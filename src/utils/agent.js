@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { computed } from 'mobx';
+import authStore from '../stores';
 
 const API_ROOT = `http://18.176.133.8:5001`;
 
@@ -25,12 +26,9 @@ class Agent {
             .catch(this._handleError);
     }
 
-    login(userInfo) {
-        // let { token, email } = commonStore;
-        // if (!token) token = undefined;
-        // if (!email) email = undefined;
+    login({email, password}) {
         return this.axios
-                .post('/auth/login', {email: userInfo.email, password: userInfo.password}, { 
+                .post('/auth/login', {email, password}, { 
                     baseURL: API_ROOT,
                     headers: { 
                         
@@ -47,29 +45,29 @@ class Agent {
             .catch(this._handleError);
     }
 
-    // refreshToken() {
-    //     let { refreshToken, user_id } = commonStore;
-    //     return this.axios
-    //             .post('/auth/token', {refreshToken, user_id}, { 
-    //                 baseURL: API_ROOT,
-    //                 headers: { 
+    refreshToken() {
+        let { refreshToken, user_id } = authStore;
+        return this.axios
+                .post('/auth/token', {refreshToken, user_id}, { 
+                    baseURL: API_ROOT,
+                    headers: { 
                         
-    //                 }
-    //             })
-    //             .catch(this._handleError);
-    // }
+                    }
+                })
+                .catch(this._handleError);
+    }
 
-    // validateToken() {
-    //     let { refreshToken, user_id } = commonStore;
-    //     return this.axios
-    //             .post('/auth/token/check', {refreshToken, user_id}, { 
-    //                 baseURL: API_ROOT,
-    //                 headers: { 
+    validateToken() {
+        let { refreshToken, user_id } = authStore;
+        return this.axios
+                .post('/auth/token/check', {refreshToken, user_id}, { 
+                    baseURL: API_ROOT,
+                    headers: { 
                         
-    //                 }
-    //             })
-    //             .catch(this._handleError);
-    // }
+                    }
+                })
+                .catch(this._handleError);
+    }
 
 
 

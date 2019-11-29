@@ -1,5 +1,5 @@
-import { observable, action, reaction } from 'mobx';
-import agent from '../utils/agent';
+// import { observable, action, reaction } from 'mobx';
+// import agent from '../utils/agent';
 
 class CommonStore {
     

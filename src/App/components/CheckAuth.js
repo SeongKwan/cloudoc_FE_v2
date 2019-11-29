@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { 
     Switch, 
     Route, 
-    withRouter 
+    withRouter,
+    Redirect
 } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import Landing from '../../pages/Landing';
 import Page404 from '../../pages/Page404';
+import Login from '../../pages/Login';
+import Signup from '../../pages/Signup';
 
 const CheckAuth = () => (WrappedComponent) => {
     @withRouter
@@ -14,15 +17,24 @@ const CheckAuth = () => (WrappedComponent) => {
     @observer
     class AuthenticatedComponent extends Component {
         render() {
-            const { loggedIn } = this.props.loginStore;
+            const { inLoggedIn } = this.props.loginStore;
             return (
                 <>
                     {
-                        loggedIn
+                        inLoggedIn
                         ? <WrappedComponent {...this.props} />
                         : <Switch> 
                             <Route path="/" exact>
                                 <Landing />
+                            </Route>
+                            <Route path="/editor">
+                                <Redirect to="/" />
+                            </Route>
+                            <Route path="/login">
+                                <Login />
+                            </Route>
+                            <Route path="/signup">
+                                <Signup />
                             </Route>
                             <Route>
                                 <Page404 />

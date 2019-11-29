@@ -89,10 +89,6 @@ class AuthStore {
         this.user_id = undefined;
     }
 
-    @action setAppLoaded(isAppLoaded) {
-        this.appLoaded = isAppLoaded;
-    }
-
     @action setToken() {
         this.token = window.localStorage.getItem('token');
     }
@@ -100,16 +96,7 @@ class AuthStore {
     @action validateToken() {
         return agent.validateToken()
         .then((response) => {
-            if (!response.data) {
-                if (this.countForReload < 3) {
-                    this.countForReload = this.countForReload + 1;
-                } else {
-                    window.location.reload(true);
-                }
-                
-            } else {
-                this.countForReload = 0;
-            }
+            
             return response.data;
         })
         .catch((error) => {

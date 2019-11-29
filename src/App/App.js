@@ -12,11 +12,12 @@ const cx = classNames.bind(styles);
 @observer
 class App extends Component {
   render() {
-    console.log(this.props.loginStore.loggedIn);
+    console.log(this.props.loginStore.inLoggedIn)
     return (
       <Router>
         <Helmet>
           <title>{`Cloudoc`}</title>
+          <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
         <div className={cx('App')}>
           <Routes />

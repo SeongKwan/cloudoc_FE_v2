@@ -2,6 +2,8 @@ import 'react-app-polyfill/ie9';
 import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './styles/base.scss';
+import './styles/bs4/bootstrap.scss';
 import App from './App';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
