@@ -16,6 +16,7 @@ const cx = classNames.bind(styles);
 class Signup extends Component {
   componentWillUnmount() {
     this.props.signupStore.clear();
+    this.props.signupStore.clearErrorValues();
   }
 
   _handleClick = (e) => {

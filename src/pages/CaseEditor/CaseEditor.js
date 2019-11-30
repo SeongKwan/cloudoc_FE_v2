@@ -4,33 +4,64 @@ import { inject, observer } from 'mobx-react';
 import styles from './CaseEditor.module.scss';
 import classNames from 'classnames/bind';
 import { Helmet } from "react-helmet";
+import Loader from '../../components/Loader/Loader';
 
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('userStore', 'loginStore')
+@inject(
+  'authStore',
+  'caseStore',
+  'loginStore',
+  'userStore', 
+)
 @observer
 class CaseEditor extends Component {
+  componentDidMount() {
+    this._loadCases();
+  }
+
+  _loadCases = () => {
+    this.props.caseStore.loadCases();
+  }
+
   render() {
+    const cases = this.props.caseStore.registry || [];
+    const { isLoading } = this.props.caseStore;
+
     return (
       <div className={cx('CaseEditor')}>
         <Helmet>
             <title>Case Editor</title>
         </Helmet>
         Case Editor Page
-        <button 
-          className={cx('btn-logout')}
-          onClick={() => {
-            this.props.loginStore.logout()
-            .then(async (res) => {
-              if (res) {
-                this.props.history.go('/')
-              }
-            })
-          }}
-        >
-          로그아웃
-        </button>
+        <span>
+          <button onClick={this._loadCases}>증례 불러오기</button>
+          <button 
+            className={cx('btn-logout')}
+            onClick={() => {
+              this.props.loginStore.logout()
+              .then(async (res) => {
+                if (res) {
+                  this.props.history.go('/')
+                }
+              })
+            }}
+          >
+            로그아웃
+          </button>
+        </span>
+        <div className={cx('wrapper-caselist')}>
+          {
+            isLoading 
+            ? <Loader /> 
+            : <ul>
+              {cases.map((item, i) => {
+                return <li key={i}>#{i} 증례</li>
+              })}
+            </ul>
+          }
+        </div>
       </div>
     );
   }

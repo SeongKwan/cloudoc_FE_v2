@@ -11,7 +11,6 @@ class CaseMaster extends Component {
       <div className={cx('CaseMaster')}>
         <Helmet>
             <title>Case Master</title>
-            <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
       </div>
     );

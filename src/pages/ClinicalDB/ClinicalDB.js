@@ -10,8 +10,7 @@ class ClinicalDB extends Component {
     return (
       <div className={cx('ClinicalDB')}>
         <Helmet>
-            <title>Case Master</title>
-            <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
+            <title>Clinical-DB</title>
         </Helmet>
       </div>
     );

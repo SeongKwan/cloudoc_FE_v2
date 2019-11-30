@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { computed } from 'mobx';
-import authStore from '../stores';
+import authStore from '../stores/authStore';
+import errorStore from '../stores/errorStore';
+import loginStore from '../stores/loginStore';
 
 const API_ROOT = `http://18.176.133.8:5001`;
 
@@ -69,7 +71,9 @@ class Agent {
                 .catch(this._handleError);
     }
 
-
+    loadCases() {
+        return this.get(`/cases`);
+    }
 
     /* Base REST API method */
     get(url) {
@@ -104,41 +108,39 @@ class Agent {
             headers: {} 
         };
         
-        // let { token, email, user_id } = commonStore;
+        let { token, email, user_id } = authStore;
         requestConfig.headers['user-type'] = "ADMIN";
         
-        // if (token) { requestConfig.headers['Authorization'] = `bearer ${token}`; }
-        // if (email) { requestConfig.headers['email'] = `${email}`; }
-        // if (user_id) { requestConfig.headers['user_id'] = `${user_id}`; }
+        if (token) { requestConfig.headers['Authorization'] = `bearer ${token}`; }
+        if (email) { requestConfig.headers['email'] = `${email}`; }
+        if (user_id) { requestConfig.headers['user_id'] = `${user_id}`; }
 
         return requestConfig;
     }
 
 
     _handleError(error) {
-        // let type = '';
-        // const { isLoggedIn } = loginStore;
+        let type = '';
+        const { inLoggedIn } = loginStore;
 
-        // if (error.response !== undefined) {
-        //     type = error.response.data.type;
-        //     if (!window.navigator.onLine) {
-                
-        //     } else {
-        //         if (error.response.status === 401 && Boolean(error.response.data.type) === true) {
-        //             if (type === "expired" || type === "refresh" || type === "error") {
-        //                 return commonStore.errorHelper(error.response.data);
-        //             } else if (type === 'guest') {
-        //                 if (isLoggedIn) {
-        //                     return window.location.reload(true);
-        //                 }
-        //                 return window.location.href = "http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/";
-        //             }
-        //             // console.log('reload')
-        //             return window.location.reload(true);
-        //         }
-        //     }
+        if (error.response !== undefined) {
+            type = error.response.data.type;
+            if (!window.navigator.onLine) {
+            } else {
+                if (error.response.status === 401 && Boolean(error.response.data.type) === true) {
+                    if (type === "expired" || type === "refresh" || type === "error") {
+                        return errorStore.authError(error.response.data);
+                    } else if (type === 'guest') {
+                        if (inLoggedIn) {
+                            return window.location.reload(true);
+                        }
+                        return window.location.href = "http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/";
+                    }
+                    return window.location.reload(true);
+                }
+            }
             
-        // }
+        }
         throw error.response;
     }
 }

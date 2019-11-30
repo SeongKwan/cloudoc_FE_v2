@@ -1,12 +1,14 @@
 import authStore from './authStore';
-import commonStore from './commonStore';
+import caseStore from './caseStore';
+import errorStore from './errorStore';
 import loginStore from './loginStore';
 import signupStore from './signupStore';
 import userStore from './userStore';
 
 const stores = {
     authStore,
-    commonStore,
+    caseStore,
+    errorStore,
     loginStore,
     signupStore,
     userStore

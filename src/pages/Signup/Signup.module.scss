@@ -75,6 +75,7 @@
                 &:disabled {
                     color: $gray-4;
                     background-color: $gray-3;
+                    cursor: not-allowed;
                 }
                 
             }

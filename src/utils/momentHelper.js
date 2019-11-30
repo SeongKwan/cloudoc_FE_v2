@@ -7,7 +7,7 @@ import 'moment-timezone';
 
 class MomentHelper {
     constructor() {
-        this.moment = moment;
+        this.moment = moment();
         this.timezone = moment.tz.guess();
     }
 
