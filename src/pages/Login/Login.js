@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 class Login extends Component {
   componentWillUnmount() {
     this.props.loginStore.clearInputValuesForLogin();
+    this.props.loginStore.clearErrorValues();
   }
   _handleChange = (e) => {
     this.props.loginStore.changeInput(e.target.name, e.target.value);
