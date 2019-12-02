@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 class ServiceIntro extends Component {
   render() {
     return (
-      <div className={cx('ServiceIntro')}>
+      <section className={cx('ServiceIntro')}>
         <Container fluid className={cx('container')}>
           <Jumbotron className={cx('jumbotron')}>
             <Row className={cx('top-wrapper')}>
@@ -26,7 +26,7 @@ class ServiceIntro extends Component {
             </Row>
           </Jumbotron>
         </Container>
-      </div>
+      </section>
     );
   }
 }

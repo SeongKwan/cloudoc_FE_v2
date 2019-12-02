@@ -39,7 +39,7 @@ class Login extends Component {
 
     return (
       <Layout>
-        <div className={cx('Login')}>
+        <section className={cx('Login')}>
           <Helmet>
             <title>Cloudoc - 로그인</title>
           </Helmet>
@@ -109,7 +109,7 @@ class Login extends Component {
               </Col>
             </Row>
           </Container>
-        </div>
+        </section>
       </Layout>
     );
   }

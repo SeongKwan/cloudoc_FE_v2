@@ -15,9 +15,9 @@ class App extends Component {
           <title>{`Cloudoc`}</title>
           <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
-        <div className={cx('App')}>
+        <main className={cx('App')}>
           <Routes />
-        </div>
+        </main>
       </Router>
     );
   }

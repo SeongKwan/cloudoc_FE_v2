@@ -1,23 +1,23 @@
 import React from 'react';
-import './Page404.scss';
+import classNames from 'classnames/bind';
+import styles from './Page404.module.scss';
 
-const Page404 = ({message = '404 에러, 존재하지 않는 요청주소 입니다.'}) => {
+const cx = classNames.bind(styles);
+
+const Page404 = () => {
     return (
-        <div className="Page404">
-            <main>
-                <div className="container">
-                    <p className="hero">
-                    <span className="bigger">404</span>
+        <section className={cx('Page404')}>
+            <div className={cx('container')}>
+                <p className={cx('content')}>
+                    <span className={cx('error-state')}>404</span>
                     <span>Not</span>
                     <span>Found</span>
-                    </p>
-                    <p className="links">
-                        <a href='/'>메인화면으로 돌아가기 -></a>
-                    </p>
+                </p>
+                <div className={cx('links')}>
+                    <a href='/'>메인화면으로 돌아가기 -></a>
                 </div>
-            </main>
-            {message} <br/>
-        </div>
+            </div>
+        </section>
     );
 };
 

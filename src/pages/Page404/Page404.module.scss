@@ -1,14 +1,4 @@
-// ::-moz-selection {
-//     background: transparent;
-//     color: #03a9f4;
-// }
-
-// ::selection {
-//     background: transparent;
-//     color: #03a9f4;
-// }
-
-.Page404 main {
+.Page404 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,7 +12,7 @@
         flex-direction: column;
     }
 
-    .hero {
+    .content {
         margin: 0;
         font-size: 6em;
         font-weight: bold;
@@ -34,7 +24,7 @@
             display: block;
             word-wrap: break-word;
     
-            &.bigger {
+            &.error-state {
                 font-size: 1.5em;
             }
         }

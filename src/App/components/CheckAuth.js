@@ -30,10 +30,10 @@ const CheckAuth = () => (WrappedComponent) => {
                             <Route path="/editor">
                                 <Redirect to="/" />
                             </Route>
-                            <Route path="/login">
+                            <Route exact path="/login">
                                 <Login />
                             </Route>
-                            <Route path="/signup">
+                            <Route exact path="/signup">
                                 <Signup />
                             </Route>
                             <Route>

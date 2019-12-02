@@ -87,141 +87,143 @@ class Signup extends Component {
     let buttonOn = name.length > 0 && email.length > 0 && password.length > 0 && confirmPassword.length > 0 && inviteCode.length > 0;
 
     return (
+      <>
+      <Helmet>
+        <title>Cloudoc - 회원가입</title>
+      </Helmet>
       <Layout>
-        <div className={cx('Signup')}>
-        <Helmet>
-          <title>Cloudoc - 회원가입</title>
-        </Helmet>
-        <Container fluid className={cx('signup-container')}>
-          <div className={cx('wrapper')}>
-              <h2>회원가입</h2>
-              <Row className={cx('row')}>
-                <Col xs={12} sm={8} md={6} lg={5} xl={4}>
-                  <Form 
-                    className={cx('signup-form')}
-                  >
-                      <Form.Group controlId="formBasicName">
-                          <Form.Label>사용자명</Form.Label>
-                          <Form.Control 
-                            className={cx('input-form', {error: noUsernameValue})}
-                            autoFocus
-                            name='name' 
-                            type="text" 
-                            placeholder={noUsernameValue ? '* 사용자명을 입력해 주세요' : '사용자명' } 
-                            as='input' 
-                            value={name} 
-                            onChange={this._handleChange} 
-                            required
-                          />
-                      </Form.Group>
+        <section className={cx('Signup')}>
+          <Container fluid className={cx('signup-container')}>
+            <div className={cx('wrapper')}>
+                <h2>회원가입</h2>
+                <Row className={cx('row')}>
+                  <Col xs={12} sm={8} md={6} lg={5} xl={4}>
+                    <Form 
+                      className={cx('signup-form')}
+                    >
+                        <Form.Group controlId="formBasicName">
+                            <Form.Label>사용자명</Form.Label>
+                            <Form.Control 
+                              className={cx('input-form', {error: noUsernameValue})}
+                              autoFocus
+                              name='name' 
+                              type="text" 
+                              placeholder={noUsernameValue ? '* 사용자명을 입력해 주세요' : '사용자명' } 
+                              as='input' 
+                              value={name} 
+                              onChange={this._handleChange} 
+                              required
+                            />
+                        </Form.Group>
 
-                      <Form.Group controlId="formBasicEmail">
-                          <Form.Label>이메일</Form.Label>
-                          <Form.Control 
-                            className={cx('input-form', {error: noIdValue}, {inValid: inValidEmail})}
-                            name='email' 
-                            type="email" 
-                            placeholder={noIdValue ? '* 이메일을 입력해 주세요' : '이메일' } 
-                            as='input' 
-                            value={email} 
-                            onChange={this._handleChange} 
-                            required
-                            pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
-                          />
-                          
-                      </Form.Group>
-                      {
-                        inValidEmail && 
-                        <div className={cx('container-error')}>
-                          {
-                            inValidEmail && <p>이메일 형식이 아닙니다</p>
-                          }
-                        </div>
-                      }
-                      <Form.Group controlId="formBasicPassword">
-                          <Form.Label>비밀번호</Form.Label>
-                          <Form.Control 
-                            className={cx('input-form', {error: noPasswordValue}, {inValid: inValidPassword})}
-                            name='password' 
-                            type="password" 
-                            placeholder={noPasswordValue ? '* 비밀번호을 입력해 주세요' : '비밀번호' } 
-                            as='input' 
-                            value={password} 
-                            onChange={this._handleChange}
-                            minLength="8"
-                            required
-                          />
-                          <Form.Text className={cx('text-muted')}>
-                            * 최소 8자리 이상
-                          </Form.Text>
-                      </Form.Group>
-                      {
-                        inValidPassword && 
-                        <div className={cx('container-error')}>
-                          {
-                            inValidPassword && <p>비밀번호 자릿수가 부족합니다</p>
-                          }
-                        </div>
-                      }
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>이메일</Form.Label>
+                            <Form.Control 
+                              className={cx('input-form', {error: noIdValue}, {inValid: inValidEmail})}
+                              name='email' 
+                              type="email" 
+                              placeholder={noIdValue ? '* 이메일을 입력해 주세요' : '이메일' } 
+                              as='input' 
+                              value={email} 
+                              onChange={this._handleChange} 
+                              required
+                              pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
+                            />
+                            
+                        </Form.Group>
+                        {
+                          inValidEmail && 
+                          <div className={cx('container-error')}>
+                            {
+                              inValidEmail && <p>이메일 형식이 아닙니다</p>
+                            }
+                          </div>
+                        }
+                        <Form.Group controlId="formBasicPassword">
+                            <Form.Label>비밀번호</Form.Label>
+                            <Form.Control 
+                              className={cx('input-form', {error: noPasswordValue}, {inValid: inValidPassword})}
+                              name='password' 
+                              type="password" 
+                              placeholder={noPasswordValue ? '* 비밀번호을 입력해 주세요' : '비밀번호' } 
+                              as='input' 
+                              value={password} 
+                              onChange={this._handleChange}
+                              minLength="8"
+                              required
+                            />
+                            <Form.Text className={cx('text-muted')}>
+                              * 최소 8자리 이상
+                            </Form.Text>
+                        </Form.Group>
+                        {
+                          inValidPassword && 
+                          <div className={cx('container-error')}>
+                            {
+                              inValidPassword && <p>비밀번호 자릿수가 부족합니다</p>
+                            }
+                          </div>
+                        }
 
-                      <Form.Group controlId="formBasicConfirmPassword">
-                          <Form.Label>비밀번호 확인</Form.Label>
-                          <Form.Control 
-                            className={cx('input-form', {error: noConfirmPasswordValue}, {inValid: inValidConfirm})}
-                            name='confirmPassword' 
-                            type="password" 
-                            placeholder={noConfirmPasswordValue ? '* 확인용 비밀번호를 입력해 주세요' : '비밀번호 확인' } 
-                            as='input' 
-                            value={confirmPassword} 
-                            onChange={this._handleChange}
-                            minLength="8"
-                            required
-                          />
-                      </Form.Group>
-                      {
-                        inValidConfirm && 
-                        <div className={cx('container-error')}>
-                          {
-                            inValidConfirm && <p>비밀번호가 다릅니다</p>
-                          }
-                        </div>
-                      }
+                        <Form.Group controlId="formBasicConfirmPassword">
+                            <Form.Label>비밀번호 확인</Form.Label>
+                            <Form.Control 
+                              className={cx('input-form', {error: noConfirmPasswordValue}, {inValid: inValidConfirm})}
+                              name='confirmPassword' 
+                              type="password" 
+                              placeholder={noConfirmPasswordValue ? '* 확인용 비밀번호를 입력해 주세요' : '비밀번호 확인' } 
+                              as='input' 
+                              value={confirmPassword} 
+                              onChange={this._handleChange}
+                              minLength="8"
+                              required
+                            />
+                        </Form.Group>
+                        {
+                          inValidConfirm && 
+                          <div className={cx('container-error')}>
+                            {
+                              inValidConfirm && <p>비밀번호가 다릅니다</p>
+                            }
+                          </div>
+                        }
 
-                      <Form.Group controlId="inviteCode">
-                          <Form.Label>초대코드</Form.Label>
-                          <Form.Control 
-                            className={cx('input-form', {error: noInviteCode}, {inValid: inValidInviteCode})}
-                            name='inviteCode' 
-                            type="text" 
-                            placeholder={noInviteCode ? '* 초대코드를 입력해 주세요' : '초대코드' } 
-                            as='input' 
-                            value={inviteCode} 
-                            onChange={this._handleChange}
-                            required
-                          />
-                      </Form.Group>
-                      {
-                        inValidInviteCode && 
-                        <div className={cx('container-error')}>
-                          {
-                            inValidInviteCode && <p>초대코드가 다릅니다. 관리자에게 문의바랍니다.</p>
-                          }
-                        </div>
-                      }
-                      <Button 
-                        disabled={!buttonOn}
-                        variant="primary" 
-                        type="submit" 
-                        onClick={this._handleClick}>
-                          가입하기
-                      </Button>
-                  </Form>
-                </Col>
-              </Row>
-          </div>
-        </Container>
-        </div>
+                        <Form.Group controlId="inviteCode">
+                            <Form.Label>초대코드</Form.Label>
+                            <Form.Control 
+                              className={cx('input-form', {error: noInviteCode}, {inValid: inValidInviteCode})}
+                              name='inviteCode' 
+                              type="text" 
+                              placeholder={noInviteCode ? '* 초대코드를 입력해 주세요' : '초대코드' } 
+                              as='input' 
+                              value={inviteCode} 
+                              onChange={this._handleChange}
+                              required
+                            />
+                        </Form.Group>
+                        {
+                          inValidInviteCode && 
+                          <div className={cx('container-error')}>
+                            {
+                              inValidInviteCode && <p>초대코드가 다릅니다. 관리자에게 문의바랍니다.</p>
+                            }
+                          </div>
+                        }
+                        <Button 
+                          disabled={!buttonOn}
+                          variant="primary" 
+                          type="submit" 
+                          onClick={this._handleClick}>
+                            가입하기
+                        </Button>
+                    </Form>
+                  </Col>
+                </Row>
+            </div>
+          </Container>
+        </section>
       </Layout>
+      </>
     );
   }
 }
