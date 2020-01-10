@@ -1,3 +1,23 @@
 .App {
     position: relative;
+    .network-message {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: $white;
+        border-radius: 2px;;
+        z-index: 999999;
+        padding: 0.5rem 1rem;
+        min-width: 13rem;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+        text-align: center;
+        &.offline {
+            background-color: $brand-1;
+        }
+        &.online {
+            background-color: $brand-4;
+        }
+    }
 }

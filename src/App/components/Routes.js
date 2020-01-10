@@ -4,16 +4,16 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
-import CaseEditor from '../../pages/CaseEditor';
-import CaseMaster from '../../pages/CaseMaster';
+import CaseLibrary from '../../pages/CaseLibrary';
 import PrintPage from '../../pages/PrintPage';
-import ClinicalDB from '../../pages/ClinicalDB';
 import Page404 from '../../pages/Page404';
 import {
     BrowserView,
     // MobileView
 } from "react-device-detect";
 import CheckAuth from './CheckAuth';
+import CaseQnA from '../../pages/CaseQnA/CaseQnA';
+import Lecture from '../../pages/Lecture/Lecture';
 
 const Routes = () => {
     return (
@@ -31,16 +31,16 @@ const Routes = () => {
             <BrowserView>
                 <Switch>
                     <Route exact path="/">
-                        <Redirect to="/editor" />
+                        <Redirect to="/case" />
                     </Route>
-                    <Route path="/editor">
-                        <CaseEditor />
+                    <Route path="/case">
+                        <CaseLibrary />
                     </Route>
-                    <Route path="/master">
-                        <CaseMaster />
+                    <Route path="/qna">
+                        <CaseQnA />
                     </Route>
-                    <Route path="/clinicaldb">
-                        <ClinicalDB />
+                    <Route path="/lecture">
+                        <Lecture />
                     </Route>
                     <Route path="/print">
                         <PrintPage />

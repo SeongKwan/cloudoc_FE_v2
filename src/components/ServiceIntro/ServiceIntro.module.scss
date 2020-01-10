@@ -6,11 +6,11 @@
         width: 100%;
         min-height: 100vh;
         position: relative;
-        background-color: rgba(black, 0.5);
+        background-color: rgba($black, 0.5);
         .jumbotron {
             background-color: transparent;
             padding: 10rem;
-            color: white;
+            color: $white;
             margin-bottom: 0;
             z-index: 9990;
             letter-spacing: 2px;
@@ -29,13 +29,12 @@
     .bottom-wrapper {
         .col {
             display: flex;
-            // justify-content: center;
             .btn-login {
                 transition: all 0.2s;
                 padding: 0.7rem 1.2rem;
                 border-radius: 0.25rem;
-                color: white;
-                background-color: black;
+                color: $white;
+                background-color: $black;
                 letter-spacing: 2px;
                 &:hover {
                     background-color: $oc-gray-9;

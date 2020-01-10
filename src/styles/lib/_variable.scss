@@ -4,11 +4,23 @@
 // $brand-tertiary: #f66767;
 // $brand-quaternary: #fff4e4;
 
+// $brand-primary: #0e204a;
+// $brand-secondary: #2b536b;
+// $brand-tertiary: #518489;
+// $brand-quaternary: #5d542d;
+
 // color -----------------------
-$brand-primary: #0e204a;
-$brand-secondary: #2b536b;
-$brand-tertiary: #518489;
-$brand-quaternary: #5d542d;
+$black: black;
+$white: white;
+
+$brand-1: #f66767;
+$brand-2: #a37774;
+$brand-3: #e0ac9d;
+$brand-4: #5c6d70;
+$brand-5: #71816d;
+$brand-6: #c9b79c;
+$brand-7: #f1e0c5;
+$brand-8: #484a47;
 
 $main-background: $oc-gray-1;
 $sub-background: $oc-gray-3;
@@ -33,3 +45,8 @@ $drawer-z-index: 1003;
 $header-z-index: 1010;
 $topbar-z-index: 1020;
 $main-container-z-index: 1000;
+
+// border radius
+$radius-low: 2px;
+$radius-middle: 4px;
+$radius-high: 8px;

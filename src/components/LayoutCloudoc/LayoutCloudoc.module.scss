@@ -1,0 +1,22 @@
+.LayoutCloudoc {
+    position: relative;
+    .header-container {
+        background-color: $brand-8;
+        color: $white;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .main-container {
+        min-height: calc(100vh - 12rem);
+    }
+    .footer-container {
+        background-color: $brand-7;
+        color: $black;
+        height: 7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

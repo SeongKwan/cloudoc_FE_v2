@@ -1,17 +1,17 @@
-import authStore from './authStore';
-import caseStore from './caseStore';
-import errorStore from './errorStore';
-import loginStore from './loginStore';
-import signupStore from './signupStore';
-import userStore from './userStore';
+import auth from './authStore';
+import Case from './caseStore';
+import error from './errorStore';
+import login from './loginStore';
+import signup from './signupStore';
+import user from './userStore';
 
 const stores = {
-    authStore,
-    caseStore,
-    errorStore,
-    loginStore,
-    signupStore,
-    userStore
+    auth,
+    Case,
+    error,
+    login,
+    signup,
+    user
 }
 
 export default stores;
