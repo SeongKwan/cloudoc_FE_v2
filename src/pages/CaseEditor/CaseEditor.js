@@ -1,51 +1,34 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
-import styles from './CaseEditor.module.scss';
-import classNames from 'classnames/bind';
+import React, { useEffect } from 'react';
+import useReactRouter from 'use-react-router';
+import useStores from '../../stores/useStores';
+import { observer } from 'mobx-react';
 import { Helmet } from "react-helmet";
+import classNames from 'classnames/bind';
+import styles from './CaseEditor.module.scss';
 import Loader from '../../components/Loader/Loader';
 
 const cx = classNames.bind(styles);
 
-@withRouter
-@inject(
-  'authStore',
-  'caseStore',
-  'loginStore',
-  'userStore', 
-)
-@observer
-class CaseEditor extends Component {
-  componentDidMount() {
-    this._loadCases();
-  }
+const CaseEditor = observer(() => {
+  const { history } = useReactRouter();
+  const { login, Case } = useStores();
 
-  _loadCases = () => {
-    this.props.caseStore.loadCases();
-  }
+  useEffect(() => {
+    Case.loadCases();
+  }, [Case])
 
-  render() {
-    const cases = this.props.caseStore.registry || [];
-    const { isLoading } = this.props.caseStore;
-
-    return (
-      <div className={cx('CaseEditor')}>
+  return (
+    <div className={cx('CaseEditor')}>
         <Helmet>
             <title>Case Editor</title>
         </Helmet>
         Case Editor Page
         <span>
-          <button onClick={this._loadCases}>증례 불러오기</button>
+          <button onClick={() => {Case.loadCases();}}>증례 불러오기</button>
           <button 
             className={cx('btn-logout')}
             onClick={() => {
-              this.props.loginStore.logout()
-              .then(async (res) => {
-                if (res) {
-                  this.props.history.go('/')
-                }
-              })
+              login.logout().then(async (res) => {if (res) history.go('/')});
             }}
           >
             로그아웃
@@ -53,18 +36,17 @@ class CaseEditor extends Component {
         </span>
         <div className={cx('wrapper-caselist')}>
           {
-            isLoading 
+            Case.isLoading 
             ? <Loader /> 
             : <ul>
-              {cases.map((item, i) => {
+              {Case.registry.map((item, i) => {
                 return <li key={i}>#{i} 증례</li>
               })}
             </ul>
           }
         </div>
       </div>
-    );
-  }
-}
+  );
+});
 
 export default CaseEditor;

@@ -6,7 +6,7 @@
         width: 100%;
         min-height: 100vh;
         position: relative;
-        background-color: rgba(black, 0.5);
+        background-color: rgba($black, 0.5);
         display: flex;
         .wrapper {
             width: 100%;
@@ -16,7 +16,7 @@
         }
         h2 {
             text-align: center;
-            color: white;
+            color: $white;
             margin-bottom: 0;
             letter-spacing: 2px;
         }
@@ -51,9 +51,9 @@
                 }
             }
             .container-error {
-                background-color: rgba(black, 0.6);
+                background-color: rgba($black, 0.6);
                 font-size: 0.5rem;
-                color: white;
+                color: $white;
                 border-radius: 0.25rem;
                 padding: 0.2rem 0.4rem;
                 margin-top: -0.5rem;
@@ -66,12 +66,12 @@
 
             label {
                 display: none;
-                color: white;
+                color: $white;
             }
             
             button {
                 width: 100%;
-                background-color: black;
+                background-color: $black;
                 &:disabled {
                     color: $gray-4;
                     background-color: $gray-3;
@@ -81,7 +81,7 @@
             }
             .text-muted {
                 font-size: 0.7rem;
-                color: white;
+                color: $white;
             }
         }
     }

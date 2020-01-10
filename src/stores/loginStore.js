@@ -17,7 +17,7 @@ class LoginStore {
         inputError: false
     }
 
-    @computed get inLoggedIn() {
+    @computed get isLoggedIn() {
         const token = window.localStorage.getItem('token') || null;
         if (token) {
             return true;
@@ -41,6 +41,18 @@ class LoginStore {
                 return this.errorValues.noPasswordValue = true;
             }
             this.errorValues.noPasswordValue = false;
+        }
+    }
+
+    @action errorHandle({email, password, input}) {
+        if (email) {
+            this.errorValues.noIdValue = true;
+        }
+        if (password) {
+            this.errorValues.noPasswordValue = true;
+        }
+        if (input) {
+            this.errorValues.inputError = false;
         }
     }
 
@@ -91,37 +103,34 @@ class LoginStore {
         this.loggedIn = status;
     }
 
+    _removeItem() {
+        window.localStorage.removeItem('caseCounts');
+        window.localStorage.removeItem('email');
+        window.localStorage.removeItem('length');
+        window.localStorage.removeItem('refreshToken');
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('user_id');
+        window.localStorage.removeItem('username');
+    }
+
     @action logout(type) {
         const THIS = this;
         return new Promise(function (resolve, reject) {
             if (type !== 'expiredRefreshToken') {
-                const gostop = window.confirm('로그아웃 하시겠습니까?');
-                if (gostop) {
-                    window.localStorage.removeItem('caseCounts');
-                    window.localStorage.removeItem('email');
-                    window.localStorage.removeItem('length');
-                    window.localStorage.removeItem('refreshToken');
-                    window.localStorage.removeItem('token');
-                    window.localStorage.removeItem('user_id');
-                    window.localStorage.removeItem('username');
+                const logoutOK = window.confirm('로그아웃 하시겠습니까?');
+                if (logoutOK) {
+                    console.log('logout')
+                    THIS._removeItem()
                     THIS.setLoggedIn(false);
                     authStore.destroyTokenAndUuid();
                     userStore.clearUser();
-                    resolve({success: true});
-                }
-            } else {
-                window.localStorage.removeItem('caseCounts');
-                window.localStorage.removeItem('email');
-                window.localStorage.removeItem('length');
-                window.localStorage.removeItem('refreshToken');
-                window.localStorage.removeItem('token');
-                window.localStorage.removeItem('user_id');
-                window.localStorage.removeItem('username');
-                THIS.setLoggedIn(false);
-                authStore.destroyTokenAndUuid();
-                userStore.clearUser();
-                resolve({success: true});
-            }
+                    return resolve({success: true});
+                } else {return false}
+            } else THIS._removeItem();
+            THIS.setLoggedIn(false);
+            authStore.destroyTokenAndUuid();
+            userStore.clearUser();
+            return resolve({success: true});
         });
     }
 

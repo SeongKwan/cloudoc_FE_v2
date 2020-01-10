@@ -11,12 +11,12 @@ import Layout from '../../components/Layout';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('userStore', 'signupStore')
+@inject('user', 'signup')
 @observer
 class Signup extends Component {
   componentWillUnmount() {
-    this.props.signupStore.clear();
-    this.props.signupStore.clearErrorValues();
+    this.props.signup.clear();
+    this.props.signup.clearErrorValues();
   }
 
   _handleClick = (e) => {
@@ -27,43 +27,43 @@ class Signup extends Component {
       password,
       confirmPassword,
       inviteCode
-    } = this.props.signupStore.userInfo;
+    } = this.props.signup.userInfo;
     
     let buttonOn = name.length > 0 && email.length > 0 && password.length > 0 && confirmPassword.length > 0 && inviteCode.length > 0;
 
     let isEmailForm = email.search(/[0-9a-zA-Z][_0-9a-zA-Z-]*@[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+){1,2}$/) !== -1;
 
         if (name === '') {
-          this.props.signupStore.manageError('name');
+          this.props.signup.manageError('name');
         } 
         if (email === '') {
-          this.props.signupStore.manageError('email');
+          this.props.signup.manageError('email');
         }
         if (password === '') {
-          this.props.signupStore.manageError('password');
+          this.props.signup.manageError('password');
         }
         if (!isEmailForm) {
-          this.props.signupStore.manageError('inValidEmail');
+          this.props.signup.manageError('inValidEmail');
         }
         if (password.length < 8) {
-          this.props.signupStore.manageError('inValidPassword');
+          this.props.signup.manageError('inValidPassword');
         }
         if (password !== confirmPassword) {
-          this.props.signupStore.manageError('inValidConfirm');
+          this.props.signup.manageError('inValidConfirm');
         }
         if (inviteCode === '') {
-          this.props.signupStore.manageError('inviteCode');
+          this.props.signup.manageError('inviteCode');
         }
 
         if (inviteCode !== constInviteCode) {
-          this.props.signupStore.manageError('inValidInviteCode');
+          this.props.signup.manageError('inValidInviteCode');
       }
       
       if (buttonOn) {
-        return this.props.signupStore.signup()
+        return this.props.signup.signup()
         .then(res => {
           if(res.data.success) {
-            this.props.signupStore.signupCaseMaster();
+            this.props.signup.signupCaseMaster();
           }
         })
         .then(res => {
@@ -77,12 +77,12 @@ class Signup extends Component {
   }
 
   _handleChange = (e) => {
-    this.props.signupStore.changeInput(e.target.name, e.target.value);
+    this.props.signup.changeInput(e.target.name, e.target.value);
   }
 
   render() {
-    const { email, password, name, confirmPassword, inviteCode } = this.props.signupStore.userInfo;
-    const { noIdValue, noPasswordValue, noUsernameValue, noConfirmPasswordValue, noInviteCode, inValidEmail, inValidPassword, inValidConfirm, inValidInviteCode } = this.props.signupStore.errorValues;
+    const { email, password, name, confirmPassword, inviteCode } = this.props.signup.userInfo;
+    const { noIdValue, noPasswordValue, noUsernameValue, noConfirmPasswordValue, noInviteCode, inValidEmail, inValidPassword, inValidConfirm, inValidInviteCode } = this.props.signup.errorValues;
 
     let buttonOn = name.length > 0 && email.length > 0 && password.length > 0 && confirmPassword.length > 0 && inviteCode.length > 0;
 

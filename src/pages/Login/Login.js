@@ -10,31 +10,31 @@ import Layout from '../../components/Layout';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('userStore', 'loginStore')
+@inject('user', 'login')
 @observer
 class Login extends Component {
   componentWillUnmount() {
-    this.props.loginStore.clearInputValuesForLogin();
-    this.props.loginStore.clearErrorValues();
+    this.props.login.clearInputValuesForLogin();
+    this.props.login.clearErrorValues();
   }
   _handleChange = (e) => {
-    this.props.loginStore.changeInput(e.target.name, e.target.value);
+    this.props.login.changeInput(e.target.name, e.target.value);
   }
 
   _handleClick = (e) => {
     e.preventDefault();
-    this.props.loginStore.login()
+    this.props.login.login()
     .then((res) => {
-      return this.props.history.replace('/editor');
+      return this.props.history.replace('/case');
     })
     .catch(err => {
     });
   }
 
   render() {
-    const { email, password } = this.props.loginStore.inputValuesForLogin;
-    const { noIdValue, noPasswordValue, inputError } = this.props.loginStore.errorValues;
-    const { isLoading } = this.props.loginStore;
+    const { email, password } = this.props.login.inputValuesForLogin;
+    const { noIdValue, noPasswordValue, inputError } = this.props.login.errorValues;
+    const { isLoading } = this.props.login;
     let error = noIdValue || noPasswordValue || inputError;
 
     return (

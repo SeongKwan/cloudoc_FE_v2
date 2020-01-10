@@ -1,0 +1,49 @@
+.FooterCloudoc {
+    position: relative;
+    padding: 0 2rem;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .company-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+            margin-top: 1px;
+            margin-right: 1rem;
+            width: 50px;
+        }
+        .info {
+            p {
+                font-size: 0.8rem;
+                color: $brand-8;
+                margin-bottom: 0;
+            }
+        }
+    }
+    ul.navbar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        li {
+            &:not(:last-child) {
+                margin-right: 2rem;
+            }
+        }
+        a {
+            color: $white;
+            transition-property: font-weight, color;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
+            
+            letter-spacing: 1px;
+            color: $brand-8;
+            &:hover {
+                color: $brand-4;
+                text-decoration: none;
+            }
+        }
+    }
+}

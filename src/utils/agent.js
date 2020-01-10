@@ -126,8 +126,9 @@ class Agent {
         if (error.response !== undefined) {
             type = error.response.data.type;
             if (!window.navigator.onLine) {
+                alert('오프라인 상태입니다');
             } else {
-                if (error.response.status === 401 && Boolean(error.response.data.type) === true) {
+                if (Boolean(error.response.data.type) === true) {
                     if (type === "expired" || type === "refresh" || type === "error") {
                         return errorStore.authError(error.response.data);
                     } else if (type === 'guest') {

@@ -1,1 +1,1 @@
-2019 Cloudoc 통합서비스 프론트엔드 [Cloudoc App](https://github.com/facebook/create-react-app).
+2019 Cloudoc 통합서비스 관리자페이지 [Cloudoc App](https://github.com/facebook/create-react-app).

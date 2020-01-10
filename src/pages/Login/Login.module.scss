@@ -7,7 +7,7 @@
         width: 100%;
         min-height: 100vh;
         position: relative;
-        background-color: rgba(black, 0.5);
+        background-color: rgba($black, 0.5);
         display: flex;
         .row {
             margin: 0;
@@ -24,7 +24,7 @@
                 }
 
                 h2 {
-                    color: white;
+                    color: $white;
                     text-align: center;
                     display: flex;
                     justify-content: center;
@@ -34,7 +34,7 @@
                 .form-container {
                     .login-button {
                         width: 100%;
-                        background-color: black;
+                        background-color: $black;
                         
                         &:hover {
                             background-color: $oc-gray-9;
@@ -57,9 +57,9 @@
                         }
                     }
                     .container-error {
-                        background-color: rgba(black, 0.6);
+                        background-color: rgba($black, 0.6);
                         font-size: 0.5rem;
-                        color: white;
+                        color: $white;
                         border-radius: 0.25rem;
                         padding: 0.2rem 0.4rem;
                         margin-top: -0.5rem;
@@ -75,7 +75,7 @@
                     font-size: 0.8em;
                     padding: 0 0.2rem;
                     a {
-                        color: white;
+                        color: $white;
                     }
                 }
             }

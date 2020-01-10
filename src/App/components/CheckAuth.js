@@ -13,21 +13,22 @@ import Signup from '../../pages/Signup';
 
 const CheckAuth = () => (WrappedComponent) => {
     @withRouter
-    @inject("loginStore")
+    @inject("login")
     @observer
     class AuthenticatedComponent extends Component {
         render() {
-            const { inLoggedIn } = this.props.loginStore;
+            const { isLoggedIn } = this.props.login;
+
             return (
                 <>
                     {
-                        inLoggedIn
+                        isLoggedIn
                         ? <WrappedComponent {...this.props} />
                         : <Switch> 
                             <Route path="/" exact>
                                 <Landing />
                             </Route>
-                            <Route path="/editor">
+                            <Route path="/case">
                                 <Redirect to="/" />
                             </Route>
                             <Route exact path="/login">
