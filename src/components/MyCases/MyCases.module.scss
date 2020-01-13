@@ -50,7 +50,7 @@
                     text-decoration: underline;
                 }
             }
-            a.add-case li {
+            li.add-case {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -58,11 +58,12 @@
                 height: 100%;
                 font-weight: 100;
                 user-select: none;
+                cursor: pointer;
                 svg {
                     margin-right: 0.5rem;
                 }
             }
-            a {
+            a, li.add-case {
                 font-weight: 100;
                 color: $white;
                 padding: 1rem;

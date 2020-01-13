@@ -3,8 +3,8 @@ import styles from './CaseListItem.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { GoPerson } from "react-icons/go";
-import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
-import { IoIosWater, IoIosMan } from "react-icons/io";
+// import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
+// import { IoIosWater, IoIosMan } from "react-icons/io";
 import { FaNotesMedical } from "react-icons/fa";
 import { GiBubblingBowl, GiBackPain } from "react-icons/gi";
 
@@ -78,7 +78,7 @@ class CaseListItem extends Component {
 }
 
 const _renderSymptom = (symptoms = []) => {
-    const { length } = symptoms;
+    // const { length } = symptoms;
 
     return symptoms.map((symptom, i) => {
         const { name } = symptom;

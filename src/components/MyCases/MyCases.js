@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './MyCases.module.scss';
 import classNames from 'classnames/bind';
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 import Loader from '../../components/Loader/Loader';
 import { FiPlus } from "react-icons/fi";
 import SearchBar from './components/SearchBar/SearchBar';
@@ -63,12 +63,10 @@ class MyCases extends Component {
                         }
                         {
                             !isLoading && length > 0 && this.props.search.keyword['cases'].length === 0 &&
-                            <a onClick={this._handleClickOnButton} className={cx('add-case')}>
-                                <li>
-                                    <FiPlus />
-                                    <span>새 증례</span>
-                                </li>
-                            </a>
+                            <li onClick={this._handleClickOnButton} className={cx('add-case')}>
+                                <FiPlus />
+                                <span>새 증례</span>
+                            </li>
                         }
                         {
                             !isLoading ?

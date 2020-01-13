@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
 import searchStore from './searchStore';
-import _ from 'lodash';
+// import _ from 'lodash';
 import Hangul from 'hangul-js';
 
 const windowWidth = window.outerWidth;
