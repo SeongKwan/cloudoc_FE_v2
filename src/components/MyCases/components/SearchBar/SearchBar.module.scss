@@ -1,0 +1,29 @@
+.SearchBar {
+    width: 100%;
+    position: relative;
+    div.search-icon {
+        position: absolute;
+        top: 45%;
+        left: 0.75rem;
+        transform: translateY(-50%);
+        cursor: pointer;
+        svg {
+            font-size: 1.25rem;
+        }
+    }
+    input {
+        width: 100%;
+        // max-width: 350px;
+        padding: 0.85rem;
+        padding-left: 2.5rem;
+        transition: all 0.2s ease;
+        border: 1px solid $gray-1;
+        border-radius: $radius-low;
+        &:active, &:focus, &:hover {
+            border: 1px solid $brand-8;
+            border-radius: $radius-low;
+            outline: 0;
+            border-color: $brand-1;
+        }
+    }
+}

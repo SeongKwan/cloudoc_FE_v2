@@ -9,6 +9,7 @@ class AuthStore {
     @observable username = window.localStorage.getItem('username');
     @observable user_id = window.localStorage.getItem('user_id');
     @observable authError = false;
+    @observable expiredToken = false;
 
     constructor() {
         this._initTokenAndUuidWithLocalStorage();
@@ -95,13 +96,24 @@ class AuthStore {
         this.token = window.localStorage.getItem('token');
     }
 
+    @action setExpiredToken(status) {
+        this.expiredToken = status;
+    }
+
     @action validateToken() {
         return agent.validateToken()
         .then(action((response) => {
             if (!response.data) {
-                loginStore.logout('expiredRefreshToken');
-                alert("로그인 시간이 만료되었습니다. 다시 로그인하여 주세요.")
-                window.location.href = "http://localhost:3000/login";
+                this.expiredToken = true;
+                setTimeout(() => {
+                    alert("로그인 시간이 만료되었습니다. 다시 로그인하여 주세요.")
+                }, 100);
+                setTimeout(() => {
+                    loginStore.logout('expiredRefreshToken');
+                }, 150);
+                setTimeout(() => {
+                    window.location.href = "http://localhost:3000/login";
+                }, 200);
             }
             return response.data;
         }))

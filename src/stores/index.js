@@ -4,6 +4,7 @@ import error from './errorStore';
 import login from './loginStore';
 import signup from './signupStore';
 import user from './userStore';
+import search from './searchStore';
 
 const stores = {
     auth,
@@ -11,7 +12,8 @@ const stores = {
     error,
     login,
     signup,
-    user
+    user,
+    search
 }
 
 export default stores;

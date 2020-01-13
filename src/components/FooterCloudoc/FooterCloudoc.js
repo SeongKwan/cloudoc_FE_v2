@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './FooterCloudoc.module.scss';
 import classNames from 'classnames/bind';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import brandLogo from '../../styles/img/logo_main.png';
 
 const cx = classNames.bind(styles);
@@ -17,7 +17,7 @@ class FooterCloudoc extends Component {
                         src={brandLogo}
                     />
                     <div className={cx('info')}>
-                        <p>(c) 2020 INTEGRO MEDI LAB CO., LTD.</p>
+                        <p>&copy; 2020 INTEGRO MEDI LAB CO., LTD.</p>
                         <p>All Rights Reserved.</p>
                     </div>
                 </div>

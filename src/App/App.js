@@ -4,9 +4,12 @@ import { Helmet } from 'react-helmet';
 import styles from './App.module.scss';
 import classNames from 'classnames/bind';
 import Routes from './components/Routes';
+import { inject, observer } from 'mobx-react';
 
 const cx = classNames.bind(styles);
 
+@inject('auth')
+@observer
 class App extends Component {
   state = {
     online: false
@@ -26,6 +29,7 @@ class App extends Component {
       this.setState({ online: false })
     });
   }
+  
   render() {
     return (
       <Router>

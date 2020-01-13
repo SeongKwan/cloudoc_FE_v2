@@ -1,14 +1,56 @@
 .CaseLibrary {
-    padding: 2rem;
-    font-size: 2rem;
-    button {
-        font-size: 0.7em;
-        padding: 0.3rem;
-        &:hover {
-            cursor: pointer;
+    main {
+        display: flex;
+        justify-content: center;
+        .flexible-container {
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            @include media('lg') {
+                padding: 2rem 14rem;
+            }
         }
-        &:first-child {
-            margin: 0 1rem;
+        .selector {
+            display: flex;
+            margin-bottom: 3rem;
+            button {
+                position: relative;
+                padding: 1rem;
+                font-size: 1.2rem;
+                font-weight: 100;
+                background-color: transparent;
+                border: none;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                &:nth-child(2) {
+                    margin: 0 3rem;
+                }
+                &.active {
+                    color: $brand-1;
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        width: 90%;
+                        height: 1px;
+                        background-color: $brand-1;
+                        transform: translateX(-50%);
+                    }
+                    &:hover {
+                        color: $brand-1;
+                    }
+                }
+                &:focus, &:active {
+                    outline: 0;
+                }
+                &:hover {
+                    color: $brand-4;
+                }
+            }
         }
     }
     .wrapper-caselist {

@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Helmet } from "react-helmet";
-import Loader from '../../components/Loader/Loader';
+// import Loader from '../../components/Loader/Loader';
 import LayoutCloudoc from '../../components/LayoutCloudoc';
 import styles from './CaseLibrary.module.scss';
 import classNames from 'classnames/bind';
+import UserStatus from '../../components/UserStatus/UserStatus';
+import MyCases from '../../components/MyCases/MyCases';
 
 const cx = classNames.bind(styles);
 let timer = null;
@@ -16,29 +18,47 @@ let timer = null;
     'Case',
     'login',
     'user', 
+    'search'
 )
 @observer
 class CaseLibrary extends Component {
+    state = {
+        selector: ''
+    }
     componentDidMount() {
-        this._loadCases();
+        this._handleClickOnSelector('case');
+        this.checkToken()
+        .then(res => {
+            if (res) {
+                return this._loadCases();
+            }
+        })
         timer = setInterval(() => {
             this.checkToken();
         }, 1800000);
+        
     }
     componentWillUnmount() {
         clearInterval(timer);
+        this.setState({selector: ''});
     }
 
     checkToken = () => {
-        this.props.auth.validateToken();
+        const THIS = this;
+        return new Promise((resolve, reject) => {
+            let result = THIS.props.auth.validateToken();
+            return resolve({success: result}); 
+        });
     }
     _loadCases = () => {
         this.props.Case.loadCases();
     }
+    _handleClickOnSelector = (type) => {
+        this.setState({selector: type});
+    }
 
     render() {
-        const cases = this.props.Case.registry || [];
-        const { isLoading } = this.props.Case;
+        const { selector } = this.state;
     
         return (
             <LayoutCloudoc>
@@ -46,22 +66,20 @@ class CaseLibrary extends Component {
                     <Helmet>
                         <title>Case Library</title>
                     </Helmet>
-                    Home - Case Library
-                    <span>
-                        <button onClick={this._loadCases}>증례 불러오기</button>
-                        
-                    </span>
-                    <div className={cx('wrapper-caselist')}>
-                    {
-                        isLoading 
-                        ? <Loader /> 
-                        : <ul>
-                        {cases.map((item, i) => {
-                            return <li key={i}>#{i} 증례</li>
-                        })}
-                        </ul>
-                    }
-                    </div>
+                    <UserStatus />
+                    <main>
+                        <div className={cx('flexible-container')}>
+                            <div className={cx('selector')}>
+                                <button className={cx({active: selector === 'case'})} onClick={() => {this._handleClickOnSelector('case')}}>내 증례</button>
+                                <button className={cx({active: selector === 'question'})} onClick={() => {this._handleClickOnSelector('question')}}>내 질문</button>
+                                <button className={cx({active: selector === 'answer'})} onClick={() => {this._handleClickOnSelector('answer')}}>내 답변</button>
+                            </div>
+                            {
+                                selector === 'case' &&
+                                <MyCases />
+                            }
+                        </div>
+                    </main>
                 </div>
             </LayoutCloudoc>
         );

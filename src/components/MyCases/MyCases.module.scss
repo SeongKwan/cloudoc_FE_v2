@@ -1,0 +1,142 @@
+.MyCases {
+    width: 100%;
+    .toolbar {
+        display: flex;
+        align-items: center;
+        color: $brand-8;
+        font-weight: 100;
+        margin-bottom: 2%;
+        .btn-add-case {
+            width: 100px;
+            font-weight: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $brand-8;
+            margin-right: 1rem;
+            background-color: $brand-7;
+            border: 1px solid $brand-7;
+            border-radius: $radius-low;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            &:hover {
+                background-color: $brand-6;
+                border-color: $brand-6;
+            }
+            svg {
+                margin-right: 0.5rem;
+            }
+        }
+    }
+    .list-container {
+        ul.case-list {
+            display: flex;
+            flex-wrap: wrap;
+            &.isLoading {
+                padding-top: 7rem;
+                justify-content: center;
+                align-items: center;
+            }
+            .no-results {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 6rem 0;
+                font-size: 1.2rem;
+                font-weight: 100;
+                span {
+                    text-decoration: underline;
+                }
+            }
+            a.add-case li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                height: 100%;
+                font-weight: 100;
+                user-select: none;
+                svg {
+                    margin-right: 0.5rem;
+                }
+            }
+            a {
+                font-weight: 100;
+                color: $white;
+                padding: 1rem;
+                margin-bottom: 1.5%;
+                width: 23.333%;
+                // max-width: 23.333%;
+                height: 510px;
+                background-color: rgba($brand-1, 1);
+                border-radius: $radius-low;
+                transition: background-color 0.2s ease;
+                &:nth-child(4n - 2) {
+                    margin-left: 1.5%;
+                    margin-right: 0.75%;
+                }
+                &:nth-child(4n - 1) {
+                    margin-left: 0.75%;
+                    margin-right: 1.5%;
+                }
+                @include media('lg') {
+                    &:nth-child(4n - 2) {
+                        margin-left: 0%;
+                        margin-right: 0%;
+                    }
+                    &:nth-child(4n - 1) {
+                        margin-left: 0%;
+                        margin-right: 0%;
+                    }
+                    &:nth-child(3n - 1) {
+                        margin: 0 2%;
+                    }
+                    margin-bottom: 2%;
+                    width: 32%;
+                    height: 420px;
+                }
+                &.add-case {
+                    cursor: pointer;
+                    background-color: $brand-8;
+                    &:hover {
+                        background-color: $brand-4;
+                    }
+                }
+                &:hover {
+                    text-decoration: none;
+                    div#case-list-item-memo {
+                        font-weight: 700;
+                    }
+                    // background-color: rgba($brand-2, 0.9);
+                }
+            }
+        }
+    }
+    .status {
+        flex: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 0;
+        font-size: 1.2rem;
+        color: rgba($brand-8, 0.6);
+        .btn-load-more {
+            letter-spacing: 1px;
+            padding: 1rem 2.5rem;
+            border-radius: $radius-low;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            &:hover {
+                background-color: rgba($brand-8, 0.1);
+            }
+        }
+        &.no-more {
+            div {
+                padding: 1rem 2.5rem;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}

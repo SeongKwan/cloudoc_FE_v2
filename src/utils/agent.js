@@ -128,6 +128,7 @@ class Agent {
             if (!window.navigator.onLine) {
                 alert('오프라인 상태입니다');
             } else {
+                errorStore.setErrorToken(true);
                 if (Boolean(error.response.data.type) === true) {
                     if (type === "expired" || type === "refresh" || type === "error") {
                         return errorStore.authError(error.response.data);

@@ -9,9 +9,9 @@ class Footer extends Component {
     return (
       <footer className={cx('Footer')}>
         <div className={cx('copyright')}>
-          IML &copy; Copyright 2019. All rights reserved.
+          &copy; 2020 INTEGRO MEDI LAB CO., LTD. All Rights Reserved.
         </div>
-        <p>ver 20191125b (beta)</p>
+        <p>ver 20200113b (beta)</p>
       </footer>
     );
   }
