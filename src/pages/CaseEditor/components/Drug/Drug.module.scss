@@ -1,4 +1,4 @@
-.Symptoms {
+.Drug {
     padding: 2rem;
     position: relative;
     user-select: none;
@@ -18,7 +18,7 @@
 
     .search-container {
         position: relative;
-        z-index: 12;
+        z-index: 10;
     }
 
     .search-wrapper {
@@ -105,9 +105,11 @@
             li {
                 padding: 0.5rem 1rem;
 
-                &:hover, &.active {
+                &:hover,
+                &.active {
                     background-color: $gray-1;
                 }
+
                 &.no-results {
                     &:hover {
                         background-color: $white;
@@ -117,9 +119,180 @@
         }
     }
 
-    .symptoms-wrapper {
+    .drug-wrapper {
         position: relative;
         z-index: 8;
+
+        ul {
+            margin-top: 1rem;
+
+            li {
+                display: flex;
+                position: relative;
+                flex-direction: column;
+
+                &.selected {
+                    box-shadow: 0 2px 8px 4px $gray-1;
+                }
+
+            }
+        }
+
+        .form-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            margin-bottom: 1.5rem;
+
+            &:first-child {
+                margin-right: 0.5rem;
+            }
+
+            &.drug-name {
+
+                input {
+                    cursor: pointer !important;
+                }
+            }
+
+            &.input {
+
+                label,
+                input {
+                    transition: all 0.2s ease;
+                    touch-action: manipulation;
+                }
+
+                textarea {
+                    transition: color, border, font-weight, outline, transform opacity 0.2s ease;
+                    touch-action: manipulation;
+                }
+
+                input {
+                    padding: 0.1rem 0rem 0.5rem 0.5rem;
+                    border: 0;
+                    border-bottom: 1px solid $gray-1;
+                    font-family: inherit;
+                    -webkit-appearance: none;
+                    border-radius: 0;
+                    cursor: text;
+
+                    &::placeholder {
+                        color: $gray-3;
+                        font-weight: 100;
+                    }
+                }
+
+                input:focus,
+                input:hover {
+                    outline: 0;
+                    border-bottom: 1px solid $brand-6;
+                }
+
+
+
+                label {
+                    margin-bottom: 2px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    font-size: 11px;
+
+                    &.label-no-input {
+                        color: $brand-6;
+                        transform: translate(0, 0) scale(1);
+                        cursor: pointer;
+                    }
+                }
+
+
+                input:placeholder-shown+label,
+                textarea:placeholder-shown+label {
+                    cursor: text;
+                    max-width: 66.66%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    transform-origin: left bottom;
+                    transform: translate(0.5rem, 2rem) scale(1.2);
+                }
+
+
+                ::-webkit-input-placeholder {
+                    opacity: 0;
+                    transition: inherit;
+                }
+
+
+                input:focus::-webkit-input-placeholder,
+                textarea:focus::-webkit-input-placeholder {
+                    opacity: 1;
+                }
+
+
+                input:not(:placeholder-shown)+label,
+                input:focus+label,
+                textarea:not(:placeholder-shown)+label,
+                textarea:focus+label {
+                    color: $brand-6;
+                    transform: translate(0, 0) scale(1);
+                    cursor: pointer;
+                }
+            }
+
+            label {
+                margin-bottom: 2px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-size: 11px;
+                // font-weight: 100;
+                color: $gray-3;
+
+                &.label-no-input {
+                    color: $brand-6;
+                    transform: translate(0, 0) scale(1);
+                    cursor: pointer;
+                }
+            }
+
+            .textarea {
+                color: $brand-8;
+                padding: 0.5rem;
+                border: 1px solid $gray-1;
+                border-radius: $radius-low;
+
+                &:focus, &:hover {
+                    outline: 0;
+                    border: 1px solid $brand-6;
+                }
+
+                &::placeholder {
+                    color: $gray-3;
+                    // font-weight: 100;
+                }
+            }
+        }
+    }
+
+    .formula-wrapper {
+        position: relative;
+        z-index: 8;
+        margin-top: -1rem;
+
+        .btn-add-formula {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: $brand-7;
+            border: 0;
+            letter-spacing: 2px;
+            border-radius: $radius-low;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            &:hover {
+                background-color: $brand-6;
+            }
+            &:focus {
+                outline: 0;
+            }
+        }
 
         ul {
             margin-top: 1rem;
@@ -129,6 +302,12 @@
                 &.selected {
                     box-shadow: 0 2px 8px 4px $gray-1;
                 }
+                .herb-name {
+                    width: 60%;
+                }
+                .dose {
+                    width: 100px;
+                }
                 .trash {
                     display: flex;
                     align-items: center;
@@ -136,7 +315,7 @@
                     transition: all 0.3s ease;
                     position: absolute;
                     top: 50%;
-                    right: -20px;
+                    right: 10px;
                     transform: translateY(-50%);
                     &:hover {
                         color: $brand-4;
@@ -164,13 +343,13 @@
                 margin-right: 0.5rem;
             }
 
-            &.symptom-name {
+            &.formula-name {
                 width: 30%;
                 input {
                     cursor: pointer !important;
                 }
             }
-            &.description {
+            &.formula-dose {
                 flex: 1;
             }
     

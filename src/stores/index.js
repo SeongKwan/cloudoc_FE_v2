@@ -10,6 +10,12 @@ import collapsible from './collapsibleStore';
 import symptom from './symptomStore';
 import symptomListItem from './symptomListItemStore';
 import symptomListForInput from './symptomListForInputStore';
+import diagnosis from './diagnosisStore';
+import diagnosisListItem from './diagnosisListItemStore';
+import diagnosisListForInput from './diagnosisListForInputStore';
+import treatment from './treatmentStore';
+import drugListItem from './drugListItemStore';
+import drugListForInput from './drugListForInputStore';
 
 const stores = {
     auth,
@@ -23,7 +29,13 @@ const stores = {
     collapsible,
     symptom,
     symptomListItem,
-    symptomListForInput
+    symptomListForInput,
+    diagnosis,
+    diagnosisListForInput,
+    diagnosisListItem,
+    treatment,
+    drugListItem,
+    drugListForInput
 }
 
 export default stores;

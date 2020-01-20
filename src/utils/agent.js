@@ -84,6 +84,27 @@ class Agent {
         return this.get(`/symptoms/${symptomId}`);
     }
 
+
+    loadConditions() {
+        return this.get(`/conditions`);
+    }
+    
+    loadCondition(conditionId) {
+        return this.get(`/conditions/${conditionId}`);
+    }
+
+
+    loadDrugs() {
+        return this.get(`/drugs`);
+    }
+
+    loadDrug(drugId) {
+        return this.get(`/drugs/${drugId}`);
+    }
+
+
+
+
     /* Base REST API method */
     get(url) {
         return this.axios

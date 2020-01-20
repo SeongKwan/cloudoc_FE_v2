@@ -24,13 +24,13 @@ class HeaderEditor extends Component {
         return (
             <header className={cx('HeaderEditor')}>
                 <div className={cx('tool-bar')}>
-                    <div className={cx('btn-tool', 'back')}>
+                    <div className={cx('btn-tool', 'back')} onClick={() => {this.props.history.goBack();}}>
                         <FiArrowLeft />
                         <div className={cx('label')}>뒤로</div>
                     </div>
                     <div className={cx('btn-tool', 'create')}>
                         <FiPlus />
-                        <div className={cx('label')}>만들기</div>
+                        <div className={cx('label')}>새증례</div>
                     </div>
                     <div className={cx('btn-tool', 'save')}>
                         <FiSave />

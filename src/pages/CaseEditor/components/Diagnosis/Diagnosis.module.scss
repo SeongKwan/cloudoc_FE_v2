@@ -1,4 +1,4 @@
-.Symptoms {
+.Diagnosis {
     padding: 2rem;
     position: relative;
     user-select: none;
@@ -18,7 +18,7 @@
 
     .search-container {
         position: relative;
-        z-index: 12;
+        z-index: 11;
     }
 
     .search-wrapper {
@@ -117,9 +117,9 @@
         }
     }
 
-    .symptoms-wrapper {
+    .diagnosis-wrapper {
         position: relative;
-        z-index: 8;
+        z-index: 9;
 
         ul {
             margin-top: 1rem;
@@ -164,7 +164,7 @@
                 margin-right: 0.5rem;
             }
 
-            &.symptom-name {
+            &.diagnosis-name {
                 width: 30%;
                 input {
                     cursor: pointer !important;

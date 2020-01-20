@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 
-class SymptomListForInputStore {
+class DrugListForInputStore {
     @observable position = {
         top: 0,
         left: -99999,
@@ -76,4 +76,4 @@ class SymptomListForInputStore {
     };
 }
 
-export default new SymptomListForInputStore()
+export default new DrugListForInputStore()

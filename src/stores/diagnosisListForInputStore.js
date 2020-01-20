@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
 
-class SymptomListForInputStore {
+class DiagnosisListForInputStore {
+    @observable type = '';
+
     @observable position = {
         top: 0,
         left: -99999,
@@ -26,6 +28,10 @@ class SymptomListForInputStore {
         };
         this.status = 'visible';
     };
+
+    @action setType(type) {
+        this.type = type;
+    }
 
     @action setCurrentSection(section) {
         this.currentSection = section;
@@ -74,6 +80,7 @@ class SymptomListForInputStore {
         this.currentSection = '';
         this.items = [];
     };
+    
 }
 
-export default new SymptomListForInputStore()
+export default new DiagnosisListForInputStore()

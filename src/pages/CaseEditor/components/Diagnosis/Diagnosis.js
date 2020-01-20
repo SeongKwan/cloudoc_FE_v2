@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './Symptoms.module.scss';
+import styles from './Diagnosis.module.scss';
 import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import {
@@ -12,18 +12,18 @@ import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
-@inject('Case', 'search', 'symptom', 'symptomListItem', 'symptomListForInput')
+@inject('Case', 'search', 'diagnosis', 'diagnosisListItem', 'diagnosisListForInput')
 @observer
-class Symptoms extends Component {
+class Diagnosis extends Component {
     state = { 
         keyword: '',
         focusParent: false,
         selected: -1
     }
     componentDidMount() {
-        this.props.symptomListItem.loadSymptoms();
-        this.props.symptom.initEditableData();
-        this.setState({ keyword: this.props.search.keyword.symptoms })
+        this.props.diagnosisListItem.loadConditions();
+        this.props.diagnosis.initEditableData();
+        this.setState({ keyword: this.props.search.keyword.diagnosis })
         document.addEventListener('mousedown', this._handleClickOutside);
     }
     componentWillUnmount() {
@@ -42,18 +42,18 @@ class Symptoms extends Component {
     _handleClickListItem = (index, name) => {
         this.setState({ selected: index, keyword: name });
         this._focusListItem();
-        this.props.symptomListForInput.setSelectedIndex(-1);
+        this.props.diagnosisListForInput.setSelectedIndex(-1);
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
         this.setState({ keyword: value, focusParent: true });
-        this.props.symptomListItem.setSearchKeyword(value)
+        this.props.diagnosisListItem.setSearchKeyword(value)
 
     }
     _handleClearKeyword = () => {
         this.setState({ keyword: '', selected: -1});
         this.props.search.clearKeyword();
-        this.props.symptomListItem.clearSearchKeyword();
+        this.props.diagnosisListItem.clearSearchKeyword();
         $(this.input).focus();
     }
     _focusListItem = () => {
@@ -62,39 +62,38 @@ class Symptoms extends Component {
 
     _onChangeName = (e) => {
         const { dataset, name, value } = e.target;
-        this.props.symptom.handleChange(dataset.index, name, value);
+        this.props.diagnosis.handleChange(dataset.index, name, value);
     }
     _handleSelectSymptom = (name) => {
         const { selected } = this.state;
         
         if (selected > -1) {
-            this.props.symptom.handleChange(selected, 'name', name);
+            this.props.diagnosis.handleChange(selected, 'name', name);
             return this.setState({ keyword: '', focusParent: false, selected: -1});
         }
-        this.props.symptom.addSymptom(null, null, name);
-        this.props.symptomListForInput.setSelectedIndex(-1);
+        this.props.diagnosis.addDiagnosis(null, null, name);
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
-    _addSymptom = (type, value) => {
+    _addDiagnosis = (type, value) => {
         const { keyword, selected } = this.state;
         if (keyword === '') { return false; }
         if (type === 'enter') {
             if (selected > -1) {
-                this.props.symptom.handleChange(selected, 'name', value);
+                this.props.diagnosis.handleChange(selected, 'name', value);
 
             } else {
-                this.props.symptom.addSymptom(null, null, value);
+                this.props.diagnosis.addDiagnosis(null, null, value);
                 return this.setState({ keyword: '', focusParent: false, selected: -1});
             }
         }
         if (selected > -1) {
-            this.props.symptom.handleChange(selected, 'name', keyword);
+            this.props.diagnosis.handleChange(selected, 'name', keyword);
         }
-        this.props.symptom.addSymptom(null, null, this.state.keyword);
+        this.props.diagnosis.addDiagnosis(null, null, this.state.keyword);
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
-    _deleteSymptom = (i) => {
-        const { editableData } = this.props.symptom;
+    _deleteDiagnosis = (i) => {
+        const { editableData } = this.props.diagnosis;
         if (i !== undefined
         ) {
             if (editableData.length < 2) {
@@ -103,13 +102,12 @@ class Symptoms extends Component {
                 // e.stopPropagation();
                 const selectedIndex = i;
                 
-                this.props.symptom.deleteSymptom(selectedIndex);
+                this.props.diagnosis.deleteDiagnosis(selectedIndex);
             }
         }
     }
 
     _scroll = (index) => {
-        
         let offTop;
         if (index <= 3 && index >= 0) {
             offTop = 0;
@@ -118,29 +116,27 @@ class Symptoms extends Component {
             offTop = (index - 2.5) * 32;
         }
         $(function() {
-            let listContainer = $("ul[data-form='list-container-for-symptom']");
-            
+            let listContainer = $("ul[data-form='list-container-for-diagnosis']");
             listContainer.scrollTop(offTop);
             listContainer.on("scroll", () => {
             })
         })
     }
 
-    _symptomMatchingCheck = (symptomName) => {
-        const symptoms = this.props.symptomListItem.symptoms || [];
-        if (symptoms.filter(item => item.name === symptomName).length > 0) {
+    _diagnosisMatchingCheck = (diagnosisName) => {
+        const diagnosis = this.props.diagnosisListItem.diagnosises || [];
+        if (diagnosis.filter(item => item.name === diagnosisName).length > 0) {
             return true;
         } else return false;
     }
     
     render() {
-        const { editableData } = this.props.symptom;
+        const { editableData } = this.props.diagnosis;
         const { length } = editableData;
-        const { symptoms } = this.props.symptomListItem;
-
+        const { diagnosises } = this.props.diagnosisListItem;
         return (
-            <div className={cx('Symptoms')}>
-                <h5>증상</h5>
+            <div className={cx('Diagnosis')}>
+            <h5>추정진단</h5>
                 <div 
                     className={cx('search-container')}
                     ref={(ref) => {
@@ -157,43 +153,43 @@ class Symptoms extends Component {
                                     this.input = ref;
                                 }}
                                 name="keyword" 
-                                id="keyword-symptom" 
+                                id="keyword-diagnosis" 
                                 type="text" 
                                 autoComplete='off' 
-                                placeholder="증상 검색 & 추가" 
+                                placeholder="진단 검색 & 추가" 
                                 onChange={this._handleOnChange}
                                 value={this.state.keyword}
                                 onKeyDown={(e) => {
                                     const { focusParent, keyword } = this.state;
-                                    const { selectedIndex, maxIndex, currentIndex } = this.props.symptomListForInput;
-                                    const symptoms = this.props.symptomListItem.symptoms || [];
+                                    const { selectedIndex, maxIndex, currentIndex } = this.props.diagnosisListForInput;
+                                    const diagnosises = this.props.diagnosisListItem.diagnosises || [];
                                     let index;
 
                                     if(e.keyCode === 13) {
                                         if (selectedIndex < 0) {
                                             if (this._symptomMatchingCheck(keyword)) {
-                                                this.props.symptomListItem.clearSearchKeyword();
-                                                return this._addSymptom('enter', keyword);
+                                                this.props.diagnosisListItem.clearSearchKeyword();
+                                                return this._addDiagnosis('enter', keyword);
                                             } else {
                                                 this.setState({keyword: ''});
-                                                this.props.symptomListItem.clearSearchKeyword();
-                                                return alert('아래 목록에서 알맞는 증상을 선택 후 입력해 주세요')
+                                                this.props.diagnosisListItem.clearSearchKeyword();
+                                                return alert('아래 목록에서 알맞는 진단을 선택 후 입력해 주세요')
                                             }
                                         }
-                                        this._addSymptom('enter', symptoms[selectedIndex].name);
-                                        this.props.symptomListForInput.setSelectedIndex(-1);
-                                        this.props.symptomListItem.clearSearchKeyword();
-                                        return this.props.symptomListForInput.clearForList();
+                                        this._addDiagnosis('enter', diagnosises[selectedIndex].name);
+                                        this.props.diagnosisListForInput.setSelectedIndex(-1);
+                                        this.props.diagnosisListItem.clearSearchKeyword();
+                                        return this.props.diagnosisListForInput.clearForList();
                                         
                                         
                                     }
                                     if (e.keyCode === 27) {
                                         this.setState({keyword: '', focusParent: false, selected: -1})
                                         if (currentIndex < 0 || currentIndex === null) return false;
-                                        this.props.symptomListForInput.clear();
+                                        this.props.diagnosisListForInput.clear();
                                         
                                         this.props.symptom.pressESC(currentIndex);
-                                        this.props.symptomListItem.setSearchKeyword('');
+                                        this.props.diagnosisListItem.setSearchKeyword('');
                                     }
 
                                     if(e.keyCode === 38) {
@@ -201,14 +197,14 @@ class Symptoms extends Component {
                                         if(focusParent) {
                                             if (selectedIndex <= 0) {
                                                 this._scroll(0);
-                                                this.setState({keyword: symptoms[0].name})
+                                                this.setState({keyword: diagnosises[0].name})
                                                 return;
                                             }
                                             if (selectedIndex > 0) {
                                                 index = selectedIndex - 1;
                                                 this._scroll(index);
-                                                this.setState({keyword: symptoms[selectedIndex - 1].name})
-                                                return this.props.symptomListForInput.setSelectedIndex(index);
+                                                this.setState({keyword: diagnosises[selectedIndex - 1].name})
+                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
                                             }
                                         }
                                         return;
@@ -221,18 +217,18 @@ class Symptoms extends Component {
                                             if (selectedIndex < 0) {
                                                 index = 0;
                                                 this._scroll(index);
-                                                this.setState({keyword: symptoms[0].name})
-                                                return this.props.symptomListForInput.setSelectedIndex(index);
+                                                this.setState({keyword: diagnosises[0].name})
+                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
                                             }
                                             if (selectedIndex >= 0 && selectedIndex < maxIndex) {
                                                 index = selectedIndex + 1;
                                                 this._scroll(index);
-                                                this.setState({keyword: symptoms[index].name})
-                                                return this.props.symptomListForInput.setSelectedIndex(index);
+                                                this.setState({keyword: diagnosises[index].name})
+                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
                                             }
                                             if (selectedIndex === maxIndex) {
                                                 this._scroll(maxIndex);
-                                                this.setState({keyword: symptoms[maxIndex].name})
+                                                this.setState({keyword: diagnosises[maxIndex].name})
                                                 return;
                                             }
                                         }
@@ -248,11 +244,11 @@ class Symptoms extends Component {
                     {
                         this.state.focusParent &&
                         <div className={cx('wrapper', 'results-wrapper')}>
-                            <ul data-form="list-container-for-symptom">
+                            <ul data-form="list-container-for-diagnosis">
                                 {
-                                    symptoms.map((symptom, i) => {
-                                        const { name } = symptom;
-                                        const { selectedIndex } = this.props.symptomListForInput;
+                                    diagnosises.map((diagnosis, i) => {
+                                        const { name } = diagnosis;
+                                        const { selectedIndex } = this.props.diagnosisListForInput;
 
                                         return <li 
                                             className={cx({active: selectedIndex === i})}
@@ -261,10 +257,10 @@ class Symptoms extends Component {
                                                 this._handleSelectSymptom(name);
                                             }}
                                             onMouseEnter={() => {
-                                                this.props.symptomListForInput.setSelectedIndex(i);
+                                                this.props.diagnosisListForInput.setSelectedIndex(i);
                                             }}
                                             onMouseLeave={() => {
-                                                this.props.symptomListForInput.setSelectedIndex(-1);
+                                                this.props.diagnosisListForInput.setSelectedIndex(-1);
                                             }}
                                         >
                                             {name || ''}
@@ -272,47 +268,47 @@ class Symptoms extends Component {
                                     })
                                 }
                                 {
-                                    symptoms.length < 1 && <li className={cx('no-results')} style={{fontWeight: 100}}><span style={{letterSpacing: 1.2, fontWeight: 400, textDecoration: 'underline'}}>{this.state.keyword}</span> 와 일치하는 증상이 없습니다</li>
+                                    diagnosises.length < 1 && <li className={cx('no-results')} style={{fontWeight: 100}}><span style={{letterSpacing: 1.2, fontWeight: 400, textDecoration: 'underline'}}>{this.state.keyword}</span> 와 일치하는 진단이 없습니다</li>
                                 }
                             </ul>
                         </div>
                     }
                 </div>
-                <div className={cx('wrapper', 'symptoms-wrapper')}>
+                <div className={cx('wrapper', 'diagnosis-wrapper')}>
                     <ul>
                         {
-                            editableData.map((symptom, i) => {
-                                const { name, description } = symptom;
+                            editableData.map((diagnosis, i) => {
+                                const { name, description } = diagnosis;
                                 return <li key={i} className={cx('')}>
-                                    <div className={cx('form-wrapper', 'symptom-name', 'input')}>
+                                    <div className={cx('form-wrapper', 'diagnosis-name', 'input')}>
                                         <input 
                                             className={cx('name')}
                                             name="name" 
-                                            id={`symptom-name-${i}`} 
+                                            id={`diagnosis-name-${i}`} 
                                             type="text" 
-                                            placeholder="증상" 
+                                            placeholder="진단" 
                                             readOnly
                                             onClick={()=>{this._handleClickListItem(i, name)}}
                                             value={name || ''}
                                         />
-                                        <label htmlFor={`symptom-name-${i}`}>증상명</label>
+                                        <label htmlFor={`diagnosis-name-${i}`}>진단명</label>
                                     </div>
                                     <div className={cx('input', 'description', 'form-wrapper')}>
                                         <input 
                                             data-index={i}
                                             className={cx('description')}
                                             name="description" 
-                                            id={`symptom-description-${i}`} 
+                                            id={`diagnosis-description-${i}`} 
                                             type="text" 
                                             autoComplete='off' 
                                             placeholder="입력란" 
                                             onChange={this._onChangeName}
                                             value={description}
                                         />
-                                        <label htmlFor={`symptom-description-${i}`}>상세설명</label>
+                                        <label htmlFor={`diagnosis-description-${i}`}>상세설명</label>
                                     </div>
                                     <div className={cx('trash', {last: length === 1})}>
-                                        <FaTrash onClick={() => {this._deleteSymptom(i);}}/>
+                                        <FaTrash onClick={() => {this._deleteDiagnosis(i);}}/>
                                     </div>
                                 </li>
                             })
@@ -324,4 +320,4 @@ class Symptoms extends Component {
     }
 }
 
-export default Symptoms;
+export default Diagnosis;
