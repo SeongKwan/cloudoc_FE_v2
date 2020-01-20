@@ -2,7 +2,8 @@ import { observable, action } from 'mobx';
 
 class SearchStore {
     @observable keyword = {
-        cases: ''
+        cases: '',
+        symptoms: ''
     }
 
     @action setKeyword(type, keyword) {
@@ -11,7 +12,8 @@ class SearchStore {
 
     @action clearKeyword() {
         this.keyword = {
-            cases: ''
+            cases: '',
+            symptoms: ''
         }
     }
 }

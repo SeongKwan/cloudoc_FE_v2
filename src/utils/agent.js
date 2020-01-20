@@ -75,6 +75,15 @@ class Agent {
         return this.get(`/cases`);
     }
 
+
+    loadSymptoms() {
+        return this.get(`/symptoms`);
+    }
+    
+    loadSymptom(symptomId) {
+        return this.get(`/symptoms/${symptomId}`);
+    }
+
     /* Base REST API method */
     get(url) {
         return this.axios

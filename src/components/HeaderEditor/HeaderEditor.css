@@ -1,0 +1,26 @@
+
+  .fancy-link {
+    display: inline-flex;
+    align-items: center;
+    color: #17717a;
+    font-weight: bold;
+    text-decoration-skip-ink: auto;
+  }
+  
+  .fancy-link:hover,
+  .fancy-link:focus {
+    text-decoration: none;
+  }
+  
+  /* Because the icon's dimensions are set with ems, we can
+     affect it's size using font size */
+  .fancy-link__icon {
+    font-size: 1.5em;
+  }
+  
+  /* Set the width and height to be 1em, which
+     will be the font-size of its parent element */
+  .icon {
+    width: 1em;
+    height: 1em;
+  }

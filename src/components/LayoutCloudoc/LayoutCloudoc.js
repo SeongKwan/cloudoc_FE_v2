@@ -11,7 +11,7 @@ import $ from 'jquery';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('auth', 'Case', 'search')
+@inject('auth', 'Case', 'search', 'login', 'user')
 @observer
 class LayoutCloudoc extends Component {
     state = {
@@ -28,9 +28,9 @@ class LayoutCloudoc extends Component {
 
         });
         this.setState({loadingState: false});
-        
-        this.props.auth.setExpiredToken(false);
     }
+    
+
     _loadCases = async () => {
         const { loadMore } = this.props.Case;
         const totalHeight = Math.floor($(this.layout).prop("scrollHeight"));

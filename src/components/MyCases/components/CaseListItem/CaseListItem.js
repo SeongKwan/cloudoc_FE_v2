@@ -3,6 +3,7 @@ import styles from './CaseListItem.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { GoPerson } from "react-icons/go";
+import { FiClock } from "react-icons/fi";
 // import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 // import { IoIosWater, IoIosMan } from "react-icons/io";
 import { FaNotesMedical } from "react-icons/fa";
@@ -32,16 +33,18 @@ class CaseListItem extends Component {
         const { symptom, diagnosis, treatment } = Case.record[latestRecordIndex] || [];
 
         return (
-            <Link to={`/case/detail/${caseId}`}>
+            <Link to={`/case/editor/detail/${caseId}`}>
                 <li className={cx('CaseListItem')}>
                     <div className={cx('wrapper-top')}>
-                        <div className={cx('qna')}>
-                            <div className={cx('count', 'question-count')}>질문 8</div>
-                            <div className={cx('count', 'answer-count')}>답변 5</div>
-                        </div>
                         <div id="case-list-item-memo" className={cx('memo')}>{memo}</div>
-                        <div className={cx('created-at')}>
-                            {Case.created_date}
+                        <div className={cx('date-qna')}>
+                            <div className={cx('created-at')}>
+                                <FiClock />{Case.created_date} &nbsp;&nbsp;|
+                            </div>
+                            <div className={cx('qna')}>
+                                <div className={cx('count', 'question-count')}>질문 8</div>
+                                <div className={cx('count', 'answer-count')}>답변 5</div>
+                            </div>
                         </div>
                     </div>
                     <div className={cx('divider-horizon')}></div>

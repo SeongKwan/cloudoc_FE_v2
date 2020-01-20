@@ -1,21 +1,44 @@
 .CaseEditor {
-    padding: 2rem;
-    font-size: 2rem;
-    button {
-        font-size: 0.7em;
-        padding: 0.3rem;
-        &:hover {
-            cursor: pointer;
-        }
-        &:first-child {
-            margin: 0 1rem;
-        }
+    position: relative;
+    height: 100vh;
+    padding-top: 80px;
+    display: flex;
+    color: $brand-8;
+
+    @include media('lg') {
+        padding-top: 58.5px;
     }
-    .wrapper-caselist {
-        margin-top: 1rem;
-        li {
-            font-size: 0.7em;
-            letter-spacing: 2px;
+    
+    .container {
+        height: calc(100vh - 80px);
+        overflow: hidden;
+        @include media('lg') {
+            height: calc(100vh - 58.5px);
+        }
+
+        &.left, &.right {
+            background-color: rgba($gray-1, 0.2);
+        }
+        
+        &.left {
+            flex: 1;
+        }
+        
+        &.center {
+            flex: 1.7;
+            border-right: 1px solid rgba($brand-8, 0.1);
+            border-left: 1px solid rgba($brand-8, 0.1);
+        }
+        
+        &.right {
+            flex: 1;
+        }
+        .scroll-box {
+            padding-top: 1rem;
+            padding-bottom: 4rem;
+            height: 100%;
+            overflow-y: scroll;
+            
         }
     }
 }

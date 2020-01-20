@@ -21,14 +21,13 @@ const cx = classNames.bind(styles);
 )
 @observer
 class MyCases extends Component {
-    
     componentDidMount() {
         this.props.Case.loadCases();
         
     }
 
     _handleClickOnButton = () => {
-        console.log('add case');
+        this.props.history.push('/case/editor/create');
     }
 
     

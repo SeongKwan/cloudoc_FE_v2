@@ -33,10 +33,6 @@ class CaseLibrary extends Component {
                 return this._loadCases();
             }
         })
-        timer = setInterval(() => {
-            this.checkToken();
-        }, 1800000);
-        
     }
     componentWillUnmount() {
         clearInterval(timer);

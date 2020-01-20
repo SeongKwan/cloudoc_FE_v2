@@ -1,52 +1,65 @@
-import React, { useEffect } from 'react';
-import useReactRouter from 'use-react-router';
-import useStores from '../../stores/useStores';
-import { observer } from 'mobx-react';
-import { Helmet } from "react-helmet";
-import classNames from 'classnames/bind';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import styles from './CaseEditor.module.scss';
-import Loader from '../../components/Loader/Loader';
+import classNames from 'classnames/bind';
+import { Helmet } from "react-helmet";
+// import Loader from '../../components/Loader/Loader';
+import HeaderEditor from '../../components/HeaderEditor/HeaderEditor';
+import Basic from './components/Basic/Basic';
+import Symptoms from './components/Symptoms/Symptoms';
+import BasicOptional from './components/BasicOptional';
+import CollapsibleBox from '../../components/CollapsibleBox/CollapsibleBox';
 
 const cx = classNames.bind(styles);
 
-const CaseEditor = observer(() => {
-  const { history } = useReactRouter();
-  const { login, Case } = useStores();
+@withRouter
+@inject(
+  'auth',
+  'Case',
+  'login',
+  'user', 
+  'caseEditorBasic'
+)
+@observer
+class CaseEditor extends Component {
 
-  useEffect(() => {
-    Case.loadCases();
-  }, [Case])
-
-  return (
-    <div className={cx('CaseEditor')}>
+  render() {
+    const type = this.props.location.pathname.split('/')[3]
+    
+    return (
+      <div className={cx('CaseEditor')}>
         <Helmet>
-            <title>Case Editor</title>
+            <title>{type === 'create' ? 'Case Create' : 'Case Editor'}</title>
         </Helmet>
-        Case Editor Page
-        <span>
-          <button onClick={() => {Case.loadCases();}}>증례 불러오기</button>
-          <button 
-            className={cx('btn-logout')}
-            onClick={() => {
-              login.logout().then(async (res) => {if (res) history.go('/')});
-            }}
-          >
-            로그아웃
-          </button>
-        </span>
-        <div className={cx('wrapper-caselist')}>
-          {
-            Case.isLoading 
-            ? <Loader /> 
-            : <ul>
-              {Case.registry.map((item, i) => {
-                return <li key={i}>#{i} 증례</li>
-              })}
-            </ul>
-          }
+        <HeaderEditor type={type} />
+        <div className={cx('container', 'left')}>
+          <div className={cx('scroll-box')}>
+            
+          </div>
+        </div>
+        <div className={cx('container', 'center')}>
+          <div className={cx('scroll-box')}>
+            <div className={cx('container-case')}>
+              <Basic />
+              <CollapsibleBox 
+                title="추가정보(선택입력)" 
+                initOpen={false}
+              >
+                <BasicOptional />
+              </CollapsibleBox>
+              <Symptoms />
+            </div>
+          </div>
+        </div>
+        <div className={cx('container', 'right')}>
+          <div className={cx('scroll-box')}>
+            
+          </div>
         </div>
       </div>
-  );
-});
+    );
+  }
+}
 
 export default CaseEditor;

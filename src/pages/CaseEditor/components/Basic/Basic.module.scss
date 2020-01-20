@@ -1,0 +1,211 @@
+.Basic {
+  padding: 1rem 2rem;
+  user-select: none;
+
+  h5 {
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    color: $brand-8;
+    user-select: none;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+
+    &.input {
+
+      label,
+      input {
+        transition: all 0.2s ease;
+        touch-action: manipulation;
+      }
+
+      input {
+        padding: 0.1rem 0rem 0.5rem 0.5rem;
+        border: 0;
+        border-bottom: 1px solid $gray-1;
+        font-family: inherit;
+        -webkit-appearance: none;
+        border-radius: 0;
+        cursor: text;
+
+        &::placeholder {
+          color: $gray-3;
+          font-weight: 100;
+        }
+      }
+
+      input:focus,
+      input:hover {
+        outline: 0;
+        border-bottom: 1px solid $brand-6;
+      }
+
+      label {
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 11px;
+
+        &.label-no-input {
+          color: $brand-6;
+          transform: translate(0, 0) scale(1);
+          cursor: pointer;
+        }
+      }
+
+
+      input:placeholder-shown+label {
+        cursor: text;
+        max-width: 66.66%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transform-origin: left bottom;
+        transform: translate(0.5rem, 2rem) scale(1.2);
+      }
+
+
+      ::-webkit-input-placeholder {
+        opacity: 0;
+        transition: inherit;
+      }
+
+
+      input:focus::-webkit-input-placeholder {
+        opacity: 1;
+      }
+
+
+      input:not(:placeholder-shown)+label,
+      input:focus+label {
+        color: $brand-6;
+        transform: translate(0, 0) scale(1);
+        cursor: pointer;
+      }
+    }
+
+    label {
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 11px;
+
+      &.label-no-input {
+        color: $brand-6;
+        transform: translate(0, 0) scale(1);
+        cursor: pointer;
+      }
+    }
+
+    &.age-gender {
+      flex-direction: row;
+
+      .age,
+      .gender {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(0.3rem);
+        border-bottom: 1px solid $gray-1;
+        &.checked {
+          border-color: $brand-6;
+        }
+      }
+
+      .age {
+        width: 80px;
+        margin-right: 1rem;
+      }
+
+      .gender {
+        width: 100px; 
+      }
+    }
+  }
+
+  .radio-wrapper {
+    display: flex;
+    .male, .female {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+
+      input { display: none;}
+      .icon-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgba($brand-8, 0.2);
+        transition: color 0.3s ease;
+        cursor: pointer;
+        padding: 0 0.3rem;
+        &.checked {
+          color: $brand-8;
+        }
+      }
+    }
+  }
+
+
+  /* Reset Select */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    color: $brand-8;
+    background: $white;
+    background-image: none;
+  }
+
+  /* Remove IE arrow */
+  select::-ms-expand {
+    display: none;
+  }
+
+  /* Custom Select */
+  .select-wrapper {
+    position: relative;
+    display: flex;
+    width: 80px;
+    // height: 2em;
+    background: $white;
+    overflow: hidden;
+    border-radius: .25em;
+  }
+
+  select {
+    flex: 1;
+    padding: 0 .5em;
+    // color: #fff;
+    cursor: pointer;
+  }
+
+  /* Arrow */
+  .select-wrapper::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: $white;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+  }
+
+  /* Transition */
+  .select-wrapper:hover::after {
+    color: $brand-6;
+  }
+}

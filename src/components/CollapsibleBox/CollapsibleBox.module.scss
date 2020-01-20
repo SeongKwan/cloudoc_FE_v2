@@ -1,0 +1,27 @@
+.CollapsibleBox {
+    padding: 1rem 2rem;
+    color: rgba($brand-8, 0.5);
+    &.open {
+        color: $brand-8;
+    }
+    h5 {
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 1.5rem;
+        user-select: none;
+        width: 100%;
+        cursor: pointer;
+    }
+    .header {
+        position: relative;
+        display: flex;
+        .btn-toggle {
+            position: absolute;
+            top: -1rem;
+            right: 0;
+            font-size: 1.7rem;
+            padding: 0.3rem;
+            cursor: pointer;
+        }
+    }
+}
