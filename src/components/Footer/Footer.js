@@ -11,7 +11,7 @@ class Footer extends Component {
         <div className={cx('copyright')}>
           &copy; 2020 INTEGRO MEDI LAB CO., LTD. All Rights Reserved.
         </div>
-        <p>ver 20200113b (beta)</p>
+        <p>ver 2020.01.21b (beta)</p>
       </footer>
     );
   }

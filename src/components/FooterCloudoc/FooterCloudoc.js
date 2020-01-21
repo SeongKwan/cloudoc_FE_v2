@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './FooterCloudoc.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import brandLogo from '../../styles/img/logo_main.png';
+import brandLogo from '../../styles/img/IML_logo.png';
 
 const cx = classNames.bind(styles);
 
