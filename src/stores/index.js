@@ -16,6 +16,10 @@ import diagnosisListForInput from './diagnosisListForInputStore';
 import treatment from './treatmentStore';
 import drugListItem from './drugListItemStore';
 import drugListForInput from './drugListForInputStore';
+import lab from './labStore';
+import labListItem from './labListItemStore';
+import labListForInput from './labListForInputStore';
+import modal from './modalStore';
 
 const stores = {
     auth,
@@ -35,7 +39,11 @@ const stores = {
     diagnosisListItem,
     treatment,
     drugListItem,
-    drugListForInput
+    drugListForInput,
+    lab,
+    labListForInput,
+    labListItem,
+    modal
 }
 
 export default stores;

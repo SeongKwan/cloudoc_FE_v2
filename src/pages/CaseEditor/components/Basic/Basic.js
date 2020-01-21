@@ -78,6 +78,7 @@ class Basic extends Component {
                 <div className={cx('form-wrapper', 'title', 'input')}>
                     <input 
                     name="title" 
+                    autoFocus
                     id="title" 
                     type="text" 
                     autoComplete='off' 

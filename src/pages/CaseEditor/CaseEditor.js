@@ -12,6 +12,7 @@ import BasicOptional from './components/BasicOptional';
 import CollapsibleBox from '../../components/CollapsibleBox/CollapsibleBox';
 import Diagnosis from './components/Diagnosis/Diagnosis';
 import Drug from './components/Drug/Drug';
+import Lab from './components/Lab';
 
 const cx = classNames.bind(styles);
 
@@ -51,6 +52,7 @@ class CaseEditor extends Component {
                 <BasicOptional />
               </CollapsibleBox>
               <Symptoms />
+              <Lab />
               <Diagnosis />
               <Drug />
             </div>

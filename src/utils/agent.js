@@ -84,6 +84,21 @@ class Agent {
         return this.get(`/symptoms/${symptomId}`);
     }
 
+    postExcel(file) {
+        let { token, email } = authStore;
+        
+        return this.axios
+        .post(`/api/v1/cases/uploadxlsx`, file, { 
+            baseURL: API_ROOT,
+            headers: { 
+                'content-type': 'multipart/form-data',
+                'Authorization': `bearer ${token}`,
+                'email': `${email}`
+            }
+        })
+        .catch(this._handleError);
+    }
+
 
     loadConditions() {
         return this.get(`/conditions`);

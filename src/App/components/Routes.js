@@ -28,9 +28,8 @@ class Routes extends Component {
         const { isLoggedIn } = this.props.login;
         if (isLoggedIn) {
             timer = setInterval(() => {
-                console.log('check')
                 this.checkToken();
-            }, 5000);
+            }, 50000);
             // }, 1800000);
         }
     }

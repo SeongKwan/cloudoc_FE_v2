@@ -69,9 +69,11 @@ class Diagnosis extends Component {
         
         if (selected > -1) {
             this.props.diagnosis.handleChange(selected, 'name', name);
+            this.props.diagnosisListForInput.setSelectedIndex(-1);
             return this.setState({ keyword: '', focusParent: false, selected: -1});
         }
         this.props.diagnosis.addDiagnosis(null, null, name);
+        this.props.diagnosisListForInput.setSelectedIndex(-1);
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _addDiagnosis = (type, value) => {

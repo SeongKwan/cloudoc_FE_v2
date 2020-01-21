@@ -3,7 +3,7 @@ import styles from './Drug.module.scss';
 import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import {
-    FiSearch, FiX
+    FiSearch, FiX, FiPlus
 } from 'react-icons/fi';
 import {
     FaTrash
@@ -76,6 +76,7 @@ class Drug extends Component {
     _handleSelectDrug = (drug) => {
         this.props.treatment.handleChangeTretment('drugName', drug.name);
         this.props.treatment.autoSetDrug(drug);
+        this.props.drugListForInput.setSelectedIndex(-1);
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _addDrug = (type, value) => {
@@ -336,7 +337,7 @@ class Drug extends Component {
                 </div>
 
                 <div className={cx('wrapper', 'formula-wrapper')}>
-                    <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>처방구성추가</button>
+                    <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>처방구성추가<FiPlus /></button>
                     <ul>
                         {
                             editableData.map((formula, i) => {
