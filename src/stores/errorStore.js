@@ -11,7 +11,7 @@ class ErrorStore {
     @action async authError(error) {
         const { type } = error;
         if (type === "refresh") {
-            authStore.setExpiredToken(true);
+            
             setTimeout(() => {
                 alert("로그인 시간이 만료되었습니다. 다시 로그인하여 주세요.")
             }, 100);

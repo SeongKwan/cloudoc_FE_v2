@@ -23,7 +23,8 @@ class Drug extends Component {
         selected: -1
     }
     componentDidMount() {
-        this.props.drugListItem.loadDrugs();
+        
+
         this.setState({ keyword: this.props.search.keyword.drug })
         document.addEventListener('mousedown', this._handleClickOutside);
     }
@@ -31,6 +32,7 @@ class Drug extends Component {
         this.setState({ selected: -1, focusParent: false });
         document.removeEventListener('mousedown', this._handleClickOutside);
         this._handleClearKeyword();
+        this.props.treatment.clear();
     }
     _handleClickOutside = (event) => {
         if (this.searchInput && !this.searchInput.contains(event.target)) {
@@ -77,6 +79,8 @@ class Drug extends Component {
         this.props.treatment.handleChangeTretment('drugName', drug.name);
         this.props.treatment.autoSetDrug(drug);
         this.props.drugListForInput.setSelectedIndex(-1);
+        this.props.search.setKeyword('drug', '');
+        this.props.drugListItem.clearSearchKeyword();
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _addDrug = (type, value) => {

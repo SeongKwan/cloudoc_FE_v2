@@ -26,6 +26,7 @@
         display: flex;
         border-radius: $radius-low;
         margin-bottom: 1rem;
+        padding: 0;
 
         &:hover {
             border-color: $brand-6;
@@ -39,14 +40,12 @@
         }
 
         .btn-search {
-            padding: 0 0.5rem;
-            padding-left: 0;
+            padding: 0.5rem;
             cursor: pointer;
         }
 
         .btn-clear {
-            padding: 0 0.5rem;
-            padding-right: 0;
+            padding: 0.5rem;
             cursor: pointer;
         }
 
@@ -58,6 +57,7 @@
             width: 100%;
             border: 0;
             color: $brand-8;
+            padding: 0.5rem;
 
             &::placeholder {
                 font-weight: 100;

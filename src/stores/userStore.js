@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 
 class UserStore {
-    @observable loginUser = null;
+    // @observable loginUser = null;
 
     @computed get currentUser() {
         let user;
@@ -14,7 +14,7 @@ class UserStore {
     }
 
     @action clearUser() {
-        this.loginUser = null;
+        // this.loginUser = null;
     }
 }
 

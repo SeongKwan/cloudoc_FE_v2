@@ -13,13 +13,17 @@ import {
     FiFileText
 } from "react-icons/fi";
 import './HeaderEditor.css';
+import { inject, observer } from 'mobx-react';
 
 const cx = classNames.bind(styles);
 
 @withRouter
+@inject('Case')
+@observer
 class HeaderEditor extends Component {
+
     render() {
-        // const { type } = this.props;
+        const { type } = this.props;
 
         return (
             <header className={cx('HeaderEditor')}>
@@ -28,22 +32,41 @@ class HeaderEditor extends Component {
                         <FiArrowLeft />
                         <div className={cx('label')}>뒤로</div>
                     </div>
-                    <div className={cx('btn-tool', 'create')}>
-                        <FiPlus />
-                        <div className={cx('label')}>새증례</div>
-                    </div>
-                    <div className={cx('btn-tool', 'save')}>
+                    {
+                        type === "detail" &&
+                        <div className={cx('btn-tool', 'create')}>
+                            <FiPlus />
+                            <div className={cx('label')}>새증례</div>
+                        </div>
+                    }
+                    <div 
+                        className={cx('btn-tool', 'save')} 
+                        onClick={() => {
+                                this.props.Case.postCase();
+                                this.props.history.push(`/case`)
+                            }
+                        }
+                    >
                         <FiSave />
-                        <div className={cx('label')}>저장</div>
+                        <div className={cx('label')}>
+                            {
+                                type === "detail" ? "저장" : "만들기"
+                            }
+                        </div>
                     </div>
-                    <div className={cx('btn-tool', 'trash')}>
-                        <FiTrash />
-                        <div className={cx('label')}>삭제</div>
-                    </div>
-                    <div className={cx('btn-tool', 'question')}>
-                        <CsQuestion />
-                        <div className={cx('label')}>질문</div>
-                    </div>
+                    {
+                        type === "detail" &&
+                        <>
+                            <div className={cx('btn-tool', 'trash')}>
+                                <FiTrash />
+                                <div className={cx('label')}>삭제</div>
+                            </div>
+                            <div className={cx('btn-tool', 'question')}>
+                                <CsQuestion />
+                                <div className={cx('label')}>질문</div>
+                            </div>
+                        </>
+                    }
                     <div className={cx('btn-tool', 'report')}>
                         <FiFileText />
                         <div className={cx('label')}>리포트</div>

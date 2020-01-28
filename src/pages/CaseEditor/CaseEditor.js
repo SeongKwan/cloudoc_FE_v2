@@ -13,6 +13,8 @@ import CollapsibleBox from '../../components/CollapsibleBox/CollapsibleBox';
 import Diagnosis from './components/Diagnosis/Diagnosis';
 import Drug from './components/Drug/Drug';
 import Lab from './components/Lab';
+import LeftSideToolbar from './components/LeftSideToolbar/LeftSideToolbar';
+import RightSideList from './components/RightSideList/RightSideList';
 
 const cx = classNames.bind(styles);
 
@@ -22,10 +24,24 @@ const cx = classNames.bind(styles);
   'Case',
   'login',
   'user', 
-  'caseEditorBasic'
+  'caseEditorBasic',
+  'symptomListItem',
+  'drugListItem',
+  'diagnosisListItem'
 )
 @observer
 class CaseEditor extends Component {
+  componentDidMount() {
+    this.props.symptomListItem.loadSymptoms()
+    .then((res) => {
+      this.props.drugListItem.loadDrugs();
+      this.props.diagnosisListItem.loadConditions();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+  
 
   render() {
     const type = this.props.location.pathname.split('/')[3]
@@ -38,11 +54,11 @@ class CaseEditor extends Component {
         <HeaderEditor type={type} />
         <div className={cx('container', 'left')}>
           <div className={cx('scroll-box')}>
-            
+            <LeftSideToolbar />
           </div>
         </div>
-        <div className={cx('container', 'center')}>
-          <div className={cx('scroll-box')}>
+        <div id="case-editor-center-container" className={cx('container', 'center')}>
+          <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
             <div className={cx('container-case')}>
               <Basic />
               <CollapsibleBox 
@@ -60,7 +76,7 @@ class CaseEditor extends Component {
         </div>
         <div className={cx('container', 'right')}>
           <div className={cx('scroll-box')}>
-            
+            <RightSideList />
           </div>
         </div>
       </div>

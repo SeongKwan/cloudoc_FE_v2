@@ -1,0 +1,50 @@
+.RightSideList {
+    position: absolute;
+    // background-color: $brand-2;
+    top: 1%;
+    left: 0.5rem;
+    font-weight: 100;
+    letter-spacing: 1px;
+
+    width: calc(100% - 1rem);
+    // padding: 0.5rem;
+    ul {
+        max-height: 270px;
+        @include media('lg') {
+            max-height: 160px;
+        }
+        overflow-y: scroll;
+        padding: 0 0.5rem;
+        margin-bottom: 0rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        li {
+            // background-color: $brand-8;
+            color: $white;
+            padding: 8px 4px;
+            border-radius: $radius-low;
+            word-break: break-all;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            &:not(:last-child) {
+                margin-bottom: 2%;
+            }
+            &:hover {
+                background-color: $brand-7;
+                color: $brand-8;
+            }
+        }
+        &.check-symptoms, &.check-labs {
+            display: flex;
+            flex-wrap: wrap;
+            li {
+                padding: 4px;
+                width: 48%;
+                &:nth-child(2n) {
+                    margin-left: 2%;
+                }
+                margin-bottom: 2%;
+            }
+        }
+    }
+}

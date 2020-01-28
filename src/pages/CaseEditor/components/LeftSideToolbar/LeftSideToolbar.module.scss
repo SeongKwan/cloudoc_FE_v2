@@ -1,0 +1,489 @@
+.LeftSideToolbar {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // border-radius: $radius-low;
+    background-color: $brand-2;
+    color: $white;
+    
+    z-index: 999;
+    &.openList {
+        border-right: 1px solid $brand-6;
+    }
+    
+    .btn {
+        width: 67px;
+        height: 67px;
+        position: relative;
+        padding: 0.7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 2.5rem;
+        // transition: all 0.3s ease;
+        // border-radius: $radius-low;
+        .label {
+            margin-top: 0.15rem;
+            font-size: 0.8rem;
+            font-weight: 100;
+        }
+        &:hover {
+            background-color: $brand-8;
+        }
+        
+    }
+
+    .content-container {
+        left: 68px;
+    }
+    .detail-container {
+        left: 359px;
+        visibility: hidden;
+        z-index: -10;
+        &.open {
+            visibility: visible;
+            z-index: 9999999;
+        }
+    }
+    .content-container, .detail-container {
+        position: absolute;
+        top: 0%;
+        
+        // width: 200px;
+        // height: 100px;
+        // background-color: greenyellow;
+        ul {
+            margin-bottom: 0;
+        }
+        .scroll-box {
+            // width: 100%;
+            max-height: 700px;
+            overflow-y: scroll;
+            @include media('lg') {
+                max-height: 540px;
+            }
+        }
+        .results {
+            position: absolute;
+            top: 0px;
+            // left: calc(100% + 1px);
+            // padding: 1rem;
+            
+            // border-radius: $radius-low;
+            background-color: $brand-2;
+            &.drug {
+                // top: -67px;
+                
+            }
+            &.teaching {
+                // top: -134px;
+                ul.content {
+                    li:first-child {
+                        margin-top: 0 !important;
+                    }
+                }
+            }
+            &.openDetail {
+                border-right: 1px solid $brand-6;
+            }
+            li {
+                font-size: 1rem;
+                width: 290px;
+                
+                display: flex;
+                flex-direction: column;
+                cursor: default;
+                
+                .name-btn {
+                    display: flex;
+                    
+                    padding: 1rem;
+                }
+                .name {
+                    margin-right: auto;
+                    div {
+                        cursor: pointer;
+                        letter-spacing: 2px;
+                        font-weight: 700;
+                        &:hover {
+                            color: $brand-8;
+                            text-decoration: underline;
+                        }
+                    }
+                }
+                button {
+                    background-color: $brand-8;
+                    padding: 0.2rem 0.5rem;
+                    border: 0;
+                    border-radius: $radius-low;
+                    color: $white;
+                    font-size: 0.8rem;
+                    font-weight: 100;
+                    letter-spacing: 1px;
+                    cursor: pointer;
+                    &:focus, &:active {
+                        outline: 0;
+                    }
+                }
+                .btn-add > button {
+                    background-color: $brand-5;
+                    margin-left: 0.5rem;
+                }
+                .more {
+                    font-size: 0.9rem;
+                    padding: 1rem;
+                    background-color: $brand-3;
+                    color: $white;
+                    .row {
+                        &:not(:last-child) {
+                            margin-bottom: 1rem;
+                        }
+                        .title {
+                            letter-spacing: 1.5px;
+                            color: $brand-8;
+                            font-size: 1rem;
+                            font-weight: 700;
+                        }
+                        &.evidence {
+                            li {
+                                width: 100%;
+                            }
+                        }
+                        ul.content {
+                            padding-left: 0.5rem;
+                            
+                            li {
+                                
+                                display: flex;
+                                flex-direction: row;
+                                // font-weight: 100;
+                                padding: 0.25rem 0;
+                                font-size: 0.9rem;
+                                letter-spacing: 1px;
+                                &:first-child {
+                                    margin-top: 0.5rem;
+                                }
+                                div:first-child {
+                                    margin-right: 0.2rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .detail {
+            position: absolute;
+            top: 0px;
+            // left: calc(100% + 1px);
+            background-color: $brand-2;
+            color: $white;
+            
+            ul {
+                box-shadow: 6px 0 3px -1.5px rgba($black, 0.2);
+            }
+            li {
+                color: $white;
+                padding: 1rem 0;
+                width: 630px;
+            }
+        }
+        
+        .divider {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(white, 0.15);
+            margin: 1.5rem 0;
+        }
+    
+        .anchor {
+            color: #336b85;
+            font-weight: 400;
+            font-size: 0.7rem;
+            position: relative;
+            top: -4px;
+            left: 0px;
+        }
+    
+        .header {
+            display: flex;
+            justify-content: center;
+            padding: 0 1rem;
+            .title {
+                font-size: 1.8rem;
+                letter-spacing: 3px;
+                font-weight: 700;
+                color: $brand-8;
+    
+                .input-container {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;    
+                    input {
+                        @extend %input;
+                        border-radius: 4px;
+                        font-size: 0.9rem;
+                        padding: 0.3rem 0.5rem;
+                        &::placeholder {
+                            font-weight: 300;
+                        }
+                    }
+                    textarea {
+                        width: 100%;
+                        border-radius: 4px;
+                        max-width: 20rem;
+                        border: 0;
+                        background-color: $gray-1;
+                        font-size: 0.9rem;
+                        padding: 0.3rem;
+                        &:focus {
+                            outline: 0;
+                        }
+                        &::placeholder {
+                            color: $oc-gray-5;
+                            font-weight: 300;
+                        }
+                    }
+                }
+            }
+            .edit-save-delete-button {
+                display: flex;
+                .button {
+                    color: $brand-2;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                    padding: 0.2rem;
+                    font-size: 1rem;
+                    &:not(:last-child) {
+                        margin-right: 1.2rem;
+                    }
+                    &:hover {
+                        color: lighten($brand-2, 15%);
+                        cursor: pointer;
+                    }
+                    .icon {
+                        color: inherit;
+                        font-size: 1.25em;
+                    }
+                    .label {
+                        color: inherit;
+                        font-size: 0.7em;
+                    }
+                }
+            }
+        }
+        .top-content {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+            .content-wrapper {
+                display: flex;
+                flex-direction: column;
+                .pathology-item {
+                    margin-bottom: 0rem;
+                }
+                .box {
+                    width: 100%;
+                    
+                    font-weight: 300;
+                    padding-left: 1rem;
+                    font-size: 0.925em;
+                    // letter-spacing: 1px;
+                }
+                .detail-item,
+                .teach-item {
+                    display: flex;
+                    &:not(:last-child) {
+                        margin-bottom: 0.3rem;
+                    }
+                    & > div {
+                        width: 100%;
+                        padding-right: 1rem;
+                    }
+                    button {
+                        // width: 20%;
+                        padding: 0.2rem 1rem;
+                    }
+                }
+                .pathology-wrapper {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    .pathology {
+                        display: flex;
+                        margin-bottom: 0.3rem;
+                        
+                        .pathology-content {
+                            width: 100%;
+                        }
+                        button {
+                            padding: 0.2rem 1rem;
+                        }
+                    }
+                }
+                .head {
+                    font-weight: 700;
+                }
+                .linked {
+                    display: flex;
+                    margin-bottom: 0.3rem;
+                }
+                .lab-state {
+                    text-transform: uppercase;
+                    &.high {
+                        color: rgb(194, 63, 63);
+                    }
+                    &.low {
+                        color: rgb(64, 64, 173);
+                    }
+                }
+                .drug {
+                    margin-bottom: 0.5rem;
+                }
+                .drug-card {
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid rgba(white, 0.3);
+                    padding: 0.5rem;
+                    border-radius: 2px;
+                    .drug-card-body {
+                        display: flex;
+                        &:not(:last-child) {
+                            margin-bottom: 0.3rem;
+                        }
+                        .drug-label {
+                            flex: 2;
+                            font-weight: 500;
+                        }
+                        .drug-content {
+                            flex: 8;
+                            font-weight: 300;
+                        }
+                    }
+                }
+    
+                .label {
+                    width: 10rem;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    padding: 0rem 0;
+                    margin-bottom: 1rem;
+                    padding-left: 0.5rem;
+                    color: $brand-8;
+                }
+                .read-only {
+                    display: flex;
+                    align-items: center;
+                }
+                .input-container {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;    
+                    input {
+                        @extend %input;
+                        border-radius: 4px;
+                        font-size: 0.9rem;
+                        padding: 0.3rem 0.5rem;
+                        &::placeholder {
+                            font-weight: 300;
+                        }
+                    }
+                    textarea {
+                        width: 100%;
+                        border-radius: 4px;
+                        max-width: 20rem;
+                        border: 0;
+                        background-color: $gray-1;
+                        font-size: 0.9rem;
+                        padding: 0.3rem;
+                        &:focus {
+                            outline: 0;
+                        }
+                        &::placeholder {
+                            color: $oc-gray-5;
+                            font-weight: 300;
+                        }
+                    }
+                }
+            }
+        }
+        .bottom-content {
+            padding: 0 1rem;
+    
+            .input-form-container {
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+                display: flex;
+                overflow-x: auto;
+                
+                .form-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    
+                    &:not(:last-child) {
+                        margin-right: 1.2rem;
+                    }
+                    &.related-disease {
+                        flex: 1;
+                    }
+                    &.relevance,
+                    &.reference {
+                        flex: 2;
+                    }
+                    &.delete-row-button {
+                        padding: 0.3rem 0;
+                        color: $delete;
+                        &:hover {
+                            cursor: pointer;
+                        }
+                    }
+        
+                    .label {
+                        margin-bottom: 0.3rem;
+                    }
+        
+                    .content {
+                        height: 2rem;
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 0.3rem;
+                        .icon {
+                            margin-left: 0.3rem;
+                            font-size: 1rem;
+                        }
+                        input {
+                            width: 100%;
+                            @extend %input;
+                            border-radius: 4px;
+                            padding: 0.3rem;
+                        }
+                    }
+                }
+            }
+            .addup-button-wrapper {
+                .addup-button {
+                    background-color: $brand-1;
+                    font-size: 0.8rem;
+                    .icon {
+                        margin-left: 0.3rem;
+                    }
+                    &:hover {
+                        background-color: lighten($brand-1, 10%);
+                    }
+                }
+            }
+        }
+    }
+
+    
+}

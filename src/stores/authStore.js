@@ -104,7 +104,12 @@ class AuthStore {
         return agent.validateToken()
         .then(action((response) => {
             if (!response.data) {
-                this.expiredToken = true;
+                this.setExpiredToken(true);
+            }
+            return response;
+        }))
+        .then((response) => {
+            if (!response.data) {
                 setTimeout(() => {
                     alert("로그인 시간이 만료되었습니다. 다시 로그인하여 주세요.")
                 }, 100);
@@ -116,7 +121,7 @@ class AuthStore {
                 }, 200);
             }
             return response.data;
-        }))
+        })
         .catch((error) => {
             throw error;
         })

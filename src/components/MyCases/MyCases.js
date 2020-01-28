@@ -41,6 +41,8 @@ class MyCases extends Component {
             : infiniteStore;
         let { length } = database || [];
 
+        // console.log(JSON.parse(JSON.stringify(database)))
+        // console.log(lastPage, rest, loadMore)
 
         return (
             <div 

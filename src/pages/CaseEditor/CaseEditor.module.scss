@@ -4,41 +4,61 @@
     padding-top: 80px;
     display: flex;
     color: $brand-8;
-
+    background-color: rgba($gray-1, 0.2);
+    justify-content: center;
     @include media('lg') {
         padding-top: 58.5px;
     }
     
     .container {
         height: calc(100vh - 80px);
-        overflow: hidden;
+        display: flex;
         @include media('lg') {
             height: calc(100vh - 58.5px);
         }
 
+        .scroll-box {
+            width: 100%;
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
         &.left, &.right {
+            position: relative;
             background-color: rgba($gray-1, 0.2);
         }
         
         &.left {
             flex: 1;
+            position: relative;
+            z-index: 10;
+            .scroll-box {
+                overflow-y: scroll;
+                overflow-x: visible;
+            }
         }
         
         &.center {
+            position: relative;
             flex: 2;
             border-right: 1px solid rgba($brand-8, 0.1);
             border-left: 1px solid rgba($brand-8, 0.1);
+            z-index: 9;
+            background-color: $white;
+            
         }
         
         &.right {
+            padding-left: 0.5rem;
             flex: 1;
+            z-index: 8;
+            .scroll-box {
+                overflow-y: scroll;
+                overflow-x: visible;
+            }
         }
-        .scroll-box {
-            padding-top: 1rem;
-            padding-bottom: 2rem;
-            height: 100%;
-            overflow-y: scroll;
-            
-        }
+        
     }
 }

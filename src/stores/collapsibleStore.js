@@ -1,18 +1,38 @@
 import { observable, action } from 'mobx';
 
 class CollapsibleStore {
-    @observable open = false;
+    @observable open = {
+        basic: false,
+        sidebar: {
+            symptom: false,
+            lab: false,
+            caution: false
+        }
+    };
 
-    @action toggleSwitch() {
-        this.open = !this.open;
+    @action toggleSwitch(type, detail) {
+        if (type === 'basic') {
+            return this.open[type] = !this.open[type];
+        }
+        this.open[type][detail] = !this.open[type][detail];
     }
     
-    @action initOpen() {
-        this.open = true;
+    @action initOpen(type, detail) {
+        if (type === 'basic') {
+            return this.open[type] = true;
+        }
+        this.open[type][detail] = true;
     }
 
     @action clear() {
-        this.open = false;
+        this.open = {
+            basic: false,
+            sidebar: {
+                symptom: false,
+                lab: false,
+                caution: false
+            }
+        }
     }
 }
 

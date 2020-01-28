@@ -21,7 +21,6 @@ class Diagnosis extends Component {
         selected: -1
     }
     componentDidMount() {
-        this.props.diagnosisListItem.loadConditions();
         this.props.diagnosis.initEditableData();
         this.setState({ keyword: this.props.search.keyword.diagnosis })
         document.addEventListener('mousedown', this._handleClickOutside);
@@ -70,10 +69,14 @@ class Diagnosis extends Component {
         if (selected > -1) {
             this.props.diagnosis.handleChange(selected, 'name', name);
             this.props.diagnosisListForInput.setSelectedIndex(-1);
+            this.props.search.setKeyword('diagnosis', '');
+            this.props.diagnosisListItem.clearSearchKeyword();
             return this.setState({ keyword: '', focusParent: false, selected: -1});
         }
         this.props.diagnosis.addDiagnosis(null, null, name);
         this.props.diagnosisListForInput.setSelectedIndex(-1);
+        this.props.search.setKeyword('diagnosis', '');
+        this.props.diagnosisListItem.clearSearchKeyword();
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _addDiagnosis = (type, value) => {

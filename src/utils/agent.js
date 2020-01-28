@@ -75,6 +75,21 @@ class Agent {
         return this.get(`/cases`);
     }
 
+    postCase(newCase) {
+        return this.post(`/cases`, newCase);
+    }
+
+    updateCase(caseId, updatedCase) {
+        return this.patch(`/cases/${caseId}`, updatedCase);
+    }
+
+    deleteCase(caseId) {
+        return this.delete(`/cases/${caseId}`);
+    }
+
+
+    
+
 
     loadSymptoms() {
         return this.get(`/symptoms`);
@@ -118,6 +133,13 @@ class Agent {
     }
 
 
+    analyzeCondition(referenceData) {
+        return this.post(`/cases/analyzeCondition`, referenceData);
+    }
+
+    analyzeTreatment(referenceData) {
+        return this.post(`/cases/analyzeTreatment`, referenceData);
+    }
 
 
     /* Base REST API method */

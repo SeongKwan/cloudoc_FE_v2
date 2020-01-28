@@ -4,6 +4,29 @@
     &.open {
         color: $brand-8;
     }
+    &.sidebar {
+        background-color: $brand-2;
+        padding: 0.5rem;
+        // color: rgba($white, 0.5);
+        overflow: hidden;
+        // color: $brand-8;
+        &:not(:last-child) {
+            margin-bottom: 0.5rem;
+        }
+        h5 {
+
+            font-size: 1rem;
+            // font-weight: 400 !important;
+            margin-bottom: 0rem;
+            padding: 0.3rem 0;
+            padding-left: 0.3rem;
+        }
+        .btn-toggle {
+            font-size: 1rem;
+        }
+        color: $white;
+    }
+    
     h5 {
         font-weight: 700;
         letter-spacing: 2px;
@@ -11,6 +34,9 @@
         user-select: none;
         width: 100%;
         cursor: pointer;
+        &:hover {
+            text-decoration: underline;
+        }
     }
     .header {
         position: relative;

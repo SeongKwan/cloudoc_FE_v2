@@ -26,13 +26,21 @@ let timer = null;
 class Routes extends Component {
     componentDidMount() {
         const { isLoggedIn } = this.props.login;
+        const { expiredToken } = this.props.auth;
+
         if (isLoggedIn) {
             timer = setInterval(() => {
-                this.checkToken();
-            }, 50000);
+                if (!expiredToken) {
+                    
+                    this.checkToken();
+                } else {
+                    console.log('expired')
+                }
+            }, 30000);
             // }, 1800000);
         }
     }
+
     componentWillUnmount() {
         clearInterval(timer);
         this.props.auth.setExpiredToken(false);
@@ -41,7 +49,7 @@ class Routes extends Component {
         const THIS = this;
         return new Promise((resolve, reject) => {
             let result = THIS.props.auth.validateToken();
-            return resolve({success: result}); 
+            return resolve({success: result.data}); 
         });
     }
     render() {

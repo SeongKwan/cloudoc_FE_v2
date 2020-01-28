@@ -1,0 +1,10 @@
+.custom-tooltip {
+    word-break: break-all;
+    width: 200px;
+    font-size: 0.8rem;
+    background-color: #484a47 !important;
+}
+
+.__react_component_tooltip.type-dark.place-top:after, .__react_component_tooltip.type-dark.place-top:before {
+    border-top-color: #484a47 !important;
+}

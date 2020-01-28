@@ -18,9 +18,8 @@ const cx = classNames.bind(styles);
 @inject('Case', 'search', 'lab', 'labListItem', 'labListForInput')
 @observer
 class Lab extends Component {
-    componentDidUpdate() {
-        // this._extractCategory();
-        // this._renderResults();
+    componentWillUnmount() {
+        this.props.lab.clear();
     }
 
     _onChange = (e) => {

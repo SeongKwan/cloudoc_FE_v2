@@ -8,6 +8,7 @@
     width: 100%;
     height: 5rem;
     background-color: $brand-8;
+    z-index: 999999;
     @include media('lg') {
         height: 4.5rem;
     }

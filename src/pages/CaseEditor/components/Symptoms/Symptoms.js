@@ -21,7 +21,7 @@ class Symptoms extends Component {
         selected: -1
     }
     componentDidMount() {
-        this.props.symptomListItem.loadSymptoms();
+        
         this.props.symptom.initEditableData();
         this.setState({ keyword: this.props.search.keyword.symptoms })
         document.addEventListener('mousedown', this._handleClickOutside);
@@ -66,13 +66,17 @@ class Symptoms extends Component {
     }
     _handleSelectSymptom = (name) => {
         const { selected } = this.state;
-        
+        console.log('what?')
         if (selected > -1) {
             this.props.symptom.handleChange(selected, 'name', name);
+            this.props.search.setKeyword('symptoms', '');
+            this.props.symptomListItem.clearSearchKeyword();
             return this.setState({ keyword: '', focusParent: false, selected: -1});
         }
         this.props.symptom.addSymptom(null, null, name);
         this.props.symptomListForInput.setSelectedIndex(-1);
+        this.props.symptomListItem.clearSearchKeyword();
+        this.props.search.setKeyword('symptoms', '');
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _addSymptom = (type, value) => {
