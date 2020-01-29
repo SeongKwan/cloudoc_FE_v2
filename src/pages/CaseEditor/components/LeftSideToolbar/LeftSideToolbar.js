@@ -176,7 +176,7 @@ class LeftSideToolbar extends Component {
         symptomDetail = this.props.analyzeSymptom.openDetail;
         drugDetail = this.props.analyzeDrug.openDetail;
         drugMores = this.props.analyzeDrug.openMores;
-        console.log(JSON.parse(JSON.stringify(this.props.analyzeDrug.openMores)))
+        // console.log(JSON.parse(JSON.stringify(this.props.analyzeDrug.openMores)))
         // console.log(JSON.parse(JSON.stringify(openDetails)))
         const anlSymptom = this.props.analyzeSymptom.editableData;
         const anlDrug = this.props.analyzeDrug.editableData;
