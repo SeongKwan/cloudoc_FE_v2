@@ -4,13 +4,15 @@ import styles from './HeaderEditor.module.scss';
 import classNames from 'classnames/bind';
 import { 
     FiArrowLeft, 
-    CsQuestion, 
+    
+    // CsQuestion, 
     CsQuestionMenu,
     FiSettings,
     FiTrash,
     FiPlus,
     FiSave,
-    FiFileText
+    FiFileText,
+    FiHelpCircle
 } from "react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
@@ -62,7 +64,7 @@ class HeaderEditor extends Component {
                                 <div className={cx('label')}>삭제</div>
                             </div>
                             <div className={cx('btn-tool', 'question')}>
-                                <CsQuestion />
+                                <FiHelpCircle />
                                 <div className={cx('label')}>질문</div>
                             </div>
                         </>
