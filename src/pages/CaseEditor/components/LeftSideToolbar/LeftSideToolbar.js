@@ -8,11 +8,17 @@ import './LeftSideToolbar.css';
 import ReactTooltip from 'react-tooltip'
 import $ from 'jquery';
 
+// import { 
+//     CsSmartCondition,
+//     CsSmartDrug,
+//     CsTeaching
+// } from "react-icons/fi";
 import { 
-    CsSmartCondition,
-    CsSmartDrug,
-    CsTeaching
-} from "react-icons/fi";
+    FaUserCheck,
+    FaNotesMedical,
+    FaChalkboard
+} from "react-icons/fa"; 
+
 
 const cx = classNames.bind(styles);
 
@@ -179,15 +185,15 @@ class LeftSideToolbar extends Component {
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
                 <div className={cx('btn')} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} >
-                    <CsSmartCondition />
+                    <FaUserCheck />
                     <div className={cx('label')}>스마트진단</div>
                 </div>
                 <div className={cx('btn')} data-type="drug" data-anl="drug" onClick={this._handleOnClick} >
-                    <CsSmartDrug />
+                    <FaNotesMedical />
                     <div className={cx('label')}>스마트처방</div>
                 </div>
                 <div className={cx('btn')} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} >
-                    <CsTeaching />
+                    <FaChalkboard />
                     <div className={cx('label')}>스마트티칭</div>
                     
                 </div>
