@@ -6,7 +6,7 @@ import {
     FiArrowLeft, 
     
     // CsQuestion, 
-    CsQuestionMenu,
+    FiMessageCircle,
     FiSettings,
     FiTrash,
     FiPlus,
@@ -64,7 +64,7 @@ class HeaderEditor extends Component {
                                 <div className={cx('label')}>삭제</div>
                             </div>
                             <div className={cx('btn-tool', 'question')}>
-                                <FiHelpCircle />
+                                <FiMessageCircle />
                                 <div className={cx('label')}>질문</div>
                             </div>
                         </>
@@ -76,7 +76,7 @@ class HeaderEditor extends Component {
                 </div>
                 <div className={cx('menu')}>
                     <div className={cx('btn-tool', 'qna')}>
-                        <CsQuestionMenu />
+                        <FiHelpCircle />
                         <div className={cx('label')}>도움</div>
                     </div>
                     <div className={cx('btn-tool', 'settings')}>
