@@ -66,7 +66,6 @@ class Symptoms extends Component {
     }
     _handleSelectSymptom = (name) => {
         const { selected } = this.state;
-        console.log('what?')
         if (selected > -1) {
             this.props.symptom.handleChange(selected, 'name', name);
             this.props.search.setKeyword('symptoms', '');

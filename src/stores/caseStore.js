@@ -481,7 +481,7 @@ class CaseStore {
         this.isLoadingForAnalyze = true;
         return agent.analyzeCondition({ referenceData })
             .then(action((response) => {
-                console.log(response.data.result)
+                // console.log(response.data.result)
                 analyzeSymptomStore.setEditableData(response.data.result);
                 this.isLoadingForAnalyze = false;
                 return response.data.result;

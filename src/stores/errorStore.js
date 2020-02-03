@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import loginStore from './loginStore';
 import agent from '../utils/agent';
-import authStore from './authStore';
+// import authStore from './authStore';
 
 class ErrorStore {
     @observable errorToken = false;

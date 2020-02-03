@@ -75,7 +75,8 @@
             // padding: 1rem;
             
             // border-radius: $radius-low;
-            background-color: $brand-2;
+            background-color: rgba($brand-2, 0.9);
+            opacity: 0.9;
             &.drug {
                 // top: -67px;
                 
@@ -181,7 +182,7 @@
             position: absolute;
             top: 0px;
             // left: calc(100% + 1px);
-            background-color: $brand-2;
+            background-color: rgba($brand-2, 0.9);
             color: $white;
             
             ul {
@@ -214,6 +215,26 @@
             display: flex;
             justify-content: center;
             padding: 0 1rem;
+            position: relative;
+            .btn-close {
+                position: absolute;
+                left: 1rem;
+                top: 0;
+                button {
+                    background-color: $brand-8;
+                    padding: 0.2rem 0.5rem;
+                    border: 0;
+                    border-radius: $radius-low;
+                    color: $white;
+                    font-size: 0.8rem;
+                    font-weight: 100;
+                    letter-spacing: 1px;
+                    cursor: pointer;
+                    &:focus, &:active {
+                        outline: 0;
+                    }
+                }
+            }
             .title {
                 font-size: 1.8rem;
                 letter-spacing: 3px;

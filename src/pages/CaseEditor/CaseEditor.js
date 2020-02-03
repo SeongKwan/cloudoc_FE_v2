@@ -59,19 +59,17 @@ class CaseEditor extends Component {
         </div>
         <div id="case-editor-center-container" className={cx('container', 'center')}>
           <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
-            <div className={cx('container-case')}>
-              <Basic />
-              <CollapsibleBox 
-                title="추가정보(선택입력)" 
-                initOpen={false}
-              >
-                <BasicOptional />
-              </CollapsibleBox>
-              <Symptoms />
-              <Lab />
-              <Diagnosis />
-              <Drug />
-            </div>
+            <Basic />
+            <CollapsibleBox 
+              title="추가정보(선택입력)" 
+              initOpen={false}
+            >
+              <BasicOptional />
+            </CollapsibleBox>
+            <Symptoms />
+            <Lab />
+            <Diagnosis />
+            <Drug />
           </div>
         </div>
         <div className={cx('container', 'right')}>

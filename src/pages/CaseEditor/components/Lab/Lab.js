@@ -146,7 +146,7 @@ class Lab extends Component {
     render() {
         const { editableData } = this.props.lab;
         
-        const { category, testName, state } = this.props.lab.sortingType;
+        // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
         // const nameSorting = testName;
         // const stateSorting = state;

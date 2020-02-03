@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+// import { inject, observer } from 'mobx-react';
 import styles from './RightSideList.module.scss';
 import classNames from 'classnames/bind';
 import CollapsibleBox from '../../../../components/CollapsibleBox/CollapsibleBox';

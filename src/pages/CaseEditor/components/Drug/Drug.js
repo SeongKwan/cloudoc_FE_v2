@@ -145,7 +145,7 @@ class Drug extends Component {
 
     render() {
         const { editableData, editableDataForTreatment } = this.props.treatment;
-        const { length } = editableData;
+        // const { length } = editableData;
         const { drugs } = this.props.drugListItem;
         const {
             drugName,

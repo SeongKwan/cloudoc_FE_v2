@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { computed } from 'mobx';
 
 class UserStore {
     // @observable loginUser = null;
@@ -11,10 +11,6 @@ class UserStore {
             user_id: window.localStorage.getItem('user_id') || null
         }
         return user;
-    }
-
-    @action clearUser() {
-        // this.loginUser = null;
     }
 }
 

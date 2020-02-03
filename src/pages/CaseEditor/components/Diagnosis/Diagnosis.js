@@ -140,7 +140,7 @@ class Diagnosis extends Component {
         const { length } = editableData;
         const { diagnosises } = this.props.diagnosisListItem;
         return (
-            <div className={cx('Diagnosis')}>
+            <div id="case-editor-diagnosis" className={cx('Diagnosis')}>
             <h5>추정진단</h5>
                 <div 
                     className={cx('search-container')}

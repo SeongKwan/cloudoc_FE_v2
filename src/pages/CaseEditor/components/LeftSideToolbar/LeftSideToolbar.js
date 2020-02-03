@@ -35,14 +35,45 @@ const cx = classNames.bind(styles);
 @observer
 class LeftSideToolbar extends Component {
     state = {
-        openList: ''
+        openList: '',
+        diagnosisScrollTop: 0
     }
     componentDidMount() {
+        let scrollBox = $('#case-editor-center-container-scroll-box');
+        let objDiv = $('#case-editor-diagnosis');
+        let THIS = this;
+        let offset1 = objDiv.position();
+        let adj1 = offset1.top;
+        setTimeout(() => {
+            THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1})
+        }, 100)
+        scrollBox.on('scroll', this._setScrollTop);
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        let scrollBox = $('#case-editor-center-container-scroll-box');
+        let objDiv = $('#case-editor-diagnosis');
+        let offset1 = objDiv.position();
+        let adj1 = offset1.top;
+        let currentScrollTop = scrollBox.scrollTop() + adj1;
+        if (prevState.diagnosisScrollTop !== currentScrollTop) {
+            this.setState({diagnosisScrollTop: currentScrollTop});
+        }
+    }
+
     componentWillUnmount() {
+        let scrollBox = $('#case-editor-center-container-scroll-box');
+        scrollBox.off('scroll', this._setScrollTop);
         document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    _setScrollTop = () => {
+        let scrollBox = $('#case-editor-center-container-scroll-box');
+        let objDiv = $('#case-editor-diagnosis');
+        let offset = objDiv.position();
+        let adj = offset.top
+        this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj})
     }
 
     _handleOnClick = (e) => {
@@ -110,9 +141,6 @@ class LeftSideToolbar extends Component {
             diagnosis: diagnosis.slice()
         }
 
-        // this.props.bloodTestStore.stateData.forEach((state, i) => {
-        //     referenceData["lab"][i].state = state;
-        // });
         
         if (type === 'symptom') {
             this.props.analyzeSymptom.clear();
@@ -136,8 +164,12 @@ class LeftSideToolbar extends Component {
     }
 
     _handleClickOnBtnAdd = (type, name, drug = null) => {
+        
         if (type === "condition") {
-            this.props.symptom.addSymptom(null, null, name);
+            this.props.diagnosis.addDiagnosis(null, null, name);
+            let scrollBox = $('#case-editor-center-container-scroll-box');
+
+            scrollBox.animate({scrollTop: this.state.diagnosisScrollTop});
         }
         if (type === "drug" && !!drug) {
             this.props.treatment.handleChangeTretment('drugName', name);
@@ -171,15 +203,16 @@ class LeftSideToolbar extends Component {
             formula
         } = this.props.analyzeDrug.currentDrug;
         
-        let symptomMores, symptomDetail, drugMores, drugDetail;
-        symptomMores = this.props.analyzeSymptom.openMores;
+        let symptomDetail, drugDetail;
+        // symptomMores = this.props.analyzeSymptom.openMores;
         symptomDetail = this.props.analyzeSymptom.openDetail;
         drugDetail = this.props.analyzeDrug.openDetail;
-        drugMores = this.props.analyzeDrug.openMores;
+        // drugMores = this.props.analyzeDrug.openMores;
         // console.log(JSON.parse(JSON.stringify(this.props.analyzeDrug.openMores)))
         // console.log(JSON.parse(JSON.stringify(openDetails)))
         const anlSymptom = this.props.analyzeSymptom.editableData;
         const anlDrug = this.props.analyzeDrug.editableData;
+
         
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
@@ -227,7 +260,6 @@ class LeftSideToolbar extends Component {
                                                 <div className={cx('btn-more')}>
                                                     <button onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                {/* this.setState({openMore: !this.state.openMore}); */}
                                                                 this.props.analyzeSymptom.toggleOpenMores(i);
                                                             }
                                                         }
@@ -337,9 +369,7 @@ class LeftSideToolbar extends Component {
                                     const {
                                         id,
                                         drugName,
-                                        relatedDisease,
                                         evidence,
-                                        reference_id
                                     } = anl;
                                         return <li key={i}>
                                         <div className={cx('name-btn')}>
@@ -450,6 +480,16 @@ class LeftSideToolbar extends Component {
                                 <ul className={cx('scroll-box')}>
                                     <li>
                                         <div className={cx('header')}>
+                                            <div className={cx('btn-close')}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.props.analyzeSymptom.closeDetail();
+                                                    }}
+                                                >
+                                                    닫기
+                                                </button>
+                                            </div>
                                             <div className={cx('title')}>
                                                 <div className={cx('box')}>{name}</div>
                                             </div>
@@ -679,6 +719,16 @@ class LeftSideToolbar extends Component {
                                 <ul className={cx('scroll-box')}>
                                     <li>
                                         <div className={cx('header')}>
+                                            <div className={cx('btn-close')}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.props.analyzeDrug.closeDetail();
+                                                    }}
+                                                >
+                                                    닫기
+                                                </button>
+                                            </div>
                                             <div className={cx('title')}>
                                                 <div className={cx('box')}>{this.props.analyzeDrug.currentDrug.name}</div>
                                             </div>
