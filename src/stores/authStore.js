@@ -117,7 +117,7 @@ class AuthStore {
                     loginStore.logout('expiredRefreshToken');
                 }, 150);
                 setTimeout(() => {
-                    window.location.href = "http://localhost:3000/login";
+                    window.location.href = "http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/login";
                 }, 200);
             }
             return response.data;
