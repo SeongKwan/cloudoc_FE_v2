@@ -222,6 +222,19 @@ class LabStore {
         editableData.forEach((editableData) => { 
             this.editableData.push(editableData) 
         });
+        editableData.forEach((editableData, i) => {
+            const {
+                refMin,
+                refMax,
+                optMin,
+                optMax,
+                alertMin,
+                alertMax,
+                value
+            } = editableData;
+            
+            this.getState(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
+        })
         
     }
 
@@ -270,7 +283,7 @@ class LabStore {
 
     @action getState(index, refMin, refMax, optMin, optMax, alertMin, alertMax, value) {
         if (alertMin !== null || alertMax !== null) {
-            if (value === '' || value === 0 || value === null) {
+            if (value === '' || value === null || value === undefined) {
                 this.editableData[index]['state'] = '-';
                 return '-';
             }
