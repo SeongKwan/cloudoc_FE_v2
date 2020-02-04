@@ -9,6 +9,7 @@
     height: 5rem;
     background-color: $brand-8;
     z-index: 999999;
+    color: $white;
     @include media('lg') {
         height: 4.5rem;
     }
