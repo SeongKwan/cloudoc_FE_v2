@@ -12,6 +12,7 @@ import diagnosisStore from './diagnosisStore';
 import drugStore from './treatmentStore';
 import analyzeSymptomStore from './analyzeSymptomStore';
 import analyzeDrugStore from './analyzeRecommendationTreatmentStore';
+import analyzeTeachingStore from './analyzeTeachingStore';
 
 const windowWidth = window.outerWidth;
 let initialLoadAmount;
@@ -30,6 +31,7 @@ class CaseStore {
     @observable isLoadingMore = false;
     @observable isLoadingForAnalyze = false;
     @observable isLoadingForTreatment = false;
+    @observable isLoadingForTeaching = false;
     @observable registry = [];
     @observable infiniteStore = [];
     @observable searchedInfiniteStore = [];
@@ -497,6 +499,18 @@ class CaseStore {
             .then(action((response) => {
                 this.isLoadingForTreatment = false;
                 analyzeDrugStore.setEditableData(response.data.result);
+                return response.data.result;
+            }))
+            .catch(err => {
+                throw(err);
+            })
+    }
+    @action analyzeTeaching(referenceData = {}) {
+        this.isLoadingForTeaching = true;
+        return agent.analyzeTeaching({ referenceData })
+            .then(action((response) => {
+                this.isLoadingForTeaching = false;
+                analyzeTeachingStore.setEditableData(response.data.result);
                 return response.data.result;
             }))
             .catch(err => {

@@ -22,6 +22,7 @@ import labListForInput from './labListForInputStore';
 import modal from './modalStore';
 import analyzeSymptom from './analyzeSymptomStore';
 import analyzeDrug from './analyzeRecommendationTreatmentStore';
+import analyzeTeaching from './analyzeTeachingStore';
 
 const stores = {
     auth,
@@ -47,7 +48,8 @@ const stores = {
     labListItem,
     modal,
     analyzeSymptom,
-    analyzeDrug
+    analyzeDrug,
+    analyzeTeaching
 }
 
 export default stores;

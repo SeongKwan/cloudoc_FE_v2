@@ -30,7 +30,8 @@ const cx = classNames.bind(styles);
     'diagnosis',
     'treatment', 
     'analyzeSymptom',
-    'analyzeDrug'
+    'analyzeDrug',
+    'analyzeTeaching'
 )
 @observer
 class LeftSideToolbar extends Component {
@@ -77,9 +78,14 @@ class LeftSideToolbar extends Component {
     }
 
     _handleOnClick = (e) => {
+        const { dataset } = e.currentTarget;
+
+        if (dataset.disabled === 'true') {
+            return false;
+        }
+        
         e.preventDefault();
         e.stopPropagation();
-        const { dataset } = e.currentTarget;
         this._handleAnalyze(dataset.anl);
         if (this.state.openList !== dataset.type) {
             this.setState({openDetail: ''});
@@ -124,6 +130,7 @@ class LeftSideToolbar extends Component {
             this.setState({openList: ''});
             this.props.analyzeSymptom.clearOpen();
             this.props.analyzeDrug.clearOpen();
+            this.props.analyzeTeaching.clearOpen();
         }
     }
 
@@ -158,6 +165,15 @@ class LeftSideToolbar extends Component {
                 let countResult = result.length;
                 if (countResult === 0) alert('해당하는 분석결과가 없습니다');
                 this.props.analyzeDrug.initiateOpen();
+            });
+            return null;
+        } else if (type === 'teaching') {
+            this.props.analyzeTeaching.clear();
+            this.props.Case.analyzeTeaching(referenceData)
+            .then(result => {
+                let countResult = result.length;
+                if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                this.props.analyzeTeaching.initiateOpen();
             });
             return null;
         }
@@ -208,24 +224,27 @@ class LeftSideToolbar extends Component {
         symptomDetail = this.props.analyzeSymptom.openDetail;
         drugDetail = this.props.analyzeDrug.openDetail;
         // drugMores = this.props.analyzeDrug.openMores;
-        // console.log(JSON.parse(JSON.stringify(this.props.analyzeDrug.openMores)))
+        // console.log(JSON.parse(JSON.stringify(this.props.diagnosis.editableData)))
         // console.log(JSON.parse(JSON.stringify(openDetails)))
         const anlSymptom = this.props.analyzeSymptom.editableData;
         const anlDrug = this.props.analyzeDrug.editableData;
+        const anlTeaching = this.props.analyzeTeaching.editableData;
+        const lengthSymptom = this.props.symptom.editableData.length > 0;
+        const lengthDiagnosis = this.props.diagnosis.editableData.length > 0;
 
         
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
-                <div className={cx('btn')} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} >
+                <div className={cx('btn', {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} data-disabled={!lengthSymptom ? 'true' : 'false'} data-tip="증상이 최소 1개 이상 필요합니다">
                     <FaUserCheck />
                     <div className={cx('label')}>스마트진단</div>
                 </div>
-                <div className={cx('btn')} data-type="drug" data-anl="drug" onClick={this._handleOnClick} >
+                <div className={cx('btn', {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} data-type="drug" data-anl="drug" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
                     <FaNotesMedical />
                     <div className={cx('label')}>스마트처방</div>
                 </div>
-                <div className={cx('btn')} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} >
+                <div className={cx('btn', {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
                     <FaChalkboard />
                     <div className={cx('label')}>스마트티칭</div>
                     
@@ -366,11 +385,11 @@ class LeftSideToolbar extends Component {
                                 {
                                     anlDrug.map((anl, i) => {
                                         const { openMores } = this.props.analyzeDrug;
-                                    const {
-                                        id,
-                                        drugName,
-                                        evidence,
-                                    } = anl;
+                                        const {
+                                            id,
+                                            drugName,
+                                            evidence,
+                                        } = anl;
                                         return <li key={i}>
                                         <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
@@ -418,46 +437,69 @@ class LeftSideToolbar extends Component {
                             </ul>
                         </div>
                     }
+
+
                     {
                         openList === 'teaching' &&
                         <div className={cx('results', 'teaching', {openDetail: true})}>
                             <ul className={cx('scroll-box')}>
-                                <li>
-                                    <div className={cx('name-btn')}>
-                                        <div className={cx('name', 'teaching-name')}>
-                                            <div data-type="teaching" onClick={this._handleClickOnListitem}>진단명 (3)</div>
-                                        </div>
-                                        <div className={cx('btn-more')}>
-                                            <button onClick={() => {this.setState({openMore: !this.state.openMore})}}>
+                                {
+                                    anlTeaching.map((anl, i) => {
+                                        const { openMores } = this.props.analyzeTeaching;
+                                        const {
+                                            relatedDisease,
+                                            teachings
+                                        } = anl;
+
+                                        return <li key={i}>
+                                                <div className={cx('name-btn')}>
+                                                    <div className={cx('name', 'teaching-name')}>
+                                                        <div data-type="teaching" onClick={this._handleClickOnListitem}>{relatedDisease}</div>
+                                                    </div>
+                                                    <div className={cx('btn-more')}>
+                                                        <button onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                this.props.analyzeTeaching.toggleOpenMores(i);
+                                                            }}>
+                                                                {
+                                                                    openMores[i] ? '닫기' : '더보기'
+                                                                }
+                                                        </button>
+                                                    </div>
+                                                    <div className={cx('btn-add')}>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                this._handleClickOnBtnAdd('teaching', '지도법')
+                                                            }}
+                                                        >
+                                                            선택
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 {
-                                                    this.state.openMore ? '줄이기' : '더보기'
+                                                    openMores[i] &&
+                                                    <div className={cx('more')}>
+                                                        <div className={cx('row', 'matched')}>
+                                                            <ul className={cx('content')}>
+                                                                {
+                                                                    teachings.map((teach, i) => {
+                                                                        const { 
+                                                                            description,
+                                                                            ref_id
+                                                                        } = teach;
+                                                                        return <li key={i}>
+                                                                            {description}
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 }
-                                            </button>
-                                        </div>
-                                        <div className={cx('btn-add')}>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    this._handleClickOnBtnAdd('teaching', '지도법')
-                                                }}
-                                            >
-                                                선택
-                                            </button>
-                                        </div>
-                                    </div>
-                                    {
-                                        this.state.openMore &&
-                                        <div className={cx('more')}>
-                                            <div className={cx('row', 'matched')}>
-                                                <ul className={cx('content')}>
-                                                    <li>환자지도 내용1</li>
-                                                    <li>환자지도 내용2</li>
-                                                    <li>환자지도 내용3</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    }
-                                </li>
+                                            </li>
+                                    })
+                                }
                             </ul>
                         </div>
                     }

@@ -140,6 +140,10 @@ class Agent {
     analyzeTreatment(referenceData) {
         return this.post(`/cases/analyzeTreatment`, referenceData);
     }
+    
+    analyzeTeaching(referenceData) {
+        return this.post(`/cases/analyzeTeaching`, referenceData);
+    }
 
 
     /* Base REST API method */
