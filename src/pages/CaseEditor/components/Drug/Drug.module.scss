@@ -306,7 +306,7 @@
                     box-shadow: 0 2px 8px 4px $gray-1;
                 }
                 .herb-name {
-                    width: 60%;
+                    width: 70%;
                 }
                 .dose {
                     width: 100px;
@@ -318,7 +318,7 @@
                     transition: all 0.3s ease;
                     position: absolute;
                     top: 50%;
-                    right: 10px;
+                    right: -20px;
                     transform: translateY(-50%);
                     &:hover {
                         color: $brand-4;

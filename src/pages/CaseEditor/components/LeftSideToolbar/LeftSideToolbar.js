@@ -236,15 +236,15 @@ class LeftSideToolbar extends Component {
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
-                <div className={cx('btn', {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} data-disabled={!lengthSymptom ? 'true' : 'false'} data-tip="증상이 최소 1개 이상 필요합니다">
+                <div className={cx('btn', {open: openList === 'condition'}, {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} data-disabled={!lengthSymptom ? 'true' : 'false'} data-tip="증상이 최소 1개 이상 필요합니다">
                     <FaUserCheck />
                     <div className={cx('label')}>스마트진단</div>
                 </div>
-                <div className={cx('btn', {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} data-type="drug" data-anl="drug" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
+                <div className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} data-type="drug" data-anl="drug" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
                     <FaNotesMedical />
                     <div className={cx('label')}>스마트처방</div>
                 </div>
-                <div className={cx('btn', {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
+                <div className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
                     <FaChalkboard />
                     <div className={cx('label')}>스마트티칭</div>
                     
@@ -489,7 +489,7 @@ class LeftSideToolbar extends Component {
                                                                             ref_id
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                            {description}
+                                                                            -&nbsp;{description}
                                                                         </li>
                                                                     })
                                                                 }
