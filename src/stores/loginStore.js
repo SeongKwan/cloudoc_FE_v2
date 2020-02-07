@@ -119,7 +119,7 @@ class LoginStore {
             if (type !== 'expiredRefreshToken') {
                 const logoutOK = window.confirm('로그아웃 하시겠습니까?');
                 if (logoutOK) {
-                    console.log('logout')
+                    
                     THIS._removeItem()
                     THIS.setLoggedIn(false);
                     authStore.destroyTokenAndUuid();
@@ -127,7 +127,7 @@ class LoginStore {
                     return resolve({success: true});
                 } else {return false}
             } else THIS._removeItem();
-            console.log('logout222')
+            
             THIS.setLoggedIn(false);
             authStore.destroyTokenAndUuid();
             userStore.clearUser();

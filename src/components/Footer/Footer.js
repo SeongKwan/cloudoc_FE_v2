@@ -8,7 +8,6 @@ const cx = classNames.bind(styles);
 class Footer extends Component {
   render() {
     let dateNow = getLocaleDateWithYYYY( Date.now());
-    console.log(dateNow)
     return (
       <footer className={cx('Footer')}>
         <div className={cx('copyright')}>
