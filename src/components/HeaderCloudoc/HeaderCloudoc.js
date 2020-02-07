@@ -103,11 +103,12 @@ class HeaderCloudoc extends Component {
                             className={cx('content-item')}
                             onClick={() => {
                                 console.log('click')
+                                console.log(this.props.history)
                                 this.props.login.logout()
-                                .then(async (res) => {
+                                .then((res) => {
                                     console.log(res)
                                     if (res) {
-                                        this.props.history.go('/')
+                                        this.props.history.go('http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/')
                                     }
                                 })
                             }}

@@ -29,11 +29,11 @@
         padding: 0;
 
         &:hover {
-            border-color: $brand-6;
+            border-color: $brand-2;
         }
 
         &.focus {
-            border-color: $brand-6;
+            border-color: $brand-2;
             border-bottom: 1px solid transparent;
             ;
             border-radius: 2px 2px 0 0;
@@ -74,7 +74,7 @@
         position: absolute;
         top: 33px;
         width: calc(100% - 1rem);
-        border: 1px solid $brand-6;
+        border: 1px solid $brand-2;
         border-radius: $radius-low;
         border-top: 1px solid transparent;
         padding: 0;
@@ -185,7 +185,7 @@
                 input:focus,
                 input:hover {
                     outline: 0;
-                    border-bottom: 1px solid $brand-6;
+                    border-bottom: 1px solid $brand-2;
                 }
 
 
@@ -197,7 +197,7 @@
                     font-size: 11px;
 
                     &.label-no-input {
-                        color: $brand-6;
+                        color: $brand-2;
                         transform: translate(0, 0) scale(1);
                         cursor: pointer;
                     }
@@ -232,7 +232,7 @@
                 input:focus+label,
                 textarea:not(:placeholder-shown)+label,
                 textarea:focus+label {
-                    color: $brand-6;
+                    color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     cursor: pointer;
                 }
@@ -247,7 +247,7 @@
                 color: $gray-3;
 
                 &.label-no-input {
-                    color: $brand-6;
+                    color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     cursor: pointer;
                 }
@@ -261,7 +261,7 @@
 
                 &:focus, &:hover {
                     outline: 0;
-                    border: 1px solid $brand-6;
+                    border: 1px solid $brand-2;
                 }
 
                 &::placeholder {
@@ -283,14 +283,15 @@
             align-items: center;
             justify-content: center;
             padding: 0.5rem;
-            background-color: $brand-7;
+            background-color: $brand-1;
             border: 0;
             letter-spacing: 2px;
             border-radius: $radius-low;
+            color: $white;
             transition: all 0.3s ease;
             cursor: pointer;
             &:hover {
-                background-color: $brand-6;
+                background-color: $brand-2;
             }
             &:focus {
                 outline: 0;
@@ -382,7 +383,7 @@
                 input:focus,
                 input:hover {
                     outline: 0;
-                    border-bottom: 1px solid $brand-6;
+                    border-bottom: 1px solid $brand-2;
                 }
 
                 
@@ -394,7 +395,7 @@
                     font-size: 11px;
     
                     &.label-no-input {
-                        color: $brand-6;
+                        color: $brand-2;
                         transform: translate(0, 0) scale(1);
                         cursor: pointer;
                     }
@@ -425,7 +426,7 @@
     
                 input:not(:placeholder-shown)+label,
                 input:focus+label {
-                    color: $brand-6;
+                    color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     font-weight: 400;
                     cursor: pointer;
@@ -441,7 +442,7 @@
                 color: $gray-3;
     
                 &.label-no-input {
-                    color: $brand-6;
+                    color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     cursor: pointer;
                 }

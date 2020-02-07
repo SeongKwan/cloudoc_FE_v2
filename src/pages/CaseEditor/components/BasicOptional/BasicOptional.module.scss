@@ -37,7 +37,7 @@
       input:focus,
       input:hover {
         outline: 0;
-        border-bottom: 1px solid $brand-6;
+        border-bottom: 1px solid $brand-2;
       }
 
       label {
@@ -47,7 +47,7 @@
         font-size: 11px;
 
         &.label-no-input {
-          color: $brand-6;
+          color: $brand-2;
           transform: translate(0, 0) scale(1);
           cursor: pointer;
         }
@@ -81,7 +81,7 @@
       input:focus+label,
       textarea:not(:placeholder-shown)+label,
       textarea:focus+label {
-        color: $brand-6;
+        color: $brand-2;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
@@ -94,7 +94,7 @@
       font-size: 11px;
 
       &.label-no-input {
-        color: $brand-6;
+        color: $brand-2;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
@@ -107,7 +107,7 @@
       border-radius: $radius-low;
       &:focus, &:hover {
         outline: 0;
-        border: 1px solid $brand-6;
+        border: 1px solid $brand-2;
       }
       &::placeholder {
         color: $gray-3;

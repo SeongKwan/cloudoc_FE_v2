@@ -26,6 +26,10 @@ class MyCases extends Component {
         
     }
 
+    componentWillUnmount() {
+        this.props.Case.clearLoadMore();
+    }
+
     _handleClickOnButton = () => {
         this.props.history.push('/case/editor/create');
     }
@@ -33,7 +37,7 @@ class MyCases extends Component {
     
 
     render() {
-        const { infiniteStore, searchedInfiniteStore, loadMore, isLoading, isLoadingMore } = this.props.Case;
+        const { infiniteStore, searchedInfiniteStore, loadMore, isLoading, isLoadingMore, lastPage, rest } = this.props.Case;
 
         let database = 
             this.props.search.keyword['cases'].length > 0 

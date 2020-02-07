@@ -10,6 +10,7 @@ import symptomStore from './symptomStore';
 import labStore from './labStore';
 import diagnosisStore from './diagnosisStore';
 import drugStore from './treatmentStore';
+import teachingStore from './teachingStore';
 import analyzeSymptomStore from './analyzeSymptomStore';
 import analyzeDrugStore from './analyzeRecommendationTreatmentStore';
 import analyzeTeachingStore from './analyzeTeachingStore';
@@ -23,7 +24,7 @@ if (windowWidth > 1411) {
     loadAmount = 4;
 } else {
     initialLoadAmount = 5;
-    loadAmount = 3;
+    loadAmount = 6;
 }
 
 class CaseStore {
@@ -88,6 +89,7 @@ class CaseStore {
                 .then(action((response) => {
                     this.isLoading = false;
                     this.registry = response.data.cases;
+                    // console.log(response.data.cases)
                     // this.registry = this.registry.sort(function (a, b) { 
                     //     let unixA = momentHelper.toUnix(a.created_date);
                     //     let unixB = momentHelper.toUnix(b.created_date);
@@ -109,8 +111,12 @@ class CaseStore {
             plusOne = 0;
         }
         // database = this._filter(filterKeyword, this.registry);
-        this.lastPage = Math.floor(database.length / loadAmount) + 1;
-        this.rest = database.length%initialLoadAmount;
+        if (database.length - initialLoadAmount <= 0) {
+            this.lastPage = 1;
+        } else if (database.length - initialLoadAmount > 0) {
+            this.lastPage = Math.floor((database.length - initialLoadAmount) / loadAmount) + 2;
+        }
+        this.rest = (database.length + 1)%loadAmount;
         this.currentPage = 1;
 
         if (this.currentPage === this.lastPage) {
@@ -138,15 +144,27 @@ class CaseStore {
         let cases = [];
         cases = this.registry;
         
+        console.log('current page: ',this.currentPage)
         // cases = this._filter({reference: true}, this.registry);
         this.isLoadingMore = false;
         if ((this.currentPage + 1) < this.lastPage) {
-            this.infiniteStore = [...this.infiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage + 1) * loadAmount))]
+            console.log('1')
+            if (this.currentPage === 1) {
+                this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
+                return this.currentPage++;
+            }
+            this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage - 1) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
             this.currentPage++;
         } else if (this.currentPage + 1 === this.lastPage) {
-            this.infiniteStore = [...this.infiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage) * loadAmount + this.rest))]
+            console.log('2')
+            if (this.currentPage === 1) {
+                this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
+                return this.currentPage++;
+            }
+            this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage - 1) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount + this.rest))]
             this.currentPage++;
         } else if (this.currentPage >= this.lastPage) {
+            console.log('3')
             return this.loadMore = false;
         }
     }
@@ -169,6 +187,10 @@ class CaseStore {
 
     @action noLoadMore() {
         this.loadMore = false;
+    }
+
+    @action clearLoadMore() {
+        this.loadMore = true;
     }
 
     @action setIsLoadingMore(status) {
@@ -267,6 +289,7 @@ class CaseStore {
         let newCase = {
         user_id: currentUser.user_id || 'admin',
         created_date: dateNow,
+        title: '',
         record: [
             {
             createdDate: dateNow,
@@ -280,7 +303,8 @@ class CaseStore {
             diagnosis: [],
             analyzeTreatment: [],
             treatment: {},
-            memo: ''
+            memo: '',
+            teaching: []
             }
         ]
         };
@@ -303,8 +327,10 @@ class CaseStore {
         const fomula = JSON.parse(JSON.stringify(drugStore.editableData));
         // const { memo } = memoStore.editableData;
         const { memo } = '';
+        const teaching = JSON.parse(JSON.stringify(teachingStore.editableData))
         
         newCase = { ...newCase, patient: patientInfo };
+        newCase['title'] = patientInfo.title;
         newCase.record[0].symptom = symptom.slice();
         newCase.record[0].exam = exam.slice();
         newCase.record[0].lab = lab.slice();
@@ -318,6 +344,7 @@ class CaseStore {
         newCase.record[0].analyzeTreatment = analyzeTreatment.slice();
         newCase.record[0].treatment = {...treatment, fomula};
         newCase.record[0].memo = memo;
+        newCase.record[0].teaching = teaching.slice();
 
 
         // 공란 필터링 -- 증상

@@ -6,13 +6,13 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 0 $radius-low $radius-low 0;
-    background-color: $brand-2;
+    background-color: $brand-1;
     color: $white;
 
     z-index: 999;
 
     &.openList {
-        border-right: 1px solid $brand-6;
+        border-right: 1px solid $brand-2;
     }
 
     .btn {
@@ -61,7 +61,7 @@
         &.disabled {
             color: rgba(white, 0.15);
             &:hover {
-                background-color: $brand-2;
+                background-color: $brand-1;
             }
         }
 
@@ -95,7 +95,7 @@
     .detail-container {
         position: absolute;
         top: 0%;
-
+        border-radius: $radius-low;
         // width: 200px;
         // height: 100px;
         // background-color: greenyellow;
@@ -119,8 +119,8 @@
             // left: calc(100% + 1px);
             // padding: 1rem;
 
-            // border-radius: $radius-low;
-            background-color: rgba($brand-2, 0.9);
+            border-radius: $radius-low;
+            background-color: rgba($brand-1, 0.9);
             opacity: 0.9;
 
             &.drug {
@@ -135,11 +135,14 @@
                     li:first-child {
                         margin-top: 0 !important;
                     }
+                    button {
+                        white-space: nowrap;
+                    }
                 }
             }
 
             &.openDetail {
-                border-right: 1px solid $brand-6;
+                border-right: 1px solid $brand-2;
             }
 
             li {
@@ -247,7 +250,7 @@
             position: absolute;
             top: 0px;
             // left: calc(100% + 1px);
-            background-color: rgba($brand-2, 0.9);
+            background-color: rgba($brand-1, 0.9);
             color: $white;
 
             ul {
@@ -353,7 +356,7 @@
                 display: flex;
 
                 .button {
-                    color: $brand-2;
+                    color: $brand-1;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -367,7 +370,7 @@
                     }
 
                     &:hover {
-                        color: lighten($brand-2, 15%);
+                        color: lighten($brand-1, 15%);
                         cursor: pointer;
                     }
 

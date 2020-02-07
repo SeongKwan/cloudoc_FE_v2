@@ -127,6 +127,7 @@ class LoginStore {
                     return resolve({success: true});
                 } else {return false}
             } else THIS._removeItem();
+            console.log('logout222')
             THIS.setLoggedIn(false);
             authStore.destroyTokenAndUuid();
             userStore.clearUser();

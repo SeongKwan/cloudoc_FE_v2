@@ -155,7 +155,7 @@ class Drug extends Component {
         } = editableDataForTreatment;
 
         return (
-            <div className={cx('Drug')}>
+            <div id="case-editor-drug" className={cx('Drug')}>
                 <h5>처방</h5>
                 <div 
                     className={cx('search-container')}

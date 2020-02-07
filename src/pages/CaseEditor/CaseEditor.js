@@ -15,6 +15,7 @@ import Drug from './components/Drug/Drug';
 import Lab from './components/Lab';
 import LeftSideToolbar from './components/LeftSideToolbar/LeftSideToolbar';
 import RightSideList from './components/RightSideList/RightSideList';
+import Teaching from './components/Teaching/Teaching';
 
 const cx = classNames.bind(styles);
 
@@ -70,6 +71,7 @@ class CaseEditor extends Component {
             <Lab />
             <Diagnosis />
             <Drug />
+            <Teaching />
           </div>
         </div>
         <div className={cx('container', 'right')}>

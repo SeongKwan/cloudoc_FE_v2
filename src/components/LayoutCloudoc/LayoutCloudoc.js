@@ -53,8 +53,8 @@ class LayoutCloudoc extends Component {
                         }, 550);
                     } else if (this.props.search.keyword['cases'] !== '') {
                         setTimeout(() => {
-                            this.props.Case.addToSearchedStore();
-                        }, 550);
+                        this.props.Case.addToSearchedStore();
+                    }, 550);
                     }
                 }
             }

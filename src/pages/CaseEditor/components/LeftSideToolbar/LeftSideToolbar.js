@@ -31,22 +31,27 @@ const cx = classNames.bind(styles);
     'treatment', 
     'analyzeSymptom',
     'analyzeDrug',
-    'analyzeTeaching'
+    'analyzeTeaching',
+    'teaching'
 )
 @observer
 class LeftSideToolbar extends Component {
     state = {
         openList: '',
-        diagnosisScrollTop: 0
+        diagnosisScrollTop: 0,
+        drugScrollTop: 0
     }
     componentDidMount() {
         let scrollBox = $('#case-editor-center-container-scroll-box');
         let objDiv = $('#case-editor-diagnosis');
+        let objDivDrug = $('#case-editor-drug');
         let THIS = this;
         let offset1 = objDiv.position();
         let adj1 = offset1.top;
+        let offset2 = objDivDrug.position();
+        let adj2 = offset2.top;
         setTimeout(() => {
-            THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1})
+            THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
         }, 100)
         scrollBox.on('scroll', this._setScrollTop);
         document.addEventListener('mousedown', this.handleClickOutside);
@@ -72,9 +77,12 @@ class LeftSideToolbar extends Component {
     _setScrollTop = () => {
         let scrollBox = $('#case-editor-center-container-scroll-box');
         let objDiv = $('#case-editor-diagnosis');
+        let objDivDrug = $('#case-editor-drug');
         let offset = objDiv.position();
-        let adj = offset.top
-        this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj})
+        let adj = offset.top;
+        let offset2 = objDivDrug.position();
+        let adj2 = offset2.top;
+        this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj, drugScrollTop: scrollBox.scrollTop() + adj2})
     }
 
     _handleOnClick = (e) => {
@@ -179,22 +187,35 @@ class LeftSideToolbar extends Component {
         }
     }
 
-    _handleClickOnBtnAdd = (type, name, drug = null) => {
+    _handleClickOnBtnAdd = (type, name, data = null) => {
+        let scrollBox = $('#case-editor-center-container-scroll-box');
         
         if (type === "condition") {
             this.props.diagnosis.addDiagnosis(null, null, name);
-            let scrollBox = $('#case-editor-center-container-scroll-box');
 
             scrollBox.animate({scrollTop: this.state.diagnosisScrollTop});
         }
-        if (type === "drug" && !!drug) {
+        if (type === "drug" && !!data) {
             this.props.treatment.handleChangeTretment('drugName', name);
-            this.props.treatment.autoSetDrug({_id: drug.id});
+            this.props.treatment.autoSetDrug({_id: data.id});
+            // let objDiv = $('#case-editor-center-container-scroll-box');
+            // let h = objDiv.get(0).scrollHeight;
+            // objDiv.animate({scrollTop: h});
+            scrollBox.animate({scrollTop: this.state.drugScrollTop});
+            this.props.analyzeDrug.clearOpen();
+            this.setState({openList: ''});
+        }
+        if (type === 'teaching') {
+            this.props.teaching.addTeaching(null, data, '')
             let objDiv = $('#case-editor-center-container-scroll-box');
             let h = objDiv.get(0).scrollHeight;
             objDiv.animate({scrollTop: h});
-            this.props.analyzeDrug.clearOpen();
-            this.setState({openList: ''});
+        }
+        if (type === 'teaching_all') {
+            this.props.teaching.addTeaching('all', data, '')
+            let objDiv = $('#case-editor-center-container-scroll-box');
+            let h = objDiv.get(0).scrollHeight;
+            objDiv.animate({scrollTop: h});
         }
     }
 
@@ -451,6 +472,7 @@ class LeftSideToolbar extends Component {
                                             teachings
                                         } = anl;
 
+                                        if (teachings.length > 0) {
                                         return <li key={i}>
                                                 <div className={cx('name-btn')}>
                                                     <div className={cx('name', 'teaching-name')}>
@@ -470,10 +492,10 @@ class LeftSideToolbar extends Component {
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                this._handleClickOnBtnAdd('teaching', '지도법')
+                                                                this._handleClickOnBtnAdd('teaching_all', '지도법', teachings)
                                                             }}
                                                         >
-                                                            선택
+                                                            모두선택
                                                         </button>
                                                     </div>
                                                 </div>
@@ -483,13 +505,23 @@ class LeftSideToolbar extends Component {
                                                         <div className={cx('row', 'matched')}>
                                                             <ul className={cx('content')}>
                                                                 {
-                                                                    teachings.map((teach, i) => {
+                                                                    teachings.length > 0 && teachings.map((teach, i) => {
                                                                         const { 
                                                                             description,
-                                                                            ref_id
+                                                                            reference_id
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                            -&nbsp;{description}
+                                                                            <div>-&nbsp;{description}</div>
+                                                                            <div className={cx('btn-add')}>
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        this._handleClickOnBtnAdd('teaching', '지도법', teach)
+                                                                                    }}
+                                                                                >
+                                                                                    선택
+                                                                                </button>
+                                                                            </div>
                                                                         </li>
                                                                     })
                                                                 }
@@ -498,6 +530,7 @@ class LeftSideToolbar extends Component {
                                                     </div>
                                                 }
                                             </li>
+                                        }
                                     })
                                 }
                             </ul>

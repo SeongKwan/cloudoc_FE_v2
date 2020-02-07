@@ -23,6 +23,7 @@ import modal from './modalStore';
 import analyzeSymptom from './analyzeSymptomStore';
 import analyzeDrug from './analyzeRecommendationTreatmentStore';
 import analyzeTeaching from './analyzeTeachingStore';
+import teaching from './teachingStore';
 
 const stores = {
     auth,
@@ -49,7 +50,8 @@ const stores = {
     modal,
     analyzeSymptom,
     analyzeDrug,
-    analyzeTeaching
+    analyzeTeaching,
+    teaching
 }
 
 export default stores;

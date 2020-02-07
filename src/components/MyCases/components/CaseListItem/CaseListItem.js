@@ -19,7 +19,7 @@ class CaseListItem extends Component {
             gender,
             age,
             // chart_id,
-            memo
+            // memo
         } = Case.patient;
         
         let latestRecordIndex;
@@ -36,7 +36,7 @@ class CaseListItem extends Component {
             <Link to={`/case/editor/detail/${caseId}`}>
                 <li className={cx('CaseListItem')}>
                     <div className={cx('wrapper-top')}>
-                        <div id="case-list-item-memo" className={cx('memo')}>{memo}</div>
+                        <div id="case-list-item-memo" className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
                             <div className={cx('created-at')}>
                                 <FiClock />{Case.created_date} &nbsp;&nbsp;|
@@ -52,7 +52,7 @@ class CaseListItem extends Component {
                         <div className={cx('flexbox', 'patient')}>
                             <span className={cx('label')}><GoPerson /></span>
                             <div className={cx('content')}>
-                                {gender}, 만 {age}세
+                                {gender === 'male' ? '남자' : '여자'}, 만 {age}세
                             </div>
                         </div>
                         <div className={cx('flexbox', 'symptom')}>
@@ -85,9 +85,9 @@ const _renderSymptom = (symptoms = []) => {
 
     return symptoms.map((symptom, i) => {
         const { name } = symptom;
-        if (i === 4) {
+        if (i === 3) {
             return <div key={i} className={cx('item')}>...</div>
-        } else if (i > 4) {
+        } else if (i > 3) {
             return false;
         }
         return (
