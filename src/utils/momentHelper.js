@@ -12,7 +12,13 @@ function toUnix(_datetime) {
 
 function getLocaleFullDateWithTime(_datetime) {
     let d = new Date(_datetime);
-    return moment(d).tz(moment.tz.guess()).format("YYYY/MM/DD HH:mm:ss")
+    return moment(d).tz(moment.tz.guess()).format("YYYY/MM/DD HH:mm:ss");
 }
 
-export { toUnix, getLocaleFullDateWithTime }
+function getLocaleDateWithYYYY(_datetime) {
+    let d = new Date(_datetime);
+    return moment(d).tz(moment.tz.guess()).format("YYYYMMDD");
+}
+
+
+export { toUnix, getLocaleFullDateWithTime, getLocaleDateWithYYYY }
