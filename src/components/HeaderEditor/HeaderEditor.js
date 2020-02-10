@@ -32,8 +32,6 @@ class HeaderEditor extends Component {
             if (this.props.Case.currentCase === null) {
                 return false;
             }
-        } else {
-            return true;
         }
         return (
             <header className={cx('HeaderEditor')}>
