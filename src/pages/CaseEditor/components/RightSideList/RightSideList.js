@@ -11,7 +11,8 @@ class RightSideList extends Component {
         return (
             <div className={cx('RightSideList')}>
                 <CollapsibleBox 
-                    title="증상 점검" 
+                    short
+                    title="증상점검" 
                     initOpen={false}
                     sidebar
                     detail="symptom"
@@ -41,7 +42,8 @@ class RightSideList extends Component {
                     </ul>
                 </CollapsibleBox>
                 <CollapsibleBox 
-                    title="검사 점검" 
+                    short
+                    title="검사점검" 
                     initOpen={false}
                     sidebar
                     detail="lab"
@@ -73,6 +75,7 @@ class RightSideList extends Component {
                     </ul>
                 </CollapsibleBox>
                 <CollapsibleBox 
+                    short
                     title="주의사항" 
                     initOpen={false}
                     sidebar

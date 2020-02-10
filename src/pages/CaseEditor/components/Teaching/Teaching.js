@@ -31,18 +31,19 @@ class Teaching extends Component {
     }
     
     render() {
-        const { editableData } = this.props.teaching;
+        const { isEditing } = this.props.Case;
+        const { type } = this.props;
+        const { editableData, staticData } = this.props.teaching;
         const { length } = editableData;
 
-        console.log(JSON.parse(JSON.stringify(editableData)))
-
         return (
-            <div className={cx('Teaching')}>
+            <div className={cx('Teaching', {view: !isEditing})}>
                 <h5>환자지도</h5>
                 <div className={cx('wrapper', 'teaching-wrapper')}>
                     <ul>
                         {
-                            length > 0 ? editableData.map((teaching, i) => {
+                            length > 0 ? (type === "create" || isEditing) ?
+                            editableData.map((teaching, i) => {
                                 const { ref_id, description } = teaching;
                                 return <li key={i} className={cx('')}>
                                     <div className={cx('form-wrapper', 'teaching-description', 'input')}>
@@ -77,10 +78,40 @@ class Teaching extends Component {
                                     </div>
                                 </li>
                             })
+                            : staticData.map((teaching, i) => {
+                                const { ref_id, description } = teaching;
+                                return <li key={i} className={cx('')}>
+                                    <div className={cx('form-wrapper', 'teaching-description', 'input')}>
+                                        <input 
+                                            className={cx('description', 'static')}
+                                            name="description" 
+                                            id={`teaching-description-${i}`} 
+                                            type="text" 
+                                            readOnly
+                                            value={description || ''}
+                                        />
+                                        <label htmlFor={`teaching-description-${i}`}>지도내용</label>
+                                    </div>
+                                    <div className={cx('input', 'ref_id', 'form-wrapper')}>
+                                        <input 
+                                            className={cx('ref_id', 'static')}
+                                            name="ref_id" 
+                                            id={`teaching-ref_id-${i}`} 
+                                            type="text" 
+                                            readOnly
+                                            value={ref_id}
+                                        />
+                                        <label htmlFor={`teaching-ref_id-${i}`}>No.</label>
+                                    </div>
+                                </li>
+                            })
                             : <li></li>
                         }
                     </ul>
-                    <button className={cx('btn-add-teaching')} onClick={this._handleClickOnAddTeaching}>지도법추가<FiPlus /></button>
+                    {
+                        (type === "create" || isEditing) &&
+                        <button className={cx('btn-add-teaching')} onClick={this._handleClickOnAddTeaching}>지도법추가<FiPlus /></button>
+                    }
                 </div>
             </div>
         );

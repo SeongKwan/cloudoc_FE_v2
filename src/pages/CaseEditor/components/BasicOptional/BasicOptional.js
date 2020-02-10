@@ -18,9 +18,7 @@ const cx = classNames.bind(styles);
 @observer
 class BasicOptional extends Component {
     state = {value: ''}
-    componentWillUnmount() {
-        this.props.caseEditorBasic.clearOptional();
-    }
+    
     handleChange = (value) => {
         this.setState({value})
     }
@@ -50,52 +48,110 @@ class BasicOptional extends Component {
             socialHistory,
             memo
         } = this.props.caseEditorBasic.editableData;
+        const { staticData } = this.props.caseEditorBasic;
+        const { type } = this.props;
+        const { isEditing } = this.props.Case;
 
         return (
             <div className={cx('BasicOptional')}>
                 <div className={cx('form-wrapper', 'pastHistory', 'input')}>
-                    <input 
-                    name="pastHistory" 
-                    id="pastHistory" 
-                    type="text" 
-                    autoComplete='off' 
-                    placeholder="과거 질병 이력" 
-                    onChange={this._handleChange}
-                    value={pastHistory}/>
+                    {
+                        type === 'create' || isEditing ?
+                        <TextareaAutosize 
+                            className={cx('textarea')}
+                            name="pastHistory" 
+                            id="pastHistory" 
+                            type="text" 
+                            minRows={4}
+                            placeholder="과거 질병 이력"  
+                            onChange={this._handleChange}
+                            value={pastHistory}
+                        />
+                        : <TextareaAutosize 
+                            className={cx('textarea','static')}
+                            name="pastHistory" 
+                            id="pastHistory" 
+                            type="text" 
+                            minRows={4}
+                            readOnly
+                            value={staticData.pastHistory}
+                        />
+                    }
                     <label htmlFor="pastHistory">과거력</label>
                 </div>
                 <div className={cx('form-wrapper', 'familyHistory', 'input')}>
-                    <input 
-                    name="familyHistory" 
-                    id="familyHistory" 
-                    type="text" 
-                    autoComplete='off' 
-                    placeholder="집안 질병 내력" 
-                    onChange={this._handleChange}
-                    value={familyHistory}/>
+                    {
+                        type === 'create' || isEditing ?
+                        <TextareaAutosize 
+                            className={cx('textarea')}
+                            name="familyHistory" 
+                            id="familyHistory" 
+                            type="text" 
+                            minRows={4}
+                            placeholder="집안 질병 내력"  
+                            onChange={this._handleChange}
+                            value={familyHistory}
+                        />
+                        : <TextareaAutosize 
+                            className={cx('textarea','static')}
+                            name="familyHistory" 
+                            id="familyHistory" 
+                            type="text" 
+                            minRows={4}
+                            readOnly
+                            value={staticData.familyHistory}
+                        />
+                    }
                     <label htmlFor="familyHistory">가족력</label>
                 </div>
                 <div className={cx('form-wrapper', 'socialHistory', 'input')}>
-                    <input 
-                    name="socialHistory" 
-                    id="socialHistory" 
-                    type="text" 
-                    autoComplete='off' 
-                    placeholder="외부 환경 또는 사회생활" 
-                    onChange={this._handleChange}
-                    value={socialHistory}/>
+                    {
+                        type === 'create' || isEditing ?
+                        <TextareaAutosize 
+                            className={cx('textarea')}
+                            name="socialHistory" 
+                            id="socialHistory" 
+                            type="text" 
+                            minRows={4}
+                            placeholder="외부 환경 또는 사회생활"  
+                            onChange={this._handleChange}
+                            value={socialHistory}
+                        />
+                        : <TextareaAutosize 
+                            className={cx('textarea','static')}
+                            name="socialHistory" 
+                            id="socialHistory" 
+                            type="text" 
+                            minRows={4}
+                            readOnly
+                            value={staticData.socialHistory}
+                        />
+                    }
                     <label htmlFor="socialHistory">사회력</label>
                 </div>
                 <div className={cx('form-wrapper', 'memo', 'input')}>
-                    <TextareaAutosize 
-                    className={cx('textarea')}
-                    name="memo" 
-                    id="memo" 
-                    type="text" 
-                    minRows={4}
-                    placeholder="진찰관련 자유롭게 작성해 주세요" 
-                    onChange={this._handleChange}
-                    value={memo}/>
+                    {
+                        type === 'create' || isEditing ?
+                        <TextareaAutosize 
+                            className={cx('textarea')}
+                            name="memo" 
+                            id="memo" 
+                            type="text" 
+                            minRows={4}
+                            placeholder="진찰관련 자유롭게 작성해 주세요" 
+                            onChange={this._handleChange}
+                            value={memo}
+                        />
+                        : <TextareaAutosize 
+                            className={cx('textarea','static')}
+                            name="memo" 
+                            id="memo" 
+                            type="text" 
+                            minRows={4}
+                            readOnly
+                            value={staticData.memo}
+                        />
+                    }
                     <label htmlFor="memo">기타 진찰결과</label>
                 </div>
             </div>

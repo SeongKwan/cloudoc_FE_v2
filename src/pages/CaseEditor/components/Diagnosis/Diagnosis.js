@@ -32,12 +32,15 @@ class Diagnosis extends Component {
     }
     _handleClickOutside = (event) => {
         if (this.searchInput && !this.searchInput.contains(event.target)) {
-            this.setState({focusParent: false, selected: -1});
+            this.setState({ keyword: '', focusParent: false, selected: -1});
+            this.props.search.clearKeyword();
+            this.props.diagnosisListItem.clearSearchKeyword();
         }
     }
     _toggleOnFocus = () => {
         this.setState({ focusParent: true})
     }
+
     _handleClickListItem = (index, name) => {
         this.setState({ selected: index, keyword: name });
         this._focusListItem();
@@ -136,12 +139,16 @@ class Diagnosis extends Component {
     }
     
     render() {
-        const { editableData } = this.props.diagnosis;
+        const { isEditing } = this.props.Case;
+        const { type } = this.props;
+        const { editableData, staticData } = this.props.diagnosis;
         const { length } = editableData;
         const { diagnosises } = this.props.diagnosisListItem;
         return (
-            <div id="case-editor-diagnosis" className={cx('Diagnosis')}>
+            <div id="case-editor-diagnosis" className={cx('Diagnosis', {view: !isEditing})}>
             <h5>추정진단</h5>
+            {
+                (type === "create" || isEditing) &&
                 <div 
                     className={cx('search-container')}
                     ref={(ref) => {
@@ -279,9 +286,11 @@ class Diagnosis extends Component {
                         </div>
                     }
                 </div>
+            }
                 <div className={cx('wrapper', 'diagnosis-wrapper')}>
                     <ul>
                         {
+                            type === "create" || isEditing ?
                             editableData.map((diagnosis, i) => {
                                 const { name, description } = diagnosis;
                                 return <li key={i} className={cx('')}>
@@ -314,6 +323,33 @@ class Diagnosis extends Component {
                                     </div>
                                     <div className={cx('trash', {last: length === 1})}>
                                         <FaTrash onClick={() => {this._deleteDiagnosis(i);}}/>
+                                    </div>
+                                </li>
+                            })
+                            : staticData.map((diagnosis, i) => {
+                                const { name, description } = diagnosis;
+                                return <li key={i} className={cx('')}>
+                                    <div className={cx('form-wrapper', 'diagnosis-name', 'input')}>
+                                        <input 
+                                            className={cx('name', 'static')}
+                                            name="name" 
+                                            id={`diagnosis-name-${i}`} 
+                                            type="text" 
+                                            readOnly
+                                            value={name || ''}
+                                        />
+                                        <label htmlFor={`diagnosis-name-${i}`}>진단명</label>
+                                    </div>
+                                    <div className={cx('input', 'description', 'form-wrapper')}>
+                                        <input 
+                                            className={cx('description', 'static')}
+                                            name="description" 
+                                            id={`diagnosis-description-${i}`} 
+                                            type="text" 
+                                            readOnly
+                                            value={description}
+                                        />
+                                        <label htmlFor={`diagnosis-description-${i}`}>상세설명</label>
                                     </div>
                                 </li>
                             })

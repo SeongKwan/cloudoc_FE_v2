@@ -23,8 +23,6 @@ class Drug extends Component {
         selected: -1
     }
     componentDidMount() {
-        
-
         this.setState({ keyword: this.props.search.keyword.drug })
         document.addEventListener('mousedown', this._handleClickOutside);
     }
@@ -36,7 +34,9 @@ class Drug extends Component {
     }
     _handleClickOutside = (event) => {
         if (this.searchInput && !this.searchInput.contains(event.target)) {
-            this.setState({focusParent: false, selected: -1});
+            this.setState({ keyword: '', focusParent: false, selected: -1});
+            this.props.search.clearKeyword();
+            this.props.drugListItem.clearSearchKeyword();
         }
     }
     _toggleOnFocus = () => {
@@ -144,7 +144,9 @@ class Drug extends Component {
     }
 
     render() {
-        const { editableData, editableDataForTreatment } = this.props.treatment;
+        const { isEditing } = this.props.Case;
+        const { type } = this.props;
+        const { editableData, editableDataForTreatment, staticData, staticDataForTreatment } = this.props.treatment;
         // const { length } = editableData;
         const { drugs } = this.props.drugListItem;
         const {
@@ -155,195 +157,243 @@ class Drug extends Component {
         } = editableDataForTreatment;
 
         return (
-            <div id="case-editor-drug" className={cx('Drug')}>
+            <div id="case-editor-drug" className={cx('Drug', {view: !isEditing})}>
                 <h5>처방</h5>
-                <div 
-                    className={cx('search-container')}
-                    ref={(ref) => {
-                        this.searchInput = ref;
-                    }}
-                >
-                    <div className={cx('wrapper', 'search-wrapper', {focus: this.state.focusParent})}>
-                        <div className={cx('btn-search')}>
-                            <FiSearch />
-                        </div>
-                        <div className={cx('input')}>
-                            <input 
-                                ref={(ref) => {
-                                    this.input = ref;
-                                }}
-                                name="keyword" 
-                                id="keyword-drug" 
-                                type="text" 
-                                autoComplete='off' 
-                                placeholder="처방 검색" 
-                                onChange={this._handleOnChange}
-                                value={this.state.keyword}
-                                onKeyDown={(e) => {
-                                    const { focusParent, keyword } = this.state;
-                                    const { selectedIndex, maxIndex, currentIndex } = this.props.drugListForInput;
-                                    const drugs = this.props.drugListItem.drugs || [];
-                                    let index;
+                {
+                    (type === "create" || isEditing) &&
+                    <div 
+                        className={cx('search-container')}
+                        ref={(ref) => {
+                            this.searchInput = ref;
+                        }}
+                    >
+                        <div className={cx('wrapper', 'search-wrapper', {focus: this.state.focusParent})}>
+                            <div className={cx('btn-search')}>
+                                <FiSearch />
+                            </div>
+                            <div className={cx('input')}>
+                                <input 
+                                    ref={(ref) => {
+                                        this.input = ref;
+                                    }}
+                                    name="keyword" 
+                                    id="keyword-drug" 
+                                    type="text" 
+                                    autoComplete='off' 
+                                    placeholder="처방 검색" 
+                                    onChange={this._handleOnChange}
+                                    value={this.state.keyword}
+                                    onKeyDown={(e) => {
+                                        const { focusParent, keyword } = this.state;
+                                        const { selectedIndex, maxIndex, currentIndex } = this.props.drugListForInput;
+                                        const drugs = this.props.drugListItem.drugs || [];
+                                        let index;
 
-                                    if(e.keyCode === 13) {
-                                        if (selectedIndex < 0) {
-                                            if (this._drugMatchingCheck(keyword)) {
-                                                this.props.drugListItem.clearSearchKeyword();
-                                                return this._addDrug('enter', keyword);
-                                            } else {
-                                                this.setState({keyword: ''});
-                                                this.props.drugListItem.clearSearchKeyword();
-                                                return alert('아래 목록에서 알맞는 처방을 선택 후 입력해 주세요')
-                                            }
-                                        }
-                                        this._addDrug('enter', drugs[selectedIndex].name);
-                                        this.props.drugListForInput.setSelectedIndex(-1);
-                                        this.props.drugListItem.clearSearchKeyword();
-                                        return this.props.drugListForInput.clearForList();
-                                        
-                                        
-                                    }
-                                    if (e.keyCode === 27) {
-                                        this.setState({keyword: '', focusParent: false, selected: -1})
-                                        if (currentIndex < 0 || currentIndex === null) return false;
-                                        this.props.drugListForInput.clear();
-                                        
-                                        this.props.treatment.pressESC(currentIndex);
-                                        this.props.drugListItem.setSearchKeyword('');
-                                    }
-
-                                    if(e.keyCode === 38) {
-                                        e.preventDefault();
-                                        if(focusParent) {
-                                            if (selectedIndex <= 0) {
-                                                this._scroll(0);
-                                                this.setState({keyword: drugs[0].name})
-                                                return;
-                                            }
-                                            if (selectedIndex > 0) {
-                                                index = selectedIndex - 1;
-                                                this._scroll(index);
-                                                this.setState({keyword: drugs[selectedIndex - 1].name})
-                                                return this.props.drugListForInput.setSelectedIndex(index);
-                                            }
-                                        }
-                                        return;
-                                    }
-                                    if(e.keyCode === 40) {
-                                        e.preventDefault();
-                                        if(!focusParent) {
-                                            this.setState({focusParent: true})
-                                        } else {
+                                        if(e.keyCode === 13) {
                                             if (selectedIndex < 0) {
-                                                index = 0;
-                                                this._scroll(index);
-                                                this.setState({keyword: drugs[0].name})
-                                                return this.props.drugListForInput.setSelectedIndex(index);
+                                                if (this._drugMatchingCheck(keyword)) {
+                                                    this.props.drugListItem.clearSearchKeyword();
+                                                    return this._addDrug('enter', keyword);
+                                                } else {
+                                                    this.setState({keyword: ''});
+                                                    this.props.drugListItem.clearSearchKeyword();
+                                                    return alert('아래 목록에서 알맞는 처방을 선택 후 입력해 주세요')
+                                                }
                                             }
-                                            if (selectedIndex >= 0 && selectedIndex < maxIndex) {
-                                                index = selectedIndex + 1;
-                                                this._scroll(index);
-                                                this.setState({keyword: drugs[index].name})
-                                                return this.props.drugListForInput.setSelectedIndex(index);
+                                            this._addDrug('enter', drugs[selectedIndex].name);
+                                            this.props.drugListForInput.setSelectedIndex(-1);
+                                            this.props.drugListItem.clearSearchKeyword();
+                                            return this.props.drugListForInput.clearForList();
+                                            
+                                            
+                                        }
+                                        if (e.keyCode === 27) {
+                                            this.setState({keyword: '', focusParent: false, selected: -1})
+                                            if (currentIndex < 0 || currentIndex === null) return false;
+                                            this.props.drugListForInput.clear();
+                                            
+                                            this.props.treatment.pressESC(currentIndex);
+                                            this.props.drugListItem.setSearchKeyword('');
+                                        }
+
+                                        if(e.keyCode === 38) {
+                                            e.preventDefault();
+                                            if(focusParent) {
+                                                if (selectedIndex <= 0) {
+                                                    this._scroll(0);
+                                                    this.setState({keyword: drugs[0].name})
+                                                    return;
+                                                }
+                                                if (selectedIndex > 0) {
+                                                    index = selectedIndex - 1;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: drugs[selectedIndex - 1].name})
+                                                    return this.props.drugListForInput.setSelectedIndex(index);
+                                                }
                                             }
-                                            if (selectedIndex === maxIndex) {
-                                                this._scroll(maxIndex);
-                                                this.setState({keyword: drugs[maxIndex].name})
-                                                return;
+                                            return;
+                                        }
+                                        if(e.keyCode === 40) {
+                                            e.preventDefault();
+                                            if(!focusParent) {
+                                                this.setState({focusParent: true})
+                                            } else {
+                                                if (selectedIndex < 0) {
+                                                    index = 0;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: drugs[0].name})
+                                                    return this.props.drugListForInput.setSelectedIndex(index);
+                                                }
+                                                if (selectedIndex >= 0 && selectedIndex < maxIndex) {
+                                                    index = selectedIndex + 1;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: drugs[index].name})
+                                                    return this.props.drugListForInput.setSelectedIndex(index);
+                                                }
+                                                if (selectedIndex === maxIndex) {
+                                                    this._scroll(maxIndex);
+                                                    this.setState({keyword: drugs[maxIndex].name})
+                                                    return;
+                                                }
                                             }
                                         }
-                                    }
-                                }}
-                                onFocus={this._toggleOnFocus}
-                            />
+                                    }}
+                                    onFocus={this._toggleOnFocus}
+                                />
+                            </div>
+                            <div onClick={this._handleClearKeyword} className={cx('btn-clear')}>
+                                {this.state.keyword.length > 0 && <FiX />}
+                            </div>
                         </div>
-                        <div onClick={this._handleClearKeyword} className={cx('btn-clear')}>
-                            {this.state.keyword.length > 0 && <FiX />}
-                        </div>
-                    </div>
-                    {
-                        this.state.focusParent &&
-                        <div className={cx('wrapper', 'results-wrapper')}>
-                            <ul data-form="list-container-for-drug">
-                                {
-                                    drugs.map((drug, i) => {
-                                        const { name } = drug;
-                                        const { selectedIndex } = this.props.drugListForInput;
+                        {
+                            this.state.focusParent &&
+                            <div className={cx('wrapper', 'results-wrapper')}>
+                                <ul data-form="list-container-for-drug">
+                                    {
+                                        drugs.map((drug, i) => {
+                                            const { name } = drug;
+                                            const { selectedIndex } = this.props.drugListForInput;
 
-                                        return <li 
-                                            className={cx({active: selectedIndex === i})}
-                                            key={i}
-                                            onClick={() => {
-                                                this._handleSelectDrug(drug);
-                                            }}
-                                            onMouseEnter={() => {
-                                                this.props.drugListForInput.setSelectedIndex(i);
-                                            }}
-                                            onMouseLeave={() => {
-                                                this.props.drugListForInput.setSelectedIndex(-1);
-                                            }}
-                                        >
-                                            {name || ''}
-                                        </li>
-                                    })
-                                }
-                                {
-                                    drugs.length < 1 && <li className={cx('no-results')} style={{fontWeight: 100}}><span style={{letterSpacing: 1.2, fontWeight: 400, textDecoration: 'underline'}}>{this.state.keyword}</span> 와 일치하는 처방이 없습니다</li>
-                                }
-                            </ul>
-                        </div>
-                    }
-                </div>
+                                            return <li 
+                                                className={cx({active: selectedIndex === i})}
+                                                key={i}
+                                                onClick={() => {
+                                                    this._handleSelectDrug(drug);
+                                                }}
+                                                onMouseEnter={() => {
+                                                    this.props.drugListForInput.setSelectedIndex(i);
+                                                }}
+                                                onMouseLeave={() => {
+                                                    this.props.drugListForInput.setSelectedIndex(-1);
+                                                }}
+                                            >
+                                                {name || ''}
+                                            </li>
+                                        })
+                                    }
+                                    {
+                                        drugs.length < 1 && <li className={cx('no-results')} style={{fontWeight: 100}}><span style={{letterSpacing: 1.2, fontWeight: 400, textDecoration: 'underline'}}>{this.state.keyword}</span> 와 일치하는 처방이 없습니다</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
                 <div className={cx('wrapper', 'drug-wrapper')}>
                     <ul>
-                        <li className={cx('')}>
-                            <div className={cx('form-wrapper', 'drug-name', 'input')}>
-                                <input 
-                                    className={cx('name')}
-                                    name="name" 
-                                    id={`drug-name`} 
-                                    type="text" 
-                                    placeholder="처방" 
-                                    readOnly
-                                    onClick={()=>{this._handleClickListItem(drugName)}}
-                                    value={drugName || ''}
-                                />
-                                <label htmlFor={`drug-name`}>처방명</label>
-                            </div>
-                            <div className={cx('form-wrapper', 'guide', 'input')}>
-                                <TextareaAutosize 
-                                    className={cx('textarea')}
-                                    name="guide" 
-                                    id="guide" 
-                                    type="text" 
-                                    minRows={3}
-                                    placeholder="올바른 처방 복용방법" 
-                                    onChange={this._handleChange}
-                                    value={guide}
-                                />
-                                <label htmlFor="guide">복약법</label>
-                            </div>
-                            <div className={cx('form-wrapper', 'caution', 'input')}>
-                                <TextareaAutosize 
-                                    className={cx('textarea')}
-                                    name="caution" 
-                                    id="caution" 
-                                    type="text" 
-                                    minRows={3}
-                                    placeholder="복용시 주의사항" 
-                                    onChange={this._handleChange}
-                                    value={caution}
-                                />
-                                <label htmlFor="caution">주의사항</label>
-                            </div>
-                        </li>
+                        {
+                            (type === "create" || isEditing) ?
+                            <li className={cx('')}>
+                                <div className={cx('form-wrapper', 'drug-name', 'input')}>
+                                    <input 
+                                        className={cx('name')}
+                                        name="name" 
+                                        id={`drug-name`} 
+                                        type="text" 
+                                        placeholder="처방" 
+                                        readOnly
+                                        onClick={()=>{this._handleClickListItem(drugName)}}
+                                        value={drugName || ''}
+                                    />
+                                    <label htmlFor={`drug-name`}>처방명</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'guide', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea')}
+                                        name="guide" 
+                                        id="guide" 
+                                        type="text" 
+                                        minRows={3}
+                                        placeholder="올바른 처방 복용방법" 
+                                        onChange={this._handleChange}
+                                        value={guide}
+                                    />
+                                    <label htmlFor="guide">복약법</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'caution', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea')}
+                                        name="caution" 
+                                        id="caution" 
+                                        type="text" 
+                                        minRows={3}
+                                        placeholder="복용시 주의사항" 
+                                        onChange={this._handleChange}
+                                        value={caution}
+                                    />
+                                    <label htmlFor="caution">주의사항</label>
+                                </div>
+                            </li>
+                            : 
+                            <li className={cx('static')}>
+                                <div className={cx('form-wrapper', 'drug-name', 'input')}>
+                                    <input 
+                                        className={cx('name', 'static')}
+                                        name="name" 
+                                        id={`drug-name`} 
+                                        type="text" 
+                                        readOnly
+                                        value={staticDataForTreatment.drugName || ''}
+                                    />
+                                    <label htmlFor={`drug-name`}>처방명</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'guide', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea', 'static')}
+                                        name="guide" 
+                                        id="guide" 
+                                        type="text" 
+                                        minRows={3}
+                                        readOnly
+                                        value={staticDataForTreatment.guide}
+                                    />
+                                    <label htmlFor="guide">복약법</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'caution', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea', 'static')}
+                                        name="caution" 
+                                        id="caution" 
+                                        type="text" 
+                                        minRows={3}
+                                        readOnly
+                                        value={staticDataForTreatment.caution}
+                                    />
+                                    <label htmlFor="caution">주의사항</label>
+                                </div>
+                            </li>
+                        }
                     </ul>
                 </div>
 
                 <div className={cx('wrapper', 'formula-wrapper')}>
-                    <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>처방구성추가<FiPlus /></button>
+                    {
+                        (type === "create" || isEditing) &&
+                        <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>처방구성추가<FiPlus /></button>
+                    }
                     <ul>
                         {
+                            (type === "create" || isEditing) ?
                             editableData.map((formula, i) => {
                                 const { herbName, dose } = formula;
                                 return <li key={i} className={cx('')}>
@@ -377,6 +427,33 @@ class Drug extends Component {
                                     </div>
                                     <div className={cx('trash')}>
                                         <FaTrash onClick={() => {this._deleteFormula(i);}}/>
+                                    </div>
+                                </li>
+                            })
+                            : staticData.map((formula, i) => {
+                                const { herbName, dose } = formula;
+                                return <li key={i} className={cx('')}>
+                                    <div className={cx('form-wrapper', 'herb-name', 'input')}>
+                                        <input 
+                                            className={cx('name', 'static')}
+                                            name="herbName" 
+                                            id={`herb-name-${i}`} 
+                                            type="text" 
+                                            readOnly
+                                            value={herbName || ''}
+                                        />
+                                        <label htmlFor={`herb-name-${i}`}>약초명</label>
+                                    </div>
+                                    <div className={cx('input', 'dose', 'form-wrapper')}>
+                                        <input 
+                                            className={cx('dose','static')}
+                                            name="dose" 
+                                            id={`formula-dose-${i}`} 
+                                            type="number" 
+                                            readOnly
+                                            value={dose}
+                                        />
+                                        <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
                                     </div>
                                 </li>
                             })

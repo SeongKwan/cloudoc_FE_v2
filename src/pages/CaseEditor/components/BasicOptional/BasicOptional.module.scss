@@ -113,6 +113,10 @@
         color: $gray-3;
         font-weight: 100;
       }
+      &.static {
+        outline: 0;
+        border: 1px solid $brand-2;
+      }
     }
   }
 }

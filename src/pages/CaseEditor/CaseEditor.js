@@ -33,6 +33,11 @@ const cx = classNames.bind(styles);
 @observer
 class CaseEditor extends Component {
   componentDidMount() {
+    const type = this.props.location.pathname.split('/')[3];
+    const caseId = this.props.location.pathname.split('/')[4];
+    if (type === 'detail') {
+      this.props.Case.loadCase(caseId);
+    }
     this.props.symptomListItem.loadSymptoms()
     .then((res) => {
       this.props.drugListItem.loadDrugs();
@@ -42,11 +47,23 @@ class CaseEditor extends Component {
       console.log(err);
     });
   }
+
+  componentDidUpdate() {
+    const type = this.props.location.pathname.split('/')[3];
+    if (type === 'detail' && this.props.Case.currentCase !== null) {
+      this.props.Case.setCurrentCase(this.props.Case.currentCase);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.Case.clearCurrentCase();
+  }
   
 
   render() {
     const type = this.props.location.pathname.split('/')[3]
-    
+    const { isEditing, isLoading } = this.props.Case;
+
     return (
       <div className={cx('CaseEditor')}>
         <Helmet>
@@ -55,28 +72,39 @@ class CaseEditor extends Component {
         <HeaderEditor type={type} />
         <div className={cx('container', 'left')}>
           <div className={cx('scroll-box')}>
-            <LeftSideToolbar />
+            {
+              (type === "create" || isEditing) &&
+              <LeftSideToolbar />
+            }
           </div>
         </div>
         <div id="case-editor-center-container" className={cx('container', 'center')}>
           <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
-            <Basic />
-            <CollapsibleBox 
-              title="추가정보(선택입력)" 
-              initOpen={false}
-            >
-              <BasicOptional />
-            </CollapsibleBox>
-            <Symptoms />
-            <Lab />
-            <Diagnosis />
-            <Drug />
-            <Teaching />
+            {
+              !isLoading &&
+              <>
+                <Basic type={type} />
+                <CollapsibleBox 
+                  title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 
+                  initOpen={type === "detail" ? true : false}
+                >
+                  <BasicOptional type={type} />
+                </CollapsibleBox>
+                <Symptoms type={type} />
+                <Lab type={type} />
+                <Diagnosis type={type} />
+                <Drug type={type} />
+                <Teaching type={type} />
+              </>
+            }
           </div>
         </div>
         <div className={cx('container', 'right')}>
           <div className={cx('scroll-box')}>
-            <RightSideList />
+            {
+              (type === "create" || isEditing) &&
+              <RightSideList />
+            }
           </div>
         </div>
       </div>

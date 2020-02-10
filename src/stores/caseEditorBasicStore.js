@@ -1,10 +1,19 @@
 import { observable, action } from 'mobx';
 
 class CaseEditorBasicStore {
+    @observable staticData = {
+        title: '',
+        gender: '',
+        age: '',
+        pastHistory: '',
+        familyHistory: '',
+        socialHistory: '',
+        memo: ''
+    };
     @observable editableData = {
         title: '',
         gender: 'male',
-        age: '0',
+        age: '30',
         pastHistory: '',
         familyHistory: '',
         socialHistory: '',
@@ -30,6 +39,14 @@ class CaseEditorBasicStore {
         this.editableData.familyHistory = familyHistory;
         this.editableData.socialHistory = socialHistory;
         this.editableData.memo = memo;
+        
+        this.staticData.title = title;
+        this.staticData.gender = gender;
+        this.staticData.age = age;
+        this.staticData.pastHistory = pastHistory;
+        this.staticData.familyHistory = familyHistory;
+        this.staticData.socialHistory = socialHistory;
+        this.staticData.memo = memo;
     }
 
     @action changeEditableData = (type, value) => {
@@ -40,7 +57,16 @@ class CaseEditorBasicStore {
         this.editableData = {
             title: '',
             gender: 'male',
-            age: '0',
+            age: '30',
+            pastHistory: '',
+            familyHistory: '',
+            socialHistory: '',
+            memo: ''
+        }
+        this.staticData = {
+            title: '',
+            gender: '',
+            age: '',
             pastHistory: '',
             familyHistory: '',
             socialHistory: '',
@@ -58,7 +84,7 @@ class CaseEditorBasicStore {
         this.editableData = {
             title: this.editableData.title,
             gender: 'male',
-            age: '0',
+            age: '30',
             pastHistory: '',
             familyHistory: '',
             socialHistory: '',

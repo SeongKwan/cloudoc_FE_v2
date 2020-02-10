@@ -3,6 +3,36 @@
     position: relative;
     user-select: none;
 
+    button {
+        position: relative;
+        font-size: 0.9rem;
+        font-weight: 100;
+        background-color: $brand-1;
+        &.text {
+            background-color: $brand-8;
+        }
+        &.delete-all {
+            background-color: $gray-2;
+            color: $brand-8;
+            margin-right: auto;
+            margin-left: 1rem;
+        }
+        color: $white;
+        border: 0;
+        border-radius: $radius-low;
+        padding: 0.3rem 0.6rem;
+        cursor: pointer;
+        &.disabled {
+            cursor: default;
+            background-color: $oc-gray-1;
+            color: $white;
+        }
+        
+        &:focus {
+            outline: 0;
+        }
+    }
+
     .title-wrapper {
         position: relative;
         display: flex;
@@ -20,21 +50,7 @@
         .load-lab-results {
             margin-left: 1rem;
             position: relative;
-            button {
-                position: relative;
-                font-size: 0.9rem;
-                font-weight: 100;
-                background-color: $brand-1;
-                color: $white;
-                border: 0;
-                border-radius: $radius-low;
-                padding: 0.3rem 0.6rem;
-                cursor: pointer;
-                
-                &:focus {
-                    outline: 0;
-                }
-            }
+            
             section > div:focus {
                 outline: 0;
             }

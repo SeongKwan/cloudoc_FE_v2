@@ -2,6 +2,12 @@
   padding: 1rem 2rem;
   user-select: none;
 
+  &.view {
+    label {
+      cursor: default !important;
+    }
+  }
+
   h5 {
     font-weight: 700;
     letter-spacing: 2px;
@@ -36,6 +42,10 @@
         &::placeholder {
           color: $gray-3;
           font-weight: 100;
+        }
+        &.static {
+          outline: 0;
+          border-bottom: 1px solid $brand-2;
         }
       }
 
@@ -105,6 +115,9 @@
     &.age-gender {
       flex-direction: row;
 
+      .age-wrapper, .gender-wrapper {
+        padding-left: 0.5rem;
+      }
       .age,
       .gender {
         display: flex;

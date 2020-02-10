@@ -71,6 +71,10 @@ class Agent {
                 .catch(this._handleError);
     }
 
+    loadCase(caseId) {
+        return this.get(`/cases/${caseId}`);
+    }
+
     loadCases() {
         return this.get(`/cases`);
     }

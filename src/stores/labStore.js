@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 class LabStore {
     @observable editableData = [];
-    @observable stateData = [];
+    @observable staticData = [];
 
     @observable registry = [];
 
@@ -352,6 +352,7 @@ class LabStore {
         return agent.postExcel(formData)
             .then(action((res) => {
                 this.registryForExcel = res.data || [];
+                
                 modalStore.showModal();
             }))
             .catch(action((err) => {
@@ -388,6 +389,11 @@ class LabStore {
             })
         });
         return results;
+    }
+
+    @action initCaseDetailData(labs) {
+        this.staticData = labs;
+        this.editableData = labs;
     }
 
     @action initialize() {
@@ -647,7 +653,6 @@ class LabStore {
         this.selectedDate = '';
         this.selectedDateIndex = 0;
         this.excelFile = null;
-        
         this.labsForReadOnly = [];
     }
     @action clearForSelector() {

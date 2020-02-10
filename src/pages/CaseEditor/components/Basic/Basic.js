@@ -41,6 +41,7 @@ class Basic extends Component {
     state = {value: ''}
     componentWillUnmount() {
         this.props.caseEditorBasic.clear();
+        this.props.caseEditorBasic.clearOptional();
     }
     handleChange = (value) => {
         this.setState({value})
@@ -71,76 +72,103 @@ class Basic extends Component {
             gender,
             age
         } = this.props.caseEditorBasic.editableData;
+        const { staticData } = this.props.caseEditorBasic;
+        const { type } = this.props;
+        const { isEditing } = this.props.Case;
 
         return (
-            <div className={cx('Basic')}>
+            <div className={cx('Basic', {view: !isEditing})}>
                 <h5>기본정보</h5>
                 <div className={cx('form-wrapper', 'title', 'input')}>
-                    <input 
-                    name="title" 
-                    autoFocus
-                    id="title" 
-                    type="text" 
-                    autoComplete='off' 
-                    placeholder="증례 핵심요약 한줄" 
-                    onChange={this._handleChange}
-                    value={title}/>
+                    {
+                        type === 'create' || isEditing ?
+                        <input 
+                            name="title" 
+                            autoFocus
+                            id="title" 
+                            type="text" 
+                            autoComplete='off' 
+                            placeholder="증례 핵심요약 한줄" 
+                            onChange={this._handleChange}
+                            value={title}
+                        />
+                        : <input 
+                            name="title" 
+                            id="title" 
+                            type="text" 
+                            readOnly
+                            className={cx('static')}
+                            value={staticData.title}
+                        />
+                    }
                     <label htmlFor="title">제목</label>
                 </div>
                 <div className={cx('form-wrapper', 'age-gender', 'label')}>
                     <div className={cx('age', {checked: +age > -1})}>
                         <label className={cx('label-no-input', 'label-age')} htmlFor="age">나이[만]</label>
-                        <div className={cx('select-wrapper')}>
-                            <select 
-                                name="age"
-                                value={age} 
-                                onChange={this._handleChange}
-                            >
-                                <option disabled>만 나이를 선택</option>
-                                {this.renderOptions()}
-                            </select>
-                        </div>
+                        {
+                            type === 'create' || isEditing ?
+                            <div className={cx('select-wrapper')}>
+                                <select 
+                                    name="age"
+                                    value={age} 
+                                    onChange={this._handleChange}
+                                >
+                                    <option disabled>만 나이를 선택</option>
+                                    {this.renderOptions()}
+                                </select>
+                            </div>
+                            : <div className={cx('age-wrapper')}>
+                                {staticData.age} 세
+                            </div>
+                        }
                     </div>
                     <div className={cx('gender', {checked: gender !== ''})}>
                         <label 
                         className={cx('label-no-input', 'label-gender')} htmlFor="gender">성별</label>
                         <div className={cx('radio-wrapper')}>
-                            <div className={cx('male')}>
-                                <input 
-                                    autoComplete="off"  
-                                    name='gender'
-                                    type="radio" 
-                                    value="male" 
-                                    onChange={this._handleChange} 
-                                    checked={gender === 'male'}
-                                />
-                                <div 
-                                    className={cx('icon-wrapper', {checked: gender === 'male'})}
-                                    data-value="male"
-                                    data-name="gender"
-                                    onClick={this._handleClickGender}
-                                >
-                                    남자
-                                </div>
-                            </div>
-                            <div className={cx('female')}>
-                                <input 
-                                    autoComplete="off"  
-                                    name='gender'
-                                    type="radio" 
-                                    value="female" 
-                                    onChange={this._handleChange} 
-                                    checked={gender === 'female'}
-                                />
-                                <div 
-                                    className={cx('icon-wrapper', {checked: gender === 'female'})}
-                                    data-value="female"
-                                    data-name="gender"
-                                    onClick={this._handleClickGender}
-                                >
-                                    여자
-                                </div>
-                            </div>
+                            {
+                                type === 'create' || isEditing ?
+                                <>
+                                    <div className={cx('male')}>
+                                        <input 
+                                            autoComplete="off"  
+                                            name='gender'
+                                            type="radio" 
+                                            value="male" 
+                                            onChange={this._handleChange} 
+                                            checked={gender === 'male'}
+                                        />
+                                        <div 
+                                            className={cx('icon-wrapper', {checked: gender === 'male'})}
+                                            data-value="male"
+                                            data-name="gender"
+                                            onClick={this._handleClickGender}
+                                        >
+                                            남자
+                                        </div>
+                                    </div>
+                                    <div className={cx('female')}>
+                                        <input 
+                                            autoComplete="off"  
+                                            name='gender'
+                                            type="radio" 
+                                            value="female" 
+                                            onChange={this._handleChange} 
+                                            checked={gender === 'female'}
+                                        />
+                                        <div 
+                                            className={cx('icon-wrapper', {checked: gender === 'female'})}
+                                            data-value="female"
+                                            data-name="gender"
+                                            onClick={this._handleClickGender}
+                                        >
+                                            여자
+                                        </div>
+                                    </div>
+                                </>
+                                : <div className={cx('gender-wrapper')}>{staticData.gender === "male" ? '남자' : '여자'}</div>
+                            }
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,11 @@ class SearchBar extends Component {
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
+        if (value === '') {
+            this.handleClearKeyword();
+            this.props.Case.clearLoadMore();
+            this.props.Case.loadCases();
+        }
         this.setState({ keyword: value });
     }
     handleOnClick = (e) => {

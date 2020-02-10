@@ -12,7 +12,8 @@ import {
     FiPlus,
     FiSave,
     FiFileText,
-    FiHelpCircle
+    FiHelpCircle,
+    FiEdit
 } from "react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
@@ -26,11 +27,21 @@ class HeaderEditor extends Component {
 
     render() {
         const { type } = this.props;
-
+        const { isEditing } = this.props.Case;
+        if (type === "detail") {
+            if (this.props.Case.currentCase === null) {
+                return false;
+            }
+        } else {
+            return true;
+        }
         return (
             <header className={cx('HeaderEditor')}>
                 <div className={cx('tool-bar')}>
-                    <div className={cx('btn-tool', 'back')} onClick={() => {this.props.history.goBack();}}>
+                    <div className={cx('btn-tool', 'back')} onClick={() => {
+                        this.props.history.goBack();
+                        this.props.Case.clearIsEditing();
+                        }}>
                         <FiArrowLeft />
                         <div className={cx('label')}>뒤로</div>
                     </div>
@@ -41,25 +52,72 @@ class HeaderEditor extends Component {
                             <div className={cx('label')}>새증례</div>
                         </div>
                     }
-                    <div 
-                        className={cx('btn-tool', 'save')} 
-                        onClick={() => {
-                                this.props.Case.postCase();
-                                this.props.history.push(`/case`)
+                    {
+                        type === "detail" && isEditing &&
+                        <div 
+                            className={cx('btn-tool', 'save')} 
+                            onClick={() => {
+                                    this.props.Case.updateCase()
+                                    .then(res => {
+                                        this.props.Case.toggleIsEditing();
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    });
+                                }
                             }
-                        }
-                    >
-                        <FiSave />
-                        <div className={cx('label')}>
-                            {
-                                type === "detail" ? "저장" : "만들기"
-                            }
+                        >
+                            <FiSave />
+                            <div className={cx('label')}>
+                                저장
+                            </div>
                         </div>
-                    </div>
+                    }
+                    {
+                        type === "create" &&
+                        <div 
+                            className={cx('btn-tool', 'save')} 
+                            onClick={() => {
+                                    this.props.Case.postCase();
+                                    this.props.Case.clearIsEditing();
+                                    this.props.history.push(`/case`)
+                                }
+                            }
+                        >
+                            <FiSave />
+                            <div className={cx('label')}>
+                                생성
+                            </div>
+                        </div>
+                    }
+                    {
+                        type === "detail" &&
+                        <div 
+                            className={cx('btn-tool', 'save')} 
+                            onClick={() => {
+                                    this.props.Case.toggleIsEditing();
+                                }
+                            }
+                        >
+                            <FiEdit />
+                            <div className={cx('label')}>
+                                {!isEditing ? '편집' : '취소'}
+                            </div>
+                        </div>
+                    }
                     {
                         type === "detail" &&
                         <>
-                            <div className={cx('btn-tool', 'trash')}>
+                            <div 
+                                className={cx('btn-tool', 'trash')}
+                                onClick={() => {
+                                        if (window.confirm('이 증례를 삭제하시겠습니까?')) {
+                                            this.props.Case.deleteCase(this.props.Case.currentCase._id);
+                                            this.props.history.push(`/case`)
+                                        }
+                                    }
+                                }
+                            >
                                 <FiTrash />
                                 <div className={cx('label')}>삭제</div>
                             </div>

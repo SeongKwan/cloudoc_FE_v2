@@ -6,6 +6,12 @@ import drugListForInputStore from './drugListForInputStore';
 class TreatmentStore {
     @observable isLoading = false;
     @observable staticData = [];
+    @observable staticDataForTreatment = {
+        drugName: '',
+        guide: '',
+        caution: '',
+        lifestyle: ''
+    };
     @observable editableData = [];
     @observable editableDataForTreatment = {
         drugName: '',
@@ -26,6 +32,11 @@ class TreatmentStore {
         this.editableDataForTreatment.guide = guide;
         this.editableDataForTreatment.caution = caution;
         this.editableDataForTreatment.lifestyle = lifestyle;
+
+        this.staticDataForTreatment.drugName = drugName;
+        this.staticDataForTreatment.guide = guide;
+        this.staticDataForTreatment.caution = caution;
+        this.staticDataForTreatment.lifestyle = lifestyle;
     }
 
     @action setEditableData(editableData) {
@@ -33,6 +44,7 @@ class TreatmentStore {
             this.editableData = [];
         }
         editableData.forEach((editableData) => { this.editableData.push(editableData) });
+        this.staticData = editableData;
     }
 
     @action setEditableDataForTreatment(type, value) {
@@ -148,6 +160,12 @@ class TreatmentStore {
 
     @action clearTreatment() {
         this.editableDataForTreatment = {
+            drugName: '',
+            guide: '',
+            caution: '',
+            lifestyle: ''
+        }
+        this.staticDataForTreatment = {
             drugName: '',
             guide: '',
             caution: '',

@@ -1,6 +1,4 @@
 import { observable, action, computed } from 'mobx';
-import symptomListItemStore from './symptomListItemStore';
-import symptomListForInputStore from './symptomListForInputStore';
 
 class TeachingStore {
     @observable staticData = [
@@ -32,6 +30,10 @@ class TeachingStore {
 
     @action initEditableData() {
         this.editableData = [];
+    }
+
+    @action initStaticData(teachings) {
+        this.staticData = teachings;
     }
 
     @action sortEditableData() {
@@ -140,40 +142,8 @@ class TeachingStore {
 
     @action deleteTeaching(selectedIndex) {
         this.editableData.splice(selectedIndex, 1);
-        // this.editableData.forEach((item, index) => {
-        //     if (index < Number(selectedIndex)) {
-        //         return false;
-        //     }
-        //     if (index + 1 > Number(selectedIndex)) {
-        //         if (item.rank - 1 === 0) {
-        //             return item.rank = 1;
-        //         }
-        //         if (item.rank - 1 > 0) {
-        //             return item.rank = item.rank - 1;
-        //         }
-        //     }
-        // })
-        // symptomListItemStore.deleteCategory(selectedIndex);
-        // symptomListItemStore.deleteSearchKeyword(selectedIndex);
-
     }
-    @action deleteSymptomForStatic(selectedIndex) {
-        this.staticData.splice(selectedIndex, 1);
-        // this.staticData.forEach((item, index) => {
-        //     if (index < Number(selectedIndex)) {
-        //         return false;
-        //     }
-        //     if (index + 1 > Number(selectedIndex)) {
-        //         if (item.rank - 1 === 0) {
-        //             return item.rank = 1;
-        //         }
-        //         if (item.rank - 1 > 0) {
-        //             return item.rank = item.rank - 1;
-        //         }
-        //     }
-        // })
-
-    }
+    
 
 
     // Sorting
@@ -188,265 +158,6 @@ class TeachingStore {
     };
 
 
-    @action _sorting(type = 'editable') {
-        const { 
-            rank,
-            category, 
-            testName,
-            onset,
-            degree,
-            unit
-        } = this.sortingType;
-        let items = [];
-
-        if (type === 'editable') {
-            this.editableData.forEach((item) => { items.push(item); });
-    
-            if (category === 'up') {
-                items.sort(function (a, b) { 
-                    return a.category < b.category ? -1 : a.category > b.category ? 1 : 0;
-                });
-            }
-            else if (category === 'down') {
-                items.sort(function (a, b) { 
-                    return a.category > b.category ? -1 : a.category < b.category ? 1 : 0;  
-                });
-            }
-    
-            else if (testName === 'up') {
-                items.sort(function (a, b) { 
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;  
-                });
-            }
-            else if (testName === 'down') {
-                items.sort(function (a, b) { 
-                    return a.name > b.name ? -1 : a.name < b.name ? 1 : 0;  
-                });
-            }
-
-            else if (rank === 'up') {
-                items.sort(function (a, b) { 
-                    return a.rank < b.rank ? -1 : a.rank > b.rank ? 1 : 0;  
-                });
-            }
-            else if (rank === 'down') {
-                items.sort(function (a, b) { 
-                    return a.rank > b.rank ? -1 : a.rank < b.rank ? 1 : 0;  
-                });
-            }
-
-            else if (onset === 'up') {
-                items.sort(function (a, b) { 
-                    return a.onset < b.onset ? -1 : a.onset > b.onset ? 1 : 0;  
-                });
-            }
-            else if (onset === 'down') {
-                items.sort(function (a, b) { 
-                    return a.onset > b.onset ? -1 : a.onset < b.onset ? 1 : 0;  
-                });
-            }
-
-            else if (degree === 'up') {
-                items.sort(function (a, b) { 
-                    if ( ! isNaN( a.degree ) &&  ! isNaN( b.degree )  ) {
-                        return a.degree - b.degree;
-                    }
-                    let c,d;
-                    c = a.degree.toString(); 
-                    d = b.degree.toString(); 
-                    return ( c < d ) ? -1 : ( c === d ) ? 0 : 1;
-                });
-            }
-            else if (degree === 'down') {
-                items.sort(function (a, b) { 
-                    if ( ! isNaN( a.degree ) &&  ! isNaN( b.degree )  ) {
-                        return b.degree - a.degree;
-                    }
-                    let c,d;
-                    c = a.degree.toString(); 
-                    d = b.degree.toString(); 
-                    return ( d < c ) ? -1 : ( d === c ) ? 0 : 1;
-                });
-            }
-
-            else if (unit === 'up') {
-                items.sort(function (a, b) { 
-                    return a.unit < b.unit ? -1 : a.unit > b.unit ? 1 : 0;  
-                });
-            }
-            else if (unit === 'down') {
-                items.sort(function (a, b) { 
-                    return a.unit > b.unit ? -1 : a.unit < b.unit ? 1 : 0;  
-                });
-            }
-
-    
-            symptomListItemStore.reorder(items);
-            return this.editableData = items;
-        }
-
-        if (type === 'readOnly') {
-            this.symptomsForReadOnly.forEach((item) => { items.push(item); });
-    
-            if (category === 'up') {
-                items.sort(function (a, b) { 
-                    return a.category < b.category ? -1 : a.category > b.category ? 1 : 0;  
-                });
-            }
-            else if (category === 'down') {
-                items.sort(function (a, b) { 
-                    return a.category > b.category ? -1 : a.category < b.category ? 1 : 0;  
-                });
-            }
-    
-            else if (testName === 'up') {
-                items.sort(function (a, b) { 
-                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;  
-                });
-            }
-            else if (testName === 'down') {
-                items.sort(function (a, b) { 
-                    return a.name > b.name ? -1 : a.name < b.name ? 1 : 0;  
-                });
-            }
-
-            else if (rank === 'up') {
-                items.sort(function (a, b) { 
-                    return a.rank < b.rank ? -1 : a.rank > b.rank ? 1 : 0;  
-                });
-            }
-            else if (rank === 'down') {
-                items.sort(function (a, b) { 
-                    return a.rank > b.rank ? -1 : a.rank < b.rank ? 1 : 0;  
-                });
-            }
-
-            else if (onset === 'up') {
-                items.sort(function (a, b) { 
-                    return a.onset < b.onset ? -1 : a.onset > b.onset ? 1 : 0;  
-                });
-            }
-            else if (onset === 'down') {
-                items.sort(function (a, b) { 
-                    return a.onset > b.onset ? -1 : a.onset < b.onset ? 1 : 0;  
-                });
-            }
-
-            else if (degree === 'up') {
-                items.sort(function (a, b) { 
-                    if ( ! isNaN( a.degree ) &&  ! isNaN( b.degree )  ) {
-                        return a.degree - b.degree;
-                    }
-                    let c,d;
-                    c = a.degree.toString(); 
-                    d = b.degree.toString(); 
-                    return ( c < d ) ? -1 : ( c === d ) ? 0 : 1;
-                });
-            }
-            else if (degree === 'down') {
-                items.sort(function (a, b) { 
-                    if ( ! isNaN( a.degree ) &&  ! isNaN( b.degree )  ) {
-                        return b.degree - a.degree;
-                    }
-                    let c,d;
-                    c = a.degree.toString(); 
-                    d = b.degree.toString(); 
-                    return ( d < c ) ? -1 : ( d === c ) ? 0 : 1;
-                });
-            }
-
-            else if (unit === 'up') {
-                items.sort(function (a, b) { 
-                    return a.unit < b.unit ? -1 : a.unit > b.unit ? 1 : 0;  
-                });
-            }
-            else if (unit === 'down') {
-                items.sort(function (a, b) { 
-                    return a.unit > b.unit ? -1 : a.unit < b.unit ? 1 : 0;  
-                });
-            }
-
-    
-            symptomListItemStore.reorder(items);
-            return this.symptomsForReadOnly = items;
-        }
-    }
-
-    @action initializeSymptomsForReadOnly(teachings) {
-        this.teachingsForReadOnly = teachings;
-    }
-
-    // @action setClassNameToTh(type) {
-    //     if (type === 'category') {
-    //         if ( this.sortingType.category === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } else if (this.sortingType.category === 'down' || this.sortingType.category === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     } else if (type === 'name') {
-    //         if (this.sortingType.testName === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } 
-    //         if (this.sortingType.testName === 'down' || this.sortingType.testName === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     } else if (type === 'rank') {
-    //         if (this.sortingType.rank === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } 
-    //         if (this.sortingType.rank === 'down' || this.sortingType.rank === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     } else if (type === 'onset') {
-    //         if (this.sortingType.onset === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } 
-    //         if (this.sortingType.onset === 'down' || this.sortingType.onset === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     } else if (type === 'degree') {
-    //         if (this.sortingType.degree === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } 
-    //         if (this.sortingType.degree === 'down' || this.sortingType.degree === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     } else if (type === 'unit') {
-    //         if (this.sortingType.unit === 'up') {
-    //             return this.changeSortingType(type, 'down');
-    //         } 
-    //         if (this.sortingType.unit === 'down' || this.sortingType.unit === '') {
-    //             return this.changeSortingType(type, 'up');
-    //         }
-    //     }
-    // }
-
-    // @action changeSortingType(type, direction) {
-    //     this.sortingType = {
-    //         rank: '',
-    //         category: '',
-    //         testName: '',
-    //         onset: '',
-    //         degree: '',
-    //         unit: ''
-    //     };
-    //     if (type === 'name') {
-    //         return this.sortingType['testName'] = direction;
-    //     }
-    //     return this.sortingType[type] = direction;
-    // }
-
-    // @action clearSortingType() {
-    //     this.sortingType = {
-    //         rank: 'up',
-    //         category: '',
-    //         testName: '',
-    //         onset: '',
-    //         degree: '',
-    //         unit: ''
-    //     };
-    // }
-
     @action clear() {
         this.staticData = [
             {
@@ -460,8 +171,6 @@ class TeachingStore {
                 ref_id: ''
             }
         ];
-
-        this.symptomsForReadOnly = [];
     }
 
     @action deleteAllInputValue() {

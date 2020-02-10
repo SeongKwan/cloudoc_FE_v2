@@ -3,6 +3,14 @@
     position: relative;
     user-select: none;
 
+    &.view {
+        h5 {
+            margin-bottom: 1rem !important;
+        }
+        label {
+            cursor: default !important;
+        }
+    }
     h5 {
         font-weight: 700;
         letter-spacing: 2px;
@@ -168,7 +176,7 @@
             &.symptom-name {
                 width: 30%;
                 input {
-                    cursor: pointer !important;
+                    cursor: pointer;
                 }
             }
             &.description {
@@ -195,6 +203,11 @@
                     &::placeholder {
                         color: $gray-3;
                         font-weight: 100;
+                    }
+                    &.static {
+                        cursor: default;
+                        outline: 0;
+                        border-bottom: 1px solid $brand-2;
                     }
                 }
     

@@ -4,7 +4,7 @@ import searchStore from './searchStore';
 import user from './userStore';
 // import _ from 'lodash';
 import Hangul from 'hangul-js';
-import { getLocaleFullDateWithTime } from '../utils/momentHelper';
+import { getLocaleFullDateWithTime, toUnix } from '../utils/momentHelper';
 import basicStore from './caseEditorBasicStore';
 import symptomStore from './symptomStore';
 import labStore from './labStore';
@@ -33,7 +33,9 @@ class CaseStore {
     @observable isLoadingForAnalyze = false;
     @observable isLoadingForTreatment = false;
     @observable isLoadingForTeaching = false;
+    @observable isEditing = false;
     @observable registry = [];
+    @observable currentCase = null;
     @observable infiniteStore = [];
     @observable searchedInfiniteStore = [];
     @observable currentPage = 1;
@@ -63,11 +65,26 @@ class CaseStore {
         this.searchedInfiniteStore = [];
         this.registry.forEach((article) => { database.push(article); });
         database = this._search(keyword['cases'], database);
+        // console.log(database.length)
         // database = this._filter(this.filterKeyword, database);
         // database = _.sortBy(database, 'section', 'name')
 
-        this.lastPageForSearching = Math.floor(database.length / loadAmount) + 1;
+        // this.lastPageForSearching = Math.floor(database.length / loadAmount) + 1;
         this.restForSearch = database.length%loadAmount;
+
+        if (database.length - initialLoadAmount + 1 <= 0) {
+            this.lastPageForSearching = 1;
+        } else if (database.length - initialLoadAmount + 1 > 0) {
+            if (this.restForSearch > 0) {
+                this.lastPageForSearching = Math.floor((database.length) / loadAmount) + 1;
+            } else {
+                this.lastPageForSearching = Math.floor((database.length) / loadAmount);
+            }
+        }
+        // console.log(this.lastPageForSearching)
+        
+        
+        // console.log(this.restForSearch)
         this.currentPage = 1;
         
         if (this.lastPageForSearching > 1) {
@@ -87,14 +104,15 @@ class CaseStore {
         this.isLoading = true;
         return agent.loadCases()
                 .then(action((response) => {
+                    this.clear();
                     this.isLoading = false;
                     this.registry = response.data.cases;
                     // console.log(response.data.cases)
-                    // this.registry = this.registry.sort(function (a, b) { 
-                    //     let unixA = momentHelper.toUnix(a.created_date);
-                    //     let unixB = momentHelper.toUnix(b.created_date);
-                    //     return unixA > unixB ? -1 : unixA < unixB ? 1 : 0;
-                    // });
+                    this.registry = this.registry.sort(function (a, b) { 
+                        let unixA = toUnix(a.created_date);
+                        let unixB = toUnix(b.created_date);
+                        return unixA > unixB ? -1 : unixA < unixB ? 1 : 0;
+                    });
                     this.InitInfiniteStore();
                 }))
                 .catch(error => {
@@ -110,13 +128,20 @@ class CaseStore {
         } else {
             plusOne = 0;
         }
+        this.rest = (database.length + 1)%loadAmount;
         // database = this._filter(filterKeyword, this.registry);
         if (database.length - initialLoadAmount <= 0) {
             this.lastPage = 1;
         } else if (database.length - initialLoadAmount > 0) {
-            this.lastPage = Math.floor((database.length - initialLoadAmount) / loadAmount) + 2;
+            if (this.rest === 0) {
+                // console.log('111')
+                this.lastPage = Math.floor((database.length + 1) / loadAmount);
+            } else {
+                // console.log('222')
+                this.lastPage = Math.floor((database.length - initialLoadAmount) / loadAmount) + 2;
+            }
         }
-        this.rest = (database.length + 1)%loadAmount;
+        // console.log('last page : ', this.lastPage)
         this.currentPage = 1;
 
         if (this.currentPage === this.lastPage) {
@@ -143,12 +168,11 @@ class CaseStore {
     @action addToInfiniteStore() {
         let cases = [];
         cases = this.registry;
-        
-        console.log('current page: ',this.currentPage)
-        // cases = this._filter({reference: true}, this.registry);
+        // console.log('current Page : ', this.currentPage)
+        // console.log('rest: ', this.rest)
         this.isLoadingMore = false;
         if ((this.currentPage + 1) < this.lastPage) {
-            console.log('1')
+            // console.log('1')
             if (this.currentPage === 1) {
                 this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
                 return this.currentPage++;
@@ -156,15 +180,21 @@ class CaseStore {
             this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage - 1) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
             this.currentPage++;
         } else if (this.currentPage + 1 === this.lastPage) {
-            console.log('2')
+            // console.log('2')
             if (this.currentPage === 1) {
                 this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount), (initialLoadAmount + (this.currentPage) * loadAmount))]
                 return this.currentPage++;
             }
-            this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage - 1) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount + this.rest))]
+            this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage - 1) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount ))]
+            if (this.rest === 0) {
+                this.loadMore = false;
+            } else {
+                this.loadMore = true;
+            }
             this.currentPage++;
         } else if (this.currentPage >= this.lastPage) {
-            console.log('3')
+            // console.log('3')
+            this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount + this.rest))]
             return this.loadMore = false;
         }
     }
@@ -174,13 +204,23 @@ class CaseStore {
         cases = this.registryForSearching;
         // cases = this._filter({reference: true}, this.registryForSearching);
         this.isLoadingMore = false;
+        // console.log('current Page : ', this.currentPage)
         if ((this.currentPage + 1) < this.lastPageForSearching) {
+            // console.log('1')
             this.searchedInfiniteStore = [...this.searchedInfiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage + 1) * loadAmount))]
             this.currentPage++;
         } else if (this.currentPage + 1 === this.lastPageForSearching) {
-            this.searchedInfiniteStore = [...this.searchedInfiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage) * loadAmount + this.restForSearch))]
+            // console.log('2')
+            this.searchedInfiniteStore = [...this.searchedInfiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage + 1) * loadAmount))]
+            if (this.restForSearch === 0) {
+                this.loadMore = false;
+            } else {
+                this.loadMore = true;
+            }
             this.currentPage++;
         } else if (this.currentPage >= this.lastPageForSearching) {
+            // console.log('3')
+            this.searchedInfiniteStore = [...this.searchedInfiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage) * loadAmount) + this.restForSearch)]
             return this.loadMore = false;
         }
     }
@@ -224,7 +264,7 @@ class CaseStore {
         const latestRecordIndex = item.record.length - 1;
         const { treatment } = item.record[latestRecordIndex]; 
         return (
-                this._hasSearchKeywordInProperty(searcher, item.patient['memo'] || '') 
+                this._hasSearchKeywordInProperty(searcher, item.title || '') 
                 || this._hasSearchKeywordInProperty(searcher, this._getRecordLatestData(item, 'symptom') || '') 
                 || this._hasSearchKeywordInProperty(searcher, this._getRecordLatestData(item, 'diagnosis') || '') 
                 || this._hasSearchKeywordInProperty(searcher, treatment.drugName || '') 
@@ -275,7 +315,55 @@ class CaseStore {
         }
     }
 
+    @action setCurrentCase(currentCase) {
+        const {
+            title,
+            created_date,
+            patient,
+            record
+        } = currentCase;
 
+        let patientInfoData = {
+            title: title,
+            gender: patient.gender,
+            age: patient.age,
+            pastHistory: patient.pastHistory,
+            familyHistory: patient.familyHistory,
+            socialHistory: patient.socialHistory,
+            memo: patient.memo
+        }
+
+        basicStore.initialize(patientInfoData);
+        symptomStore.initStaticData(record[0].symptom);
+        symptomStore.setEditableData(record[0].symptom);
+        labStore.initCaseDetailData(record[0].lab);
+        diagnosisStore.initStaticData(record[0].diagnosis);
+        diagnosisStore.setEditableData(record[0].diagnosis);
+        drugStore.initilize(record[0].treatment);
+        drugStore.setEditableData(record[0].treatment.fomula);
+        teachingStore.initStaticData(record[0].teaching);
+        teachingStore.setEditableData(record[0].teaching);
+    }
+
+    @action toggleIsEditing() {
+        this.isEditing = !this.isEditing;
+    }
+
+
+    @action loadCase(id) {
+        this.isLoading = true;
+        return agent.loadCase(id)
+            .then(action((response) => {
+                this.isLoading = false;
+                // console.log(response.data.case)
+                this.currentCase = response.data.case;
+                this.setCurrentCase(response.data.case);
+            }))
+            .catch((err) => {
+                this.isLoading = false;
+                throw err;
+            })
+    }
 
     /**
      * 
@@ -383,119 +471,117 @@ class CaseStore {
             }))
     }
 
-    // @action updateCase(id, dateIndex) {
-    //     const { currentCaseRecordDate, currentCase } = this;
-    //     const { currentLoginUser } = userStore;
 
-    //     let updatedCase = {
-    //     created_date: currentCase.created_date,
-    //     user_id: currentLoginUser.user_id || 'admin',
-    //     record: [
-    //         {
-    //         createdDate: currentCaseRecordDate,
-    //         symptom: [],
-    //         exam: [],
-    //         selectedLabCategory: [],
-    //         lab: [],
-    //         analyzeCondition: [],
-    //         analyzeSymptom: [],
-    //         analyzeLab: [],
-    //         diagnosis: [],
-    //         analyzeTreatment: [],
-    //         treatment: {},
-    //         memo: ''
-    //         }
-    //     ]
-    //     };
-
-    //     let patientInfo = JSON.parse(JSON.stringify(patientInfoStore.editableData));
-    //     let symptom = JSON.parse(JSON.stringify(symptomStore.editableData));
-    //     let exam = JSON.parse(JSON.stringify(examinationStore.editableData));
-    //     let selectedLabCategory = JSON.parse(JSON.stringify(bloodTestStore.selectedLabCategory));
-    //     let lab = JSON.parse(JSON.stringify(bloodTestStore.editableData));
-    //     let analyzeSymptom = JSON.parse(JSON.stringify(analyzeSymptomStore.editableData));
-    //     let analyzeLab = JSON.parse(JSON.stringify(analyzeBloodTestStore.editableData));
-    //     let diagnosis = JSON.parse(JSON.stringify(diagnosisStore.editableData));
-    //     let analyzeTreatment = JSON.parse(JSON.stringify(analyzeRecommendationTreatmentStore.editableData));
-    //     let treatment = JSON.parse(JSON.stringify(treatmentStore.editableDataForTreatment));
-    //     let fomula = JSON.parse(JSON.stringify(treatmentStore.editableData));
-    //     let { memo } = memoStore.editableData;
-
-    //     updatedCase = { ...updatedCase, patient: patientInfo };
-    //     updatedCase.record[0].symptom = symptom.slice();
-
-    //     updatedCase.record[0].exam = exam.slice();
-    //     updatedCase.record[0].selectedLabCategory = selectedLabCategory.slice();
-    //     updatedCase.record[0].lab = lab.slice();
-
-    //     updatedCase.record[0].analyzeCondition = analyzeSymptom.slice();
-    //     updatedCase.record[0].analyzeSymptom = analyzeSymptom.slice();
-    //     updatedCase.record[0].analyzeLab = analyzeLab.slice();
-    //     updatedCase.record[0].diagnosis = diagnosis.slice();
-    //     updatedCase.record[0].analyzeTreatment = analyzeTreatment.slice();
-    //     updatedCase.record[0].treatment = {...treatment, fomula};
-    //     updatedCase.record[0].memo = memo;
-
-    //     // 공란 필터링 -- 증상
-    //     let filteredSymptoms = updatedCase.record[0].symptom.filter((item) => {
-    //     return item.name !== '';
-    //     })
-    //     // 중요도 재배치
-    //     filteredSymptoms.forEach((item, i) => {
-    //     item.rank = i + 1;
-    //     });
-
-    //     // 공란 필터링 -- 진찰
-    //     let filteredExam = updatedCase.record[0].exam.filter((item) => {
-    //     return item.name !== '';
-    //     })
-    //     // 중요도 재배치
-    //     filteredExam.forEach((item, i) => {
-    //     item.rank = i + 1;
-    //     });
-
-    //     // 공란 필터링 -- 진단
-    //     let filteredDiagnosis = updatedCase.record[0].diagnosis.filter((item) => {
-    //     return item.name !== '';
-    //     })
-
-    //     updatedCase.record[0].symptom = filteredSymptoms;
-    //     updatedCase.record[0].exam = filteredExam;
-    //     updatedCase.record[0].diagnosis = filteredDiagnosis;
-
-
-    //     let reversedRecords = [];
-    //     if (this.currentCase.record.length > 1) {
-    //         reversedRecords = this.currentCase.record.slice().reverse();
-    //         let willBeUpdatedRecords = JSON.parse(JSON.stringify(reversedRecords));
-    //         willBeUpdatedRecords.splice(dateIndex, 1, updatedCase.record[0]);
-    //         let reversedUpdatedRecords = willBeUpdatedRecords.slice().reverse();
-    //         updatedCase = { ...updatedCase, record: reversedUpdatedRecords }
-    //     }
+    /**
+     * 
+     * @param {object} updateCase
+     * @return {object}
+     */
+    @action updateCase() {
+        this.isLoading = true;
+        const date = this.currentCase.created_date;
+        const { currentUser } = user;
+        let updatedCase = {
+        user_id: currentUser.user_id || 'admin',
+        created_date: date,
+        title: '',
+        record: [
+            {
+            createdDate: date,
+            symptom: [],
+            exam: [],
+            selectedLabCategory: [],
+            lab: [],
+            analyzeCondition: [],
+            analyzeSymptom: [],
+            analyzeLab: [],
+            diagnosis: [],
+            analyzeTreatment: [],
+            treatment: {},
+            memo: '',
+            teaching: []
+            }
+        ]
+        };
+        const patientInfo = JSON.parse(JSON.stringify(basicStore.editableData));
+        const symptom = JSON.parse(JSON.stringify(symptomStore.editableData));
+        // const exam = JSON.parse(JSON.stringify(examStore.editableData));
+        const exam = [];
+        const lab = JSON.parse(JSON.stringify(labStore.editableData));
         
-    //     this.isLoading = true;
+        // const selectedLabCategory = JSON.parse(JSON.stringify(bloodTestStore.selectedLabCategory));
+        const selectedLabCategory = [];
+        // const analyzeSymptom = JSON.parse(JSON.stringify(analyzeSymptomStore.editableData));
+        const analyzeSymptom = [];
+        // const analyzeLab = JSON.parse(JSON.stringify(analyzeBloodTestStore.editableData));
+        const analyzeLab = [];
+        const diagnosis = JSON.parse(JSON.stringify(diagnosisStore.editableData));
+        // const analyzeTreatment = JSON.parse(JSON.stringify(analyzeRecommendationTreatmentStore.editableData));
+        const analyzeTreatment = [];
+        const treatment = JSON.parse(JSON.stringify(drugStore.editableDataForTreatment));
+        const fomula = JSON.parse(JSON.stringify(drugStore.editableData));
+        // const { memo } = memoStore.editableData;
+        const { memo } = '';
+        const teaching = JSON.parse(JSON.stringify(teachingStore.editableData))
+        
+        updatedCase = { ...updatedCase, patient: patientInfo };
+        updatedCase['title'] = patientInfo.title;
+        updatedCase.record[0].symptom = symptom.slice();
+        updatedCase.record[0].exam = exam.slice();
+        updatedCase.record[0].lab = lab.slice();
+        updatedCase.record[0].selectedLabCategory = selectedLabCategory.slice();
 
-    //     return agent.updateCase(id ,updatedCase)
-    //         .then(action(async (response) => {
-    //             this.isLoading = false;
-    //             const { Case } = response.data;
-    //             this.currentCase = Case;
-    //             this.currentCasePatient = Case.patient;
+        updatedCase.record[0].analyzeCondition = analyzeSymptom.slice();
+        updatedCase.record[0].analyzeSymptom = analyzeSymptom.slice();
+        updatedCase.record[0].analyzeLab = analyzeLab.slice();
 
-    //             let reversedDetail = Case.record.slice().reverse();
-    //             this.currentCaseDetail = reversedDetail[dateIndex];
+        updatedCase.record[0].diagnosis = diagnosis.slice();
+        updatedCase.record[0].analyzeTreatment = analyzeTreatment.slice();
+        updatedCase.record[0].treatment = {...treatment, fomula};
+        updatedCase.record[0].memo = memo;
+        updatedCase.record[0].teaching = teaching.slice();
 
-    //             let recordDates = [];
-    //             Case.record.forEach((record) => { recordDates.push(record.createdDate) });
-    //             this.currentCaseRecord = recordDates.slice().reverse();
+
+        // 공란 필터링 -- 증상
+        let filteredSymptoms = updatedCase.record[0].symptom.filter((item) => {
+            return item.name !== '';
+        })
+        // 중요도 재배치
+        filteredSymptoms.forEach((item, i) => {
+            item.rank = i + 1;
+        });
+
+        // 공란 필터링 -- 진찰
+        let filteredExam = updatedCase.record[0].exam.filter((item) => {
+            return item.name !== '';
+        })
+        // 중요도 재배치
+        filteredExam.forEach((item, i) => {
+            item.rank = i + 1;
+        });
+
+        // 공란 필터링 -- 진단
+        let filteredDiagnosis = updatedCase.record[0].diagnosis.filter((item) => {
+            return item.name !== '';
+        })
+
+        updatedCase.record[0].symptom = filteredSymptoms;
+        updatedCase.record[0].exam = filteredExam;
+        updatedCase.record[0].diagnosis = filteredDiagnosis;
+
+        return agent.updateCase(this.currentCase._id ,updatedCase)
+            .then(action((response) => {
+                // console.log(response.data)
+                this.isLoading = false;
+                this.currentCase = response.data.Case;
+                this.setCurrentCase(response.data.Case);
                 
-    //             this.currentCaseRecordDate = this.currentCaseRecord[dateIndex];
+                // this.clearAutoSavedCaseForCreate();
+                return response;
+            }))
+    }
 
-    //         }))
-    //         .catch(action((err) => {
-    //             throw err;
-    //         }));
-    // }
+    
 
     @action deleteCase(id) {
         this.isLoading = true;
@@ -546,7 +632,25 @@ class CaseStore {
     }
 
 
+    @action clear() {
+        this.registry = [];
+        this.infiniteStore = [];
+        this.searchedInfiniteStore = [];
+        this.currentPage = 1;
+        this.lastPage = 0;
+        this.lastPageForSearching = 0;
+        this.rest = 0;
+        this.restForSearch = 0;
+        this.loadMore = true;
+    }
 
+    @action clearCurrentCase() {
+        this.currentCase = null;
+    }
+
+    @action clearIsEditing() {
+        this.isEditing = false;
+    }
 
 
 

@@ -102,8 +102,6 @@ class HeaderCloudoc extends Component {
                         <li 
                             className={cx('content-item')}
                             onClick={() => {
-                                console.log('click')
-                                console.log(this.props.history)
                                 this.props.login.logout()
                                 .then((res) => {
                                     console.log(res)

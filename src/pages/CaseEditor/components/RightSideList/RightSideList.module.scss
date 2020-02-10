@@ -9,9 +9,9 @@
     width: calc(100% - 1rem);
     // padding: 0.5rem;
     ul {
-        max-height: 270px;
+        max-height: 236px;
         @include media('lg') {
-            max-height: 160px;
+            max-height: 146px;
         }
         overflow-y: scroll;
         padding: 0 0.5rem;

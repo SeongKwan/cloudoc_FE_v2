@@ -47,6 +47,9 @@ class SymptomStore {
     @action initEditableData() {
         this.editableData = [];
     }
+    @action initStaticData(symptoms) {
+        this.staticData = symptoms;
+    }
 
     @action sortEditableData() {
         this.editableData.slice().sort(function(a, b) {

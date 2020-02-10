@@ -23,11 +23,23 @@ const cx = classNames.bind(styles);
 class MyCases extends Component {
     componentDidMount() {
         this.props.Case.loadCases();
-        
     }
 
     componentWillUnmount() {
         this.props.Case.clearLoadMore();
+    }
+
+    componentDidUpdate(prevProps) {
+        let type = this.props.search.keyword['cases'].length > 0;
+        if (type) {
+            if (this.props.Case.lastPageForSearching === this.props.Case.currentPage) {
+                this.props.Case.noLoadMore();
+            }
+        } else {
+            if (this.props.Case.lastPage === this.props.Case.currentPage) {
+                this.props.Case.noLoadMore();
+            }
+        }
     }
 
     _handleClickOnButton = () => {
@@ -37,7 +49,7 @@ class MyCases extends Component {
     
 
     render() {
-        const { infiniteStore, searchedInfiniteStore, loadMore, isLoading, isLoadingMore, lastPage, rest } = this.props.Case;
+        const { infiniteStore, searchedInfiniteStore, loadMore, isLoading, isLoadingMore } = this.props.Case;
 
         let database = 
             this.props.search.keyword['cases'].length > 0 

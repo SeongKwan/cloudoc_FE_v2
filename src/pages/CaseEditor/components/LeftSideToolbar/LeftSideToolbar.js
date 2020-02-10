@@ -45,6 +45,9 @@ class LeftSideToolbar extends Component {
         let scrollBox = $('#case-editor-center-container-scroll-box');
         let objDiv = $('#case-editor-diagnosis');
         let objDivDrug = $('#case-editor-drug');
+        if (!scrollBox || !objDiv || !objDivDrug) {
+            return false;
+        }
         let THIS = this;
         let offset1 = objDiv.position();
         let adj1 = offset1.top;
@@ -60,6 +63,9 @@ class LeftSideToolbar extends Component {
     componentDidUpdate(prevProps, prevState) {
         let scrollBox = $('#case-editor-center-container-scroll-box');
         let objDiv = $('#case-editor-diagnosis');
+        if (scrollBox.lenght <= 0 || objDiv.length <= 0) {
+            return false;
+        }
         let offset1 = objDiv.position();
         let adj1 = offset1.top;
         let currentScrollTop = scrollBox.scrollTop() + adj1;
@@ -159,30 +165,36 @@ class LeftSideToolbar extends Component {
         
         if (type === 'symptom') {
             this.props.analyzeSymptom.clear();
-            this.props.Case.analyzeSymptom(referenceData)
-            .then(result => {
-                let countResult = result.length;
-                if (countResult === 0) alert('해당하는 분석결과가 없습니다');
-                this.props.analyzeSymptom.initiateOpen();
-            });
+            if (!this.props.analyzeSymptom.isLoading) {
+                this.props.Case.analyzeSymptom(referenceData)
+                .then(result => {
+                    let countResult = result.length;
+                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    this.props.analyzeSymptom.initiateOpen();
+                });
+            }
             return null;
         } else if (type === 'drug') {
             this.props.analyzeDrug.clear();
-            this.props.Case.analyzeTreatment(referenceData)
-            .then(result => {
-                let countResult = result.length;
-                if (countResult === 0) alert('해당하는 분석결과가 없습니다');
-                this.props.analyzeDrug.initiateOpen();
-            });
+            if (!this.props.analyzeDrug.isLoading) {
+                this.props.Case.analyzeTreatment(referenceData)
+                .then(result => {
+                    let countResult = result.length;
+                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    this.props.analyzeDrug.initiateOpen();
+                });
+            }
             return null;
         } else if (type === 'teaching') {
             this.props.analyzeTeaching.clear();
-            this.props.Case.analyzeTeaching(referenceData)
-            .then(result => {
-                let countResult = result.length;
-                if (countResult === 0) alert('해당하는 분석결과가 없습니다');
-                this.props.analyzeTeaching.initiateOpen();
-            });
+            if (!this.props.analyzeTeaching.isLoading) {
+                this.props.Case.analyzeTeaching(referenceData)
+                .then(result => {
+                    let countResult = result.length;
+                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    this.props.analyzeTeaching.initiateOpen();
+                });
+            }
             return null;
         }
     }
@@ -257,19 +269,42 @@ class LeftSideToolbar extends Component {
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
-                <div className={cx('btn', {open: openList === 'condition'}, {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} id="btn-smart-condition" data-anl="symptom" data-type="condition" onClick={this._handleOnClick} data-disabled={!lengthSymptom ? 'true' : 'false'} data-tip="증상이 최소 1개 이상 필요합니다">
+                <div 
+                    className={cx('btn', {open: openList === 'condition'}, {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} 
+                    id="btn-smart-condition" 
+                    data-anl="symptom" 
+                    data-type="condition" 
+                    onClick={this._handleOnClick} 
+                    data-disabled={!lengthSymptom ? 'true' : 'false'} 
+                    data-tip="증상이 최소 1개 이상 필요합니다"
+                >
                     <FaUserCheck />
                     <div className={cx('label')}>스마트진단</div>
                 </div>
-                <div className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} data-type="drug" data-anl="drug" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
+                <div 
+                    className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} 
+                    data-type="drug" 
+                    data-anl="drug" 
+                    onClick={this._handleOnClick} 
+                    data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                    data-tip="진단이 최소 1개 이상 필요합니다"
+                >
                     <FaNotesMedical />
                     <div className={cx('label')}>스마트처방</div>
                 </div>
-                <div className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} data-type="teaching" data-anl="teaching" onClick={this._handleOnClick} data-disabled={!lengthDiagnosis ? 'true' : 'false'} data-tip="진단이 최소 1개 이상 필요합니다">
+                <div 
+                    className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} 
+                    data-type="teaching" 
+                    data-anl="teaching" 
+                    onClick={this._handleOnClick} 
+                    data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                    data-tip="진단이 최소 1개 이상 필요합니다"
+                >
                     <FaChalkboard />
                     <div className={cx('label')}>스마트티칭</div>
                     
                 </div>
+                
                 <div className={cx('content-container')}>
                     {
                         openList === 'condition' &&

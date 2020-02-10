@@ -24,6 +24,10 @@ class DiagnosisStore {
         this.editableData = [];
     }
 
+    @action initStaticData(diagnosis) {
+        this.staticData = diagnosis;
+    }
+
     @action setEditableData(editableData) {
         if (this.editableData.length > 0) {
             this.editableData = [];
