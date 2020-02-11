@@ -1,9 +1,9 @@
 .Lab {
     padding: 2rem;
     position: relative;
-    user-select: none;
+    // user-select: none;
 
-    button {
+    button, .button-paste {
         position: relative;
         font-size: 0.9rem;
         font-weight: 100;
@@ -31,6 +31,10 @@
         &:focus {
             outline: 0;
         }
+    }
+
+    .button-paste {
+        user-select: default !important;
     }
 
     .title-wrapper {

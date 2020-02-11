@@ -21,38 +21,28 @@ const cx = classNames.bind(styles);
 class Lab extends Component {
     componentDidMount() {
         if (document.querySelector("#paste")) {
-            console.log('acitve paste button')
-            document.querySelector("#paste").addEventListener("click", this.paste);
+            document.querySelector("#paste").addEventListener("paste", this.handleCopyAndPaste);
         }
         
     }
     
     componentDidUpdate() {
         if (document.querySelector("#paste")) {
-            console.log('acitve paste button')
-            document.querySelector("#paste").addEventListener("click", this.paste);
+            document.querySelector("#paste").addEventListener("paste", this.handleCopyAndPaste);
         }
     }
     componentWillUnmount() {
         if (document.querySelector("#paste")) {
-            document.querySelector("#paste").removeEventListener("click", this.paste);
+            document.querySelector("#paste").removeEventListener("paste", this.handleCopyAndPaste);
         }
         this.props.lab.clear();
     }
 
     paste = () => {
-        let pasteText = document.getElementById("outbox");
+        // let pasteText = document.getElementById("outbox");
         // let data;
         // pasteText.focus();
-        // document.execCommand("paste");
-
-        // setTimeout(() => { data = window.clipboardData; }, 500);
-    
-        // console.log(document.execCommand("paste"));
-        // setTimeout(() => {console.log(data.getData('Text'))}, 800);
-        console.log(navigator)
-        console.log(navigator.clipboard)
-        
+        // pasteText.execCommand("paste");        
         navigator.clipboard.readText().then(clipText => {
             // document.getElementById("outbox").innerText = clipText
             // console.log(clipText)
@@ -66,6 +56,7 @@ class Lab extends Component {
     }
 
     handleCopyAndPaste = (e) => {
+        console.log('paste !!')
         let clipboardData, pastedData;
  
         // Stop data actually being pasted into div
@@ -77,7 +68,7 @@ class Lab extends Component {
         pastedData = clipboardData.getData('Text');
         
         // Do whatever with pasteddata
-        // alert(pastedData);
+        alert(pastedData);
         // console.log(pastedData)
         this.convertTextToObject(pastedData)
     }
@@ -299,8 +290,7 @@ class Lab extends Component {
                         <>
                             <button disabled={disabledButton} className={cx('delete-all', {disabled: disabledButton})} onClick={this.handleDeleteAll}>결과삭제</button>
                             <div>
-                                <input hidden id="outbox" />
-                                <button className={cx('text')} id="paste">텍스트결과</button>
+                                <div className={cx('text','button-paste')} id="paste">텍스트결과</div>
                             </div>
                             <div className={cx('load-lab-results')}>
                                 <button className={cx('excel')}>
