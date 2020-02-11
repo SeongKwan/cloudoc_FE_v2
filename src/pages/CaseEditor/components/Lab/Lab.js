@@ -42,7 +42,6 @@ class Lab extends Component {
 
     paste = () => {
         let pasteText = document.getElementById("outbox");
-<<<<<<< HEAD
         // let data;
         // pasteText.focus();
         // document.execCommand("paste");
@@ -53,11 +52,6 @@ class Lab extends Component {
         // setTimeout(() => {console.log(data.getData('Text'))}, 800);
         
         navigator.clipboard.readText().then(clipText => {
-=======
-        pasteText.focus();
-        document.execCommand("paste");
-        window.navigator.clipboard.readText().then(clipText => {
->>>>>>> master
             // document.getElementById("outbox").innerText = clipText
             // console.log(clipText)
             this.convertTextToObject(clipText);
