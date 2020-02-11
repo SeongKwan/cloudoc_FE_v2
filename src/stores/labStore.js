@@ -21,7 +21,12 @@ class LabStore {
     @observable selectedLabCategory = [
         {}
     ];
+    @observable readyForPaste = false;
     
+
+    @action toggleReadyForPaste() {
+        this.readyForPaste = !this.readyForPaste;
+    }
 
     @action filteredEditableData(gender = '', categoryIndex) {
         

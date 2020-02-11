@@ -38,6 +38,10 @@ class Lab extends Component {
         this.props.lab.clear();
     }
 
+    handleOnClickPasteButton = () => {
+        this.props.lab.toggleReadyForPaste();
+    }
+
     handleCopyAndPaste = (e) => {
         let clipboardData, pastedData;
  
@@ -59,7 +63,7 @@ class Lab extends Component {
         let parsedData = [];
         
         if (!this.checkerPaste(pastedData.split('\n')[0])) {
-            return alert('복사한 혈액검사 텍스트파일 양식이 틀렸거나 내용이 올바르지 않습니다')
+            return alert('복사한 혈액검사 텍스트파일 양식이 틀렸거나 내용이 올바르지 않습니다');
         }
         pastedData.split('\n').forEach(data => {
             let splitted = data.split('\t');
@@ -91,6 +95,7 @@ class Lab extends Component {
         parsedData.splice(0, 1);
 
         this.props.lab.setEditableData(parsedData.filter(x => x.value !== "-"));
+        this.props.lab.toggleReadyForPaste();
         // console.log(parsedData);
     }
 
@@ -263,41 +268,8 @@ class Lab extends Component {
                     {
                         (type === "create" || isEditing) &&
                         <>
+                            <div className={cx('text','button-paste')} onClick={this.handleOnClickPasteButton} id="paste">결과붙여넣기</div>
                             <button disabled={disabledButton} className={cx('delete-all', {disabled: disabledButton})} onClick={this.handleDeleteAll}>결과삭제</button>
-                            <div>
-                                <div className={cx('text','button-paste')} id="paste">텍스트결과</div>
-                            </div>
-                            <div className={cx('load-lab-results')}>
-                                <button className={cx('excel')}>
-                                    <Dropzone
-                                        onDrop={(acceptedFiles) => this.onFormSubmit(acceptedFiles)}
-                                        onDropRejected={(rejectedFiles) => {
-                                            if (rejectedFiles.length > 0) {
-                                                return alert('엑셀파일만 업로드가 가능합니다')
-                                            }
-                                        }
-                                        }
-                                    >
-                                        {({acceptedFiles, getRootProps, getInputProps}) => (
-                                            <section>
-                                                <div {...getRootProps()} className={cx('drag-drop-zone')}>
-                                                    <input {...getInputProps()} accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-                                                    엑셀결과
-                                                </div>
-                                                <div className={cx("fileName-dateSelectButton")}>
-                                                    <div>
-                                                        {acceptedFiles.map((file) => {
-                                                        return <div key={file.path} className={cx('fileName')}>
-                                                                선택된 파일: {file.path}
-                                                            </div>
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        )}
-                                    </Dropzone>
-                                </button>
-                            </div>
                         </>
                     }
                 </div>

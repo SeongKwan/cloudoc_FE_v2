@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 
 const cx = classNames.bind(styles);
 
-@inject('auth')
+@inject('auth', 'lab')
 @observer
 class App extends Component {
   state = {
@@ -28,9 +28,30 @@ class App extends Component {
     window.addEventListener('offline', () => {
       this.setState({ online: false })
     });
+    if (this.props.lab.readyForPaste) {
+      window.addEventListener('keydown', this.handleKeydown);
+    }
+  }
+  componentDidUpdate() {
+    if (this.props.lab.readyForPaste) {
+      window.addEventListener('keydown', this.handleKeydown);
+    }
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  handleKeydown = (e) => {
+    const { keyCode } = e;
+    const { readyForPaste } = this.props.lab;
+    if (keyCode === 27 && readyForPaste) {
+      this.props.lab.toggleReadyForPaste();
+    }
   }
   
   render() {
+    const { readyForPaste } = this.props.lab;
+
     return (
       <Router>
         <Helmet>
@@ -41,6 +62,30 @@ class App extends Component {
         {
           this.state.online === false &&
           <div className={cx('network-message', 'offline')}>오프라인 상태</div>
+        }
+        {
+          readyForPaste && 
+          <div className={cx('ready-paste-cover')}>
+            <div className={cx('instruction')}>
+              <div className={cx('title')}>
+                혈액검사결과 붙여넣기 
+                <span onClick={() => {this.props.lab.toggleReadyForPaste();}} className={cx('cancel')}>
+                  취소(ESC)
+                </span>
+              </div>
+              <div className={cx('code-container')}>
+                <div className={cx('window','code-wrapper')}>
+                  <div>(윈도우)</div>
+                  <code className={cx('short-command-key')}>ctrl + v</code>
+                </div>
+                <div className={cx('mac','code-wrapper')}>
+                  <div>(맥)</div>
+                  <code className={cx('short-command-key')}>cmd + v</code>
+                </div>
+              </div>
+              
+            </div>
+          </div>
         }
           <Routes />
         </main>

@@ -14,8 +14,6 @@
         &.delete-all {
             background-color: $gray-2;
             color: $brand-8;
-            margin-right: auto;
-            margin-left: 1rem;
         }
         color: $white;
         border: 0;
@@ -35,6 +33,8 @@
 
     .button-paste {
         user-select: default !important;
+        margin-right: auto;
+        margin-left: 1rem;
     }
 
     .title-wrapper {
