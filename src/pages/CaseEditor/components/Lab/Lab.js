@@ -38,25 +38,7 @@ class Lab extends Component {
         this.props.lab.clear();
     }
 
-    paste = () => {
-        // let pasteText = document.getElementById("outbox");
-        // let data;
-        // pasteText.focus();
-        // pasteText.execCommand("paste");        
-        navigator.clipboard.readText().then(clipText => {
-            // document.getElementById("outbox").innerText = clipText
-            // console.log(clipText)
-            this.convertTextToObject(clipText);
-        })
-        .catch(err => {
-            console.log('paste error: ', err);
-        });
-        // setTimeout(this.handleCopyAndPaste, 100);
-        // console.log(pasteText.textContent);
-    }
-
     handleCopyAndPaste = (e) => {
-        console.log('paste !!')
         let clipboardData, pastedData;
  
         // Stop data actually being pasted into div
@@ -68,7 +50,7 @@ class Lab extends Component {
         pastedData = clipboardData.getData('Text');
         
         // Do whatever with pasteddata
-        alert(pastedData);
+        // alert(pastedData);
         // console.log(pastedData)
         this.convertTextToObject(pastedData)
     }
@@ -81,18 +63,11 @@ class Lab extends Component {
         }
         pastedData.split('\n').forEach(data => {
             let splitted = data.split('\t');
-            // console.log(splitted)
             if (splitted.length > 1) {
                 if (splitted[1] !== "") {
                     let name = splitted[1];
                     let value;
-                    if (splitted[5] !== " ") {
-                        value = splitted[5];
-                    } else if (splitted[6] !== " ") {
-                        value = splitted[6];
-                    } else {
-                        value = splitted[7];
-                    }
+                    value = splitted[9];
 
                     let ref = convertRef.find(data => data.source === name);
                     if (ref) {
@@ -121,9 +96,9 @@ class Lab extends Component {
 
     checkerPaste = (firstData) => {
         let splitted = firstData.split('\t');
-        const ref = ['혈구검사', '생화학검사', '호르몬면역검사'];
-        if (ref.indexOf(splitted[0])!== -1) return true;
-        return false
+        
+        if (splitted[0] === '검사구분') return true;
+        return false;
     }
 
     _onChange = (e) => {
