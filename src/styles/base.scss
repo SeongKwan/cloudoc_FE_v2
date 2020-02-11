@@ -25,7 +25,7 @@
 html {
     font-size: 16px;
     // font-family: 'Noto Sans KR', sans-serif;
-    font-family: 'NanumBarunGothic', sans-serif;
+    font-family: 'NanumBarunGothic', sans-serif !important;
     @include media('xl') {
         font-size: 15px;
     }
