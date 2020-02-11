@@ -42,7 +42,7 @@ class Lab extends Component {
         let pasteText = document.getElementById("outbox");
         pasteText.focus();
         document.execCommand("paste");
-        navigator.clipboard.readText().then(clipText => {
+        window.navigator.clipboard.readText().then(clipText => {
             // document.getElementById("outbox").innerText = clipText
             // console.log(clipText)
             this.convertTextToObject(clipText);
