@@ -50,6 +50,8 @@ class Lab extends Component {
     
         // console.log(document.execCommand("paste"));
         // setTimeout(() => {console.log(data.getData('Text'))}, 800);
+        console.log(navigator)
+        console.log(navigator.clipboard)
         
         navigator.clipboard.readText().then(clipText => {
             // document.getElementById("outbox").innerText = clipText
