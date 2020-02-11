@@ -21,6 +21,7 @@ const cx = classNames.bind(styles);
 class Lab extends Component {
     componentDidMount() {
         if (document.querySelector("#paste")) {
+            console.log('acitve paste button')
             document.querySelector("#paste").addEventListener("click", this.paste);
         }
         
@@ -28,6 +29,7 @@ class Lab extends Component {
     
     componentDidUpdate() {
         if (document.querySelector("#paste")) {
+            console.log('acitve paste button')
             document.querySelector("#paste").addEventListener("click", this.paste);
         }
     }
@@ -40,12 +42,22 @@ class Lab extends Component {
 
     paste = () => {
         let pasteText = document.getElementById("outbox");
-        pasteText.focus();
-        document.execCommand("paste");
+        // let data;
+        // pasteText.focus();
+        // document.execCommand("paste");
+
+        // setTimeout(() => { data = window.clipboardData; }, 500);
+    
+        // console.log(document.execCommand("paste"));
+        // setTimeout(() => {console.log(data.getData('Text'))}, 800);
+        
         navigator.clipboard.readText().then(clipText => {
             // document.getElementById("outbox").innerText = clipText
             // console.log(clipText)
             this.convertTextToObject(clipText);
+        })
+        .catch(err => {
+            console.log('paste error: ', err);
         });
         // setTimeout(this.handleCopyAndPaste, 100);
         // console.log(pasteText.textContent);
