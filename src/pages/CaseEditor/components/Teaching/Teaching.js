@@ -10,8 +10,8 @@ const cx = classNames.bind(styles);
 @inject('Case', 'search', 'teaching')
 @observer
 class Teaching extends Component {
-    componentDidMount() {
-        this.props.teaching.initEditableData();
+    componentWillUnmount() {
+        this.props.teaching.clear();
     }
 
     _handleOnChange = (e) => {

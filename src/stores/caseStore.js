@@ -346,6 +346,7 @@ class CaseStore {
     }
 
     @action toggleIsEditing() {
+        this.setCurrentCase(this.currentCase);
         this.isEditing = !this.isEditing;
     }
 

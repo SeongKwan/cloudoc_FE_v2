@@ -248,7 +248,8 @@ class Lab extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, staticData } = this.props.lab;
-        // console.log(JSON.parse(JSON.stringify(editableData)))
+        // console.log('static ',JSON.parse(JSON.stringify(staticData)))
+        // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
         // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
         // const nameSorting = testName;

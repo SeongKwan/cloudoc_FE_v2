@@ -48,13 +48,6 @@ class CaseEditor extends Component {
     });
   }
 
-  componentDidUpdate() {
-    const type = this.props.location.pathname.split('/')[3];
-    if (type === 'detail' && this.props.Case.currentCase !== null) {
-      this.props.Case.setCurrentCase(this.props.Case.currentCase);
-    }
-  }
-
   componentWillUnmount() {
     this.props.Case.clearCurrentCase();
   }
