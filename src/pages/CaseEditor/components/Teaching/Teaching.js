@@ -22,6 +22,7 @@ class Teaching extends Component {
     _handleClickOnAddTeaching = () => {
         this.props.teaching.addTeaching(null, null, '');
     }
+    
     _deleteTeaching = (i) => {
         const selectedIndex = i;
         

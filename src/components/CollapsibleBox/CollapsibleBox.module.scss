@@ -1,6 +1,7 @@
 .CollapsibleBox {
     padding: 1rem 2rem;
     color: rgba($brand-8, 0.5);
+    
     &.open {
         color: $brand-8;
     }
@@ -51,10 +52,20 @@
         }
     }
 }
+
+
 .CollapsibleBox2 {
     padding: 1rem 2rem;
     color: rgba($brand-8, 0.5);
-    position: relative;
+    // position: relative;
+    &.active {
+        .header {
+            background-color: $brand-1;
+            &:hover {
+                background-color: $brand-2;
+            }
+        }
+    }
     &.open {
         color: $brand-8;
     }
@@ -90,7 +101,7 @@
         width: 140px;
         position: relative;
         display: flex;
-        background-color: $brand-1;
+        background-color: $gray-2;
         border-radius: $radius-low;
         user-select: none;
         margin-bottom: 0.5rem;
@@ -98,9 +109,7 @@
         @include media('lg') {
             width: 120px;
         }
-        &:hover {
-            background-color: $brand-2;
-        }
+        
         .btn-toggle {
             position: absolute;
             display: flex;
@@ -117,7 +126,86 @@
     .content {
 
         background-color: $brand-2;
-        padding: 0.5rem;
+        // padding: 0.5rem;
         border-radius: $radius-low;
     }
+
+
+    /*
+    ** Tooltip CSS
+    */
+
+    /*== start of code for tooltips ==*/
+    .tool {
+        // cursor: help;
+        // position: relative;
+    }
+
+
+    /*== common styles for both parts of tool tip ==*/
+    .tool::before,
+    .tool::after {
+        left: 100%;
+        opacity: 0;
+        position: absolute;
+        z-index: -100;
+        visibility: hidden;
+    }
+
+    .tool:hover::before,
+    .tool:focus::before,
+    .tool:hover::after,
+    .tool:focus::after {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        z-index: 100;
+    }
+
+    .tool:hover::after,
+    .tool:focus::after {
+        transform: scale(1) translateX(0) translateY(-15%);
+    }
+
+
+    /*== pointer tip ==*/
+    .tool::before {
+        border-style: solid;
+        border-width: 0.5em;
+        border-color: transparent transparent $brand-8 transparent;
+        left: 5%;
+        top: 80%;
+        content: "";
+        // margin-left: -0.5em;
+        transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26), opacity .35s .2s;
+        transform: scale(.6) translateY(-50%);
+    }
+
+    .tool:hover::before,
+    .tool:focus::before {
+        transition: all .15s cubic-bezier(.84, -0.18, .31, 1.26) .1s;
+    }
+
+
+    /*== speech bubble ==*/
+    .tool::after {
+        font-size: 0.7rem;
+        background: $brand-8;
+        border-radius: $radius-low;
+        top: 134%;
+        left: 0;
+        color: $white;
+        content: attr(data-tip);
+        padding: 1em;
+        transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26) .2s;
+        transform: scale(.6) translateY(-50%);
+        // width: 180px;
+    }
+
+    .tool:hover::after,
+    .tool:focus::after {
+        transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26);
+    }
+
+    
 }

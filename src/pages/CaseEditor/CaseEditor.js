@@ -67,7 +67,7 @@ class CaseEditor extends Component {
           <div className={cx('scroll-box')}>
             {
               (type === "create" || isEditing) &&
-              <LeftSideToolbar />
+              <LeftSideToolbar type={type} />
             }
           </div>
         </div>
@@ -96,7 +96,7 @@ class CaseEditor extends Component {
           <div className={cx('scroll-box')}>
             {
               (type === "create" || isEditing) &&
-              <RightSideList />
+              <RightSideList type={type} isEditing={isEditing} />
             }
           </div>
         </div>

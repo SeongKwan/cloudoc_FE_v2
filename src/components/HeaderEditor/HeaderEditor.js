@@ -57,7 +57,11 @@ class HeaderEditor extends Component {
                             onClick={() => {
                                     this.props.Case.updateCase()
                                     .then(res => {
-                                        this.props.Case.toggleIsEditing();
+                                        if (res) {
+                                            alert('정상적으로 수정되었습니다')
+                                            this.props.Case.toggleIsEditing();
+                                        }
+                                        {/* setTimeout(() => {this.props.Case.toggleIsEditing();}, 500); */}
                                     })
                                     .catch(err => {
                                         console.log(err)

@@ -4,6 +4,7 @@ import modalStore from './modalStore';
 import agent from '../utils/agent';
 import bloodTestItems from '../constant/bloodTestItem';
 import _ from 'lodash';
+import basicStore from './caseEditorBasicStore';
 
 class LabStore {
     @observable editableData = [];
@@ -22,7 +23,63 @@ class LabStore {
         {}
     ];
     @observable readyForPaste = false;
+
+    @observable addLab = {
+        category: '간기능',
+        name: '',
+        value: '',
+        selectLab: {}
+    }
+
+    @computed get optionsCategory() {
+        let categories = [];
+        bloodTestItems.forEach((lab, i) => {
+            return categories[i] = lab.category;
+        });
+        categories = _.uniqBy(categories);
+        categories = _.sortBy(categories);
+        return categories;
+    }
+
+    @computed get optionsName() {
+        const gender = basicStore.editableData.gender === 'male' ? 'M' : 'F';
+        let names = [];
+        
+        names = bloodTestItems.filter((lab) => {
+            
+            if (lab['sex'] !== null && lab['sex'] !== undefined) {
+                return (lab.category === this.addLab.category) && (lab.sex === gender);
+            } else {
+                return lab.category === this.addLab.category;
+            }
+        });
+        names = _.sortBy(names, 'name');
+        return names;
+    }
+
+    @computed get labNames() {
+        let names = [];
+        bloodTestItems.forEach((lab, i) => {
+            return names[i] = lab.name;
+        });
+        names = _.sortBy(names);
+        return names;
+    }
     
+    @computed get lengthAlertMessage() {
+        let count = 0;
+        this.editableData.forEach((lab, i) => {
+            const {
+                alertMin,
+                alertMax,
+                state,
+            } = lab;
+            if ((state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax)) {
+                count++;
+            }
+        })
+        return count;
+    }
 
     @action toggleReadyForPaste() {
         this.readyForPaste = !this.readyForPaste;
@@ -215,6 +272,8 @@ class LabStore {
         return results;
     }
 
+
+
     @action setRegistry(labs) {
         this.registry = labs || [];
     }
@@ -223,11 +282,21 @@ class LabStore {
         if (this.editableData.length > 0) {
             this.editableData = [];
         }
+        let results = [];
 
-        editableData.forEach((editableData) => { 
-            this.editableData.push(editableData) 
+        bloodTestItems.forEach((item, i) => {
+            return editableData.forEach((lab, INDEX) => {
+                if (item.name === lab.name) {
+                    const { category, refMin, refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description} = item;
+                    results[INDEX] = {...lab, originalIndex: INDEX, category, refMin, refMax, optMin, optMax, alertMin: alertMin || null, alertMax: alertMax || null, alertMessage: alertMessage || '', reference: reference || '', name_kor, description: description || ''};
+                }
+            })
         });
-        editableData.forEach((editableData, i) => {
+        
+        this.editableData = results;
+        this.staticData = results;
+
+        results.forEach((editableData, i) => {
             const {
                 refMin,
                 refMax,
@@ -240,8 +309,69 @@ class LabStore {
             
             this.getState(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
         })
+
+        // editableData.forEach((editableData) => { 
+        //     this.editableData.push(editableData) 
+        // });
         
     }
+
+    // @computed get testResults() {
+    //     let results = [];
+    //     console.log('testResults',JSON.parse(JSON.stringify(this.editableData)))
+    //     // this.editableData.forEach((item, i) => { 
+    //     //     results[i] = item;
+    //     // });
+
+    //     bloodTestItems.forEach((item, i) => {
+    //         return this.editableData.forEach((result, INDEX) => {
+    //             result.forEach((re, index) => {
+    //                 if (item.name === re.name) {
+    //                     const { category, refMin, refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description} = item;
+    //                     results[INDEX][index] = {...re, category, refMin, refMax, optMin, optMax, alertMin: alertMin || null, alertMax: alertMax || null, alertMessage: alertMessage || '', reference: reference || '', name_kor, description: description || ''};
+    //                 }
+    //             })
+    //         })
+    //     });
+    //     return results;
+    // }
+
+
+
+    @action handleChangeAddLab(name, value) {
+        this.addLab[name] = value; 
+    }
+
+    @action setAddLab(lab) {
+        this.addLab['selectLab'] = lab;
+    }
+
+    @action handleChangeLabBar(index, value) {
+        // let index = this.editableData.findIndex(lab => lab._id === id);
+        this.editableData[index]['value'] = value;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @action setSelectedLabCategoryForEditing(array) {
         this.selectedLabCategory = array;
@@ -259,27 +389,15 @@ class LabStore {
         this.editableData[index][key] = value;
     }
 
-    @action addBloodTest(data = null) {
-        if (this.editableData.filter(item => item.name === data.name).length > 0) {
+    @action addBloodTest() {
+        let index = this.editableData.length;
+        if (this.editableData.filter(item => item.name === this.addLab.name).length > 0) {
             return alert('같은 혈액검사항목이 이미 존재합니다');
-        }
-        else {
+        } else {
             return this.editableData = [...this.editableData, {
-                category: data.category,
-                name: data.name,
-                name_kor: data.name_kor,
-                description: data.description,
-                optMax: data.optMax,
-                optMin: data.optMin,
-                refMax: data.refMax,
-                refMin: data.refMin,
-                sex: data.sex,
-                state: '',
-                unit: data.unit,
-                value: '',
-                alertMin: data.alertMin,
-                alertMax: data.alertMax,
-                alertMessage: data.alertMessage
+                ...this.addLab.selectLab,
+                value: this.addLab.value,
+                originalIndex: index
             }];
         }
     }
@@ -377,24 +495,7 @@ class LabStore {
         return dates;
     }
 
-    @computed get testResults() {
-        let results = [];
-        this.registryForExcel.forEach((item, i) => { 
-            results[i] = item.testResult;
-        });
-
-        bloodTestItems.forEach((item, i) => {
-            return results.forEach((result, INDEX) => {
-                result.forEach((re, index) => {
-                    if (item.name === re.name) {
-                        const { category, refMin, refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description} = item;
-                        results[INDEX][index] = {...re, category, refMin, refMax, optMin, optMax, alertMin: alertMin || null, alertMax: alertMax || null, alertMessage: alertMessage || '', reference: reference || '', name_kor, description: description || ''};
-                    }
-                })
-            })
-        });
-        return results;
-    }
+    
 
     @action initCaseDetailData(labs) {
         this.staticData = labs;
@@ -470,7 +571,16 @@ class LabStore {
 
     @action deleteBloodTest(selectedIndex) {
         this.editableData.splice(selectedIndex, 1);
-        this.checkSelectedCategory();
+        this.resetOriginalIndex();
+    }
+
+    @action resetOriginalIndex() {
+        this.editableData.forEach((lab, i) => {
+            return this.editableData[i] = {
+                ...lab,
+                originalIndex: i
+            }
+        });
     }
 
     @action checkSelectedCategory() {
@@ -659,6 +769,12 @@ class LabStore {
         this.selectedDateIndex = 0;
         this.excelFile = null;
         this.labsForReadOnly = [];
+        this.addLab = {
+            category: '간기능',
+            name: '',
+            value: '',
+            selectLab: {}
+        }
     }
     @action clearForSelector() {
         this.initialSelectLabCategory(this.labCategories);

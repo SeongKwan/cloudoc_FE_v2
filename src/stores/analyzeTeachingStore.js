@@ -12,7 +12,7 @@ class AnalyzeTeachingStore {
     @action initiateOpen() {
         this.openMores = [];
         this.editableData.forEach((editableData) => {
-            this.openMores.push(false);
+            this.openMores.push(true);
         })
     }
 

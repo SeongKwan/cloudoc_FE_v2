@@ -7,7 +7,7 @@
         background-color: $gray-1;
         border-radius: $radius-low;
         padding: 1rem 2rem;
-        
+
         .ref,
         .unit {
             color: rgba($brand-8, 0.5);
@@ -17,13 +17,14 @@
             align-items: center;
             letter-spacing: 1px;
         }
-    
+
         .unit {
             font-size: 0.6rem;
             margin-left: 1rem;
         }
 
-        .min, .max {
+        .min,
+        .max {
             font-size: 0.9rem;
         }
 
@@ -49,17 +50,44 @@
             justify-content: center;
             align-items: center;
             position: absolute;
-            height: 30px;
+            height: 24px;
             width: 45px;
             background-color: $brand-8;
             border-radius: $radius-low;
             top: 50%;
             transform: translate(-50%, -50%);
+
+            &.isEditing {
+                background-color: transparent;
+            }
+
             @include media('lg') {
                 height: 25px;
                 width: 35px;
             }
+
+            input {
+                padding-left: 2px;
+                width: 54px;
+                height: 26px;
+                border: 1px solid $gray-2;
+                border-radius: $radius-low;
+                box-shadow: none;
+                &:focus {
+                    outline: 0;
+                }
+                @include media('lg') {
+                    height: 22px;
+                }
+            }
+
+            input[type="number"]::-webkit-outer-spin-button,
+            input[type="number"]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         }
+
         .gauge {
             z-index: 3;
             position: absolute;
@@ -71,6 +99,7 @@
             left: 0;
             transform: translateY(-50%);
         }
+
         .gauge-cover {
             z-index: 3;
             position: absolute;

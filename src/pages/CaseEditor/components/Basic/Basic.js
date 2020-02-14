@@ -3,28 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './Basic.module.scss';
 import classNames from 'classnames/bind';
-// import { 
-//     FiArrowLeft, 
-//     CsSmartCondition, 
-//     CsQuestion, 
-//     CsQuestionMenu,
-//     CsReportDownload,
-//     CsSave,
-//     FiSettings,
-//     CsTrash,
-//     CsSmartDrug,
-//     CsTeaching,
-//     CsFemale,
-//     CsMale,
-//     FiFilePlus,
-//     FiTrash,
-//     FiPlus,
-//     FiSave,
-//     FiFileText
-// } from "react-icons/fi";
-// import {
-//     AiOutlineSave
-// } from 'react-icons/ai';
 
 const cx = classNames.bind(styles);
 

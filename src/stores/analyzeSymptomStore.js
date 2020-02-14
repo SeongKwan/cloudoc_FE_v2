@@ -60,6 +60,7 @@ class AnalyzeSymptomStore {
         this.firstTime = true;
     }
 
+
     @action clearOpen() {
         this.openMores = [];
         this.openDetail = false;

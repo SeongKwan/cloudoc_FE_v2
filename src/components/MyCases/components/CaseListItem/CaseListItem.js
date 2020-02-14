@@ -85,9 +85,9 @@ const _renderSymptom = (symptoms = []) => {
 
     return symptoms.map((symptom, i) => {
         const { name } = symptom;
-        if (i === 3) {
+        if (i === 2) {
             return <div key={i} className={cx('item')}>...</div>
-        } else if (i > 3) {
+        } else if (i > 2) {
             return false;
         }
         return (
@@ -99,9 +99,18 @@ const _renderSymptom = (symptoms = []) => {
 const _renderCondition = (conditions =[]) => {
     return conditions.map((condition, i) => {
         const { name } = condition;
+        // return (
+        //     <div key={i} className={cx('item')}>{name}</div>
+        // );
+        if (i === 2) {
+            return <div key={i} className={cx('item')}>...</div>
+        } else if (i > 2) {
+            return false;
+        }
         return (
             <div key={i} className={cx('item')}>{name}</div>
         );
+    
     })
 }
 

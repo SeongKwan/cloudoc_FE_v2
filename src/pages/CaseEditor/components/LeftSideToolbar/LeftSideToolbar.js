@@ -3,16 +3,10 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './LeftSideToolbar.module.scss';
 import classNames from 'classnames/bind';
-// import Floater from 'react-floater';
 import './LeftSideToolbar.css';
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 
-// import { 
-//     CsSmartCondition,
-//     CsSmartDrug,
-//     CsTeaching
-// } from "react-icons/fi";
 import { 
     FaUserCheck,
     FaNotesMedical,
@@ -42,41 +36,47 @@ class LeftSideToolbar extends Component {
         drugScrollTop: 0
     }
     componentDidMount() {
-        let scrollBox = $('#case-editor-center-container-scroll-box');
-        let objDiv = $('#case-editor-diagnosis');
-        let objDivDrug = $('#case-editor-drug');
-        if (!scrollBox || !objDiv || !objDivDrug) {
-            return false;
+        if (this.props.Case.isEditing || this.props.type === "create") {
+            let scrollBox = $('#case-editor-center-container-scroll-box');
+            let objDiv = $('#case-editor-diagnosis');
+            let objDivDrug = $('#case-editor-drug');
+            if (!scrollBox || !objDiv || !objDivDrug) {
+                return false;
+            }
+            let THIS = this;
+            let offset1 = objDiv.position();
+            let adj1 = offset1.top;
+            let offset2 = objDivDrug.position();
+            let adj2 = offset2.top;
+            setTimeout(() => {
+                THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
+            }, 100)
+            scrollBox.on('scroll', this._setScrollTop);
         }
-        let THIS = this;
-        let offset1 = objDiv.position();
-        let adj1 = offset1.top;
-        let offset2 = objDivDrug.position();
-        let adj2 = offset2.top;
-        setTimeout(() => {
-            THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
-        }, 100)
-        scrollBox.on('scroll', this._setScrollTop);
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentDidUpdate(prevProps, prevState) {
-        let scrollBox = $('#case-editor-center-container-scroll-box');
-        let objDiv = $('#case-editor-diagnosis');
-        if (scrollBox.lenght <= 0 || objDiv.length <= 0) {
-            return false;
-        }
-        let offset1 = objDiv.position();
-        let adj1 = offset1.top;
-        let currentScrollTop = scrollBox.scrollTop() + adj1;
-        if (prevState.diagnosisScrollTop !== currentScrollTop) {
-            this.setState({diagnosisScrollTop: currentScrollTop});
+        if (this.props.Case.isEditing || this.props.type === "create") {
+            let scrollBox = $('#case-editor-center-container-scroll-box');
+            let objDiv = $('#case-editor-diagnosis');
+            if (scrollBox.lenght <= 0 || objDiv.length <= 0) {
+                return false;
+            }
+            let offset1 = objDiv.position();
+            let adj1 = offset1.top;
+            let currentScrollTop = scrollBox.scrollTop() + adj1;
+            if (prevState.diagnosisScrollTop !== currentScrollTop) {
+                this.setState({diagnosisScrollTop: currentScrollTop});
+            }
         }
     }
 
     componentWillUnmount() {
         let scrollBox = $('#case-editor-center-container-scroll-box');
-        scrollBox.off('scroll', this._setScrollTop);
+        if (scrollBox.length > 0) {
+            scrollBox.off('scroll', this._setScrollTop);
+        }
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
@@ -84,11 +84,13 @@ class LeftSideToolbar extends Component {
         let scrollBox = $('#case-editor-center-container-scroll-box');
         let objDiv = $('#case-editor-diagnosis');
         let objDivDrug = $('#case-editor-drug');
-        let offset = objDiv.position();
-        let adj = offset.top;
-        let offset2 = objDivDrug.position();
-        let adj2 = offset2.top;
-        this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj, drugScrollTop: scrollBox.scrollTop() + adj2})
+        if (objDiv.length > 0) {
+            let offset = objDiv.position();
+            let adj = offset.top;
+            let offset2 = objDivDrug.position();
+            let adj2 = offset2.top;
+            this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj, drugScrollTop: scrollBox.scrollTop() + adj2})
+        }
     }
 
     _handleOnClick = (e) => {
@@ -104,6 +106,7 @@ class LeftSideToolbar extends Component {
         if (this.state.openList !== dataset.type) {
             this.setState({openDetail: ''});
             this.props.analyzeSymptom.closeDetail();
+            this.props.analyzeDrug.closeDetail();
         }
         this.setState({openList: dataset.type});
     }
@@ -115,6 +118,7 @@ class LeftSideToolbar extends Component {
     _handleClickOnListitem = (e, id) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log('click')
 
         const { dataset } = e.target;
         let symptomDetail = this.props.analyzeSymptom.openDetail;
@@ -263,6 +267,7 @@ class LeftSideToolbar extends Component {
         const anlDrug = this.props.analyzeDrug.editableData;
         const anlTeaching = this.props.analyzeTeaching.editableData;
         const lengthSymptom = this.props.symptom.editableData.length > 0;
+        const lengthLab = this.props.lab.editableData.length > 0;
         const lengthDiagnosis = this.props.diagnosis.editableData.length > 0;
 
         
@@ -270,13 +275,13 @@ class LeftSideToolbar extends Component {
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
                 <div 
-                    className={cx('btn', {open: openList === 'condition'}, {tool: !lengthSymptom}, 'symptom', {disabled: !lengthSymptom})} 
+                    className={cx('btn', {open: openList === 'condition'}, {tool: (!lengthSymptom && !lengthLab)}, 'symptom', {disabled: (!lengthSymptom && !lengthLab)})} 
                     id="btn-smart-condition" 
                     data-anl="symptom" 
                     data-type="condition" 
                     onClick={this._handleOnClick} 
-                    data-disabled={!lengthSymptom ? 'true' : 'false'} 
-                    data-tip="증상이 최소 1개 이상 필요합니다"
+                    data-disabled={(!lengthSymptom && !lengthLab) ? 'true' : 'false'} 
+                    data-tip="증상 또는 혈액검사가 최소 1개 이상 필요합니다"
                 >
                     <FaUserCheck />
                     <div className={cx('label')}>스마트진단</div>
@@ -332,6 +337,11 @@ class LeftSideToolbar extends Component {
                                                 <div className={cx('name', 'condition-name')}>
                                                     <div data-type="condition" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
                                                 </div>
+                                                <div className={cx('btn-condition')}>
+                                                    <button data-type="condition" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
+                                                        질환
+                                                    </button>
+                                                </div>
                                                 <div className={cx('btn-more')}>
                                                     <button onClick={(e) => {
                                                                 e.stopPropagation();
@@ -340,7 +350,7 @@ class LeftSideToolbar extends Component {
                                                         }
                                                     >
                                                         {
-                                                            openMores[i] ? '닫기' : '더보기'
+                                                            openMores[i] ? '닫기' : '분석'
                                                         }
                                                     </button>
                                                 </div>
@@ -423,7 +433,29 @@ class LeftSideToolbar extends Component {
                                                             추가확인이 필요한 증상/검사결과
                                                         </div>
                                                         <ul className={cx('content')}>
-                                                            <li>항목1</li>
+                                                            {
+                                                                analyzeSymptom.needToCheck.length > 0 &&
+                                                                analyzeSymptom.needToCheck.map((item, i) => {
+                                                                    return <li key={i}>
+                                                                        <div>[증상]</div>
+                                                                        <div> {item}</div>
+                                                                    </li>
+                                                                })
+                                                            }
+                                                            {
+                                                                analyzeLab.needToCheck.length > 0 &&
+                                                                analyzeLab.needToCheck.map((item, i) => {
+                                                                    return <li key={i}>
+                                                                        <div>[혈검]</div>
+                                                                        <div> {item.name} </div>
+                                                                        <div> - {item.state}</div>
+                                                                    </li>
+                                                                })
+                                                            }
+                                                            {
+                                                                analyzeSymptom.needToCheck.length < 1 && analyzeLab.needToCheck.length < 1 &&
+                                                                <li>-</li>
+                                                            }
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -445,11 +477,17 @@ class LeftSideToolbar extends Component {
                                             id,
                                             drugName,
                                             evidence,
+                                            reference_id
                                         } = anl;
                                         return <li key={i}>
                                         <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
                                                     <div data-type="drug" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{drugName}</div>
+                                                </div>
+                                                <div className={cx('btn-condition')}>
+                                                    <button data-type="drug" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
+                                                        처방
+                                                    </button>
                                                 </div>
                                                 <div className={cx('btn-more')}>
                                                     <button onClick={(e) => {
@@ -459,7 +497,7 @@ class LeftSideToolbar extends Component {
                                                         }
                                                     >
                                                         {
-                                                            openMores[i] ? '닫기' : '더보기'
+                                                            openMores[i] ? '닫기' : '분석'
                                                         }
                                                     </button>
                                                 </div>
@@ -482,7 +520,20 @@ class LeftSideToolbar extends Component {
                                                             관련 연구결과
                                                         </div>
                                                         <ul className={cx('content')}>
-                                                            <li>{evidence}</li>
+                                                            {
+                                                                evidence !== "" ?
+                                                                <li>
+                                                                    <div 
+                                                                        className={cx('evidence')}
+                                                                        data-tip={`문헌번호 - ${reference_id}`} 
+                                                                        data-for={`tooltip-detail-${i}`}
+                                                                    >
+                                                                        {evidence}
+                                                                    </div>
+                                                                    <ReactTooltip className="custom-tooltip short" place="right" effect="solid" id={`tooltip-detail-${i}`} />
+                                                                </li>
+                                                                : <li>-</li>
+                                                            }
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -519,7 +570,7 @@ class LeftSideToolbar extends Component {
                                                                 this.props.analyzeTeaching.toggleOpenMores(i);
                                                             }}>
                                                                 {
-                                                                    openMores[i] ? '닫기' : '더보기'
+                                                                    openMores[i] ? '닫기' : '분석'
                                                                 }
                                                         </button>
                                                     </div>
@@ -543,10 +594,20 @@ class LeftSideToolbar extends Component {
                                                                     teachings.length > 0 && teachings.map((teach, i) => {
                                                                         const { 
                                                                             description,
-                                                                            reference_id
+                                                                            reference_id,
+                                                                            reference_summary
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                            <div>-&nbsp;{description}</div>
+                                                                            <div>
+                                                                                <div 
+                                                                                    className={cx('description')}
+                                                                                    data-tip={reference_summary} 
+                                                                                    data-for={`tooltip-detail-${i}`}
+                                                                                >
+                                                                                    {description}
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-detail-${i}`} />
+                                                                            </div>
                                                                             <div className={cx('btn-add')}>
                                                                                 <button
                                                                                     onClick={(e) => {

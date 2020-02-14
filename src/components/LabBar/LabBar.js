@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-const LabBar = ({value, unit, refMax = 100, refMin = 0, optMax, optMin, currentPosition, state, alertMin, alertMax }) => {
+const LabBar = ({changeValue, isEditing, index, value, unit, refMax = 100, refMin = 0, optMax, optMin, currentPosition, state, alertMin, alertMax }) => {
 
     const _renderBar = () => {
         let widthBar, widthCoverBar;
@@ -22,8 +22,22 @@ const LabBar = ({value, unit, refMax = 100, refMin = 0, optMax, optMin, currentP
                 <div className={cx('min')}>
                     <div className={cx('ref', 'refMin')}>{refMin}</div>
                 </div>
-                <div style={{left: `${widthBar}%`}} className={cx('current-position')}>
-                    {value}
+                <div style={{left: `${widthBar}%`}} className={cx('current-position', {isEditing: isEditing})}>
+                    {
+                        isEditing ? 
+                        <input 
+                            name="value" 
+                            id="value" 
+                            type="number"
+                            placeholder="검사값" 
+                            onChange={(e) => {
+                                changeValue(index, e.target.value)
+                            }}
+                            value={value}
+                        />
+                        :
+                        value
+                    }
                 </div>
                 <div className={cx('gauge')}>
                 </div>
@@ -40,7 +54,6 @@ const LabBar = ({value, unit, refMax = 100, refMin = 0, optMax, optMin, currentP
             {
                 _renderBar()
             }
-            {/* <div className={cx('unit')}>[{unit}]</div> */}
         </div>
     );
 };

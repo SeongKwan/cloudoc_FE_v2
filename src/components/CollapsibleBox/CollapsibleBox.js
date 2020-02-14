@@ -4,10 +4,11 @@ import { inject, observer } from 'mobx-react';
 import styles from './CollapsibleBox.module.scss';
 import classNames from 'classnames/bind';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import './tooltip.css';
 
 const cx = classNames.bind(styles);
 
-@inject('collapsible')
+@inject('collapsible', 'lab')
 @observer
 class CollapsibleBox extends Component {
     componentDidMount() {
@@ -20,27 +21,42 @@ class CollapsibleBox extends Component {
     }
     _handleClickToggle = () => {
         let type = this.props.sidebar ? 'sidebar' : 'basic';
-        this.props.collapsible.toggleSwitch(type, this.props.detail);
+        if (this.props.short) {
+            if (this.props.lab.editableData.length > 0) {
+                return this.props.collapsible.toggleSwitch(type, this.props.detail);
+            } else {
+                return false;
+            }
+        } else {
+            this.props.collapsible.toggleSwitch(type, this.props.detail);
+        }
     }
     render() {
         const { open } = this.props.collapsible;
         let type = this.props.sidebar ? 'sidebar' : 'basic';
         let openSidebar = type === 'basic' ? open[type] : open[type][this.props.detail];
+        const { editableData } = this.props.lab;
+        let { length } = editableData;
         if (this.props.short) {
             return (
-                <div className={cx('CollapsibleBox2', {sidebar: this.props.sidebar}, {open: openSidebar === true})}>
-                    <div className={cx('header')}>
-                        <h5 onClick={this._handleClickToggle}>{this.props.title}</h5>
-                        <div
-                            onClick={this._handleClickToggle} 
-                            className={cx('btn-toggle')}
-                        >
-                            {
-                                openSidebar ?
-                                <MdKeyboardArrowUp />
-                                :
-                                <MdKeyboardArrowDown />
-                            }
+                <div className={cx('CollapsibleBox2', {active: length > 0}, {sidebar: this.props.sidebar}, {open: openSidebar === true})}>
+                    <div
+                        className={cx({tool: length <= 0})}
+                        data-tip="혈액검사가 필요합니다"
+                    >
+                        <div className={cx('header')}>
+                            <h5 onClick={this._handleClickToggle}>{this.props.title}</h5>
+                            <div
+                                onClick={this._handleClickToggle} 
+                                className={cx('btn-toggle')}
+                            >
+                                {
+                                    openSidebar ?
+                                    <MdKeyboardArrowUp />
+                                    :
+                                    <MdKeyboardArrowDown />
+                                }
+                            </div>
                         </div>
                     </div>
                     {

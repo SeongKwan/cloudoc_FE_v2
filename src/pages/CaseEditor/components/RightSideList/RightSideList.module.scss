@@ -9,22 +9,22 @@
     width: calc(100% - 1rem);
     // padding: 0.5rem;
     ul {
-        max-height: 236px;
-        @include media('lg') {
-            max-height: 146px;
-        }
+        // margin-top: 2.5rem;
+        max-height: 80vh;
         overflow-y: scroll;
-        padding: 0 0.5rem;
+        // padding: 0.5rem;
         margin-bottom: 0rem;
-        margin-top: 0.5rem;
+        // margin-top: 0.5rem;
         font-size: 0.9rem;
+        // padding: 0.2rem 0;
         li {
             // background-color: $brand-8;
             color: $white;
-            padding: 8px 4px;
+            padding: 0.5rem;
             border-radius: $radius-low;
             word-break: break-all;
             transition: all 0.3s ease;
+            line-height: 1.8;
             cursor: pointer;
             &:not(:last-child) {
                 margin-bottom: 2%;
@@ -32,6 +32,9 @@
             &:hover {
                 background-color: $brand-7;
                 color: $brand-8;
+            }
+            .lab-name {
+                font-weight: 700;
             }
         }
         &.check-symptoms, &.check-labs {
@@ -44,7 +47,10 @@
                     margin-left: 2%;
                 }
                 margin-bottom: 2%;
+                
             }
         }
     }
+
+
 }

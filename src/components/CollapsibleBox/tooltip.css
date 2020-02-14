@@ -3,11 +3,6 @@
     width: 200px;
     font-size: 0.8rem;
     background-color: #484a47 !important;
-    z-index: 999999999999 !important;
-}
-
-.custom-tooltip.short {
-    width: 120px;
 }
 
 .__react_component_tooltip.type-dark.place-top:after, .__react_component_tooltip.type-dark.place-top:before {

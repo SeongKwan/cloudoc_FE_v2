@@ -3,6 +3,13 @@
     flex-direction: column;
     font-weight: 100;
     // color: $brand-8;
+    .wrapper-bottom {
+        padding: 0.5rem;
+        // background-color: $brand-7;
+        background-color: $oc-gray-1;
+        color: $brand-8;
+        border-radius: $radius-low;
+    }
     .divider-horizon {
         position: relative;
         margin: 0.3rem 0 1.5rem;
@@ -75,7 +82,7 @@
         }
         &.symptom {
             .content {
-                height: 7rem;
+                // height: 7rem;
                 .item {
                     overflow: hidden;
                 }

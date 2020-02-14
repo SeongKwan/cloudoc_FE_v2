@@ -2,39 +2,17 @@ import React, { Component } from 'react';
 import styles from './Lab.module.scss';
 import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
-import convertRef from '../../../../constant/convertReference'
-// import {
-    // FiSearch, FiX
-// } from 'react-icons/fi';
-// import {
-    // FaTrash
-// } from 'react-icons/fa';
-// import $ from 'jquery';
-import Dropzone from 'react-dropzone';
 import LabBar from '../../../../components/LabBar/LabBar';
 import _ from 'lodash';
+import { FiPlus } from 'react-icons/fi';
+import { FaTrash } from 'react-icons/fa';
 
 const cx = classNames.bind(styles);
 
 @inject('Case', 'search', 'lab', 'labListItem', 'labListForInput')
 @observer
 class Lab extends Component {
-    componentDidMount() {
-        if (document.querySelector("#paste")) {
-            document.querySelector("#paste").addEventListener("paste", this.handleCopyAndPaste);
-        }
-        
-    }
-    
-    componentDidUpdate() {
-        if (document.querySelector("#paste")) {
-            document.querySelector("#paste").addEventListener("paste", this.handleCopyAndPaste);
-        }
-    }
     componentWillUnmount() {
-        if (document.querySelector("#paste")) {
-            document.querySelector("#paste").removeEventListener("paste", this.handleCopyAndPaste);
-        }
         this.props.lab.clear();
     }
 
@@ -42,69 +20,7 @@ class Lab extends Component {
         this.props.lab.toggleReadyForPaste();
     }
 
-    handleCopyAndPaste = (e) => {
-        let clipboardData, pastedData;
- 
-        // Stop data actually being pasted into div
-        e.stopPropagation();
-        e.preventDefault();
     
-        // Get pasted data via clipboard API
-        clipboardData = e.clipboardData || window.clipboardData;
-        pastedData = clipboardData.getData('Text');
-        
-        // Do whatever with pasteddata
-        // alert(pastedData);
-        // console.log(pastedData)
-        this.convertTextToObject(pastedData)
-    }
-
-    convertTextToObject = (pastedData) => {
-        let parsedData = [];
-        
-        if (!this.checkerPaste(pastedData.split('\n')[0])) {
-            return alert('복사한 혈액검사 텍스트파일 양식이 틀렸거나 내용이 올바르지 않습니다');
-        }
-        pastedData.split('\n').forEach(data => {
-            let splitted = data.split('\t');
-            if (splitted.length > 1) {
-                if (splitted[1] !== "") {
-                    let name = splitted[1];
-                    let value;
-                    value = splitted[9];
-
-                    let ref = convertRef.find(data => data.source === name);
-                    if (ref) {
-                        parsedData.push({
-                            name: ref.target,
-                            category: ref.category,
-                            unit: ref.unit,
-                            value: value
-                        })
-                    } else {
-                        parsedData.push({
-                            name: name,
-                            unit: splitted[3],
-                            value: value
-                        })
-                    }
-
-                }
-            }
-        })
-        parsedData.splice(0, 1);
-
-        this.props.lab.setEditableData(parsedData.filter(x => x.value !== "-"));
-        this.props.lab.toggleReadyForPaste();
-        // console.log(parsedData);
-    }
-
-    checkerPaste = (firstData) => {
-        let splitted = firstData.split('\t');
-        
-        if (splitted[0] === '검사구분') return true;
-        return false;
-    }
 
     _onChange = (e) => {
         if (e.target.files.length === 0) {
@@ -157,14 +73,12 @@ class Lab extends Component {
     //     this.props.lab.handleChange(dataset.index, name, value);
     // }
 
-    // _deleteBloodTest = (e) => {
-    //     if (e.target.dataset.index !== undefined
-    //     ) {
-    //         e.stopPropagation();
-    //         const selectedIndex = e.target.dataset.index;
-    //         this.props.handleDeleteBloodTest(selectedIndex);
-    //     }
-    // }
+    _deleteBloodTest = (index) => {
+        if (index !== undefined
+        ) {
+            this.props.lab.deleteBloodTest(index);
+        }
+    }
 
     _extractCategory = () => {
         const { isEditing } = this.props.Case;
@@ -191,6 +105,7 @@ class Lab extends Component {
         const { editableData, staticData } = this.props.lab;
 
         let labs = (type === "create" || isEditing) ? editableData : staticData;
+        // let labs = testResults || [];
         
         const categories = this._extractCategory();
         let dividedLabByCategory = [];
@@ -201,15 +116,20 @@ class Lab extends Component {
             })
         });
 
+        // console.log(JSON.parse(JSON.stringify(dividedLabByCategory)))
+
         return dividedLabByCategory.map((arr, i) => {
+            let sortedArr = _.sortBy(arr, 'name');
+
             return <ul key={i} style={{marginBottom: '4rem'}}>
                 <h6 className={cx('category-title')}>
                     <span>[{categories[i]}]</span>
                 </h6>
                 
                 {
-                    arr.map((lab, i) => {
+                    sortedArr.map((lab, i) => {
                         const {
+                            originalIndex,
                             name,
                             unit,
                             value,
@@ -227,6 +147,9 @@ class Lab extends Component {
                             </div>
                             <div className={cx('bar-wrapper')}>
                                 <LabBar 
+                                    changeValue={this.handleChangeValueLabBar}
+                                    isEditing={(type === "create" || isEditing)}
+                                    index={originalIndex}
                                     value={value}
                                     unit={unit}
                                     refMin={refMin}
@@ -237,6 +160,9 @@ class Lab extends Component {
                                     alertMax={alertMax}
                                 />
                             </div>
+                            <div className={cx('trash')}>
+                                <FaTrash onClick={(e) => {this._deleteBloodTest(originalIndex);}}/>
+                            </div>
                         </li>
                     })
                 }
@@ -244,10 +170,61 @@ class Lab extends Component {
         })
     }
 
+    handleChangeValueLabBar = (index, value) => {
+        const {
+            refMin,
+            refMax,
+            optMin,
+            optMax,
+            alertMin,
+            alertMax
+        } = this.props.lab.editableData[index];
+        
+        this.props.lab.getState(index, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
+        this.props.lab.handleChangeLabBar(index, value);
+    }
+
+    _handleClickOnAddLab = () => {
+        const { name, value } = this.props.lab.addLab;
+        if (name !== '' && value !== '') {
+            return this.props.lab.addBloodTest();
+        } else {
+            alert('검사명 또는 결과값이 입력되지 않았습니다');
+        }
+    }
+
+    _handleChangeAddLab = (e) => {
+        const { value, name } = e.target;
+        
+        if (name === 'name') {
+            let lab = e.target.options[e.target.selectedIndex].dataset.lab;
+            this.props.lab.setAddLab(JSON.parse(lab));
+        }
+        this.props.lab.handleChangeAddLab(name, value);
+
+    }
+
+    renderOptionsCategory = () => {
+        return this.props.lab.optionsCategory.map((category, i) => {
+            return <option key={i} value={category}>{category}</option>
+        });
+    }
+
+    renderOptionsName = () => {
+        return this.props.lab.optionsName.map((lab, i) => {
+            return <option data-lab={JSON.stringify(lab)} key={i} value={lab.name}>{lab.name}</option>
+        });
+    }
+
     render() {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
-        const { editableData, staticData } = this.props.lab;
+        const { editableData, staticData, addLab } = this.props.lab;
+        let labs = (type === "create" || isEditing) ? editableData : staticData;
+        let { length } = labs;
+        // console.log(length)
+        // console.log(labNames.length)
+        // console.log(JSON.parse(JSON.stringify(addLab)));
         // console.log('static ',JSON.parse(JSON.stringify(staticData)))
         // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
         // const { category, testName, state } = this.props.lab.sortingType;
@@ -255,8 +232,6 @@ class Lab extends Component {
         // const nameSorting = testName;
         // const stateSorting = state;
         // const disabledModalButton = this.props.lab.labDates.length > 0 ? false : true;
-        let labs = (type === "create" || isEditing) ? editableData : staticData;
-        let { length } = labs;
         
         let disabledButton = length <= 0;
         
@@ -272,6 +247,60 @@ class Lab extends Component {
                             <div className={cx('text','button-paste')} onClick={this.handleOnClickPasteButton} id="paste">결과붙여넣기</div>
                             <button disabled={disabledButton} className={cx('delete-all', {disabled: disabledButton})} onClick={this.handleDeleteAll}>결과삭제</button>
                         </>
+                    }
+                </div>
+                <div className={cx('lab-select-input-container')}>
+                    {
+                        (type === 'create' || isEditing) &&
+                        <div className={cx('lab-input-wrapper')}>
+                        <div className={cx('form-wrapper', 'age-gender', 'label')}>
+                            <div className={cx('category', {checked: true})}>
+                                <label className={cx('label-no-input', 'label-age')} htmlFor="category">검사종류</label>
+                                <div className={cx('select-wrapper')}>
+                                    <select 
+                                        name="category"
+                                        value={addLab.category} 
+                                        onChange={this._handleChangeAddLab}
+                                    >
+                                        <option disabled>검사종류</option>
+                                        {this.renderOptionsCategory()}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className={cx('name', {checked: true})}>
+                                <label className={cx('label-no-input', 'label-age')} htmlFor="name">검사명</label>
+                                <div className={cx('select-wrapper')}>
+                                    <select 
+                                        name="name"
+                                        value={addLab.name} 
+                                        onChange={this._handleChangeAddLab}
+                                    >
+                                        <option disabled>검사명</option>
+                                        <option>선택해 주세요</option>
+                                        {this.renderOptionsName()}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div className={cx('form-wrapper', 'value-wrapper', 'title', 'input')}>
+                            <input 
+                                name="value" 
+                                id="value" 
+                                type="number"
+                                placeholder="검사값" 
+                                onChange={this._handleChangeAddLab}
+                                value={addLab.value}
+                            />
+                            <label htmlFor="value">검사값</label>
+                        </div>
+                        
+                        </div>
+                    }
+                </div>
+                <div className={cx('btn-add-container')}>
+                    {
+                        (type === "create" || isEditing) &&
+                        <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>검사추가<FiPlus /></button>
                     }
                 </div>
                 <div className={cx('lab-results-list')}>
