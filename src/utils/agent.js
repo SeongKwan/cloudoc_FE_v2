@@ -149,6 +149,10 @@ class Agent {
         return this.post(`/cases/analyzeTeaching`, referenceData);
     }
 
+    loadReferenceByLink(referenceId) {
+        return this.get(`/references/link/${referenceId}`);
+    }
+
 
     /* Base REST API method */
     get(url) {

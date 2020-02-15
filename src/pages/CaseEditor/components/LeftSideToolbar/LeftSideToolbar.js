@@ -26,7 +26,8 @@ const cx = classNames.bind(styles);
     'analyzeSymptom',
     'analyzeDrug',
     'analyzeTeaching',
-    'teaching'
+    'teaching',
+    'caseEditor'
 )
 @observer
 class LeftSideToolbar extends Component {
@@ -93,6 +94,7 @@ class LeftSideToolbar extends Component {
         }
     }
 
+    // 스마트도구 버튼
     _handleOnClick = (e) => {
         const { dataset } = e.currentTarget;
 
@@ -107,22 +109,26 @@ class LeftSideToolbar extends Component {
             this.setState({openDetail: ''});
             this.props.analyzeSymptom.closeDetail();
             this.props.analyzeDrug.closeDetail();
+            this.props.analyzeTeaching.closeDetail();
         }
         this.setState({openList: dataset.type});
     }
 
-    _handleClick = (e) => {
-        console.log(e.target)
-    }
+    // _handleClick = (e) => {
+    //     console.log(e.target)
+    // }
     
+    // 진단, 처방 리스트
     _handleClickOnListitem = (e, id) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('click')
 
         const { dataset } = e.target;
         let symptomDetail = this.props.analyzeSymptom.openDetail;
         let drugDetail = this.props.analyzeDrug.openDetail;
+        let teachingDetail = this.props.analyzeTeaching.openDetail;
+
+        this.props.caseEditor.setPageType(dataset.page);
 
         if (dataset.type === 'condition') {
             if (!symptomDetail) {
@@ -137,6 +143,11 @@ class LeftSideToolbar extends Component {
                 this.props.analyzeDrug.loadDrug(id);
             } else {
                 this.props.analyzeDrug.loadDrug(id);
+            }
+        } else if (dataset.type === 'teaching') {
+            if (!teachingDetail) {
+                this.props.analyzeTeaching.toggleOpenDetail();
+            } else {
             }
         }
 
@@ -256,10 +267,11 @@ class LeftSideToolbar extends Component {
             formula
         } = this.props.analyzeDrug.currentDrug;
         
-        let symptomDetail, drugDetail;
+        let symptomDetail, drugDetail, teachingDetail;
         // symptomMores = this.props.analyzeSymptom.openMores;
         symptomDetail = this.props.analyzeSymptom.openDetail;
         drugDetail = this.props.analyzeDrug.openDetail;
+        teachingDetail = this.props.analyzeTeaching.openDetail;
         // drugMores = this.props.analyzeDrug.openMores;
         // console.log(JSON.parse(JSON.stringify(this.props.diagnosis.editableData)))
         // console.log(JSON.parse(JSON.stringify(openDetails)))
@@ -269,6 +281,8 @@ class LeftSideToolbar extends Component {
         const lengthSymptom = this.props.symptom.editableData.length > 0;
         const lengthLab = this.props.lab.editableData.length > 0;
         const lengthDiagnosis = this.props.diagnosis.editableData.length > 0;
+
+        const { currentReference, pageType } = this.props.caseEditor;
 
         
         return (
@@ -335,10 +349,10 @@ class LeftSideToolbar extends Component {
                                         return <li key={i}>
                                                 <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
-                                                    <div data-type="condition" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
+                                                    <div data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
                                                 </div>
                                                 <div className={cx('btn-condition')}>
-                                                    <button data-type="condition" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
+                                                    <button data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
                                                         질환
                                                     </button>
                                                 </div>
@@ -482,10 +496,10 @@ class LeftSideToolbar extends Component {
                                         return <li key={i}>
                                         <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
-                                                    <div data-type="drug" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{drugName}</div>
+                                                    <div data-type="drug" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{drugName}</div>
                                                 </div>
                                                 <div className={cx('btn-condition')}>
-                                                    <button data-type="drug" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
+                                                    <button data-type="drug" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
                                                         처방
                                                     </button>
                                                 </div>
@@ -523,13 +537,19 @@ class LeftSideToolbar extends Component {
                                                             {
                                                                 evidence !== "" ?
                                                                 <li>
-                                                                    <div 
+                                                                    <a 
                                                                         className={cx('evidence')}
                                                                         data-tip={`문헌번호 - ${reference_id}`} 
                                                                         data-for={`tooltip-detail-${i}`}
+                                                                        onClick={() => {
+                                                                            if (!drugDetail && +reference_id > 0) {
+                                                                                this.props.analyzeDrug.toggleOpenDetail();
+                                                                            }
+                                                                            this.props.caseEditor.loadReferenceByLink(reference_id);
+                                                                        }}
                                                                     >
                                                                         {evidence}
-                                                                    </div>
+                                                                    </a>
                                                                     <ReactTooltip className="custom-tooltip short" place="right" effect="solid" id={`tooltip-detail-${i}`} />
                                                                 </li>
                                                                 : <li>-</li>
@@ -599,13 +619,19 @@ class LeftSideToolbar extends Component {
                                                                         } = teach;
                                                                         return <li key={i}>
                                                                             <div>
-                                                                                <div 
+                                                                                <a 
                                                                                     className={cx('description')}
                                                                                     data-tip={reference_summary} 
                                                                                     data-for={`tooltip-detail-${i}`}
+                                                                                    onClick={() => {
+                                                                                        if (!teachingDetail && +reference_id > 0) {
+                                                                                            this.props.analyzeTeaching.toggleOpenDetail();
+                                                                                        }
+                                                                                        this.props.caseEditor.loadReferenceByLink(reference_id);
+                                                                                    }}
                                                                                 >
                                                                                     {description}
-                                                                                </div>
+                                                                                </a>
                                                                                 <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-detail-${i}`} />
                                                                             </div>
                                                                             <div className={cx('btn-add')}>
@@ -643,7 +669,7 @@ class LeftSideToolbar extends Component {
 
 
                 {
-                    !this.props.analyzeSymptom.isLoading && symptomDetail &&
+                    !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "detail" &&
                     <div className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
                         {
                             
@@ -679,16 +705,19 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         detail.description && 
                                                                         <>
-                                                                            <Link 
+                                                                            <a 
                                                                                 data-tip={detail.ref_content} 
                                                                                 data-for={`tooltip-detail-${i}`}
                                                                                 className={cx('anchor')}
                                                                                 key={i} 
-                                                                                to={`/cloudoc/clinicaldb/detail/reference/link/${detail.ref_id}`}
-                                                                                target='_blank'
+                                                                                onClick={() => {
+                                                                                    if (+detail.ref_id > 0) {
+                                                                                        this.props.caseEditor.loadReferenceByLink(detail.ref_id)
+                                                                                    }
+                                                                                }}
                                                                             >
                                                                                 [{detail.ref_id}]
-                                                                            </Link>
+                                                                            </a>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
                                                                         </>
                                                                     }
@@ -714,16 +743,19 @@ class LeftSideToolbar extends Component {
                                                                             {
                                                                                 path.level1 &&
                                                                                 <>
-                                                                                    <Link 
+                                                                                    <a 
                                                                                         data-tip={path.ref_content} 
                                                                                         data-for={`tooltip-path-${i}`}
                                                                                         className={cx('anchor')}
                                                                                         key={i} 
-                                                                                        to={`/cloudoc/clinicaldb/detail/reference/link/${path.ref_id}`}
-                                                                                        target='_blank'
+                                                                                        onClick={() => {
+                                                                                            if (+path.ref_id > 0) {
+                                                                                                this.props.caseEditor.loadReferenceByLink(path.ref_id)
+                                                                                            }
+                                                                                        }}
                                                                                     >
                                                                                         [{path.ref_id}]
-                                                                                    </Link>
+                                                                                    </a>
                                                                                     <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
                                                                                 </>
                                                                             }
@@ -761,16 +793,19 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         symptom.name &&
                                                                         <>
-                                                                            <Link 
+                                                                            <a 
                                                                                 data-tip={symptom.ref_content} 
                                                                                 data-for={`tooltip-symptom-${i}`}
                                                                                 className={cx('anchor')}
                                                                                 key={i} 
-                                                                                to={`/cloudoc/clinicaldb/detail/reference/link/${symptom.ref_id}`}
-                                                                                target='_blank'
+                                                                                onClick={() => {
+                                                                                    if (+symptom.ref_id > 0) {
+                                                                                        this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
+                                                                                    }
+                                                                                }}
                                                                             >
                                                                                 [{symptom.ref_id}]
-                                                                            </Link>
+                                                                            </a>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
                                                                         </>
                                                                     }
@@ -815,16 +850,19 @@ class LeftSideToolbar extends Component {
                                                                         {
                                                                             drug.effect &&
                                                                             <>
-                                                                                <Link 
+                                                                                <a 
                                                                                     data-tip={drug.ref_content} 
                                                                                     data-for={`tooltip-drug-${i}`}
                                                                                     className={cx('anchor')}
                                                                                     key={i} 
-                                                                                    to={`/cloudoc/clinicaldb/detail/reference/link/${drug.ref_id}`}
-                                                                                    target='_blank'
+                                                                                    onClick={() => {
+                                                                                    if (+drug.ref_id > 0) {
+                                                                                        this.props.caseEditor.loadReferenceByLink(drug.ref_id)
+                                                                                    }
+                                                                                }}
                                                                                 >
                                                                                     [{drug.ref_id}]
-                                                                                </Link>
+                                                                                </a>
                                                                                 <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
                                                                             </>
                                                                         }
@@ -849,16 +887,19 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         teach.description &&
                                                                         <>
-                                                                            <Link 
+                                                                            <a 
                                                                                 data-tip={teach.ref_content} 
                                                                                 data-for={`tooltip-teach-${i}`}
                                                                                 className={cx('anchor')}
                                                                                 key={i} 
-                                                                                to={`/cloudoc/clinicaldb/detail/reference/link/${teach.ref_id}`}
-                                                                                target='_blank'
+                                                                                onClick={() => {
+                                                                                    if (+teach.ref_id > 0) {
+                                                                                        this.props.caseEditor.loadReferenceByLink(teach.ref_id)
+                                                                                    }
+                                                                                }}
                                                                             >
                                                                                 [{teach.ref_id}]
-                                                                            </Link>
+                                                                            </a>
                                                                             <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
                                                                         </>
                                                                     }
@@ -877,9 +918,174 @@ class LeftSideToolbar extends Component {
                 }
 
 
+                {/* 
+                *** 문헌 구조
+                    user_id: "admin"
+                    created_date: 1581693281904
+                    updated_date: null
+                    section: "reference"
+                    reference_id: "587"
+                    name: "The diagnosis and management of nonalcoholic fatty liver disease: Practice guidance from the American Association for the Study of Liver Diseases"
+                    category: "논문"
+                    method: "임상지침"
+                    author: "Naga Chalasani,  Zobair Younossi,  Joel E. Lavine,  Michael Charlton,  Kenneth Cusi,  Mary Rinella, Stephen A. Harrison,  Elizabeth M. Brunt,  Arun J. Sanyal"
+                    year: "2017"
+                    publisher: "Hepatology"
+                    url: "https://aasldpubs.onlinelibrary.wiley.com/doi/full/10.1002/hep.29367"
+                    memo: ""
+                    description: ""
+                    methodDetail: ""
+                    status: true
+                    _id: "5db91f27931f5a5b12ca8e4c"
+                 */}
 
 
+                {
+                    !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "reference" &&
+                    <div className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
+                        {
+                            <div className={cx('detail')}>
+                                <ul className={cx('scroll-box')}>
+                                    <li>
+                                        <div className={cx('header')}>
+                                            <div className={cx('btn-close')}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.props.caseEditor.setPageType('detail');
+                                                    }}
+                                                >
+                                                    뒤로
+                                                </button>
+                                            </div>
+                                            <div className={cx('title')}>
+                                                <div className={cx('box')}>{currentReference.name}</div>
+                                            </div>
+                                        </div>
+                                        <div className={cx('top-content')}>
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>분류</div>
+                                                
+                                                
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.category || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구분류</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.method || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>저자</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.author || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판연도</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.year || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판사(저널명)</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.publisher || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>원문링크</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.url || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>참고사항</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.memo || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>주요내용</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.description || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구방법</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.methodDetail || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
 
                 {
                     !this.props.analyzeDrug.isLoading && drugDetail &&
@@ -1006,6 +1212,311 @@ class LeftSideToolbar extends Component {
                         }
                     </div>
                 }
+
+
+
+
+
+
+
+
+
+
+
+                {
+                    !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "reference" &&
+                    <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
+                        {
+                            <div className={cx('detail')}>
+                                <ul className={cx('scroll-box')}>
+                                    <li>
+                                        <div className={cx('header')}>
+                                            <div className={cx('btn-close')}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.props.analyzeDrug.closeDetail();
+                                                    }}
+                                                >
+                                                    닫기
+                                                </button>
+                                            </div>
+                                            <div className={cx('title')}>
+                                                <div className={cx('box')}>{currentReference.name}</div>
+                                            </div>
+                                        </div>
+                                        <div className={cx('top-content')}>
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>분류</div>
+                                                
+                                                
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.category || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구분류</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.method || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>저자</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.author || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판연도</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.year || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판사(저널명)</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.publisher || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>원문링크</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.url || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>참고사항</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.memo || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>주요내용</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.description || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구방법</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.methodDetail || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
+                {
+                    !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "reference" &&
+                    <div className={cx('detail-container', {open: !this.props.analyzeTeaching.isLoading && teachingDetail})}>
+                        {
+                            <div className={cx('detail')}>
+                                <ul className={cx('scroll-box')}>
+                                    <li>
+                                        <div className={cx('header')}>
+                                            <div className={cx('btn-close')}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.props.analyzeTeaching.closeDetail();
+                                                    }}
+                                                >
+                                                    닫기
+                                                </button>
+                                            </div>
+                                            <div className={cx('title')}>
+                                                <div className={cx('box')}>티칭{currentReference.name}</div>
+                                            </div>
+                                        </div>
+                                        <div className={cx('top-content')}>
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>분류</div>
+                                                
+                                                
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.category || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구분류</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.method || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>저자</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.author || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판연도</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.year || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>출판사(저널명)</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.publisher || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>원문링크</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.url || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>참고사항</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.memo || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>주요내용</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.description || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={cx('divider', 'horizon-divider')}></div>
+
+                                            <div className={cx('content-wrapper')}>
+                                                <div className={cx('label')}>연구방법</div>
+                                                <div className={cx('box')}>
+                                                    <div className={cx('detail-item')}>
+                                                        <div>
+                                                            {currentReference.methodDetail || '-'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
+
+                
             </div>
         );
     }

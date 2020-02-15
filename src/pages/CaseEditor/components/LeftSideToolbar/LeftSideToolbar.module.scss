@@ -220,6 +220,13 @@
                     background-color: darkgray;
                     color: $white;
 
+                    a.evidence, a.description {
+                        cursor: pointer;
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+
                     .row {
                         &:not(:last-child) {
                             margin-bottom: 1rem;
@@ -280,6 +287,7 @@
             li {
                 color: $white;
                 padding: 1rem 0;
+                padding-top: 3rem;
                 width: 750px;
                 @include media('lg') {
                     width: 630px;
@@ -312,7 +320,7 @@
             .btn-close {
                 position: absolute;
                 left: 1rem;
-                top: 0;
+                top: -2rem;
 
                 button {
                     background-color: $brand-8;

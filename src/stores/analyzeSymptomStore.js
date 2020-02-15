@@ -31,6 +31,7 @@ class AnalyzeSymptomStore {
     }
 
     @action setEditableData(editableData) {
+        this.editableData = [];
         editableData.forEach((editableData) => { this.editableData.push(editableData) });
     }
 

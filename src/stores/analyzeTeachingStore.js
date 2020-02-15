@@ -6,7 +6,7 @@ class AnalyzeTeachingStore {
     @observable firstTime = true;
 
     @observable openMores = [];
-
+    @observable openDetail = false;
     @observable isLoading = false;
 
     @action initiateOpen() {
@@ -17,12 +17,22 @@ class AnalyzeTeachingStore {
     }
 
     @action setEditableData(editableData) {
+        this.editableData = [];
         editableData.forEach((editableData) => { this.editableData.push(editableData) });
     }
 
     @action toggleOpenMores(i) {
         this.openMores[i] = !this.openMores[i];
     }
+
+    @action toggleOpenDetail() {
+        this.openDetail = !this.openDetail;
+    }
+
+    @action closeDetail() {
+        this.openDetail = false;
+    }
+
 
     @action falseFirstTime() {
         this.firstTime = false;
@@ -39,6 +49,7 @@ class AnalyzeTeachingStore {
 
     @action clearOpen() {
         this.openMores = [];
+        this.openDetail = false;
     }
 
 }

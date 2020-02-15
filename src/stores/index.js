@@ -24,6 +24,7 @@ import analyzeSymptom from './analyzeSymptomStore';
 import analyzeDrug from './analyzeRecommendationTreatmentStore';
 import analyzeTeaching from './analyzeTeachingStore';
 import teaching from './teachingStore';
+import caseEditor from './caseEditorStore';
 
 const stores = {
     auth,
@@ -51,7 +52,8 @@ const stores = {
     analyzeSymptom,
     analyzeDrug,
     analyzeTeaching,
-    teaching
+    teaching,
+    caseEditor
 }
 
 export default stores;
