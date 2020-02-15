@@ -500,6 +500,7 @@ class LabStore {
     @action initCaseDetailData(labs) {
         this.staticData = labs;
         this.editableData = labs;
+        setTimeout(() => {this.resetOriginalIndex();}, 100);
     }
 
     @action initialize() {
