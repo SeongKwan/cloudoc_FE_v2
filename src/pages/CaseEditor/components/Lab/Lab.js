@@ -187,7 +187,8 @@ class Lab extends Component {
     _handleClickOnAddLab = () => {
         const { name, value } = this.props.lab.addLab;
         if (name !== '' && value !== '') {
-            return this.props.lab.addBloodTest();
+            this.props.lab.addBloodTest();
+            return this.props.lab.clearAddLab();
         } else {
             alert('검사명 또는 결과값이 입력되지 않았습니다');
         }

@@ -777,6 +777,14 @@ class LabStore {
             selectLab: {}
         }
     }
+    @action clearAddLab() {
+        this.addLab = {
+            category: '간기능',
+            name: '',
+            value: '',
+            selectLab: {}
+        }
+    }
     @action clearForSelector() {
         this.initialSelectLabCategory(this.labCategories);
         this.editableData = [];
