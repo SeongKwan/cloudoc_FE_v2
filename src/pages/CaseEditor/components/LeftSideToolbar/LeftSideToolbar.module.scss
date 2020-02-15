@@ -44,7 +44,7 @@
             font-size: 0.8rem;
             font-weight: 100;
             @include media('lg') {
-                font-size: 0.6rem;
+                font-size: 0.7rem;
             }
         }
         
@@ -118,7 +118,7 @@
             overflow-y: scroll;
 
             @include media('lg') {
-                max-height: 540px;
+                max-height: 520px;
             }
         }
 
