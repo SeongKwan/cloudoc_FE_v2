@@ -31,6 +31,7 @@
             li {
                 display: flex;
                 position: relative;
+                align-items: center;
                 &.selected {
                     box-shadow: 0 2px 8px 4px $gray-1;
                 }
@@ -83,6 +84,11 @@
                     transition: all 0.2s ease;
                     touch-action: manipulation;
                 }
+
+                textarea {
+                    transition: color, border, font-weight, outline, transform opacity 0.2s ease;
+                    touch-action: manipulation;
+                }
     
                 input {
                     padding: 0.1rem 0rem 0.5rem 0.5rem;
@@ -126,9 +132,10 @@
                 }
     
     
-                input:placeholder-shown+label {
+                input:placeholder-shown+label,
+                textarea:placeholder-shown+label {
                     cursor: text;
-                    // max-width: 66.66%;
+                    max-width: 66.66%;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -143,13 +150,16 @@
                 }
     
     
-                input:focus::-webkit-input-placeholder {
+                input:focus::-webkit-input-placeholder,
+                textarea:focus::-webkit-input-placeholder {
                     opacity: 1;
                 }
     
     
                 input:not(:placeholder-shown)+label,
-                input:focus+label {
+                input:focus+label,
+                textarea:not(:placeholder-shown)+label,
+                textarea:focus+label {
                     color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     font-weight: 400;
@@ -162,13 +172,37 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 font-size: 11px;
-                font-weight: 100;
+                // font-weight: 100;
                 color: $gray-3;
     
                 &.label-no-input {
                     color: $brand-2;
                     transform: translate(0, 0) scale(1);
                     cursor: pointer;
+                }
+            }
+
+            .textarea {
+                color: $brand-8;
+                padding: 0.5rem;
+                border: 1px solid $gray-1;
+                border-radius: $radius-low;
+                &.view {
+                    resize: none !important;
+                }
+
+                &:focus, &:hover {
+                    outline: 0;
+                    border: 1px solid $brand-2;
+                }
+
+                &::placeholder {
+                    color: $gray-3;
+                    // font-weight: 100;
+                }
+                &.static {
+                    outline: 0;
+                    border: 1px solid $brand-2;
                 }
             }
         }

@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import { FiPlus } from 'react-icons/fi';
 import { FaTrash } from 'react-icons/fa';
+import TextareaAutosize from 'react-textarea-autosize';
 
 const cx = classNames.bind(styles);
 
@@ -48,12 +49,14 @@ class Teaching extends Component {
                                 const { ref_id, description } = teaching;
                                 return <li key={i} className={cx('')}>
                                     <div className={cx('form-wrapper', 'teaching-description', 'input')}>
-                                        <input 
+                                        
+                                        <TextareaAutosize 
                                             data-index={i}
-                                            className={cx('description')}
+                                            className={cx('textarea', 'description')}
                                             name="description" 
                                             id={`teaching-description-${i}`} 
                                             type="text" 
+                                            minRows={1}
                                             placeholder="환자지도" 
                                             onChange={this._handleOnChange}
                                             value={description || ''}
@@ -83,11 +86,15 @@ class Teaching extends Component {
                                 const { ref_id, description } = teaching;
                                 return <li key={i} className={cx('')}>
                                     <div className={cx('form-wrapper', 'teaching-description', 'input')}>
-                                        <input 
-                                            className={cx('description', 'static')}
+                                        
+                                        <TextareaAutosize 
+                                            data-index={i}
+                                            className={cx('textarea', 'description', 'view')}
                                             name="description" 
                                             id={`teaching-description-${i}`} 
                                             type="text" 
+                                            minRows={1}
+                                            placeholder="환자지도" 
                                             readOnly
                                             value={description || ''}
                                         />

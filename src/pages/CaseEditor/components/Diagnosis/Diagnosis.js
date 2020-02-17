@@ -101,17 +101,17 @@ class Diagnosis extends Component {
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _deleteDiagnosis = (i) => {
-        const { editableData } = this.props.diagnosis;
+        // const { editableData } = this.props.diagnosis;
         if (i !== undefined
         ) {
-            if (editableData.length < 2) {
-                return false;
-            } else {
-                // e.stopPropagation();
-                const selectedIndex = i;
-                
-                this.props.diagnosis.deleteDiagnosis(selectedIndex);
-            }
+            const selectedIndex = i;
+            
+            this.props.diagnosis.deleteDiagnosis(selectedIndex);
+            // if (editableData.length < 2) {
+            //     return false;
+            // } else {
+            //     // e.stopPropagation();
+            // }
         }
     }
 
@@ -321,7 +321,7 @@ class Diagnosis extends Component {
                                         />
                                         <label htmlFor={`diagnosis-description-${i}`}>상세설명</label>
                                     </div>
-                                    <div className={cx('trash', {last: length === 1})}>
+                                    <div className={cx('trash')}>
                                         <FaTrash onClick={() => {this._deleteDiagnosis(i);}}/>
                                     </div>
                                 </li>

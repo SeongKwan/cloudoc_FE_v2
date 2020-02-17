@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './LabBar.module.scss';
 import classNames from 'classnames/bind';
+import ReactTooltip from 'react-tooltip';
+import './LabBar.css';
 
 const cx = classNames.bind(styles);
 

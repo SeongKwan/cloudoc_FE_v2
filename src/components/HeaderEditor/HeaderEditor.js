@@ -27,7 +27,8 @@ class HeaderEditor extends Component {
 
     render() {
         const { type } = this.props;
-        const { isEditing } = this.props.Case;
+        const { isEditing, currentCase } = this.props.Case;
+        
         if (type === "detail") {
             if (this.props.Case.currentCase === null) {
                 return false;
@@ -45,7 +46,14 @@ class HeaderEditor extends Component {
                     </div>
                     {
                         type === "detail" &&
-                        <div className={cx('btn-tool', 'create')}>
+                        <div 
+                            className={cx('btn-tool', 'create')}
+                            onClick={() => {
+                                    this.props.Case.clearIsEditing();
+                                    this.props.history.push(`/case/editor/create`)
+                                }
+                            }
+                        >
                             <FiPlus />
                             <div className={cx('label')}>새증례</div>
                         </div>
@@ -113,7 +121,7 @@ class HeaderEditor extends Component {
                             <div 
                                 className={cx('btn-tool', 'trash')}
                                 onClick={() => {
-                                        if (window.confirm('이 증례를 삭제하시겠습니까?')) {
+                                        if (window.confirm(`이 증례[${currentCase.title}]를(을) 삭제하시겠습니까?`)) {
                                             this.props.Case.deleteCase(this.props.Case.currentCase._id);
                                             this.props.history.push(`/case`)
                                         }

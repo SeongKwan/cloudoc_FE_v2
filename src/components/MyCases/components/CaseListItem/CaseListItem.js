@@ -8,6 +8,7 @@ import { FiClock } from "react-icons/fi";
 // import { IoIosWater, IoIosMan } from "react-icons/io";
 import { FaNotesMedical } from "react-icons/fa";
 import { GiBubblingBowl, GiBackPain } from "react-icons/gi";
+import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +32,7 @@ class CaseListItem extends Component {
         }
         
         const { symptom, diagnosis, treatment } = Case.record[latestRecordIndex] || [];
+        const semiDate = getLocaleSemiDateWithTime(Case.created_date);
 
         return (
             <Link to={`/case/editor/detail/${caseId}`}>
@@ -39,7 +41,7 @@ class CaseListItem extends Component {
                         <div id="case-list-item-memo" className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
                             <div className={cx('created-at')}>
-                                <FiClock />{Case.created_date} &nbsp;&nbsp;|
+                                <FiClock />{semiDate} &nbsp;&nbsp;|
                             </div>
                             <div className={cx('qna')}>
                                 <div className={cx('count', 'question-count')}>질문 8</div>

@@ -98,17 +98,12 @@ class Symptoms extends Component {
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _deleteSymptom = (i) => {
-        const { editableData } = this.props.symptom;
-        if (i !== undefined
-        ) {
-            if (editableData.length < 2) {
-                return false;
-            } else {
-                // e.stopPropagation();
-                const selectedIndex = i;
-                
-                this.props.symptom.deleteSymptom(selectedIndex);
-            }
+        // const { editableData } = this.props.symptom;
+        if (i !== undefined) {
+            const selectedIndex = i;
+            
+            this.props.symptom.deleteSymptom(selectedIndex);
+            
         }
     }
 
@@ -321,7 +316,7 @@ class Symptoms extends Component {
                                         />
                                         <label htmlFor={`symptom-description-${i}`}>상세설명</label>
                                     </div>
-                                    <div className={cx('trash', {last: length === 1})}>
+                                    <div className={cx('trash')}>
                                         <FaTrash onClick={() => {this._deleteSymptom(i);}}/>
                                     </div>
                                 </li>

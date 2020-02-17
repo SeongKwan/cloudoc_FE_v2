@@ -6,6 +6,8 @@ import LabBar from '../../../../components/LabBar/LabBar';
 import _ from 'lodash';
 import { FiPlus } from 'react-icons/fi';
 import { FaTrash } from 'react-icons/fa';
+import ReactTooltip from 'react-tooltip';
+import './Lab.css';
 
 const cx = classNames.bind(styles);
 
@@ -235,7 +237,7 @@ class Lab extends Component {
         // const disabledModalButton = this.props.lab.labDates.length > 0 ? false : true;
         
         let disabledButton = length <= 0;
-        
+        let dataTip = addLab.selectLab !== null ? `범위 :  ${addLab.selectLab['refMin']} ~ ${addLab.selectLab['refMax']}` : ''
         
 
         return (
@@ -285,14 +287,20 @@ class Lab extends Component {
                         </div>                        
                         <div className={cx('form-wrapper', 'value-wrapper', 'title', 'input')}>
                             <input 
+                                data-tip={dataTip}
+                                data-for="tooltip-input-value"
                                 name="value" 
                                 id="value" 
                                 type="number"
-                                placeholder="검사값" 
+                                placeholder="값" 
                                 onChange={this._handleChangeAddLab}
                                 value={addLab.value}
                             />
-                            <label htmlFor="value">검사값</label>
+                            {
+                                addLab.selectLab !== null &&
+                                <ReactTooltip className="custom-tooltip short" place="right" effect="solid" id="tooltip-input-value" />
+                            }
+                            <label className={cx('label-no-input', 'label-age')} htmlFor="value">검사값</label>
                         </div>
                         
                         </div>

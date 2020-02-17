@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './LeftSideToolbar.module.scss';
 import classNames from 'classnames/bind';

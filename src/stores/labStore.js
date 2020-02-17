@@ -28,7 +28,7 @@ class LabStore {
         category: '간기능',
         name: '',
         value: '',
-        selectLab: {}
+        selectLab: null
     }
 
     @computed get optionsCategory() {
@@ -774,7 +774,7 @@ class LabStore {
             category: '간기능',
             name: '',
             value: '',
-            selectLab: {}
+            selectLab: null
         }
     }
     @action clearAddLab() {
@@ -782,7 +782,7 @@ class LabStore {
             category: '간기능',
             name: '',
             value: '',
-            selectLab: {}
+            selectLab: null
         }
     }
     @action clearForSelector() {
