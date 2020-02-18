@@ -7,6 +7,9 @@ import Routes from './components/Routes';
 import { inject, observer } from 'mobx-react';
 import $ from 'jquery';
 import convertRef from '../constant/convertReference'
+import {
+  osName
+} from "react-device-detect";
 
 const cx = classNames.bind(styles);
 
@@ -140,7 +143,7 @@ checkerPaste = (firstData) => {
           <title>{`Cloudoc`}</title>
           <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
-        <main className={cx('App')}>
+        <main className={cx('App', {Windows: osName === 'Windows'})}>
         {
           this.state.online === false &&
           <div className={cx('network-message', 'offline')}>오프라인 상태</div>

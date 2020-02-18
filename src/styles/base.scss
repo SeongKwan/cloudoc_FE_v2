@@ -44,21 +44,3 @@ body {
     position: relative;
     box-sizing: border-box;
 }
-
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-}
- 
-::-webkit-scrollbar-track {
-    background-color: $oc-gray-1;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    background: $oc-gray-4;
-}

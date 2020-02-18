@@ -38,6 +38,8 @@
 @mixin transTime($time) {
     transition: all $time ease;
 }
+
+
     
 // Map with much breakpoints
 $breakpoints: (

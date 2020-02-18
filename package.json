@@ -63,7 +63,7 @@
     "react-app-polyfill": "^1.0.4",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dev-utils": "^9.1.0",
-    "react-device-detect": "^1.10.11",
+    "react-device-detect": "^1.11.14",
     "react-dom": "^16.12.0",
     "react-dropzone": "^10.2.1",
     "react-helmet": "^5.2.1",
