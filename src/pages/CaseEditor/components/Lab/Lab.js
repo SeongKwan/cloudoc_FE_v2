@@ -162,9 +162,12 @@ class Lab extends Component {
                                     alertMax={alertMax}
                                 />
                             </div>
-                            <div className={cx('trash')}>
-                                <FaTrash onClick={(e) => {this._deleteBloodTest(originalIndex);}}/>
-                            </div>
+                            {
+                                (type === "create" || isEditing) &&
+                                <div className={cx('trash')}>
+                                    <FaTrash onClick={(e) => {this._deleteBloodTest(originalIndex);}}/>
+                                </div>
+                            }
                         </li>
                     })
                 }

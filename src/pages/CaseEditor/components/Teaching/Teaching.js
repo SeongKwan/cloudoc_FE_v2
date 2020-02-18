@@ -56,7 +56,7 @@ class Teaching extends Component {
                                             name="description" 
                                             id={`teaching-description-${i}`} 
                                             type="text" 
-                                            minRows={1}
+                                            minRows={2}
                                             placeholder="환자지도" 
                                             onChange={this._handleOnChange}
                                             value={description || ''}
@@ -89,11 +89,11 @@ class Teaching extends Component {
                                         
                                         <TextareaAutosize 
                                             data-index={i}
-                                            className={cx('textarea', 'description', 'view')}
+                                            className={cx('textarea', 'description', 'static', 'view')}
                                             name="description" 
                                             id={`teaching-description-${i}`} 
                                             type="text" 
-                                            minRows={1}
+                                            minRows={2}
                                             placeholder="환자지도" 
                                             readOnly
                                             value={description || ''}
@@ -109,7 +109,7 @@ class Teaching extends Component {
                                             readOnly
                                             value={ref_id}
                                         />
-                                        <label htmlFor={`teaching-ref_id-${i}`}>No.</label>
+                                        <label htmlFor={`teaching-ref_id-${i}`}>문헌#</label>
                                     </div>
                                 </li>
                             })

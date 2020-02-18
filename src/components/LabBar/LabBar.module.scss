@@ -56,13 +56,14 @@
             border-radius: $radius-low;
             top: 50%;
             transform: translate(-50%, -50%);
+            font-weight: 100;
 
             &.isEditing {
                 background-color: transparent;
             }
 
             @include media('lg') {
-                height: 25px;
+                height: 16px;
                 width: 35px;
             }
 

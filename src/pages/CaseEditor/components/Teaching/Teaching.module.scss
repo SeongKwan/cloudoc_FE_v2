@@ -31,7 +31,7 @@
             li {
                 display: flex;
                 position: relative;
-                align-items: center;
+                align-items: flex-start;
                 &.selected {
                     box-shadow: 0 2px 8px 4px $gray-1;
                 }
