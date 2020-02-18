@@ -173,6 +173,10 @@
                 }
 
                 .name {
+                    width: 190px;
+                    @include media('lg') {
+                        width: 144px;
+                    }
                     margin-right: auto;
 
                     div {
@@ -207,6 +211,8 @@
 
                 .btn-condition > button {
                     margin-right: 0.5rem;
+                    background-color: $white;
+                    color: $brand-8;
                 }
 
                 .btn-add>button {
@@ -246,6 +252,7 @@
                         }
 
                         ul.content {
+                            width: 100%;
                             padding-left: 0.5rem;
 
                             li {
@@ -263,6 +270,9 @@
 
                                 div:first-child {
                                     margin-right: 0.2rem;
+                                }
+                                .description-wrapper {
+                                    width: 100%;
                                 }
                             }
                         }

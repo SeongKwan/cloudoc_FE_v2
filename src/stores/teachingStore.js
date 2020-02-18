@@ -87,7 +87,7 @@ class TeachingStore {
             }
             if (this.editableData.filter(item => item.description === name).length > 0) {
                 // symptomListItemStore.clearSearchKeyword();
-                return alert('같은 지도법이 이미 존재합니다');
+                return alert('빈 내용의 지도법이 있습니다');
             }
 
             return this.editableData = [...this.editableData, {

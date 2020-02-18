@@ -295,6 +295,8 @@
         position: relative;
         z-index: 8;
         margin-top: -1rem;
+        margin-left: 0rem;
+        padding-left: 0;
 
         .btn-add-formula {
             width: 100%;
@@ -321,13 +323,15 @@
             margin-top: 1rem;
             li {
                 display: flex;
+                flex-direction: row;
                 position: relative;
                 
                 &.selected {
                     box-shadow: 0 2px 8px 4px $gray-1;
                 }
                 .herb-name {
-                    width: 70%;
+                    min-width: 200px;
+                    max-width: 35%;
                 }
                 .dose {
                     width: 100px;
@@ -338,8 +342,8 @@
                     color: $gray-1;
                     transition: all 0.3s ease;
                     position: absolute;
-                    top: 50%;
-                    right: -20px;
+                    top: 47%;
+                    left: -25px;
                     transform: translateY(-50%);
                     &:hover {
                         color: $brand-4;

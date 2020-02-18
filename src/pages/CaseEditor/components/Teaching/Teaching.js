@@ -63,20 +63,6 @@ class Teaching extends Component {
                                         />
                                         <label htmlFor={`teaching-description-${i}`}>지도내용</label>
                                     </div>
-                                    <div className={cx('input', 'ref_id', 'form-wrapper')}>
-                                        <input 
-                                            data-index={i}
-                                            className={cx('ref_id')}
-                                            name="ref_id" 
-                                            id={`teaching-ref_id-${i}`} 
-                                            type="text" 
-                                            autoComplete='off' 
-                                            placeholder="###" 
-                                            onChange={this._handleOnChange}
-                                            value={ref_id}
-                                        />
-                                        <label htmlFor={`teaching-ref_id-${i}`}>No.</label>
-                                    </div>
                                     <div className={cx('trash')}>
                                         <FaTrash onClick={() => {this._deleteTeaching(i);}}/>
                                     </div>
@@ -99,17 +85,6 @@ class Teaching extends Component {
                                             value={description || ''}
                                         />
                                         <label htmlFor={`teaching-description-${i}`}>지도내용</label>
-                                    </div>
-                                    <div className={cx('input', 'ref_id', 'form-wrapper')}>
-                                        <input 
-                                            className={cx('ref_id', 'static')}
-                                            name="ref_id" 
-                                            id={`teaching-ref_id-${i}`} 
-                                            type="text" 
-                                            readOnly
-                                            value={ref_id}
-                                        />
-                                        <label htmlFor={`teaching-ref_id-${i}`}>문헌#</label>
                                     </div>
                                 </li>
                             })

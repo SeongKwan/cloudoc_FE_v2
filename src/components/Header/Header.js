@@ -22,8 +22,8 @@ class Header extends Component {
             <div className={cx('title')}>Cloudoc</div>
           </Navbar.Brand>
           <div className={cx('navlinks-wrapper')}>
-            <NavLink to='/login' className={cx('navlink', 'navlink--login')}>시작하기</NavLink>
-            <NavLink to='/signup' className={cx('navlink', 'navlink--signup')}>가입</NavLink>
+            <NavLink to='/login' className={cx('navlink', 'navlink--login')}>로그인</NavLink>
+            <NavLink to='/signup' className={cx('navlink', 'navlink--signup')}>회원가입</NavLink>
           </div>
         </Navbar>
       </Container>

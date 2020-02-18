@@ -15,7 +15,6 @@
             margin-bottom: 0.5rem;
         }
         h5 {
-
             font-size: 1rem;
             // font-weight: 400 !important;
             margin-bottom: 0rem;
@@ -29,11 +28,11 @@
     }
     
     h5 {
+        position: relative;
         font-weight: 700;
         letter-spacing: 2px;
         margin-bottom: 1.5rem;
         user-select: none;
-        width: 100%;
         cursor: pointer;
         &:hover {
             text-decoration: underline;
@@ -44,8 +43,8 @@
         display: flex;
         .btn-toggle {
             position: absolute;
-            top: -1rem;
-            right: 0;
+            top: -0.7rem;
+            left: 100%;
             font-size: 1.7rem;
             padding: 0.3rem;
             cursor: pointer;

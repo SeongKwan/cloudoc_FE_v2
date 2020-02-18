@@ -12,7 +12,10 @@ class TreatmentStore {
         caution: '',
         lifestyle: ''
     };
-    @observable editableData = [];
+    @observable editableData = [{
+        herbName: '',
+        dose: ''
+    }];
     @observable editableDataForTreatment = {
         drugName: '',
         guide: '',
@@ -94,7 +97,10 @@ class TreatmentStore {
                 this.editableDataForTreatment.lifestyle = lifestyle || '';
 
                 if (formula.length === 0 || formula === undefined) {
-                    return this.editableData = [];
+                    return this.editableData = [{
+                        herbName: '',
+                        dose: ''
+                    }];
                 }
                 if (formula.length > 0) {
                     this.editableData = [];
@@ -154,7 +160,10 @@ class TreatmentStore {
 
     @action clear() {
         this.staticData = [];
-        this.editableData = [];
+        this.editableData = [{
+            herbName: '',
+            dose: ''
+        }];
         this.clearTreatment();
     }
 
@@ -174,7 +183,10 @@ class TreatmentStore {
     }
 
     @action deleteAllInputValue() {
-        this.editableData = [];
+        this.editableData = [{
+            herbName: '',
+            dose: ''
+        }];
         this.editableDataForTreatment = {
             drugName: '',
             guide: '',

@@ -16,6 +16,7 @@ import Lab from './components/Lab';
 import LeftSideToolbar from './components/LeftSideToolbar/LeftSideToolbar';
 import RightSideList from './components/RightSideList/RightSideList';
 import Teaching from './components/Teaching/Teaching';
+import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
@@ -46,6 +47,13 @@ class CaseEditor extends Component {
     .catch((err) => {
       console.log(err);
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const type = this.props.location.pathname.split('/')[3];
+    if (prevProps.location.pathname.split('/')[3] !== type) {
+      $('#case-editor-center-container-scroll-box').scrollTop(0);
+    }
   }
 
   componentWillUnmount() {

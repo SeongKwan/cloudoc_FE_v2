@@ -50,6 +50,7 @@ class HeaderEditor extends Component {
                             className={cx('btn-tool', 'create')}
                             onClick={() => {
                                     this.props.Case.clearIsEditing();
+                                    this.props.Case.clearAllEditableData();
                                     this.props.history.push(`/case/editor/create`)
                                 }
                             }

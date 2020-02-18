@@ -653,6 +653,25 @@ class CaseStore {
         this.isEditing = false;
     }
 
+    @action clearAllEditableData() {
+        basicStore.clear();
+        basicStore.clearOptional();
+        symptomStore.clear();
+        labStore.clear();
+        labStore.clearAddLab();
+        diagnosisStore.clear();
+        drugStore.clear();
+        teachingStore.clear();
+        analyzeSymptomStore.clear();
+        analyzeSymptomStore.clearFirstTime();
+        analyzeSymptomStore.clearOpen();
+        analyzeDrugStore.clear();
+        analyzeDrugStore.clearFirstTime();
+        analyzeDrugStore.clearOpen();
+        analyzeTeachingStore.clear();
+        analyzeTeachingStore.clearFirstTime();
+        analyzeTeachingStore.clearOpen();
+    }
 
 
 }

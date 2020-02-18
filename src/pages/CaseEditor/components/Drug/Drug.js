@@ -317,32 +317,70 @@ class Drug extends Component {
                                     />
                                     <label htmlFor={`drug-name`}>처방명</label>
                                 </div>
-                                <div className={cx('form-wrapper', 'guide', 'input')}>
-                                    <TextareaAutosize 
-                                        className={cx('textarea')}
-                                        name="guide" 
-                                        id="guide" 
-                                        type="text" 
-                                        minRows={3}
-                                        placeholder="올바른 처방 복용방법" 
-                                        onChange={this._handleChange}
-                                        value={guide}
-                                    />
-                                    <label htmlFor="guide">복약법</label>
-                                </div>
-                                <div className={cx('form-wrapper', 'caution', 'input')}>
-                                    <TextareaAutosize 
-                                        className={cx('textarea')}
-                                        name="caution" 
-                                        id="caution" 
-                                        type="text" 
-                                        minRows={3}
-                                        placeholder="복용시 주의사항" 
-                                        onChange={this._handleChange}
-                                        value={caution}
-                                    />
-                                    <label htmlFor="caution">주의사항</label>
-                                </div>
+                                <div className={cx('wrapper', 'formula-wrapper')}>
+                                    <ul>
+                                    {
+                                        editableData.map((formula, i) => {
+                                            const { herbName, dose } = formula;
+                                            return <li key={i} className={cx('')}>
+                                                <div className={cx('form-wrapper', 'herb-name', 'input')}>
+                                                    <input 
+                                                        autoComplete="off"
+                                                        className={cx('name')}
+                                                        name="herbName" 
+                                                        id={`herb-name-${i}`} 
+                                                        type="text" 
+                                                        placeholder="약초명" 
+                                                        onChange={this._handleChangeFormula}
+                                                        data-index={i}
+                                                        value={herbName || ''}
+                                                        onKeyDown={(e) => {
+                                                            if (e.keyCode === 13) {
+                                                                $(`#formula-dose-${i}`).focus();
+                                                            }
+                                                        }}
+                                                    />
+                                                    <label htmlFor={`herb-name-${i}`}>약초명</label>
+                                                </div>
+                                                <div className={cx('input', 'dose', 'form-wrapper')}>
+                                                    <input 
+                                                        data-index={i}
+                                                        className={cx('dose')}
+                                                        name="dose" 
+                                                        id={`formula-dose-${i}`} 
+                                                        type="number" 
+                                                        autoComplete='off' 
+                                                        placeholder="수량[g/일]" 
+                                                        onChange={this._handleChangeFormula}
+                                                        value={dose}
+                                                        onKeyDown={(e) => {
+                                                            let { length } = editableData;
+                                                            let enter = e.keyCode === 13;
+                                                            if (enter && (i < length - 1)) {
+                                                                return $(`#herb-name-${i + 1}`).focus();
+                                                            }
+                                                            if (enter && (i === length - 1)) {
+                                                                if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
+                                                                    this._handleClickOnAddFormula();
+                                                                    return setTimeout(() => {$(`#herb-name-${i + 1}`).focus();}, 100);
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                    <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
+                                                </div>
+                                                <div className={cx('trash')}>
+                                                    <FaTrash onClick={() => {this._deleteFormula(i);}}/>
+                                                </div>
+                                            </li>
+                                        })
+                                    }
+                                    {
+                                        (type === "create" || isEditing) &&
+                                        <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>약재추가<FiPlus /></button>
+                                    }
+                                </ul>
+                            </div>
                             </li>
                             : 
                             <li className={cx('static')}>
@@ -356,6 +394,39 @@ class Drug extends Component {
                                         value={staticDataForTreatment.drugName || ''}
                                     />
                                     <label htmlFor={`drug-name`}>처방명</label>
+                                </div>
+                                <div className={cx('wrapper', 'formula-wrapper')}>
+                                    <ul>
+                                        {
+                                            staticData.map((formula, i) => {
+                                                const { herbName, dose } = formula;
+                                                return <li key={i} className={cx('')}>
+                                                    <div className={cx('form-wrapper', 'herb-name', 'input')}>
+                                                        <input 
+                                                            className={cx('name', 'static')}
+                                                            name="herbName" 
+                                                            id={`herb-name-${i}`} 
+                                                            type="text" 
+                                                            readOnly
+                                                            value={herbName || ''}
+                                                        />
+                                                        <label htmlFor={`herb-name-${i}`}>약초명</label>
+                                                    </div>
+                                                    <div className={cx('input', 'dose', 'form-wrapper')}>
+                                                        <input 
+                                                            className={cx('dose','static')}
+                                                            name="dose" 
+                                                            id={`formula-dose-${i}`} 
+                                                            type="number" 
+                                                            readOnly
+                                                            value={dose}
+                                                        />
+                                                        <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
+                                                    </div>
+                                                </li>
+                                            })
+                                        }
+                                    </ul>
                                 </div>
                                 <div className={cx('form-wrapper', 'guide', 'input')}>
                                     <TextareaAutosize 
@@ -386,80 +457,7 @@ class Drug extends Component {
                     </ul>
                 </div>
 
-                <div className={cx('wrapper', 'formula-wrapper')}>
-                    {
-                        (type === "create" || isEditing) &&
-                        <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>처방구성추가<FiPlus /></button>
-                    }
-                    <ul>
-                        {
-                            (type === "create" || isEditing) ?
-                            editableData.map((formula, i) => {
-                                const { herbName, dose } = formula;
-                                return <li key={i} className={cx('')}>
-                                    <div className={cx('form-wrapper', 'herb-name', 'input')}>
-                                        <input 
-                                            autoComplete="off"
-                                            className={cx('name')}
-                                            name="herbName" 
-                                            id={`herb-name-${i}`} 
-                                            type="text" 
-                                            placeholder="약초명" 
-                                            onChange={this._handleChangeFormula}
-                                            data-index={i}
-                                            value={herbName || ''}
-                                        />
-                                        <label htmlFor={`herb-name-${i}`}>약초명</label>
-                                    </div>
-                                    <div className={cx('input', 'dose', 'form-wrapper')}>
-                                        <input 
-                                            data-index={i}
-                                            className={cx('dose')}
-                                            name="dose" 
-                                            id={`formula-dose-${i}`} 
-                                            type="number" 
-                                            autoComplete='off' 
-                                            placeholder="수량[g/일]" 
-                                            onChange={this._handleChangeFormula}
-                                            value={dose}
-                                        />
-                                        <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
-                                    </div>
-                                    <div className={cx('trash')}>
-                                        <FaTrash onClick={() => {this._deleteFormula(i);}}/>
-                                    </div>
-                                </li>
-                            })
-                            : staticData.map((formula, i) => {
-                                const { herbName, dose } = formula;
-                                return <li key={i} className={cx('')}>
-                                    <div className={cx('form-wrapper', 'herb-name', 'input')}>
-                                        <input 
-                                            className={cx('name', 'static')}
-                                            name="herbName" 
-                                            id={`herb-name-${i}`} 
-                                            type="text" 
-                                            readOnly
-                                            value={herbName || ''}
-                                        />
-                                        <label htmlFor={`herb-name-${i}`}>약초명</label>
-                                    </div>
-                                    <div className={cx('input', 'dose', 'form-wrapper')}>
-                                        <input 
-                                            className={cx('dose','static')}
-                                            name="dose" 
-                                            id={`formula-dose-${i}`} 
-                                            type="number" 
-                                            readOnly
-                                            value={dose}
-                                        />
-                                        <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
-                                    </div>
-                                </li>
-                            })
-                        }
-                    </ul>
-                </div>
+                
             </div>
         );
     }

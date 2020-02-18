@@ -19,7 +19,8 @@ class CollapsibleBox extends Component {
     componentWillUnmount() {
         this.props.collapsible.clear();
     }
-    _handleClickToggle = () => {
+    _handleClickToggle = (e) => {
+        e.stopPropagation();
         let type = this.props.sidebar ? 'sidebar' : 'basic';
         if (this.props.short) {
             if (this.props.lab.editableData.length > 0) {
@@ -44,19 +45,21 @@ class CollapsibleBox extends Component {
                         className={cx({tool: length <= 0})}
                         data-tip="혈액검사가 필요합니다"
                     >
-                        <div className={cx('header')}>
-                            <h5 onClick={this._handleClickToggle}>{this.props.title}</h5>
-                            <div
-                                onClick={this._handleClickToggle} 
-                                className={cx('btn-toggle')}
-                            >
-                                {
-                                    openSidebar ?
-                                    <MdKeyboardArrowUp />
-                                    :
-                                    <MdKeyboardArrowDown />
-                                }
-                            </div>
+                        <div className={cx('header')} onClick={this._handleClickToggle}>
+                            <h5>
+                                {this.props.title}
+                                <div
+                                    onClick={this._handleClickToggle} 
+                                    className={cx('btn-toggle')}
+                                >
+                                    {
+                                        openSidebar ?
+                                        <MdKeyboardArrowUp />
+                                        :
+                                        <MdKeyboardArrowDown />
+                                    }
+                                </div>
+                            </h5>
                         </div>
                     </div>
                     {
@@ -70,19 +73,21 @@ class CollapsibleBox extends Component {
         } else {
             return (
                 <div className={cx('CollapsibleBox', {sidebar: this.props.sidebar}, {open: openSidebar === true})}>
-                    <div className={cx('header')}>
-                        <h5 onClick={this._handleClickToggle}>{this.props.title}</h5>
-                        <div
-                            onClick={this._handleClickToggle} 
-                            className={cx('btn-toggle')}
-                        >
-                            {
-                                openSidebar ?
-                                <MdKeyboardArrowUp />
-                                :
-                                <MdKeyboardArrowDown />
-                            }
-                        </div>
+                    <div className={cx('header')} onClick={this._handleClickToggle}>
+                        <h5>
+                            {this.props.title}
+                            <div
+                                onClick={this._handleClickToggle} 
+                                className={cx('btn-toggle')}
+                            >
+                                {
+                                    openSidebar ?
+                                    <MdKeyboardArrowUp />
+                                    :
+                                    <MdKeyboardArrowDown />
+                                }
+                            </div>
+                        </h5>
                     </div>
                     {
                         openSidebar && 

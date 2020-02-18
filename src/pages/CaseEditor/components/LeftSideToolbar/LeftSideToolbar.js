@@ -9,7 +9,8 @@ import $ from 'jquery';
 import { 
     FaUserCheck,
     FaNotesMedical,
-    FaChalkboard
+    FaChalkboard,
+    FaInfo
 } from "react-icons/fa"; 
 
 
@@ -352,7 +353,7 @@ class LeftSideToolbar extends Component {
                                                 </div>
                                                 <div className={cx('btn-condition')}>
                                                     <button data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>
-                                                        질환
+                                                        <FaInfo />
                                                     </button>
                                                 </div>
                                                 <div className={cx('btn-more')}>
@@ -374,7 +375,7 @@ class LeftSideToolbar extends Component {
                                                             this._handleClickOnBtnAdd('condition', conditionName)
                                                         }}
                                                     >
-                                                        선택
+                                                        입력
                                                     </button>
                                                 </div>
                                             </div>
@@ -521,7 +522,7 @@ class LeftSideToolbar extends Component {
                                                             this._handleClickOnBtnAdd('drug', drugName, anl)
                                                         }}
                                                     >
-                                                        선택
+                                                        입력
                                                     </button>
                                                 </div>
                                             </div>
@@ -600,7 +601,7 @@ class LeftSideToolbar extends Component {
                                                                 this._handleClickOnBtnAdd('teaching_all', '지도법', teachings)
                                                             }}
                                                         >
-                                                            모두선택
+                                                            모두입력
                                                         </button>
                                                     </div>
                                                 </div>
@@ -617,7 +618,7 @@ class LeftSideToolbar extends Component {
                                                                             reference_summary
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                            <div>
+                                                                            <div className={cx('description-wrapper')}>
                                                                                 <a 
                                                                                     className={cx('description')}
                                                                                     data-tip={reference_summary} 
@@ -640,7 +641,7 @@ class LeftSideToolbar extends Component {
                                                                                         this._handleClickOnBtnAdd('teaching', '지도법', teach)
                                                                                     }}
                                                                                 >
-                                                                                    선택
+                                                                                    입력
                                                                                 </button>
                                                                             </div>
                                                                         </li>

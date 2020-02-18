@@ -87,9 +87,9 @@ const _renderSymptom = (symptoms = []) => {
 
     return symptoms.map((symptom, i) => {
         const { name } = symptom;
-        if (i === 2) {
+        if (i === 3) {
             return <div key={i} className={cx('item')}>...</div>
-        } else if (i > 2) {
+        } else if (i > 3) {
             return false;
         }
         return (

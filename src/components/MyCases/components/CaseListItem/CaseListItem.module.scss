@@ -4,7 +4,11 @@
     font-weight: 100;
     // color: $brand-8;
     .wrapper-bottom {
-        padding: 0.5rem;
+        padding: 0.75rem;
+        height: 296px;
+        @include media('lg') {
+            height: 260px;
+        }
         // background-color: $brand-7;
         background-color: $oc-gray-1;
         color: $brand-8;
@@ -29,13 +33,13 @@
         font-weight: 700;
         letter-spacing: 1.5px;
         line-height: 1.6;
-        height: 3.2em;
-        max-height: 3.2em;
+        height: 1.6em;
+        max-height: 1.6em;
         overflow: hidden;
         display: -webkit-box;
         margin-top: 0.5rem;
         margin-bottom: 1rem;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         
     }
@@ -82,9 +86,20 @@
         }
         &.symptom {
             .content {
-                // height: 7rem;
+                height: 6rem;
+                @include media('lg') {
+                    height: 6.5rem;
+                }
                 .item {
                     overflow: hidden;
+                }
+            }
+        }
+        &.condition {
+            .content {
+                height: 4.5rem;
+                @include media('lg') {
+                    height: 5rem;
                 }
             }
         }
