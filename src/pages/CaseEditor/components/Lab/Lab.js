@@ -252,7 +252,7 @@ class Lab extends Component {
         // console.log(length)
         // console.log(labNames.length)
         // console.log(JSON.parse(JSON.stringify(addLab)));
-        console.log('lab ',JSON.parse(JSON.stringify(editableData)))
+        // console.log('lab ',JSON.parse(JSON.stringify(editableData)))
         // console.log('selected ',JSON.parse(JSON.stringify(selectedLabCategory)))
         // console.log('initLabs ',JSON.parse(JSON.stringify(initLabs)))
         // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
