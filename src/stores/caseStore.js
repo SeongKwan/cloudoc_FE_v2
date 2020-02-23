@@ -21,7 +21,7 @@ let loadAmount;
 
 if (windowWidth > 1411) {
     initialLoadAmount = 7;
-    loadAmount = 4;
+    loadAmount = 8;
 } else {
     initialLoadAmount = 5;
     loadAmount = 6;
@@ -403,8 +403,8 @@ class CaseStore {
         const exam = [];
         const lab = JSON.parse(JSON.stringify(labStore.editableData));
         
-        // const selectedLabCategory = JSON.parse(JSON.stringify(bloodTestStore.selectedLabCategory));
-        const selectedLabCategory = [];
+        const selectedLabCategory = JSON.parse(JSON.stringify(labStore.selectedLabCategory));
+        // const selectedLabCategory = [];
         // const analyzeSymptom = JSON.parse(JSON.stringify(analyzeSymptomStore.editableData));
         const analyzeSymptom = [];
         // const analyzeLab = JSON.parse(JSON.stringify(analyzeBloodTestStore.editableData));
@@ -510,8 +510,8 @@ class CaseStore {
         const exam = [];
         const lab = JSON.parse(JSON.stringify(labStore.editableData));
         
-        // const selectedLabCategory = JSON.parse(JSON.stringify(bloodTestStore.selectedLabCategory));
-        const selectedLabCategory = [];
+        const selectedLabCategory = JSON.parse(JSON.stringify(labStore.selectedLabCategory));
+        // const selectedLabCategory = [];
         // const analyzeSymptom = JSON.parse(JSON.stringify(analyzeSymptomStore.editableData));
         const analyzeSymptom = [];
         // const analyzeLab = JSON.parse(JSON.stringify(analyzeBloodTestStore.editableData));

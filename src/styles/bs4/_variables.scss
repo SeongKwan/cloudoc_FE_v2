@@ -278,11 +278,11 @@ $embed-responsive-aspect-ratios: join(
 // stylelint-disable value-keyword-case
 
 // font-family: 'NanumBarunGothic', sans-serif;
-$font-family-sans-serif:      'NanumBarunGothic', sans-serif !default;
+$font-family-sans-serif:      NotoSansKR !default;
 // $font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-$font-family-monospace:       'NanumBarunGothic', sans-serif !default;
+$font-family-monospace:       NotoSansKR !default;
 // $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$font-family-base:            'NanumBarunGothic', sans-serif !default;
+$font-family-base:            NotoSansKR !default;
 // $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 

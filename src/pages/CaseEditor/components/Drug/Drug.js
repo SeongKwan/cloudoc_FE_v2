@@ -115,13 +115,22 @@ class Drug extends Component {
     }
 
     _scroll = (index) => {
+        const windowWidth = window.outerWidth;
+        let offTop, listItemHeight;
         
-        let offTop;
+
+        if (windowWidth > 1411) {
+            listItemHeight = 40;
+        } else {
+            listItemHeight = 32;
+        }
+
+        
         if (index <= 3 && index >= 0) {
             offTop = 0;
         }
         if (index > 3) {
-            offTop = (index - 2.5) * 32;
+            offTop = (index - 2.5) * listItemHeight;
         }
         $(function() {
             let listContainer = $("ul[data-form='list-container-for-drug']");
@@ -352,7 +361,7 @@ class Drug extends Component {
                                                         autoComplete='off' 
                                                         placeholder="수량[g/일]" 
                                                         onChange={this._handleChangeFormula}
-                                                        value={dose}
+                                                        value={dose || ''}
                                                         onKeyDown={(e) => {
                                                             let { length } = editableData;
                                                             let enter = e.keyCode === 13;
@@ -419,7 +428,7 @@ class Drug extends Component {
                                                             id={`formula-dose-${i}`} 
                                                             type="number" 
                                                             readOnly
-                                                            value={dose}
+                                                            value={dose || ''}
                                                         />
                                                         <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
                                                     </div>

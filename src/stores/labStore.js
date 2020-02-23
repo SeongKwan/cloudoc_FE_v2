@@ -68,6 +68,7 @@ class LabStore {
     
     @computed get lengthAlertMessage() {
         let count = 0;
+        
         this.editableData.forEach((lab, i) => {
             const {
                 alertMin,
@@ -85,13 +86,6 @@ class LabStore {
         this.readyForPaste = !this.readyForPaste;
     }
 
-    @action filteredEditableData(gender = '', categoryIndex) {
-        
-        this.initLabs = [];
-        this.initializeLabsForSelector();
-        
-        this.editableData = this._filter(gender, this.editableData, categoryIndex);
-    };
 
     @action selectAllLabCategory() {
         this.clearSelectedLabCategory();
@@ -101,51 +95,34 @@ class LabStore {
                 label: item.value
             }
         });
-
-        
     }
 
-    @action setSelectedLabCategoryFromExcel(array) {
-        
-        let originalArray = [];
-        let filteredArray = [];
-        let results = [];
 
-        this.selectedLabCategory.forEach(() => {
-            return results.push({label: '', value: ''});
-        })
-
-        
-        array.forEach(action((item, i) => {
-            
-            return originalArray[i] = {
-                value: item.category,
-                label: item.category
-            }
-        }));
-
-        filteredArray = _.uniqBy(originalArray, 'label');
-        
-
-        filteredArray.forEach((item, i) => {
-            this.selectedLabCategory.forEach((category, i) => {
-                
-                if (category.label === item.label) {
-                    
-                    results[i] = {
-                        label: item.label,
-                        value: item.label
-                    }
-                } else return false;
-            })
-        })
-
-        return this.selectedLabCategory = results;
+    @action changeGender() {
+        const { gender } = basicStore.editableData;
+        console.log('fn labstore')
     }
+
+
+
+
+
+    @action filteredEditableData(gender = '', categoryIndex) {
+        
+        this.initLabs = [];
+        this.initializeLabsForSelector();
+        
+        this.editableData = this._filter(gender, this.editableData, categoryIndex);
+    };
+
+
+
+    
 
     @action setLabCategories() { // 카테고리 체크박스용
         return agent.loadLabs()
         .then(action(res => {
+            this.registry = res.data;
             let array;
             array = _.sortBy(res.data, 'category');
             array = _.uniqBy(array, 'category');
@@ -227,11 +204,11 @@ class LabStore {
             return item.sex === null;
         });
 
-        if (filterKeyword === "남자") {
+        if (filterKeyword === "male") {
             filteredGender = 'M';
         }
 
-        if (filterKeyword === "여자") {
+        if (filterKeyword === "female") {
             filteredGender = "F";
         }
 
@@ -264,11 +241,18 @@ class LabStore {
     
                 if (!checked) { // 체크가 안된 카테고리 검사항목들 처리
                     let category = this.labCategories[categoryIndex].value;
-                    return results = this.editableData = this.editableData.filter(x => x.category !== category);
+                    results = this.editableData.filter(x => x.category !== category);
+                    results.forEach((lab, i) => {
+                        results[i] = {...lab, originalIndex: i};
+                    })
+                    return results;
                 }
             }
         })
 
+        results.forEach((lab, i) => {
+            results[i] = {...lab, originalIndex: i};
+        });
         return results;
     }
 
@@ -287,8 +271,52 @@ class LabStore {
         bloodTestItems.forEach((item, i) => {
             return editableData.forEach((lab, INDEX) => {
                 if (item.name === lab.name) {
-                    const { category, refMin, refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description} = item;
-                    results[INDEX] = {...lab, originalIndex: INDEX, category, refMin, refMax, optMin, optMax, alertMin: alertMin || null, alertMax: alertMax || null, alertMessage: alertMessage || '', reference: reference || '', name_kor, description: description || ''};
+
+                    const {
+                        category,
+                        name,
+                        name_kor,
+                        description,
+                        unit,
+                        refMin,
+                        refMax,
+                        optMin,
+                        optMax,
+                        sex,
+                        alertMin,
+                        alertMax,
+                        alertMessage
+                    } = item;
+
+
+
+                    // const { 
+                    //     category, 
+                    //     refMin, 
+                    //     refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description, sex} = item;
+
+                    results[INDEX] = {
+                        category,
+                        name,
+                        name_kor,
+                        description: description || null,
+                        value: lab.value,
+                        unit,
+                        state: '',
+                        refMin,
+                        refMax,
+                        optMin,
+                        optMax,
+                        sex,
+                        alertMin,
+                        alertMax,
+                        alertMessage,
+                        originalIndex: INDEX
+                    };
+
+                    // if (sex !== null && sex !== undefined) {
+                    //     results[INDEX]['sex'] = sex;
+                    // }
                 }
             })
         });
@@ -310,11 +338,20 @@ class LabStore {
             this.getState(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
         })
 
-        // editableData.forEach((editableData) => { 
-        //     this.editableData.push(editableData) 
-        // });
+
+        let filteredArray = _.uniqBy(results, 'category');
+
+        filteredArray.forEach((item, index) => {
+            let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
+            if (selectedLabIndex >= 0) {
+                this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
+            }
+        })
         
     }
+
+    
+
 
     // @computed get testResults() {
     //     let results = [];
@@ -394,11 +431,42 @@ class LabStore {
         if (this.editableData.filter(item => item.name === this.addLab.name).length > 0) {
             return alert('같은 혈액검사항목이 이미 존재합니다');
         } else {
-            return this.editableData = [...this.editableData, {
-                ...this.addLab.selectLab,
+            const {
+                category,
+                name,
+                name_kor,
+                description,
+                unit,
+                refMin,
+                refMax,
+                optMin,
+                optMax,
+                sex,
+                alertMin,
+                alertMax,
+                alertMessage
+            } = this.addLab.selectLab;
+            
+            this.editableData = [...this.editableData, {
+                category,
+                name,
+                name_kor,
+                description: description || null,
                 value: this.addLab.value,
+                unit,
+                state: '',
+                refMin,
+                refMax,
+                optMin,
+                optMax,
+                sex,
+                alertMin,
+                alertMax,
+                alertMessage,
                 originalIndex: index
             }];
+            this.checkSelectedCategory();
+            return this.getState(index, refMin, refMax, optMin, optMax, alertMin, alertMax, +this.addLab.value);
         }
     }
 
@@ -462,44 +530,19 @@ class LabStore {
     }
 
 
-    
-
-    @action changeExcelFile(file) {
-        this.excelFile = file;
-    }
-
-    @action postExcel() {
-        const formData = new FormData();
-        formData.append('xlsxFile', this.excelFile);
-
-        return agent.postExcel(formData)
-            .then(action((res) => {
-                this.registryForExcel = res.data || [];
-                
-                modalStore.showModal();
-            }))
-            .catch(action((err) => {
-                alert('엑셀내용이 검사결과가 아닌 다른 파일입니다. 잘못된 파일 또는 엑셀의 양식이 올바른지 확인이 필요합니다')
-                throw err;
-            }))
-    }
-
-    @action changeCheckbox(date, i) {
-        this.selectedDate = date;
-        this.selectedDateIndex = i;
-    }
-
-    @computed get labDates() {
-        let dates = [];
-        this.registryForExcel.forEach((item) => { dates.push(item.date); });
-        return dates;
-    }
-
-    
-
     @action initCaseDetailData(labs) {
         this.staticData = labs;
         this.editableData = labs;
+
+        let filteredArray = _.uniqBy(labs, 'category');
+
+        filteredArray.forEach((item, index) => {
+            let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
+            if (selectedLabIndex >= 0) {
+                this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
+            }
+        })
+
         setTimeout(() => {this.resetOriginalIndex();}, 100);
     }
 
@@ -529,7 +572,7 @@ class LabStore {
     }
 
     @action initializeLabsForSelector() {
-        return this.registry.forEach((lab) => {
+        return this.registry.forEach((lab, i) => {
             this.initLabs.push(
                 {
                     category: lab.category,
@@ -572,6 +615,7 @@ class LabStore {
 
     @action deleteBloodTest(selectedIndex) {
         this.editableData.splice(selectedIndex, 1);
+        this.checkSelectedCategory();
         this.resetOriginalIndex();
     }
 
@@ -586,11 +630,20 @@ class LabStore {
 
     @action checkSelectedCategory() {
         this.selectedLabCategory.forEach((item , i) => {
-            if (item.value === '') return false;
-            if (this.editableData.findIndex(x => x.category === item.value) < 0) {
-                return this.selectedLabCategory[i] = {
-                    value: '',
-                    label: ''
+            console.log(this.editableData.findIndex(x => x.category === item.value));
+            if (item.value === '') {
+                if (this.editableData.findIndex(x => x.category === item.label) >= 0) {
+                    return this.selectedLabCategory[i] = {
+                        label: item.label,
+                        value: item.label
+                    }
+                }
+            } else {
+                if (this.editableData.findIndex(x => x.category === item.value) < 0) {
+                    return this.selectedLabCategory[i] = {
+                        label: item.label,
+                        value: ''
+                    }
                 }
             }
         })
@@ -785,16 +838,17 @@ class LabStore {
             selectLab: null
         }
     }
+    @action clearAddLabSelectLab() {
+        this.addLab['selectLab'] = null;
+    }
     @action clearForSelector() {
         this.initialSelectLabCategory(this.labCategories);
         this.editableData = [];
-        this.excelFile = null;
-        this.selectedDate = '';
-        this.selectedDateIndex = 0;
-        this.excelFile = null;
     }
     @action clearSelectedLabCategory() {
-        this.selectedLabCategory = [{}];
+        this.selectedLabCategory.forEach((category, i) => {
+            this.selectedLabCategory[i]['value'] = '';
+        })
     }
 
 }

@@ -73,7 +73,7 @@
         position: relative;
         display: flex;
         align-items: center;
-        margin-bottom: 3.5rem;
+        margin-bottom: 2.5rem;
 
         h5 {
             font-weight: 700;
@@ -101,6 +101,29 @@
                     right: -12rem;
                     transform: translateY(-50%);
 
+                }
+            }
+        }
+    }
+
+    .category-container {
+        padding: 1rem;
+        background-color: $gray-1;
+        margin-bottom: 2rem;
+        border-radius: $radius-low;
+
+        .select-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+
+            li {
+                width: 16.66%;
+                span {
+                    font-weight: 100;
+                    letter-spacing: 1.5px;
+                    font-size: 0.9rem;
+                    margin-left: 0.4rem;
                 }
             }
         }
@@ -159,7 +182,7 @@
                 width: 400px;
 
                 @include media('lg') {
-                    width: 230px;
+                    width: 190px;
                 }
 
                 .unit {
@@ -172,6 +195,19 @@
                     top: 25px;
                     font-size: 0.9rem;
                     color: $gray-3;
+                }
+            }
+
+            .alert-icon {
+                width: 35px;
+                font-size: 1.6rem;
+                display: flex;
+                cursor: pointer;
+                &.high {
+                    color: darkred;
+                }
+                &.low {
+                    color: darkblue;
                 }
             }
 

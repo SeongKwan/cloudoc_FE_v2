@@ -172,27 +172,37 @@
                     padding: 1rem;
                 }
 
-                .name {
+                .teaching-name, .condition-name {
                     width: 190px;
                     @include media('lg') {
                         width: 144px;
                     }
-                    margin-right: auto;
-
                     div {
                         word-break: break-all;
                         cursor: pointer;
                         letter-spacing: 2px;
                         font-weight: 700;
-
+    
                         &:hover {
                             color: $brand-8;
                             text-decoration: underline;
                         }
                     }
                 }
+                
+                .name {
+                    margin-right: auto;
+                    
+                    div {
+                        word-break: break-all;
+                        letter-spacing: 2px;
+                        font-weight: 700;
+                    }
+                }
 
                 button {
+                    // width: 43px;
+                    // height: 25px;
                     background-color: $brand-8;
                     padding: 0.2rem 0.5rem;
                     border: 0;
@@ -209,8 +219,22 @@
                     }
                 }
 
+                // img {
+                //     width: 25px;
+                //     cursor: pointer;
+                //     color: $white;
+                    
+                //     @include media('lg') {
+                //         // width: 20px;
+                //     }
+                // }
+                .btn-condition {
+                    // margin-right: 0.5rem;
+                    // display: flex;
+                    // justify-content: center;
+                    // align-items: center;
+                }
                 .btn-condition > button {
-                    margin-right: 0.5rem;
                     background-color: $white;
                     color: $brand-8;
                 }
@@ -223,8 +247,81 @@
                 .more {
                     font-size: 0.9rem;
                     padding: 1rem;
-                    background-color: darkgray;
+                    background-color: #858585;
                     color: $white;
+
+                    &.drug {
+                        padding: 0;
+                        .row {
+
+                            ul.content {
+                                padding: 0 !important;
+                                li {
+                                    font-size: 1rem;
+                                    display: flex;
+                                    flex-direction: column;
+                                    padding: 0;
+
+                                    .drug-name {
+                                        width: 180px;
+                                        margin-right: auto;
+                                        cursor: pointer;
+                                        @include media('lg') {
+                                            width: 140px;
+                                        }
+                                        &:hover {
+                                            color: $brand-8;
+                                            text-decoration: underline;
+                                        }
+                                    }
+
+                                    .drug-container {
+                                        display: flex;
+                                        padding: 1rem;
+                                    }
+                                    .more.deep {
+                                        background-color: #a8a8a8;
+                                        li {
+                                            position: relative;
+                                        }
+                                        .evidence {
+                                            font-size: 0.9rem;
+                                        }
+
+                                        .references-wrapper {
+                                            padding: 0.5rem;
+                                            display: flex;
+                                            margin-top: 0.5rem;
+                                            div {
+                                                display: inline-block;
+                                                font-size: 0.7rem;
+                                                
+                                                a.drug {
+                                                    padding: 0.2rem;
+                                                    color: $gray-2;
+                                                    border: 1px solid $gray-2;
+                                                    border-radius: $radius-low;
+                                                    cursor: pointer;
+
+                                                    &:not(:last-child) {
+                                                        margin-right: 0.2rem;
+                                                    }
+                                                    &:hover {
+                                                        border-color: $brand-8;
+                                                        color: $brand-8;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+                                li:first-child {
+                                    margin-top: 0 !important;
+                                }
+                            }
+                        }
+                    }
 
                     a.evidence, a.description {
                         cursor: pointer;
@@ -319,6 +416,7 @@
             position: relative;
             top: -4px;
             left: 0px;
+            cursor: pointer;
         }
 
         .header {
@@ -351,6 +449,7 @@
             }
 
             .title {
+                padding: 1rem;
                 font-size: 1.8rem;
                 letter-spacing: 3px;
                 font-weight: 700;

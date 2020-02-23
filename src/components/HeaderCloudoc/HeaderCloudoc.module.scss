@@ -2,7 +2,7 @@
     position: relative;
     padding: 0 2rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1360px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,6 +33,7 @@
                 font-size: 1.15rem;
                 letter-spacing: 1px;
                 &.active {
+                    cursor: default;
                     color: $brand-1;
                     &:hover {
                         color: $brand-1;
@@ -82,13 +83,13 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-width: 160px;
+            min-width: 200px;
             @include media('lg') {
                 right: 0;
             }
             .divider-horizon {
                 position: relative;
-                margin: 2rem 0;
+                margin: 1.3rem 0;
                 &::after {
                     position: absolute;
                     top: 0;
@@ -105,6 +106,12 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+                .nickname {
+                    letter-spacing: 2px;
+                    font-size: 1.1rem;
+                    margin-bottom: 1rem;
+                    font-weight: 900;
+                }
                 .charge {
                     margin-top: 0.5rem;
                     color: $brand-1;

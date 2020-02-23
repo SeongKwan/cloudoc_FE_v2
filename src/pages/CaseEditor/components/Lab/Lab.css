@@ -9,6 +9,9 @@
 .custom-tooltip.short {
     width: 120px;
 }
+.custom-tooltip.short.lab {
+    width: 120px;
+}
 
 .__react_component_tooltip.type-dark.place-top:after, .__react_component_tooltip.type-dark.place-top:before {
     border-top-color: #484a47 !important;

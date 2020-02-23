@@ -26,6 +26,7 @@ class CaseLibrary extends Component {
         selector: ''
     }
     componentDidMount() {
+        this.setState({selector: ''});
         this._handleClickOnSelector('case');
         this.checkToken()
         .then(res => {
@@ -36,7 +37,6 @@ class CaseLibrary extends Component {
     }
     componentWillUnmount() {
         clearInterval(timer);
-        this.setState({selector: ''});
     }
 
     checkToken = () => {
@@ -55,6 +55,7 @@ class CaseLibrary extends Component {
 
     render() {
         const { selector } = this.state;
+        const { currentUser } = this.props.user;
     
         return (
             <LayoutCloudoc>
@@ -62,7 +63,7 @@ class CaseLibrary extends Component {
                     <Helmet>
                         <title>Case Library</title>
                     </Helmet>
-                    <UserStatus />
+                    <UserStatus username={currentUser.username} />
                     <main>
                         <div className={cx('flexible-container')}>
                             <div className={cx('selector')}>

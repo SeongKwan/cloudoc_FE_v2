@@ -23,9 +23,16 @@ class AnalyzeRecommendationTreatmentStore {
 
     @action initiateOpen() {
         this.openMores = [];
-        this.editableData.forEach((editableData) => {
-            this.openMores.push(false);
-        })
+        let THIS = this;
+        if (this.editableData.length > 0) {
+            this.editableData.forEach(action((diseases, i) => {
+                THIS.openMores[i] = [];
+                diseases['drugs'].forEach(action((drug, index) => {
+                    THIS.openMores[i][index] = false;
+                }))
+            }))
+        }
+        // console.log(JSON.parse(JSON.stringify(this.openMores)))
     }
 
     @action setEditableData(editableData) {
@@ -34,8 +41,8 @@ class AnalyzeRecommendationTreatmentStore {
     }
 
 
-    @action toggleOpenMores(i) {
-        this.openMores[i] = !this.openMores[i];
+    @action toggleOpenMores(indexAnl, indexDrug) {
+        this.openMores[indexAnl][indexDrug] = !this.openMores[indexAnl][indexDrug];
     }
     @action toggleOpenDetail() {
         this.openDetail = !this.openDetail;

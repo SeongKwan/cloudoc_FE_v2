@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import labStore from './labStore';
 
 class CaseEditorBasicStore {
     @observable staticData = {
@@ -51,6 +52,13 @@ class CaseEditorBasicStore {
 
     @action changeEditableData = (type, value) => {
         this.editableData[type] = value;
+        console.log(this.editableData['gender'])
+        console.log(value)
+        // if (type === 'gender' && (this.editableData.gender !== value)) {
+        //     labStore.changeGender();
+        // } else if (type === 'gender' && this.editableData.gender === value) {
+        //     console.log('stay')
+        // }
     }
 
     @action clear() {

@@ -58,7 +58,9 @@ class HeaderCloudoc extends Component {
         }
     }
     render() {
+        const { currentUser } = this.props.user;
         let { where } = this.state;
+
         return (
             <div className={cx('HeaderCloudoc')}>
                 <div className={cx('brand-logo')} onClick={this._handleClickOnLogo}>
@@ -93,7 +95,7 @@ class HeaderCloudoc extends Component {
                     </button>
                     <ul id="dropdown-content-user" className={cx('content')}>
                         <div className={cx('user-status')}>
-                            <div className={cx('nickname')}>김원장님</div>
+                            <div className={cx('nickname')}>{`${currentUser.username} 님`}</div>
                             <div className={cx('points')}>1,000 PTS</div>
                             <div className={cx('charge')}>포인트충전</div>
                         </div>

@@ -18,16 +18,18 @@ class SearchBar extends Component {
     componentDidMount() {
         this.setState({ keyword: this.props.search.keyword.cases })
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.keyword === '' && prevState.keyword !== '' ) {
+            this.handleClearKeyword();
+            this.props.Case.clearLoadMore();
+            this.props.Case.loadCases();
+        }
+    }
     componentWillUnmount() {
         this.handleClearKeyword();
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
-        if (value === '') {
-            this.handleClearKeyword();
-            this.props.Case.clearLoadMore();
-            this.props.Case.loadCases();
-        }
         this.setState({ keyword: value });
     }
     handleOnClick = (e) => {
@@ -45,6 +47,7 @@ class SearchBar extends Component {
         this.props.search.clearKeyword();
     }
     render() {
+        // console.log(JSON.parse(JSON.stringify(this.props.search.keyword)))
         return (
             <div className={cx('SearchBar')}>
                 <div className={cx('search-icon')}>
@@ -60,6 +63,7 @@ class SearchBar extends Component {
                             this.handleOnClick();
                         }
                     }} 
+                    placeholder="제목, 증상, 진단, 처방을 검색해 주세요"
                     value={this.state.keyword} />
             </div>
         );

@@ -4,25 +4,29 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import LabBar from '../../../../components/LabBar/LabBar';
 import _ from 'lodash';
-import { FiPlus } from 'react-icons/fi';
+import { FiAlertCircle } from 'react-icons/fi';
 import { FaTrash } from 'react-icons/fa';
 import ReactTooltip from 'react-tooltip';
+import $ from 'jquery';
 import './Lab.css';
 
 const cx = classNames.bind(styles);
 
-@inject('Case', 'search', 'lab', 'labListItem', 'labListForInput')
+@inject('Case', 'caseEditorBasic', 'search', 'lab', 'labListItem', 'labListForInput')
 @observer
 class Lab extends Component {
+    componentDidMount() {
+        this.props.lab.setLabCategories();
+    }
+
     componentWillUnmount() {
         this.props.lab.clear();
+        this.props.lab.clearForSelector();
     }
 
     handleOnClickPasteButton = () => {
         this.props.lab.toggleReadyForPaste();
     }
-
-    
 
     _onChange = (e) => {
         if (e.target.files.length === 0) {
@@ -31,49 +35,14 @@ class Lab extends Component {
         return this.props.lab.changeExcelFile(e.target.files[0]);
     }
 
-    onFormSubmit = (file) => {
-        // console.log(file)
-        this.props.lab.changeExcelFile(file[0]);
-        if (this.props.lab.excelFile) {
-            return this.props.lab.postExcel()
-            .then(() => {
-                const { testResults } = this.props.lab;
-                
-                this.props.lab.setEditableData(testResults[0].filter(x => x.value !== "-"));
-            })
-        }
-        if (this.props.lab.excelFile === null) {
-            return alert('업로드 할 엑셀 파일을 선택해 주세요');
-        }
-    }
-
     handleDeleteBloodTest = (selectedIndex) => {
         this.props.lab.deleteBloodTest(selectedIndex);
     }
 
     handleDeleteAll = () => {
         this.props.lab.clear();
+        this.props.lab.clearSelectedLabCategory();
     }
-
-    // _onChangeName = (e) => {
-    //     const {
-    //         dataset,
-    //         name,
-    //         value
-    //     } = e.target;
-
-    //     const {
-    //         refMin,
-    //         refMax,
-    //         optMin,
-    //         optMax,
-    //         alertMin,
-    //         alertMax
-    //     } = this.props.bloodTest[dataset.index];
-        
-    //     this.props.lab.getState(dataset.index, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
-    //     this.props.lab.handleChange(dataset.index, name, value);
-    // }
 
     _deleteBloodTest = (index) => {
         if (index !== undefined
@@ -105,12 +74,13 @@ class Lab extends Component {
         const { type } = this.props;
 
         const { editableData, staticData } = this.props.lab;
-
+        let count = 0;
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         // let labs = testResults || [];
         
         const categories = this._extractCategory();
         let dividedLabByCategory = [];
+        let categorizedLab = [];
 
         categories.forEach((category, i) => {
             dividedLabByCategory[i] = labs.filter(item => {
@@ -118,18 +88,26 @@ class Lab extends Component {
             })
         });
 
-        // console.log(JSON.parse(JSON.stringify(dividedLabByCategory)))
-
-        return dividedLabByCategory.map((arr, i) => {
+        dividedLabByCategory.forEach((arr, i) => {
             let sortedArr = _.sortBy(arr, 'name');
+            sortedArr.forEach((lab, i) => {
+                return categorizedLab.push(lab);
+            })
+        })
 
-            return <ul key={i} style={{marginBottom: '4rem'}}>
+        // console.log(JSON.parse(JSON.stringify(categorizedLab)))
+
+        return dividedLabByCategory.map((arr, index) => {
+            let sortedArr = _.sortBy(arr, 'name');
+            
+            return <ul key={index} style={{marginBottom: '4rem'}}>
                 <h6 className={cx('category-title')}>
-                    <span>[{categories[i]}]</span>
+                    <span>[{categories[index]}]</span>
                 </h6>
                 
                 {
                     sortedArr.map((lab, i) => {
+                        
                         const {
                             originalIndex,
                             name,
@@ -140,9 +118,44 @@ class Lab extends Component {
                             optMin,
                             optMax,
                             alertMin,
-                            alertMax
+                            alertMax,
+                            alertMessage,
+                            state,
+                            description,
+                            name_kor
                         } = lab;
+                        let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
+                        let alertContents;
+                        if (!!description) {
+                            alertContents = description;
+                        } else if (!!!description && alertMessage) {
+                            alertContents = alertMessage;
+                        } else {
+                            alertContents = '-'
+                        }
+                        
+                        
                         return <li key={i}>
+                            {
+                                showAlert &&
+                                <div className={cx('alert-icon', {high: state === '매우 높음'}, {low: state === '매우 낮음'})}>
+                                    <div
+                                        className={cx('icon-box')}
+                                        ref={ref => this.labAlert = ref}
+                                        data-tip={alertContents}
+                                        data-for={`tooltip-lab-alert-${index}-${i}`}
+                                        onFocus={() => { ReactTooltip.show(this.labAlert); }}
+                                        onBlur={() => { ReactTooltip.hide(this.labAlert); }}
+                                    >
+                                        <FiAlertCircle />
+                                    </div>
+                                
+                                {
+                                    (description !== '' || showAlert) &&
+                                    <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-lab-alert-${index}-${i}`} />
+                                }
+                                </div>
+                            }
                             <div className={cx('lab-name-unit')}>
                                 <div className={cx('name')}>{name}</div>
                                 <div className={cx('unit')}>[{unit}]</div>
@@ -152,6 +165,9 @@ class Lab extends Component {
                                     changeValue={this.handleChangeValueLabBar}
                                     isEditing={(type === "create" || isEditing)}
                                     index={originalIndex}
+                                    labs={dividedLabByCategory}
+                                    categoryIndex={index}
+                                    inputIndex={i}
                                     value={value}
                                     unit={unit}
                                     refMin={refMin}
@@ -201,11 +217,16 @@ class Lab extends Component {
 
     _handleChangeAddLab = (e) => {
         const { value, name } = e.target;
+
         
-        if (name === 'name') {
+        if (name === 'name' && value !== '') {
             let lab = e.target.options[e.target.selectedIndex].dataset.lab;
             this.props.lab.setAddLab(JSON.parse(lab));
+            $('#lab-value').focus();
+        } else if (name === 'name' && value === '') {
+            this.props.lab.clearAddLabSelectLab();
         }
+
         this.props.lab.handleChangeAddLab(name, value);
 
     }
@@ -218,20 +239,22 @@ class Lab extends Component {
 
     renderOptionsName = () => {
         return this.props.lab.optionsName.map((lab, i) => {
-            return <option data-lab={JSON.stringify(lab)} key={i} value={lab.name}>{lab.name}</option>
+            return <option data-lab={JSON.stringify(lab)} key={i} value={lab.name}>{`${lab.name}`}</option>
         });
     }
 
     render() {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
-        const { editableData, staticData, addLab } = this.props.lab;
+        const { editableData, staticData, addLab, labCategories, selectedLabCategory, initLabs } = this.props.lab;
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         let { length } = labs;
         // console.log(length)
         // console.log(labNames.length)
         // console.log(JSON.parse(JSON.stringify(addLab)));
-        // console.log('static ',JSON.parse(JSON.stringify(staticData)))
+        console.log('lab ',JSON.parse(JSON.stringify(editableData)))
+        // console.log('selected ',JSON.parse(JSON.stringify(selectedLabCategory)))
+        // console.log('initLabs ',JSON.parse(JSON.stringify(initLabs)))
         // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
         // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
@@ -240,13 +263,14 @@ class Lab extends Component {
         // const disabledModalButton = this.props.lab.labDates.length > 0 ? false : true;
         
         let disabledButton = length <= 0;
-        let dataTip = addLab.selectLab !== null ? `범위 :  ${addLab.selectLab['refMin']} ~ ${addLab.selectLab['refMax']}` : ''
+        // let dataTip = addLab.selectLab !== null ? `범위 :  ${addLab.selectLab['refMin']} ~ ${addLab.selectLab['refMax']}  [ ${addLab.selectLab['unit']} ]` : ''
+        let dataTip = addLab.selectLab !== null ? `${addLab.selectLab['unit']}` : ''
         
 
         return (
             <div className={cx('Lab')}>
                 <div className={cx('title-wrapper')}>
-                    <h5>진단검사</h5>
+                    <h5>혈액검사</h5>
                     {
                         (type === "create" || isEditing) &&
                         <>
@@ -255,6 +279,51 @@ class Lab extends Component {
                         </>
                     }
                 </div>
+                { (type === "create" || isEditing) &&
+                <div className={cx('category-container')}>
+                    {/* <div className={cx('add-delete-button')}>
+                        <Button variant='info' size='sm' onClick={() => {
+                            const { gender } = this.props.patientInfoStore.editableData;
+                            this.props.bloodTestStore.selectAllLabCategory();
+                            this.props.bloodTestStore.filteredEditableData(gender);
+                        }}>
+                            모든 항목 추가
+                        </Button>
+                        <Button 
+                            variant='info' 
+                            size='sm' 
+                            onClick={() => {
+                                this.props.bloodTestStore.clearForSelector()}
+                            }
+                        >
+                            모든 내용 삭제
+                        </Button>
+                    </div> */}
+                    <ul className={cx('select-list')}>
+                    {   (selectedLabCategory !== null || selectedLabCategory !== undefined) &&
+                        labCategories.map((category, i) => {
+                            return <li className={cx('select-list-item')} key={i}>
+                                <label>
+                                    <input 
+                                        type="checkbox"
+                                        value={category.value}
+                                        checked={selectedLabCategory[i].value === category.value}
+                                        onChange={(e) => {
+                                            const { gender } = this.props.caseEditorBasic.editableData;
+
+                                            this.props.lab.handleSelectLabCategories(e.target.value, i)
+                                            return this.props.lab.filteredEditableData(gender, i);
+                                        }}
+                                    />
+                                    <span>{category.label}</span>
+                                </label>
+                                    
+                            </li>
+                        })
+                    }   
+                    </ul>
+                </div>
+                }
                 <div className={cx('lab-select-input-container')}>
                     {
                         (type === 'create' || isEditing) &&
@@ -282,7 +351,7 @@ class Lab extends Component {
                                         onChange={this._handleChangeAddLab}
                                     >
                                         <option disabled>검사명</option>
-                                        <option>선택해 주세요</option>
+                                        <option value=''>선택해 주세요</option>
                                         {this.renderOptionsName()}
                                     </select>
                                 </div>
@@ -290,20 +359,28 @@ class Lab extends Component {
                         </div>                        
                         <div className={cx('form-wrapper', 'value-wrapper', 'title', 'input')}>
                             <input 
+                                ref={ref => this.labInput = ref}
                                 data-tip={dataTip}
                                 data-for="tooltip-input-value"
                                 name="value" 
-                                id="value" 
+                                id="lab-value" 
                                 type="number"
                                 placeholder="값" 
                                 onChange={this._handleChangeAddLab}
+                                onKeyDown={(e) => {
+                                    if (e.keyCode === 13 && e.target.value > 0) {
+                                        this._handleClickOnAddLab();
+                                    }
+                                }}
                                 value={addLab.value}
+                                onFocus={() => { ReactTooltip.show(this.labInput); }}
+                                onBlur={() => { ReactTooltip.hide(this.labInput); }}
                             />
                             {
                                 addLab.selectLab !== null &&
-                                <ReactTooltip className="custom-tooltip short" place="right" effect="solid" id="tooltip-input-value" />
+                                <ReactTooltip className="custom-tooltip short lab" place="right" effect="solid" id="tooltip-input-value" />
                             }
-                            <label className={cx('label-no-input', 'label-age')} htmlFor="value">검사값</label>
+                            <label className={cx('label-no-input', 'label-age')} htmlFor="lab-value">검사값</label>
                         </div>
                         
                         </div>
@@ -312,7 +389,7 @@ class Lab extends Component {
                 <div className={cx('btn-add-container')}>
                     {
                         (type === "create" || isEditing) &&
-                        <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>검사추가<FiPlus /></button>
+                        <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>개별검사추가 +</button>
                     }
                 </div>
                 <div className={cx('lab-results-list')}>

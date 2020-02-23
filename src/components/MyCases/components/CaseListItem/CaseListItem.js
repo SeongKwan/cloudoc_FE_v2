@@ -4,11 +4,9 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { GoPerson } from "react-icons/go";
 import { FiClock } from "react-icons/fi";
-// import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
-// import { IoIosWater, IoIosMan } from "react-icons/io";
 import { FaNotesMedical } from "react-icons/fa";
-import { GiBubblingBowl, GiBackPain } from "react-icons/gi";
 import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
+import { CsSmartCondition, CsSmartDrug } from 'react-icons/fi';
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +36,7 @@ class CaseListItem extends Component {
             <Link to={`/case/editor/detail/${caseId}`}>
                 <li className={cx('CaseListItem')}>
                     <div className={cx('wrapper-top')}>
-                        <div id="case-list-item-memo" className={cx('memo')}>{Case.title || '빈 제목...'}</div>
+                        <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
                             <div className={cx('created-at')}>
                                 <FiClock />{semiDate} &nbsp;&nbsp;|
@@ -58,7 +56,7 @@ class CaseListItem extends Component {
                             </div>
                         </div>
                         <div className={cx('flexbox', 'symptom')}>
-                            <span className={cx('label')}><GiBackPain /></span>
+                            <span className={cx('label')}><CsSmartCondition /></span>
                             <div className={cx('content')}>
                                 {_renderSymptom(symptom)}
                             </div>
@@ -70,7 +68,7 @@ class CaseListItem extends Component {
                             </div>
                         </div>
                         <div className={cx('flexbox', 'drug')}>
-                            <span className={cx('label')}><GiBubblingBowl /></span>
+                            <span className={cx('label')}><CsSmartDrug /></span>
                             <div className={cx('content')}>
                                 {_renderTreatments(treatment)}
                             </div>
@@ -86,9 +84,10 @@ const _renderSymptom = (symptoms = []) => {
     // const { length } = symptoms;
 
     return symptoms.map((symptom, i) => {
+        let rest = symptoms.length - 3;
         const { name } = symptom;
         if (i === 3) {
-            return <div key={i} className={cx('item')}>...</div>
+            return <div key={i} className={cx('item')}>... <span>({`${rest}`})</span></div>
         } else if (i > 3) {
             return false;
         }
@@ -101,11 +100,9 @@ const _renderSymptom = (symptoms = []) => {
 const _renderCondition = (conditions =[]) => {
     return conditions.map((condition, i) => {
         const { name } = condition;
-        // return (
-        //     <div key={i} className={cx('item')}>{name}</div>
-        // );
+        let rest = conditions.length - 2;
         if (i === 2) {
-            return <div key={i} className={cx('item')}>...</div>
+            return <div key={i} className={cx('item')}>... <span>({`${rest}`})</span></div>
         } else if (i > 2) {
             return false;
         }

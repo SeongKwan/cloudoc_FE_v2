@@ -34,7 +34,9 @@
                 color: $brand-8;
             }
             .lab-name {
-                font-weight: 700;
+                font-weight: 900;
+                &.high {color: darkred;}
+                &.low {color: darkblue;}
             }
         }
         &.check-symptoms, &.check-labs {

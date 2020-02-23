@@ -45,7 +45,7 @@ class HeaderEditor extends Component {
                         <div className={cx('label')}>뒤로</div>
                     </div>
                     {
-                        type === "detail" &&
+                        type === "detail" && !isEditing &&
                         <div 
                             className={cx('btn-tool', 'create')}
                             onClick={() => {

@@ -26,5 +26,9 @@
             outline: 0;
             border-color: $brand-1;
         }
+        &::placeholder {
+            font-weight: 100;
+            color: $gray-3;
+        }
     }
 }

@@ -119,6 +119,15 @@ class Agent {
     }
 
 
+    loadLabs() {
+        return this.get(`/labs`);
+    }
+
+
+
+
+
+
     loadConditions() {
         return this.get(`/conditions`);
     }

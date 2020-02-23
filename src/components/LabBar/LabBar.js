@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './LabBar.module.scss';
 import classNames from 'classnames/bind';
 import ReactTooltip from 'react-tooltip';
 import './LabBar.css';
+import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
-const LabBar = ({changeValue, isEditing, index, value, unit, refMax = 100, refMin = 0, optMax, optMin, currentPosition, state, alertMin, alertMax }) => {
 
-    const _renderBar = () => {
+class LabBar extends Component {
+    _renderBar = () => {
+        const {
+            labs,
+            categoryIndex, 
+            inputIndex, 
+            changeValue, 
+            isEditing, 
+            index, 
+            value, 
+            unit, 
+            refMax = 100, 
+            refMin = 0, 
+            optMax, 
+            optMin, 
+            currentPosition, 
+            state, 
+            alertMin, 
+            alertMax 
+        } = this.props;
+
         let widthBar, widthCoverBar;
         widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
         if (widthBar > 101) {
@@ -29,11 +49,45 @@ const LabBar = ({changeValue, isEditing, index, value, unit, refMax = 100, refMi
                         isEditing ? 
                         <input 
                             name="value" 
-                            id="value" 
+                            id={`lab-bar-value-${categoryIndex}-${inputIndex}`} 
                             type="number"
                             placeholder="검사값" 
                             onChange={(e) => {
-                                changeValue(index, e.target.value)
+                                console.log(e.target.value)
+                                if (e.target.value === 0) {
+                                    changeValue(index, '');
+                                }
+                                    changeValue(index, e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.keyCode === 38 || e.keyCode === 40) {
+                                    e.preventDefault();
+                                }
+                                let categoryLength = labs.length;
+                                let lastIndex;
+                                if (categoryIndex - 1 >= 0) {
+                                    lastIndex = labs[categoryIndex - 1].length - 1;
+                                }
+
+                                if (e.keyCode === 38) {
+                                    if (inputIndex - 1 >= 0) {
+                                        $(`#lab-bar-value-${categoryIndex}-${inputIndex - 1}`).focus();
+                                    } else if (inputIndex - 1 < 0) {
+                                        if (categoryIndex - 1 >= 0) {
+                                            $(`#lab-bar-value-${categoryIndex - 1}-${lastIndex}`).focus();
+                                        }
+                                    }
+                                }
+                                if (e.keyCode === 40 || e.keyCode === 13) {
+                                    if (inputIndex + 1 > labs[categoryIndex].length - 1) {
+                                        if (categoryIndex + 1 <= categoryLength - 1) {
+                                            $(`#lab-bar-value-${categoryIndex + 1}-${0}`).focus();
+                                        } else {
+
+                                        }
+                                    }
+                                    $(`#lab-bar-value-${categoryIndex}-${inputIndex + 1}`).focus();
+                                }
                             }}
                             value={value}
                         />
@@ -50,14 +104,16 @@ const LabBar = ({changeValue, isEditing, index, value, unit, refMax = 100, refMi
             </div>
         )
     }
-
-    return (
-        <div className={cx('LabBar')}>
-            {
-                _renderBar()
-            }
-        </div>
-    );
-};
+    render() {
+        
+        return (
+            <div className={cx('LabBar')}>
+                {
+                    this._renderBar()
+                }
+            </div>
+        );
+    }
+}
 
 export default LabBar;

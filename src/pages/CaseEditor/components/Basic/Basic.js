@@ -12,7 +12,8 @@ const cx = classNames.bind(styles);
     'Case',
     'login',
     'user', 
-    'caseEditorBasic'
+    'caseEditorBasic',
+    'lab'
 )
 @observer
 class Basic extends Component {
@@ -37,10 +38,10 @@ class Basic extends Component {
     _handleChange = (e) => {
         const { value, name: type } = e.target;
         this.props.caseEditorBasic.changeEditableData(type, value);
-        // if (type === 'gender') this.props.bloodTestStore.clearForSelector();
     }
     _handleClickGender = (e) => {
         const { dataset } = e.target;
+        this.props.lab.clearForSelector();
         this.props.caseEditorBasic.changeEditableData(dataset.name, dataset.value);
     }
 
@@ -121,7 +122,11 @@ class Basic extends Component {
                                             className={cx('icon-wrapper', {checked: gender === 'male'})}
                                             data-value="male"
                                             data-name="gender"
-                                            onClick={this._handleClickGender}
+                                            onClick={(e) => {
+                                                if (gender === 'female') {
+                                                    this._handleClickGender(e);
+                                                }
+                                            }}
                                         >
                                             남자
                                         </div>
@@ -139,7 +144,11 @@ class Basic extends Component {
                                             className={cx('icon-wrapper', {checked: gender === 'female'})}
                                             data-value="female"
                                             data-name="gender"
-                                            onClick={this._handleClickGender}
+                                            onClick={(e) => {
+                                                if (gender === 'male') {
+                                                    this._handleClickGender(e);
+                                                }
+                                            }}
                                         >
                                             여자
                                         </div>
