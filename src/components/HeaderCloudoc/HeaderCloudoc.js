@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import brandLogo from '../../styles/img/logo_main.png';
-import { FiUser, FiLogOut, FiMenu } from "react-icons/fi";
+import { FiUser, FiLogOut, FiMenu } from "../../lib/react-icons/fi";
 import $ from 'jquery';
 import './HeaderCloudoc.css';
 

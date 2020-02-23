@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './SearchBar.module.scss';
 import classNames from 'classnames/bind';
-import { FiSearch } from "react-icons/fi";
+import { FiSearch } from "../../../../lib/react-icons/fi";
 
 const cx = classNames.bind(styles);
 

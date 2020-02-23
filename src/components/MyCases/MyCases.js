@@ -5,7 +5,7 @@ import styles from './MyCases.module.scss';
 import classNames from 'classnames/bind';
 // import { Helmet } from "react-helmet";
 import Loader from '../../components/Loader/Loader';
-import { FiPlus } from "react-icons/fi";
+import { FiPlus } from "../../lib/react-icons/fi";
 import SearchBar from './components/SearchBar/SearchBar';
 import CaseListItem from './components/CaseListItem/CaseListItem';
 

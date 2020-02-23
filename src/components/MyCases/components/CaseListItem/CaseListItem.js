@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import styles from './CaseListItem.module.scss';
 import classNames from 'classnames/bind';
+import { GoPerson } from "../../../../lib/react-icons/go";
+import { FiClock, CsSmartCondition, CsSmartDrug } from "../../../../lib/react-icons/fi";
+import { FaNotesMedical } from "../../../../lib/react-icons/fa";
 import { Link } from 'react-router-dom';
-import { GoPerson } from "react-icons/go";
-import { FiClock } from "react-icons/fi";
-import { FaNotesMedical } from "react-icons/fa";
 import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
-import { CsSmartCondition, CsSmartDrug } from 'react-icons/fi';
 
 const cx = classNames.bind(styles);
 

@@ -14,7 +14,7 @@ import {
     FiFileText,
     FiHelpCircle,
     FiEdit
-} from "react-icons/fi";
+} from "../../lib/react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
 
