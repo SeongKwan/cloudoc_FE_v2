@@ -19,7 +19,7 @@ class SearchBar extends Component {
         this.setState({ keyword: this.props.search.keyword.cases })
     }
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.keyword === '' && prevState.keyword !== '' ) {
+        if (this.state.keyword === '' && prevProps.search.keyword.cases !== '' ) {
             this.handleClearKeyword();
             this.props.Case.clearLoadMore();
             this.props.Case.loadCases();
@@ -47,7 +47,7 @@ class SearchBar extends Component {
         this.props.search.clearKeyword();
     }
     render() {
-        // console.log(JSON.parse(JSON.stringify(this.props.search.keyword)))
+        console.log(JSON.parse(JSON.stringify(this.props.search.keyword)))
         return (
             <div className={cx('SearchBar')}>
                 <div className={cx('search-icon')}>
