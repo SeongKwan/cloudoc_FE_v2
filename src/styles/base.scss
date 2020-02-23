@@ -1,37 +1,26 @@
 @import './resetCSS';
 @import './loader';
 @import './animate';
-// @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700|Raleway:400,700&display=swap');
-// @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,400,900&display=swap&subset=korean');
-// @import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
 
 @font-face {
     font-family: 'NotoSansKR';
-    // font-style: normal;
     font-weight: 100;
     src: url('./font/NotoSansCJKkr-Thin.ttf') format('truetype');
-    // src: url('../fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
-    // font-style: normal;
     font-weight: 400;
     src: url('./font/NotoSansCJKkr-Regular.ttf') format('truetype');
-    // src: url('../fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
-    // font-style: normal;
     font-weight: 700;
     src: url('./font/NotoSansCJKkr-Bold.ttf') format('truetype');
-    // src: url('../fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
-    // font-style: normal;
     font-weight: 900;
     src: url('./font/NotoSansCJKkr-Black.ttf') format('truetype');
-    // src: url('../fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
 }
 
 *,
@@ -53,9 +42,7 @@
 
 html {
     font-size: 16px;
-    // font-family: 'Noto Sans KR', sans-serif;
-    // font-family: NotoSansKR, sans-serif !important;
-    font-family: NotoSansKR !important;
+    font-family: NotoSansKR, sans-serif !important;
 
     @include media('xl') {
         // font-size: 15px;
