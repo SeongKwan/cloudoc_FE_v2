@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-import modalStore from './modalStore';
+// import modalStore from './modalStore';
 import agent from '../utils/agent';
 import bloodTestItems from '../constant/bloodTestItem';
 import _ from 'lodash';
@@ -29,6 +29,11 @@ class LabStore {
         name: '',
         value: '',
         selectLab: null
+    };
+
+    @observable sortType = {
+        name: 'asc',
+        value: ''
     }
 
     @computed get optionsCategory() {
@@ -303,6 +308,7 @@ class LabStore {
                         value: lab.value,
                         unit,
                         state: '',
+                        stateOrder: 0,
                         refMin,
                         refMax,
                         optMin,
@@ -476,55 +482,76 @@ class LabStore {
         if (alertMin !== null || alertMax !== null) {
             if (value === '' || value === null || value === undefined) {
                 this.editableData[index]['state'] = '-';
+                this.editableData[index]['stateOrder'] = 0;
+                this.staticData[index]['stateOrder'] = 0;
                 return '-';
             }
             if (value !== null && value !== '' && value < alertMin) {
                 this.editableData[index]['state'] = '매우 낮음';
+                this.editableData[index]['stateOrder'] = 1;
+                this.staticData[index]['stateOrder'] = 1;
                 return '매우 낮음'
             }
             if (value !== null && value !== '' && value > alertMax) {
                 this.editableData[index]['state'] = '매우 높음';
+                this.editableData[index]['stateOrder'] = 5;
+                this.staticData[index]['stateOrder'] = 5;
                 return '매우 높음'
             }
         }
 
         if (value === '' || value === 0 || value === null) {
             this.editableData[index]['state'] = '-';
-            
+            this.editableData[index]['stateOrder'] = 0;
+            this.staticData[index]['stateOrder'] = 0;
             return '-';
         }
         else if (value === refMin && value === optMin) {
             
             this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            this.staticData[index]['stateOrder'] = 3;
             return '최적'
         }
         else if (value === refMax && value === optMax) {
             
             this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            this.staticData[index]['stateOrder'] = 3;
             return '최적'
         }
         else if (refMin <= value && value < optMin) {
             
             this.editableData[index]['state'] = '낮음';
+            this.editableData[index]['stateOrder'] = 2;
+            this.staticData[index]['stateOrder'] = 2;
             return '낮음';
         }
         else if (optMin <= value && value <= optMax) {
             
             this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            this.staticData[index]['stateOrder'] = 3;
             return '최적';
         }
         else if (optMax <= value && value <= refMax) {
             
             this.editableData[index]['state'] = '높음';
+            this.editableData[index]['stateOrder'] = 4;
+            this.staticData[index]['stateOrder'] = 4;
             return '높음';
         }
         else if (value < refMin) {
             this.editableData[index]['state'] = '매우 낮음';
+            this.editableData[index]['stateOrder'] = 1;
+            this.staticData[index]['stateOrder'] = 1;
             return '매우 낮음';
         }
         else if (refMax < value) {
             
             this.editableData[index]['state'] = '매우 높음';
+            this.editableData[index]['stateOrder'] = 5;
+            this.staticData[index]['stateOrder'] = 5;
             return '매우 높음';
         }
     }
@@ -533,6 +560,20 @@ class LabStore {
     @action initCaseDetailData(labs) {
         this.staticData = labs;
         this.editableData = labs;
+
+        this.editableData.forEach((editableData, i) => {
+            const {
+                refMin,
+                refMax,
+                optMin,
+                optMax,
+                alertMin,
+                alertMax,
+                value
+            } = editableData;
+            
+            this.getState(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
+        })
 
         let filteredArray = _.uniqBy(labs, 'category');
 
@@ -793,6 +834,23 @@ class LabStore {
             if (this.sortingType.state === 'down' || this.sortingType.state === '') {
                 return this.changeSortingType(type, 'up');
             }
+        }
+    }
+
+
+    @action changeSortType(type, direction) {
+        this.sortType = {
+            name: '',
+            value: ''
+        };
+
+        this.sortType[type] = direction;
+    }
+
+    @action clearSortType() {
+        this.sortType = {
+            name: 'asc',
+            value: ''
         }
     }
 

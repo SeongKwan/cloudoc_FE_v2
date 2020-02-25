@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './CollapsibleBox.module.scss';
 import classNames from 'classnames/bind';
-import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from '../../lib/react-icons/md';
 import './tooltip.css';
 
 const cx = classNames.bind(styles);

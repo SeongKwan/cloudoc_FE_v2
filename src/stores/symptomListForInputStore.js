@@ -47,6 +47,10 @@ class SymptomListForInputStore {
         this.maxIndex = i;
     }
 
+    @action clearSelectedIndex() {
+        this.selectedIndex = - 1;
+    }
+
     @action clear() {
         this.position = {
             top: 0,

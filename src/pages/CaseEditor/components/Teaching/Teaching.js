@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import styles from './Teaching.module.scss';
 import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
-import { FiPlus } from 'react-icons/fi';
-import { FaTrash } from 'react-icons/fa';
+import { FiPlus } from '../../../../lib/react-icons/fi';
+import { FaTrash } from '../../../../lib/react-icons/fa';
 import TextareaAutosize from 'react-textarea-autosize';
 
 const cx = classNames.bind(styles);

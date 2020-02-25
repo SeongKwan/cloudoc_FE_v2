@@ -292,8 +292,10 @@
                                             padding: 0.5rem;
                                             display: flex;
                                             margin-top: 0.5rem;
+                                            flex-wrap: wrap;
                                             div {
-                                                display: inline-block;
+                                                margin-bottom: 0.5rem;
+                                                margin-right: 4px;
                                                 font-size: 0.7rem;
                                                 
                                                 a.drug {

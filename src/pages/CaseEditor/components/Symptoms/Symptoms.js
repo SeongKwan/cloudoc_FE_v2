@@ -4,10 +4,10 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import {
     FiSearch, FiX
-} from 'react-icons/fi';
+} from '../../../../lib/react-icons/fi';
 import {
     FaTrash
-} from 'react-icons/fa';
+} from '../../../../lib/react-icons/fa';
 import $ from 'jquery';
 
 const cx = classNames.bind(styles);
@@ -35,6 +35,7 @@ class Symptoms extends Component {
             this.setState({ keyword: '', focusParent: false, selected: -1});
             this.props.search.clearKeyword();
             this.props.symptomListItem.clearSearchKeyword();
+            this.props.symptomListForInput.clearSelectedIndex();
         }
     }
     _toggleOnFocus = () => {
@@ -145,7 +146,7 @@ class Symptoms extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, staticData } = this.props.symptom;
-        const { length } = editableData;
+        // const { length } = editableData;
         const { symptoms } = this.props.symptomListItem;
 
         return (
@@ -178,7 +179,7 @@ class Symptoms extends Component {
                                     value={this.state.keyword}
                                     onKeyDown={(e) => {
                                         const { focusParent, keyword } = this.state;
-                                        const { selectedIndex, maxIndex, currentIndex } = this.props.symptomListForInput;
+                                        const { selectedIndex, maxIndex } = this.props.symptomListForInput;
                                         const symptoms = this.props.symptomListItem.symptoms || [];
                                         let index;
 
@@ -202,11 +203,8 @@ class Symptoms extends Component {
                                         }
                                         if (e.keyCode === 27) {
                                             this.setState({keyword: '', focusParent: false, selected: -1})
-                                            if (currentIndex < 0 || currentIndex === null) return false;
-                                            this.props.symptomListForInput.clear();
-                                            
-                                            this.props.symptom.pressESC(currentIndex);
-                                            this.props.symptomListItem.setSearchKeyword('');
+                                            this.props.symptomListForInput.clearSelectedIndex();
+                                            this.props.symptomListItem.setSearchKeyword('');;
                                         }
 
                                         if(e.keyCode === 38) {

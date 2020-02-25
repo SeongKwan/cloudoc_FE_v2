@@ -4,8 +4,8 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import LabBar from '../../../../components/LabBar/LabBar';
 import _ from 'lodash';
-import { FiAlertCircle } from 'react-icons/fi';
-import { FaTrash } from 'react-icons/fa';
+import { FiAlertCircle } from '../../../../lib/react-icons/fi';
+import { FaTrash, FaSortAlphaUp, FaSortAlphaDown, FaSortNumericDown, FaSortNumericUp } from '../../../../lib/react-icons/fa';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 import './Lab.css';
@@ -21,6 +21,7 @@ class Lab extends Component {
 
     componentWillUnmount() {
         this.props.lab.clear();
+        this.props.lab.clearSortType();
         this.props.lab.clearForSelector();
     }
 
@@ -69,18 +70,50 @@ class Lab extends Component {
         } else return false;
     }
 
+    handleClickOnSort = (name) => {
+        const { sortType } = this.props.lab;
+        let type, direction;
+
+        if (name === 'name') {
+            type = 'name'
+            if (sortType.name !== '') {
+                if (sortType.name === 'asc') {
+                    direction = 'desc';
+                }
+                if (sortType.name === 'desc') {
+                    direction = 'asc';
+                }
+            } else if (sortType.name === '') {
+                direction = 'asc';
+            }
+        } else if (name === 'value') {
+            type = 'value'
+            if (sortType.value !== '') {
+                if (sortType.value === 'asc') {
+                    direction = 'desc';
+                }
+                if (sortType.value === 'desc') {
+                    direction = 'asc';
+                }
+            } else if (sortType.value === '') {
+                direction = 'asc';
+            }
+        }
+        this.props.lab.changeSortType(type, direction);
+    }
+
     _renderResults = () => {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
 
-        const { editableData, staticData } = this.props.lab;
-        let count = 0;
+        const { editableData, staticData, sortType } = this.props.lab;
         let labs = (type === "create" || isEditing) ? editableData : staticData;
-        // let labs = testResults || [];
         
         const categories = this._extractCategory();
         let dividedLabByCategory = [];
         let categorizedLab = [];
+
+        
 
         categories.forEach((category, i) => {
             dividedLabByCategory[i] = labs.filter(item => {
@@ -88,17 +121,78 @@ class Lab extends Component {
             })
         });
 
-        dividedLabByCategory.forEach((arr, i) => {
-            let sortedArr = _.sortBy(arr, 'name');
-            sortedArr.forEach((lab, i) => {
-                return categorizedLab.push(lab);
-            })
-        })
+        // dividedLabByCategory.forEach((arr, i) => {
+        //     let sortedArr = [];
+        //     // let sortedArr = _.sortBy(arr, 'name');
+        //     // //Ascending Order:
+        //     // _.sortBy([2, 3, 1], function(num){
+        //     //     return num;
+        //     // }); // [1, 2, 3]
+
+
+        //     // //Descending Order:
+        //     // _.sortBy([2, 3, 1], function(num){
+        //     //     return num * -1;
+        //     // }); // [3, 2, 1]
+
+        //     if (sortType.name !== '') {
+        //         if (sortType.name === 'asc') {
+        //             sortedArr = _.sortBy(arr, 'name');
+        //         } else {
+        //             sortedArr = _.sortBy(arr, 'name').reverse();
+        //         }
+        //     }
+        //     if (sortType.value !== '') {
+        //         if (sortType.value === 'asc') {
+        //             sortedArr = _.sortBy(arr, 'value');
+        //         } else {
+        //             sortedArr = _.sortBy(arr, 'value').reverse();
+        //         }
+        //     }
+
+
+        //     sortedArr.forEach((lab, i) => {
+        //         return categorizedLab.push(lab);
+        //     })
+        // })
 
         // console.log(JSON.parse(JSON.stringify(categorizedLab)))
 
         return dividedLabByCategory.map((arr, index) => {
-            let sortedArr = _.sortBy(arr, 'name');
+            console.log(arr)
+            // let sortedArr = _.sortBy(arr, 'name');
+            let sortedArr = [];
+            // let sortedArr = _.sortBy(arr, 'name');
+            // //Ascending Order:
+            // _.sortBy([2, 3, 1], function(num){
+            //     return num;
+            // }); // [1, 2, 3]
+
+
+            // //Descending Order:
+            // _.sortBy([2, 3, 1], function(num){
+            //     return num * -1;
+            // }); // [3, 2, 1]
+
+            if (sortType.name !== '') {
+                if (sortType.name === 'asc') {
+                    sortedArr = _.sortBy(arr, 'name');
+                } else {
+                    sortedArr = _.sortBy(arr, 'name').reverse();
+                }
+            }
+            if (sortType.value !== '') {
+                if (sortType.value === 'asc') {
+                    sortedArr = _.sortBy(arr, ['stateOrder', 'name']);
+                } else {
+                    sortedArr = _.sortBy(arr, ['stateOrder', 'name']).reverse();
+                }
+            }
+
+
+            sortedArr.forEach((lab, i) => {
+                return categorizedLab.push(lab);
+            })
             
             return <ul key={index} style={{marginBottom: '4rem'}}>
                 <h6 className={cx('category-title')}>
@@ -246,16 +340,17 @@ class Lab extends Component {
     render() {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
-        const { editableData, staticData, addLab, labCategories, selectedLabCategory, initLabs } = this.props.lab;
+        const { editableData, staticData, addLab, labCategories, selectedLabCategory, sortType } = this.props.lab;
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         let { length } = labs;
-        // console.log(length)
+        // console.log(sortType)
         // console.log(labNames.length)
         // console.log(JSON.parse(JSON.stringify(addLab)));
+        // console.log('sortType ',JSON.parse(JSON.stringify(sortType)))
         // console.log('lab ',JSON.parse(JSON.stringify(editableData)))
         // console.log('selected ',JSON.parse(JSON.stringify(selectedLabCategory)))
         // console.log('initLabs ',JSON.parse(JSON.stringify(initLabs)))
-        // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
+        console.log('editable ',JSON.parse(JSON.stringify(staticData)))
         // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
         // const nameSorting = testName;
@@ -392,6 +487,29 @@ class Lab extends Component {
                         <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>개별검사추가 +</button>
                     }
                 </div>
+                {
+                    length > 0 &&
+                    <div className={cx('sort-button-container')}>
+                        <button onClick={() => {this.handleClickOnSort('name')}}  className={cx({deactive: sortType.name === ''}, 'name', {asc: sortType.name === 'asc'}, {desc: sortType.name === 'desc'})}>
+                            <span>이름순</span>
+                            {
+                                sortType.name !== '' &&
+                                <>
+                                    {(sortType.name === 'asc') ? <FaSortAlphaUp /> : <FaSortAlphaDown /> }
+                                </>
+                            }
+                        </button>
+                        <button onClick={() => {this.handleClickOnSort('value')}}  className={cx({deactive: sortType.value === ''}, 'value', {asc: sortType.value === 'asc'}, {desc: sortType.value === 'desc'})}>
+                            <span>상태순</span>
+                            {
+                                sortType.value !== '' &&
+                                <>
+                                    {(sortType.value === 'asc') ? <FaSortNumericUp /> : <FaSortNumericDown /> }
+                                </>
+                            }
+                        </button>
+                    </div>
+                }
                 <div className={cx('lab-results-list')}>
                     <ul>
                         {

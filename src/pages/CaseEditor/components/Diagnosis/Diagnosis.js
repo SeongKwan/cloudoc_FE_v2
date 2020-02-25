@@ -4,10 +4,10 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import {
     FiSearch, FiX
-} from 'react-icons/fi';
+} from '../../../../lib/react-icons/fi';
 import {
     FaTrash
-} from 'react-icons/fa';
+} from '../../../../lib/react-icons/fa';
 import $ from 'jquery';
 
 const cx = classNames.bind(styles);
@@ -34,6 +34,7 @@ class Diagnosis extends Component {
         if (this.searchInput && !this.searchInput.contains(event.target)) {
             this.setState({ keyword: '', focusParent: false, selected: -1});
             this.props.search.clearKeyword();
+            this.props.diagnosisListForInput.clearSelectedIndex();
             this.props.diagnosisListItem.clearSearchKeyword();
         }
     }
@@ -183,7 +184,7 @@ class Diagnosis extends Component {
                                 value={this.state.keyword}
                                 onKeyDown={(e) => {
                                     const { focusParent, keyword } = this.state;
-                                    const { selectedIndex, maxIndex, currentIndex } = this.props.diagnosisListForInput;
+                                    const { selectedIndex, maxIndex } = this.props.diagnosisListForInput;
                                     const diagnosises = this.props.diagnosisListItem.diagnosises || [];
                                     let index;
 
@@ -207,10 +208,8 @@ class Diagnosis extends Component {
                                     }
                                     if (e.keyCode === 27) {
                                         this.setState({keyword: '', focusParent: false, selected: -1})
-                                        if (currentIndex < 0 || currentIndex === null) return false;
-                                        this.props.diagnosisListForInput.clear();
                                         
-                                        this.props.symptom.pressESC(currentIndex);
+                                        this.props.diagnosisListForInput.clearSelectedIndex();
                                         this.props.diagnosisListItem.setSearchKeyword('');
                                     }
 
@@ -236,22 +235,24 @@ class Diagnosis extends Component {
                                         if(!focusParent) {
                                             this.setState({focusParent: true})
                                         } else {
-                                            if (selectedIndex < 0) {
-                                                index = 0;
-                                                this._scroll(index);
-                                                this.setState({keyword: diagnosises[0].name})
-                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
-                                            }
-                                            if (selectedIndex >= 0 && selectedIndex < maxIndex) {
-                                                index = selectedIndex + 1;
-                                                this._scroll(index);
-                                                this.setState({keyword: diagnosises[index].name})
-                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
-                                            }
-                                            if (selectedIndex === maxIndex) {
-                                                this._scroll(maxIndex);
-                                                this.setState({keyword: diagnosises[maxIndex].name})
-                                                return;
+                                            if (diagnosises.length > 0) {
+                                                if (selectedIndex < 0) {
+                                                    index = 0;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: diagnosises[0].name})
+                                                    return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                                }
+                                                if (selectedIndex >= 0 && selectedIndex < maxIndex) {
+                                                    index = selectedIndex + 1;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: diagnosises[index].name})
+                                                    return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                                }
+                                                if (selectedIndex === maxIndex) {
+                                                    this._scroll(maxIndex);
+                                                    this.setState({keyword: diagnosises[maxIndex].name})
+                                                    return;
+                                                }
                                             }
                                         }
                                     }

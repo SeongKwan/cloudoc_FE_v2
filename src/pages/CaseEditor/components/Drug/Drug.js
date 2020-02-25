@@ -4,10 +4,10 @@ import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
 import {
     FiSearch, FiX, FiPlus
-} from 'react-icons/fi';
+} from '../../../../lib/react-icons/fi';
 import {
     FaTrash
-} from 'react-icons/fa';
+} from '../../../../lib/react-icons/fa';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import $ from 'jquery';
@@ -35,7 +35,9 @@ class Drug extends Component {
     _handleClickOutside = (event) => {
         if (this.searchInput && !this.searchInput.contains(event.target)) {
             this.setState({ keyword: '', focusParent: false, selected: -1});
+
             this.props.search.clearKeyword();
+            this.props.drugListForInput.clearSelectedIndex();
             this.props.drugListItem.clearSearchKeyword();
         }
     }
@@ -194,7 +196,7 @@ class Drug extends Component {
                                     value={this.state.keyword}
                                     onKeyDown={(e) => {
                                         const { focusParent, keyword } = this.state;
-                                        const { selectedIndex, maxIndex, currentIndex } = this.props.drugListForInput;
+                                        const { selectedIndex, maxIndex } = this.props.drugListForInput;
                                         const drugs = this.props.drugListItem.drugs || [];
                                         let index;
 
@@ -218,10 +220,7 @@ class Drug extends Component {
                                         }
                                         if (e.keyCode === 27) {
                                             this.setState({keyword: '', focusParent: false, selected: -1})
-                                            if (currentIndex < 0 || currentIndex === null) return false;
-                                            this.props.drugListForInput.clear();
-                                            
-                                            this.props.treatment.pressESC(currentIndex);
+                                            this.props.drugListForInput.clearSelectedIndex();
                                             this.props.drugListItem.setSearchKeyword('');
                                         }
 

@@ -47,7 +47,6 @@ class SearchBar extends Component {
         this.props.search.clearKeyword();
     }
     render() {
-        console.log(JSON.parse(JSON.stringify(this.props.search.keyword)))
         return (
             <div className={cx('SearchBar')}>
                 <div className={cx('search-icon')}>

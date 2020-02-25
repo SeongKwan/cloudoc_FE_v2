@@ -129,6 +129,28 @@
         }
     }
 
+    .sort-button-container {
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        span {
+            display: inline-block;
+        }
+        
+        svg {
+            margin-left: 0.3rem;
+        }
+        button {
+            &.deactive {
+                background-color: $oc-gray-2;
+            }
+        }
+        button:first-child {
+            margin-right: 0.5em;
+        }
+    }
+
     .lab-results-list {
         padding-left: 1rem;
 
@@ -279,6 +301,8 @@
             }
         }
     }
+
+    
 
     .results-wrapper {
         position: absolute;
