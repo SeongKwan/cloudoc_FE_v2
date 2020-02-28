@@ -17,11 +17,14 @@ import {
 } from "../../lib/react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PrintPage from '../../pages/PrintPage';
+import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('Case')
+@inject('Case', 'user')
 @observer
 class HeaderEditor extends Component {
 
@@ -34,6 +37,10 @@ class HeaderEditor extends Component {
                 return false;
             }
         }
+
+        console.log(JSON.parse(JSON.stringify(this.props.Case.currentCase)))
+        console.log(JSON.parse(JSON.stringify(this.props.user.currentUser)))
+
         return (
             <header className={cx('HeaderEditor')}>
                 <div className={cx('tool-bar')}>
@@ -70,7 +77,7 @@ class HeaderEditor extends Component {
                                             alert('정상적으로 수정되었습니다')
                                             this.props.Case.toggleIsEditing();
                                         }
-                                        {/* setTimeout(() => {this.props.Case.toggleIsEditing();}, 500); */}
+                                        
                                     })
                                     .catch(err => {
                                         console.log(err)
@@ -132,16 +139,44 @@ class HeaderEditor extends Component {
                                 <FiTrash />
                                 <div className={cx('label')}>삭제</div>
                             </div>
-                            <div className={cx('btn-tool', 'question')}>
+
+
+                            <div 
+                                className={cx('btn-tool', 'question')}
+                                onClick={() => {
+                                    this.props.history.push(`/report`)
+                                }}
+                            >
                                 <FiMessageCircle />
                                 <div className={cx('label')}>질문</div>
                             </div>
                         </>
                     }
-                    <div className={cx('btn-tool', 'report')}>
-                        <FiFileText />
-                        <div className={cx('label')}>리포트</div>
-                    </div>
+
+
+
+
+                    
+                    {
+                        this.props.Case.currentCase !== undefined && type === "detail" &&
+                        <PDFDownloadLink 
+                            className={cx('btn-tool', 'report')}
+                            document={<PrintPage user={this.props.user.currentUser} currentCase={this.props.Case.currentCase} />}
+                            fileName={`${this.props.Case.currentCase.title}_${getLocaleDateWithYMS(this.props.Case.currentCase.created_date)}.pdf`}
+                            style={{
+                                textDecoration: "none"
+                            }}
+                        >
+                            <FiFileText />
+                            
+                            <div className={cx('label')}>리포트</div>
+                        </PDFDownloadLink>
+                    }
+
+
+
+
+
                 </div>
                 <div className={cx('menu')}>
                     <div className={cx('btn-tool', 'qna')}>

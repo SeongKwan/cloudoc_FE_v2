@@ -24,11 +24,15 @@ function getLocaleDateWithYYYY(_datetime) {
     let d = new Date(_datetime);
     return moment(d).tz(moment.tz.guess()).format("YYYYMMDD");
 }
+function getLocaleDateWithYMS(_datetime) {
+    let d = new Date(_datetime);
+    return moment(d).tz(moment.tz.guess()).format("YYYY/MM/DD");
+}
 
 
 
 
-export { toUnix, getLocaleFullDateWithTime, getLocaleDateWithYYYY, getLocaleSemiDateWithTime }
+export { toUnix, getLocaleFullDateWithTime, getLocaleDateWithYYYY, getLocaleSemiDateWithTime, getLocaleDateWithYMS }
 
 
 // getLocaleDatetime = (_datetime) => {

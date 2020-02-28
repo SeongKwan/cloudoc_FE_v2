@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import CaseLibrary from '../../pages/CaseLibrary';
-import PrintPage from '../../pages/PrintPage';
+// import PrintPage from '../../pages/PrintPage';
 import Page404 from '../../pages/Page404';
 import {
     BrowserView,
@@ -53,6 +53,7 @@ class Routes extends Component {
         });
     }
     render() {
+        
         return (
             <>
                 {/* <MobileView>
@@ -82,8 +83,11 @@ class Routes extends Component {
                         <Route path="/lecture">
                             <Lecture />
                         </Route>
-                        <Route path="/print">
-                            <PrintPage />
+                        <Route path="/report/:caseId">
+                        {/* {
+                            this.props.Case.currentCase !== undefined && this.props.Case.currentCase !== null &&
+                            <PrintPage user={this.props.user.currentUser} currentUser={this.props.Case.currentCase}/>
+                        } */}
                         </Route>
                         <Route>
                             <Page404 />

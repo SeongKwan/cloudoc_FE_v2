@@ -52,8 +52,6 @@ class CaseEditorBasicStore {
 
     @action changeEditableData = (type, value) => {
         this.editableData[type] = value;
-        console.log(this.editableData['gender'])
-        console.log(value)
         // if (type === 'gender' && (this.editableData.gender !== value)) {
         //     labStore.changeGender();
         // } else if (type === 'gender' && this.editableData.gender === value) {

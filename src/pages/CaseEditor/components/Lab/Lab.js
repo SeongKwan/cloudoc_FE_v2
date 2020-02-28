@@ -110,6 +110,9 @@ class Lab extends Component {
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         
         const categories = this._extractCategory();
+
+        console.log(JSON.parse(JSON.stringify(categories)))
+        
         let dividedLabByCategory = [];
         let categorizedLab = [];
 
@@ -121,59 +124,21 @@ class Lab extends Component {
             })
         });
 
-        // dividedLabByCategory.forEach((arr, i) => {
-        //     let sortedArr = [];
-        //     // let sortedArr = _.sortBy(arr, 'name');
-        //     // //Ascending Order:
-        //     // _.sortBy([2, 3, 1], function(num){
-        //     //     return num;
-        //     // }); // [1, 2, 3]
-
-
-        //     // //Descending Order:
-        //     // _.sortBy([2, 3, 1], function(num){
-        //     //     return num * -1;
-        //     // }); // [3, 2, 1]
-
-        //     if (sortType.name !== '') {
-        //         if (sortType.name === 'asc') {
-        //             sortedArr = _.sortBy(arr, 'name');
-        //         } else {
-        //             sortedArr = _.sortBy(arr, 'name').reverse();
-        //         }
-        //     }
-        //     if (sortType.value !== '') {
-        //         if (sortType.value === 'asc') {
-        //             sortedArr = _.sortBy(arr, 'value');
-        //         } else {
-        //             sortedArr = _.sortBy(arr, 'value').reverse();
-        //         }
-        //     }
-
-
-        //     sortedArr.forEach((lab, i) => {
-        //         return categorizedLab.push(lab);
-        //     })
-        // })
-
-        // console.log(JSON.parse(JSON.stringify(categorizedLab)))
-
         return dividedLabByCategory.map((arr, index) => {
-            console.log(arr)
             // let sortedArr = _.sortBy(arr, 'name');
-            let sortedArr = [];
             // let sortedArr = _.sortBy(arr, 'name');
             // //Ascending Order:
             // _.sortBy([2, 3, 1], function(num){
-            //     return num;
-            // }); // [1, 2, 3]
-
-
-            // //Descending Order:
-            // _.sortBy([2, 3, 1], function(num){
-            //     return num * -1;
-            // }); // [3, 2, 1]
-
+                //     return num;
+                // }); // [1, 2, 3]
+                
+                
+                // //Descending Order:
+                // _.sortBy([2, 3, 1], function(num){
+                    //     return num * -1;
+                    // }); // [3, 2, 1]
+            let sortedArr = [];
+                    
             if (sortType.name !== '') {
                 if (sortType.name === 'asc') {
                     sortedArr = _.sortBy(arr, 'name');

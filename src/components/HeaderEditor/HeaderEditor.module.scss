@@ -49,6 +49,15 @@
             font-size: 0.7rem;
         }
     }
+
+    a.report {
+        border: 0 !important;
+        background-color: transparent !important;
+        color: $white !important;
+        &:hover {
+            background-color: rgba($black, 0.3) !important;
+        }
+    }
     
     .title {
         input {

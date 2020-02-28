@@ -14,6 +14,12 @@ configure({
     enforceActions: "observed"
 });
 
+// ReactDOM.render(
+//     <PDFViewer style={{width: '100vw', height: '100vh'}}>
+//         <PrintPage />
+//     </PDFViewer>
+// , document.getElementById('root'));
+
 ReactDOM.render(
     <Provider {...stores}>
         <App />
