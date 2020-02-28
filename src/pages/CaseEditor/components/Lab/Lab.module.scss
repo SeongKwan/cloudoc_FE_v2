@@ -65,8 +65,14 @@
 
     .button-paste {
         user-select: default !important;
-        margin-right: auto;
         margin-left: 1rem;
+    }
+    
+
+    .add-manual {
+        margin-left: 0.5rem;
+        margin-right: auto;
+
     }
 
     .title-wrapper {
@@ -201,10 +207,11 @@
 
             .lab-name-unit {
                 position: relative;
-                width: 400px;
+                // width: 400px;
+                flex: 1;
 
                 @include media('lg') {
-                    width: 190px;
+                    // width: 190px;
                 }
 
                 .unit {
@@ -221,6 +228,9 @@
             }
 
             .alert-icon {
+                position: absolute;
+                top: 0;
+                right: 8px;
                 width: 35px;
                 font-size: 1.6rem;
                 display: flex;
@@ -235,6 +245,7 @@
 
             .bar-wrapper {
                 flex: 1;
+                max-width: 240px;
                 margin-right: 3rem;
                 @include media('lg') {
                     margin-right: 2rem;

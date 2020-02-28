@@ -151,7 +151,14 @@ class Drug extends Component {
     }
 
     _handleClickOnAddFormula = () => {
-        this.props.treatment.addDrug();
+        const { editableData } = this.props.treatment;
+        const { length } = editableData;
+
+        if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
+            this.props.treatment.addDrug();
+        } else {
+            alert('약재명 또는 수량이 입력되지 않았습니다');
+        }
     }
 
     render() {
@@ -371,6 +378,8 @@ class Drug extends Component {
                                                                 if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
                                                                     this._handleClickOnAddFormula();
                                                                     return setTimeout(() => {$(`#herb-name-${i + 1}`).focus();}, 100);
+                                                                } else {
+                                                                    alert('약재명 또는 수량이 입력되지 않았습니다');
                                                                 }
                                                             }
                                                         }}

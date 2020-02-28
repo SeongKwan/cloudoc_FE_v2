@@ -380,7 +380,7 @@ class PrintPage extends Component {
                   symptom.map((symptom, i) => {
                     const { name, description } = symptom;
                     
-                    return <View key={i} style={styles.contentBox} wrap={description !== ''}>
+                    return <View key={i} style={styles.contentBox} wrap={false}>
                       <Text style={styles.name}>{i + 1}. {name}</Text>
                       <Text style={styles.content}>
                         {description || '증상 보충설명 또는 의사 소견란'}
@@ -519,7 +519,7 @@ class PrintPage extends Component {
                   diagnosis.map((diagnosis, i) => {
                     const { name, description } = diagnosis;
                     
-                    return <View key={i} style={styles.contentBox} wrap={description !== ''}>
+                    return <View key={i} style={styles.contentBox} wrap={false}>
                       <Text style={styles.name}>{i + 1}. {name}</Text>
                       <Text style={styles.content}>
                         {description || '진단 보충설명 또는 의사 소견란'}
@@ -539,7 +539,7 @@ class PrintPage extends Component {
                   처방
                 </Text>
     
-                <View style={styles.contentBox}>
+                <View style={styles.contentBox} wrap={false}>
                   <Text style={styles.name}>{treatment.drugName}</Text>
                   <Text style={styles.content}>
                     {
@@ -556,13 +556,13 @@ class PrintPage extends Component {
                     }
                   </Text>
                 </View>
-                <View style={styles.contentBox}>
+                <View style={styles.contentBox} wrap={false}>
                   <Text style={styles.name}>&#9635; 복약법</Text>
                   <Text style={styles.content}>
                     {treatment.guide || '해당사항 없음'}
                   </Text>
                 </View>
-                <View style={styles.contentBox}>
+                <View style={styles.contentBox} wrap={false}>
                   <Text style={styles.name}>&#9635; 주의사항</Text>
                   <Text style={styles.content}>
                     {treatment.caution || '해당사항 없음'}

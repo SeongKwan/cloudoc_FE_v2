@@ -64,6 +64,18 @@ class CaseEditor extends Component {
   render() {
     const type = this.props.location.pathname.split('/')[3]
     const { isEditing, isLoading } = this.props.Case;
+    const {
+      pastHistory,
+      familyHistory,
+      socialHistory,
+      memo
+    } = this.props.caseEditorBasic.editableData;
+    let checkContentEmpty;
+    if (pastHistory === '' && familyHistory === '' && socialHistory === '' && memo === '') {
+      checkContentEmpty = false;
+    } else {
+      checkContentEmpty = true;
+    }
 
     return (
       <div className={cx('CaseEditor')}>
@@ -87,7 +99,7 @@ class CaseEditor extends Component {
                 <Basic type={type} />
                 <CollapsibleBox 
                   title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 
-                  initOpen={type === "detail" ? true : false}
+                  initOpen={(type === "detail" && checkContentEmpty) ? true : false}
                 >
                   <BasicOptional type={type} />
                 </CollapsibleBox>

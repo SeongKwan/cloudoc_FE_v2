@@ -335,6 +335,9 @@
                 }
                 .dose {
                     width: 100px;
+                    &::placeholder, &:placeholder-shown {
+                        text-transform: lowercase;
+                    }
                 }
                 .trash {
                     display: flex;
@@ -418,7 +421,7 @@
     
                 label {
                     margin-bottom: 2px;
-                    text-transform: uppercase;
+                    text-transform: lowercase;
                     letter-spacing: 0.05em;
                     font-size: 11px;
     

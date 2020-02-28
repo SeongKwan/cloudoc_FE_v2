@@ -24,7 +24,7 @@ import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('Case', 'user')
+@inject('Case', 'user', 'caseEditorBasic')
 @observer
 class HeaderEditor extends Component {
 
@@ -37,9 +37,6 @@ class HeaderEditor extends Component {
                 return false;
             }
         }
-
-        console.log(JSON.parse(JSON.stringify(this.props.Case.currentCase)))
-        console.log(JSON.parse(JSON.stringify(this.props.user.currentUser)))
 
         return (
             <header className={cx('HeaderEditor')}>
@@ -56,9 +53,16 @@ class HeaderEditor extends Component {
                         <div 
                             className={cx('btn-tool', 'create')}
                             onClick={() => {
-                                    this.props.Case.clearIsEditing();
-                                    this.props.Case.clearAllEditableData();
-                                    this.props.history.push(`/case/editor/create`)
+                                    if (this.props.caseEditorBasic.editableData.title !== '') {
+                                        if (window.confirm('증례를 생성하시겠습니까?')) {
+                                            this.props.Case.clearIsEditing();
+                                            this.props.Case.clearAllEditableData();
+                                            this.props.history.push(`/case/editor/create`)
+                                        }
+                                        return false;
+                                    } else {
+                                        alert('증례의 제목을 입력해 주세요')
+                                    }
                                 }
                             }
                         >
@@ -96,9 +100,17 @@ class HeaderEditor extends Component {
                         <div 
                             className={cx('btn-tool', 'save')} 
                             onClick={() => {
-                                    this.props.Case.postCase();
-                                    this.props.Case.clearIsEditing();
-                                    this.props.history.push(`/case`)
+                                if (this.props.caseEditorBasic.editableData.title !== '') {
+                                        if (window.confirm('증례를 생성하시겠습니까?')) {
+                                            this.props.Case.postCase();
+                                            this.props.Case.clearIsEditing();
+                                            this.props.history.push(`/case`);
+                                        }
+                                        return false;
+                                    } else {
+                                        alert('증례의 제목을 입력해 주세요');
+                                    }
+                                    
                                 }
                             }
                         >
@@ -158,7 +170,7 @@ class HeaderEditor extends Component {
 
                     
                     {
-                        this.props.Case.currentCase !== undefined && type === "detail" &&
+                        this.props.Case.currentCase !== undefined && type === "detail" && !isEditing &&
                         <PDFDownloadLink 
                             className={cx('btn-tool', 'report')}
                             document={<PrintPage user={this.props.user.currentUser} currentCase={this.props.Case.currentCase} />}

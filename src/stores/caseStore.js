@@ -436,6 +436,8 @@ class CaseStore {
         newCase.record[0].teaching = teaching.slice();
 
 
+        
+
         // 공란 필터링 -- 증상
         let filteredSymptoms = newCase.record[0].symptom.filter((item) => {
             return item.name !== '';
@@ -444,6 +446,13 @@ class CaseStore {
         filteredSymptoms.forEach((item, i) => {
             item.rank = i + 1;
         });
+
+        // 공란 필터링 -- 혈검
+        let filteredLabs = newCase.record[0].lab.filter((item) => {
+            return item.value !== '';
+        })
+        // 중요도 재배치
+        
 
         // 공란 필터링 -- 진찰
         let filteredExam = newCase.record[0].exam.filter((item) => {
@@ -457,19 +466,32 @@ class CaseStore {
         // 공란 필터링 -- 진단
         let filteredDiagnosis = newCase.record[0].diagnosis.filter((item) => {
             return item.name !== '';
-        })
+        });
+
+        let filteredTeaching = newCase.record[0].teaching.filter((item) => {
+            return item.description !== '';
+        });
+
+        let filteredFomula = newCase.record[0].treatment['fomula'].filter((item) => {
+            return item.herbName !== '';
+        });
 
         newCase.record[0].symptom = filteredSymptoms;
+        newCase.record[0].lab = filteredLabs;
         newCase.record[0].exam = filteredExam;
         newCase.record[0].diagnosis = filteredDiagnosis;
+        newCase.record[0].treatment = {...newCase.record[0].treatment, fomula: filteredFomula};
+        newCase.record[0].teaching = filteredTeaching;
 
-        return agent.postCase(newCase)
-            .then(action((response) => {
-                console.log(response.data)
-                this.isLoading = false;
-                // this.clearAutoSavedCaseForCreate();
-                return response;
-            }))
+
+        console.log(newCase);
+        // return agent.postCase(newCase)
+        //     .then(action((response) => {
+        //         console.log(response.data)
+        //         this.isLoading = false;
+        //         // this.clearAutoSavedCaseForCreate();
+        //         return response;
+        //     }))
     }
 
 
@@ -543,6 +565,7 @@ class CaseStore {
         updatedCase.record[0].teaching = teaching.slice();
 
 
+        
         // 공란 필터링 -- 증상
         let filteredSymptoms = updatedCase.record[0].symptom.filter((item) => {
             return item.name !== '';
@@ -551,6 +574,13 @@ class CaseStore {
         filteredSymptoms.forEach((item, i) => {
             item.rank = i + 1;
         });
+
+        // 공란 필터링 -- 혈검
+        let filteredLabs = updatedCase.record[0].lab.filter((item) => {
+            return item.value !== '';
+        })
+        // 중요도 재배치
+        
 
         // 공란 필터링 -- 진찰
         let filteredExam = updatedCase.record[0].exam.filter((item) => {
@@ -564,11 +594,22 @@ class CaseStore {
         // 공란 필터링 -- 진단
         let filteredDiagnosis = updatedCase.record[0].diagnosis.filter((item) => {
             return item.name !== '';
-        })
+        });
+
+        let filteredTeaching = updatedCase.record[0].teaching.filter((item) => {
+            return item.description !== '';
+        });
+
+        let filteredFomula = updatedCase.record[0].treatment['fomula'].filter((item) => {
+            return item.herbName !== '';
+        });
 
         updatedCase.record[0].symptom = filteredSymptoms;
+        updatedCase.record[0].lab = filteredLabs;
         updatedCase.record[0].exam = filteredExam;
         updatedCase.record[0].diagnosis = filteredDiagnosis;
+        updatedCase.record[0].treatment = {...updatedCase.record[0].treatment, fomula: filteredFomula};
+        updatedCase.record[0].teaching = filteredTeaching;
 
         return agent.updateCase(this.currentCase._id ,updatedCase)
             .then(action((response) => {

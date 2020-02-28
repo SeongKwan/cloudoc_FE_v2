@@ -15,6 +15,9 @@ const cx = classNames.bind(styles);
 @inject('Case', 'caseEditorBasic', 'search', 'lab', 'labListItem', 'labListForInput')
 @observer
 class Lab extends Component {
+    state = {
+        openAddManual: false
+    }
     componentDidMount() {
         this.props.lab.setLabCategories();
     }
@@ -111,7 +114,7 @@ class Lab extends Component {
         
         const categories = this._extractCategory();
 
-        console.log(JSON.parse(JSON.stringify(categories)))
+        // console.log(JSON.parse(JSON.stringify(categories)))
         
         let dividedLabByCategory = [];
         let categorizedLab = [];
@@ -195,29 +198,30 @@ class Lab extends Component {
                         
                         
                         return <li key={i}>
-                            {
-                                showAlert &&
-                                <div className={cx('alert-icon', {high: state === '매우 높음'}, {low: state === '매우 낮음'})}>
-                                    <div
-                                        className={cx('icon-box')}
-                                        ref={ref => this.labAlert = ref}
-                                        data-tip={alertContents}
-                                        data-for={`tooltip-lab-alert-${index}-${i}`}
-                                        onFocus={() => { ReactTooltip.show(this.labAlert); }}
-                                        onBlur={() => { ReactTooltip.hide(this.labAlert); }}
-                                    >
-                                        <FiAlertCircle />
-                                    </div>
-                                
-                                {
-                                    (description !== '' || showAlert) &&
-                                    <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-lab-alert-${index}-${i}`} />
-                                }
-                                </div>
-                            }
+                            
                             <div className={cx('lab-name-unit')}>
                                 <div className={cx('name')}>{name}</div>
                                 <div className={cx('unit')}>[{unit}]</div>
+                                {
+                                    showAlert &&
+                                    <div className={cx('alert-icon', {high: state === '매우 높음'}, {low: state === '매우 낮음'})}>
+                                        <div
+                                            className={cx('icon-box')}
+                                            ref={ref => this.labAlert = ref}
+                                            data-tip={alertContents}
+                                            data-for={`tooltip-lab-alert-${index}-${i}`}
+                                            onFocus={() => { ReactTooltip.show(this.labAlert); }}
+                                            onBlur={() => { ReactTooltip.hide(this.labAlert); }}
+                                        >
+                                            <FiAlertCircle />
+                                        </div>
+                                    
+                                    {
+                                        (description !== '' || showAlert) &&
+                                        <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-lab-alert-${index}-${i}`} />
+                                    }
+                                    </div>
+                                }
                             </div>
                             <div className={cx('bar-wrapper')}>
                                 <LabBar 
@@ -301,6 +305,9 @@ class Lab extends Component {
             return <option data-lab={JSON.stringify(lab)} key={i} value={lab.name}>{`${lab.name}`}</option>
         });
     }
+    handleOnClickAddManual = () => {
+        this.setState({openAddManual: !this.state.openAddManual});
+    }
 
     render() {
         const { isEditing } = this.props.Case;
@@ -315,12 +322,13 @@ class Lab extends Component {
         // console.log('lab ',JSON.parse(JSON.stringify(editableData)))
         // console.log('selected ',JSON.parse(JSON.stringify(selectedLabCategory)))
         // console.log('initLabs ',JSON.parse(JSON.stringify(initLabs)))
-        console.log('editable ',JSON.parse(JSON.stringify(staticData)))
+        console.log('static ',JSON.parse(JSON.stringify(staticData)))
         // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
         // const nameSorting = testName;
         // const stateSorting = state;
         // const disabledModalButton = this.props.lab.labDates.length > 0 ? false : true;
+        console.log(this.state.openAddManual)
         
         let disabledButton = length <= 0;
         // let dataTip = addLab.selectLab !== null ? `범위 :  ${addLab.selectLab['refMin']} ~ ${addLab.selectLab['refMax']}  [ ${addLab.selectLab['unit']} ]` : ''
@@ -335,6 +343,7 @@ class Lab extends Component {
                         (type === "create" || isEditing) &&
                         <>
                             <div className={cx('text','button-paste')} onClick={this.handleOnClickPasteButton} id="paste">결과붙여넣기</div>
+                            <button className={cx('add-manual')} onClick={this.handleOnClickAddManual}>{this.state.openAddManual ? '개별입력닫기' : '직접입력'}</button>
                             <button disabled={disabledButton} className={cx('delete-all', {disabled: disabledButton})} onClick={this.handleDeleteAll}>결과삭제</button>
                         </>
                     }
@@ -384,74 +393,79 @@ class Lab extends Component {
                     </ul>
                 </div>
                 }
-                <div className={cx('lab-select-input-container')}>
-                    {
-                        (type === 'create' || isEditing) &&
-                        <div className={cx('lab-input-wrapper')}>
-                        <div className={cx('form-wrapper', 'age-gender', 'label')}>
-                            <div className={cx('category', {checked: true})}>
-                                <label className={cx('label-no-input', 'label-age')} htmlFor="category">검사종류</label>
-                                <div className={cx('select-wrapper')}>
-                                    <select 
-                                        name="category"
-                                        value={addLab.category} 
-                                        onChange={this._handleChangeAddLab}
-                                    >
-                                        <option disabled>검사종류</option>
-                                        {this.renderOptionsCategory()}
-                                    </select>
+                {
+                    this.state.openAddManual &&
+                    <>
+                    <div className={cx('lab-select-input-container')}>
+                        {
+                            (type === 'create' || isEditing) &&
+                            <div className={cx('lab-input-wrapper')}>
+                            <div className={cx('form-wrapper', 'age-gender', 'label')}>
+                                <div className={cx('category', {checked: true})}>
+                                    <label className={cx('label-no-input', 'label-age')} htmlFor="category">검사종류</label>
+                                    <div className={cx('select-wrapper')}>
+                                        <select 
+                                            name="category"
+                                            value={addLab.category} 
+                                            onChange={this._handleChangeAddLab}
+                                        >
+                                            <option disabled>검사종류</option>
+                                            {this.renderOptionsCategory()}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={cx('name', {checked: true})}>
-                                <label className={cx('label-no-input', 'label-age')} htmlFor="name">검사명</label>
-                                <div className={cx('select-wrapper')}>
-                                    <select 
-                                        name="name"
-                                        value={addLab.name} 
-                                        onChange={this._handleChangeAddLab}
-                                    >
-                                        <option disabled>검사명</option>
-                                        <option value=''>선택해 주세요</option>
-                                        {this.renderOptionsName()}
-                                    </select>
+                                <div className={cx('name', {checked: true})}>
+                                    <label className={cx('label-no-input', 'label-age')} htmlFor="name">검사명</label>
+                                    <div className={cx('select-wrapper')}>
+                                        <select 
+                                            name="name"
+                                            value={addLab.name} 
+                                            onChange={this._handleChangeAddLab}
+                                        >
+                                            <option disabled>검사명</option>
+                                            <option value=''>선택해 주세요</option>
+                                            {this.renderOptionsName()}
+                                        </select>
+                                    </div>
                                 </div>
+                            </div>                        
+                            <div className={cx('form-wrapper', 'value-wrapper', 'title', 'input')}>
+                                <input 
+                                    ref={ref => this.labInput = ref}
+                                    data-tip={dataTip}
+                                    data-for="tooltip-input-value"
+                                    name="value" 
+                                    id="lab-value" 
+                                    type="number"
+                                    placeholder="값" 
+                                    onChange={this._handleChangeAddLab}
+                                    onKeyDown={(e) => {
+                                        if (e.keyCode === 13 && e.target.value > 0) {
+                                            this._handleClickOnAddLab();
+                                        }
+                                    }}
+                                    value={addLab.value}
+                                    onFocus={() => { ReactTooltip.show(this.labInput); }}
+                                    onBlur={() => { ReactTooltip.hide(this.labInput); }}
+                                />
+                                {
+                                    addLab.selectLab !== null &&
+                                    <ReactTooltip className="custom-tooltip short lab" place="right" effect="solid" id="tooltip-input-value" />
+                                }
+                                <label className={cx('label-no-input', 'label-age')} htmlFor="lab-value">검사값</label>
                             </div>
-                        </div>                        
-                        <div className={cx('form-wrapper', 'value-wrapper', 'title', 'input')}>
-                            <input 
-                                ref={ref => this.labInput = ref}
-                                data-tip={dataTip}
-                                data-for="tooltip-input-value"
-                                name="value" 
-                                id="lab-value" 
-                                type="number"
-                                placeholder="값" 
-                                onChange={this._handleChangeAddLab}
-                                onKeyDown={(e) => {
-                                    if (e.keyCode === 13 && e.target.value > 0) {
-                                        this._handleClickOnAddLab();
-                                    }
-                                }}
-                                value={addLab.value}
-                                onFocus={() => { ReactTooltip.show(this.labInput); }}
-                                onBlur={() => { ReactTooltip.hide(this.labInput); }}
-                            />
-                            {
-                                addLab.selectLab !== null &&
-                                <ReactTooltip className="custom-tooltip short lab" place="right" effect="solid" id="tooltip-input-value" />
-                            }
-                            <label className={cx('label-no-input', 'label-age')} htmlFor="lab-value">검사값</label>
-                        </div>
-                        
-                        </div>
-                    }
-                </div>
-                <div className={cx('btn-add-container')}>
-                    {
-                        (type === "create" || isEditing) &&
-                        <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>개별검사추가 +</button>
-                    }
-                </div>
+                            
+                            </div>
+                        }
+                    </div>
+                    <div className={cx('btn-add-container')}>
+                        {
+                            (type === "create" || isEditing) &&
+                            <button className={cx('btn-add-lab')} onClick={this._handleClickOnAddLab}>개별검사추가 +</button>
+                        }
+                    </div>
+                    </>
+                }
                 {
                     length > 0 &&
                     <div className={cx('sort-button-container')}>

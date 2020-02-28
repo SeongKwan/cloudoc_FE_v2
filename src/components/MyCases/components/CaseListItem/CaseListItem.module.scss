@@ -5,9 +5,9 @@
     // color: $brand-8;
     .wrapper-bottom {
         padding: 0.75rem;
-        height: 296px;
+        height: 326px;
         @include media('lg') {
-            height: 260px;
+            height: 265px;
         }
         // background-color: $brand-7;
         background-color: $oc-gray-1;
@@ -100,9 +100,9 @@
         }
         &.condition {
             .content {
-                height: 4.5rem;
+                height: 6rem;
                 @include media('lg') {
-                    height: 5rem;
+                    height: 5.5rem;
                 }
             }
         }
@@ -114,7 +114,7 @@
         letter-spacing: 1px;
         svg {
             color: $brand-8;
-            font-size: 1.5rem;
+            font-size: 2rem;
         }
     }
     .content {
