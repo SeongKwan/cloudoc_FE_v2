@@ -20,6 +20,7 @@ import { inject, observer } from 'mobx-react';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PrintPage from '../../pages/PrintPage';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
+import Loader from '../Loader';
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +41,7 @@ class HeaderEditor extends Component {
 
         return (
             <header className={cx('HeaderEditor')}>
+                
                 <div className={cx('tool-bar')}>
                     <div className={cx('btn-tool', 'back')} onClick={() => {
                         this.props.history.goBack();
@@ -179,12 +181,11 @@ class HeaderEditor extends Component {
                                 textDecoration: "none"
                             }}
                         >
-                            <FiFileText />
-                            
-                            <div className={cx('label')}>리포트</div>
+                            {({ blob, url, loading, error }) => {
+                                return <><FiFileText /><div className={cx('label')}>리포트</div></>
+                            }}
                         </PDFDownloadLink>
                     }
-
 
 
 

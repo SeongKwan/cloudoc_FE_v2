@@ -18,20 +18,21 @@ class LayoutCloudoc extends Component {
         loadingState: false
     };
     componentDidMount() {
-        this.setState({loadingState: false});
-        window.addEventListener("scroll", () => {
-            this._loadCases();
-        });
+        // this.setState({loadingState: false});
+        // window.addEventListener("scroll", () => {
+        //     this._loadCases();
+        // });
     }
     
     componentWillUnmount() {
+        // this.setState({loadingState: false});
         // window.removeEventListener("scroll", () => {
         //     this._loadCases();
         // });
     }
     
 
-    _loadCases = async () => {
+    _loadCases = () => {
         const { loadMore } = this.props.Case;
         const totalHeight = Math.floor($(this.layout).prop("scrollHeight"));
         const windowHeight = Math.floor($(window).height());
@@ -43,7 +44,7 @@ class LayoutCloudoc extends Component {
         if (totalHeight - windowHeight - scrollTop <= offset) {
             if(!this.state.loadingState) {
                 if (loadMore) {
-                    await this.setState({ loadingState: true });
+                    this.setState({ loadingState: true });
                     this.props.Case.setIsLoadingMore(true);
                     if (this.props.search.keyword['cases'] === '') {
                         setTimeout(() => {

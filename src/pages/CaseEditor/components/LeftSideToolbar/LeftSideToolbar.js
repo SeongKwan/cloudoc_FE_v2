@@ -45,6 +45,10 @@ class LeftSideToolbar extends Component {
             }
             let THIS = this;
             let offset1 = objDiv.position();
+            if (offset1 === undefined) {
+                return false;
+            }
+            
             let adj1 = offset1.top;
             let offset2 = objDivDrug.position();
             let adj2 = offset2.top;

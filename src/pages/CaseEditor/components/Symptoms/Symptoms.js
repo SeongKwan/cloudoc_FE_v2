@@ -48,7 +48,9 @@ class Symptoms extends Component {
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
-        this.setState({ keyword: value, focusParent: true });
+        this.setState({ keyword: value, focusParent: true, selected: -1 });
+        
+        this.props.symptomListForInput.clearSelectedIndex();
         this.props.symptomListItem.setSearchKeyword(value)
 
     }
@@ -209,42 +211,46 @@ class Symptoms extends Component {
 
                                         if(e.keyCode === 38) {
                                             e.preventDefault();
-                                            if(focusParent) {
-                                                if (selectedIndex <= 0) {
-                                                    this._scroll(0);
-                                                    this.setState({keyword: symptoms[0].name})
-                                                    return;
-                                                }
-                                                if (selectedIndex > 0) {
-                                                    index = selectedIndex - 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: symptoms[selectedIndex - 1].name})
-                                                    return this.props.symptomListForInput.setSelectedIndex(index);
+                                            if (symptoms.length > 0) {
+                                                if(focusParent) {
+                                                    if (selectedIndex <= 0) {
+                                                        this._scroll(0);
+                                                        this.setState({keyword: symptoms[0].name})
+                                                        return;
+                                                    }
+                                                    if (selectedIndex > 0) {
+                                                        index = selectedIndex - 1;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: symptoms[selectedIndex - 1].name})
+                                                        return this.props.symptomListForInput.setSelectedIndex(index);
+                                                    }
                                                 }
                                             }
                                             return;
                                         }
                                         if(e.keyCode === 40) {
                                             e.preventDefault();
-                                            if(!focusParent) {
-                                                this.setState({focusParent: true})
-                                            } else {
-                                                if (selectedIndex < 0) {
-                                                    index = 0;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: symptoms[0].name})
-                                                    return this.props.symptomListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex >= 0 && selectedIndex < maxIndex) {
-                                                    index = selectedIndex + 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: symptoms[index].name})
-                                                    return this.props.symptomListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex === maxIndex) {
-                                                    this._scroll(maxIndex);
-                                                    this.setState({keyword: symptoms[maxIndex].name})
-                                                    return;
+                                            if (symptoms.length > 0) {
+                                                if(!focusParent) {
+                                                    this.setState({focusParent: true})
+                                                } else {
+                                                    if (selectedIndex < 0) {
+                                                        index = 0;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: symptoms[0].name})
+                                                        return this.props.symptomListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex >= 0 && selectedIndex < maxIndex) {
+                                                        index = selectedIndex + 1;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: symptoms[index].name})
+                                                        return this.props.symptomListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex === maxIndex) {
+                                                        this._scroll(maxIndex);
+                                                        this.setState({keyword: symptoms[maxIndex].name})
+                                                        return;
+                                                    }
                                                 }
                                             }
                                         }

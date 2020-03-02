@@ -10,7 +10,8 @@ class TreatmentStore {
         drugName: '',
         guide: '',
         caution: '',
-        lifestyle: ''
+        lifestyle: '',
+        description: ''
     };
     @observable editableData = [{
         herbName: '',
@@ -20,7 +21,8 @@ class TreatmentStore {
         drugName: '',
         guide: '',
         caution: '',
-        lifestyle: ''
+        lifestyle: '',
+        description: ''
     }
 
     @action initilize(treatmentData) {
@@ -28,18 +30,21 @@ class TreatmentStore {
             drugName,
             guide,
             caution,
-            lifestyle
+            lifestyle,
+            description,
         } = treatmentData;
 
         this.editableDataForTreatment.drugName = drugName;
         this.editableDataForTreatment.guide = guide;
         this.editableDataForTreatment.caution = caution;
         this.editableDataForTreatment.lifestyle = lifestyle;
+        this.editableDataForTreatment.description = description;
 
         this.staticDataForTreatment.drugName = drugName;
         this.staticDataForTreatment.guide = guide;
         this.staticDataForTreatment.caution = caution;
         this.staticDataForTreatment.lifestyle = lifestyle;
+        this.staticDataForTreatment.description = description;
     }
 
     @action setEditableData(editableData) {
@@ -88,6 +93,7 @@ class TreatmentStore {
                     name,
                     guide,
                     lifestyle,
+                    description,
                     caution
                 } = response.data || [];
                 
@@ -95,6 +101,7 @@ class TreatmentStore {
                 this.editableDataForTreatment.guide = guide || '';
                 this.editableDataForTreatment.caution = caution || '';
                 this.editableDataForTreatment.lifestyle = lifestyle || '';
+                this.editableDataForTreatment.description = description || '';
 
                 if (formula.length === 0 || formula === undefined) {
                     return this.editableData = [{
@@ -133,12 +140,14 @@ class TreatmentStore {
                     name,
                     guide,
                     lifestyle,
+                    description,
                     caution
                 } = response.data || [];
                 
                 this.editableDataForTreatment.drugName = name || '';
                 this.editableDataForTreatment.guide = guide || '';
                 this.editableDataForTreatment.caution = caution || '';
+                this.editableDataForTreatment.description = description || '';
                 this.editableDataForTreatment.lifestyle = lifestyle || '';
 
                 if (formula.length === 0 || formula === undefined) {
@@ -172,13 +181,15 @@ class TreatmentStore {
             drugName: '',
             guide: '',
             caution: '',
-            lifestyle: ''
+            lifestyle: '',
+            description: '',
         }
         this.staticDataForTreatment = {
             drugName: '',
             guide: '',
             caution: '',
-            lifestyle: ''
+            lifestyle: '',
+            description: '',
         }
     }
 
@@ -191,7 +202,8 @@ class TreatmentStore {
             drugName: '',
             guide: '',
             caution: '',
-            lifestyle: ''
+            lifestyle: '',
+            description: ''
         }
     }
 }

@@ -59,7 +59,8 @@ class Drug extends Component {
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
-        this.setState({ keyword: value, focusParent: true });
+        this.setState({ keyword: value, focusParent: true, selected: -1 });
+        this.props.drugListForInput.clearSelectedIndex();
         this.props.drugListItem.setSearchKeyword(value)
 
     }
@@ -171,6 +172,7 @@ class Drug extends Component {
             drugName,
             guide,
             caution,
+            description,
             // lifestyle
         } = editableDataForTreatment;
 
@@ -233,42 +235,46 @@ class Drug extends Component {
 
                                         if(e.keyCode === 38) {
                                             e.preventDefault();
-                                            if(focusParent) {
-                                                if (selectedIndex <= 0) {
-                                                    this._scroll(0);
-                                                    this.setState({keyword: drugs[0].name})
-                                                    return;
-                                                }
-                                                if (selectedIndex > 0) {
-                                                    index = selectedIndex - 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: drugs[selectedIndex - 1].name})
-                                                    return this.props.drugListForInput.setSelectedIndex(index);
+                                            if (drugs.length > 0) {
+                                                if(focusParent) {
+                                                    if (selectedIndex <= 0) {
+                                                        this._scroll(0);
+                                                        this.setState({keyword: drugs[0].name})
+                                                        return;
+                                                    }
+                                                    if (selectedIndex > 0) {
+                                                        index = selectedIndex - 1;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: drugs[selectedIndex - 1].name})
+                                                        return this.props.drugListForInput.setSelectedIndex(index);
+                                                    }
                                                 }
                                             }
                                             return;
                                         }
                                         if(e.keyCode === 40) {
                                             e.preventDefault();
-                                            if(!focusParent) {
-                                                this.setState({focusParent: true})
-                                            } else {
-                                                if (selectedIndex < 0) {
-                                                    index = 0;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: drugs[0].name})
-                                                    return this.props.drugListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex >= 0 && selectedIndex < maxIndex) {
-                                                    index = selectedIndex + 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: drugs[index].name})
-                                                    return this.props.drugListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex === maxIndex) {
-                                                    this._scroll(maxIndex);
-                                                    this.setState({keyword: drugs[maxIndex].name})
-                                                    return;
+                                            if (drugs.length > 0) {
+                                                if(!focusParent) {
+                                                    this.setState({focusParent: true})
+                                                } else {
+                                                    if (selectedIndex < 0) {
+                                                        index = 0;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: drugs[0].name})
+                                                        return this.props.drugListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex >= 0 && selectedIndex < maxIndex) {
+                                                        index = selectedIndex + 1;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: drugs[index].name})
+                                                        return this.props.drugListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex === maxIndex) {
+                                                        this._scroll(maxIndex);
+                                                        this.setState({keyword: drugs[maxIndex].name})
+                                                        return;
+                                                    }
                                                 }
                                             }
                                         }
@@ -334,70 +340,109 @@ class Drug extends Component {
                                 </div>
                                 <div className={cx('wrapper', 'formula-wrapper')}>
                                     <ul>
-                                    {
-                                        editableData.map((formula, i) => {
-                                            const { herbName, dose } = formula;
-                                            return <li key={i} className={cx('')}>
-                                                <div className={cx('form-wrapper', 'herb-name', 'input')}>
-                                                    <input 
-                                                        autoComplete="off"
-                                                        className={cx('name')}
-                                                        name="herbName" 
-                                                        id={`herb-name-${i}`} 
-                                                        type="text" 
-                                                        placeholder="약초명" 
-                                                        onChange={this._handleChangeFormula}
-                                                        data-index={i}
-                                                        value={herbName || ''}
-                                                        onKeyDown={(e) => {
-                                                            if (e.keyCode === 13) {
-                                                                $(`#formula-dose-${i}`).focus();
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label htmlFor={`herb-name-${i}`}>약초명</label>
-                                                </div>
-                                                <div className={cx('input', 'dose', 'form-wrapper')}>
-                                                    <input 
-                                                        data-index={i}
-                                                        className={cx('dose')}
-                                                        name="dose" 
-                                                        id={`formula-dose-${i}`} 
-                                                        type="number" 
-                                                        autoComplete='off' 
-                                                        placeholder="수량[g/일]" 
-                                                        onChange={this._handleChangeFormula}
-                                                        value={dose || ''}
-                                                        onKeyDown={(e) => {
-                                                            let { length } = editableData;
-                                                            let enter = e.keyCode === 13;
-                                                            if (enter && (i < length - 1)) {
-                                                                return $(`#herb-name-${i + 1}`).focus();
-                                                            }
-                                                            if (enter && (i === length - 1)) {
-                                                                if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
-                                                                    this._handleClickOnAddFormula();
-                                                                    return setTimeout(() => {$(`#herb-name-${i + 1}`).focus();}, 100);
-                                                                } else {
-                                                                    alert('약재명 또는 수량이 입력되지 않았습니다');
+                                        {
+                                            editableData.map((formula, i) => {
+                                                const { herbName, dose } = formula;
+                                                return <li key={i} className={cx('')}>
+                                                    <div className={cx('form-wrapper', 'herb-name', 'input')}>
+                                                        <input 
+                                                            autoComplete="off"
+                                                            className={cx('name')}
+                                                            name="herbName" 
+                                                            id={`herb-name-${i}`} 
+                                                            type="text" 
+                                                            placeholder="약초명" 
+                                                            onChange={this._handleChangeFormula}
+                                                            data-index={i}
+                                                            value={herbName || ''}
+                                                            onKeyDown={(e) => {
+                                                                if (e.keyCode === 13) {
+                                                                    $(`#formula-dose-${i}`).focus();
                                                                 }
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
-                                                </div>
-                                                <div className={cx('trash')}>
-                                                    <FaTrash onClick={() => {this._deleteFormula(i);}}/>
-                                                </div>
-                                            </li>
-                                        })
-                                    }
-                                    {
-                                        (type === "create" || isEditing) &&
-                                        <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>약재추가<FiPlus /></button>
-                                    }
-                                </ul>
-                            </div>
+                                                            }}
+                                                        />
+                                                        <label htmlFor={`herb-name-${i}`}>약초명</label>
+                                                    </div>
+                                                    <div className={cx('input', 'dose', 'form-wrapper')}>
+                                                        <input 
+                                                            data-index={i}
+                                                            className={cx('dose')}
+                                                            name="dose" 
+                                                            id={`formula-dose-${i}`} 
+                                                            type="number" 
+                                                            autoComplete='off' 
+                                                            placeholder="수량[g/일]" 
+                                                            onChange={this._handleChangeFormula}
+                                                            value={dose || ''}
+                                                            onKeyDown={(e) => {
+                                                                let { length } = editableData;
+                                                                let enter = e.keyCode === 13;
+                                                                if (enter && (i < length - 1)) {
+                                                                    return $(`#herb-name-${i + 1}`).focus();
+                                                                }
+                                                                if (enter && (i === length - 1)) {
+                                                                    if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
+                                                                        this._handleClickOnAddFormula();
+                                                                        return setTimeout(() => {$(`#herb-name-${i + 1}`).focus();}, 100);
+                                                                    } else {
+                                                                        alert('약재명 또는 수량이 입력되지 않았습니다');
+                                                                    }
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label htmlFor={`formula-dose-${i}`}>수량[g/일]</label>
+                                                    </div>
+                                                    <div className={cx('trash')}>
+                                                        <FaTrash onClick={() => {this._deleteFormula(i);}}/>
+                                                    </div>
+                                                </li>
+                                            })
+                                        }
+                                        {
+                                            (type === "create" || isEditing) &&
+                                            <button className={cx('btn-add-formula')} onClick={this._handleClickOnAddFormula}>약재추가<FiPlus /></button>
+                                        }
+                                    </ul>
+                                </div>
+                                <div className={cx('form-wrapper', 'description', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea')}
+                                        name="description" 
+                                        id="description" 
+                                        type="text" 
+                                        minRows={3}
+                                        placeholder="처방 상세설명란"
+                                        onChange={this._handleChange}
+                                        value={description}
+                                    />
+                                    <label htmlFor="caution">처방설명</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'guide', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea')}
+                                        name="guide" 
+                                        id="guide" 
+                                        type="text" 
+                                        minRows={3}
+                                        placeholder="처방의 올바른 복용방법"
+                                        onChange={this._handleChange}
+                                        value={guide}
+                                    />
+                                    <label htmlFor="guide">복약법</label>
+                                </div>
+                                <div className={cx('form-wrapper', 'caution', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea')}
+                                        name="caution" 
+                                        id="caution" 
+                                        type="text" 
+                                        minRows={3}
+                                        placeholder="복용시 주의사항"
+                                        onChange={this._handleChange}
+                                        value={caution}
+                                    />
+                                    <label htmlFor="caution">주의사항</label>
+                                </div>
                             </li>
                             : 
                             <li className={cx('static')}>
@@ -444,6 +489,18 @@ class Drug extends Component {
                                             })
                                         }
                                     </ul>
+                                </div>
+                                <div className={cx('form-wrapper', 'description', 'input')}>
+                                    <TextareaAutosize 
+                                        className={cx('textarea', 'static')}
+                                        name="description" 
+                                        id="description" 
+                                        type="text" 
+                                        minRows={3}
+                                        readOnly
+                                        value={staticDataForTreatment.description}
+                                    />
+                                    <label htmlFor="caution">처방설명</label>
                                 </div>
                                 <div className={cx('form-wrapper', 'guide', 'input')}>
                                     <TextareaAutosize 

@@ -49,7 +49,8 @@ class Diagnosis extends Component {
     }
     _handleOnChange = (e) => {
         const { value } = e.target;
-        this.setState({ keyword: value, focusParent: true });
+        this.setState({ keyword: value, focusParent: true, selected: -1 });
+        this.props.diagnosisListForInput.clearSelectedIndex();
         this.props.diagnosisListItem.setSearchKeyword(value)
 
     }
@@ -215,43 +216,47 @@ class Diagnosis extends Component {
 
                                     if(e.keyCode === 38) {
                                         e.preventDefault();
-                                        if(focusParent) {
-                                            if (selectedIndex <= 0) {
-                                                this._scroll(0);
-                                                this.setState({keyword: diagnosises[0].name})
-                                                return;
-                                            }
-                                            if (selectedIndex > 0) {
-                                                index = selectedIndex - 1;
-                                                this._scroll(index);
-                                                this.setState({keyword: diagnosises[selectedIndex - 1].name})
-                                                return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                        if (diagnosises.length > 0) {    
+                                            if(focusParent) {
+                                                if (selectedIndex <= 0) {
+                                                    this._scroll(0);
+                                                    this.setState({keyword: diagnosises[0].name})
+                                                    return;
+                                                }
+                                                if (selectedIndex > 0) {
+                                                    index = selectedIndex - 1;
+                                                    this._scroll(index);
+                                                    this.setState({keyword: diagnosises[selectedIndex - 1].name})
+                                                    return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                                }
                                             }
                                         }
                                         return;
                                     }
                                     if(e.keyCode === 40) {
                                         e.preventDefault();
-                                        if(!focusParent) {
-                                            this.setState({focusParent: true})
-                                        } else {
-                                            if (diagnosises.length > 0) {
-                                                if (selectedIndex < 0) {
-                                                    index = 0;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: diagnosises[0].name})
-                                                    return this.props.diagnosisListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex >= 0 && selectedIndex < maxIndex) {
-                                                    index = selectedIndex + 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: diagnosises[index].name})
-                                                    return this.props.diagnosisListForInput.setSelectedIndex(index);
-                                                }
-                                                if (selectedIndex === maxIndex) {
-                                                    this._scroll(maxIndex);
-                                                    this.setState({keyword: diagnosises[maxIndex].name})
-                                                    return;
+                                        if (diagnosises.length > 0) {
+                                            if(!focusParent) {
+                                                this.setState({focusParent: true})
+                                            } else {
+                                                if (diagnosises.length > 0) {
+                                                    if (selectedIndex < 0) {
+                                                        index = 0;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: diagnosises[0].name})
+                                                        return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex >= 0 && selectedIndex < maxIndex) {
+                                                        index = selectedIndex + 1;
+                                                        this._scroll(index);
+                                                        this.setState({keyword: diagnosises[index].name})
+                                                        return this.props.diagnosisListForInput.setSelectedIndex(index);
+                                                    }
+                                                    if (selectedIndex === maxIndex) {
+                                                        this._scroll(maxIndex);
+                                                        this.setState({keyword: diagnosises[maxIndex].name})
+                                                        return;
+                                                    }
                                                 }
                                             }
                                         }

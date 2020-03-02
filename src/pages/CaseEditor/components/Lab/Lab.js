@@ -322,13 +322,13 @@ class Lab extends Component {
         // console.log('lab ',JSON.parse(JSON.stringify(editableData)))
         // console.log('selected ',JSON.parse(JSON.stringify(selectedLabCategory)))
         // console.log('initLabs ',JSON.parse(JSON.stringify(initLabs)))
-        console.log('static ',JSON.parse(JSON.stringify(staticData)))
+        // console.log('static ',JSON.parse(JSON.stringify(staticData)))
         // const { category, testName, state } = this.props.lab.sortingType;
         // const categorySorting = category;
         // const nameSorting = testName;
         // const stateSorting = state;
         // const disabledModalButton = this.props.lab.labDates.length > 0 ? false : true;
-        console.log(this.state.openAddManual)
+        // console.log(this.state.openAddManual)
         
         let disabledButton = length <= 0;
         // let dataTip = addLab.selectLab !== null ? `범위 :  ${addLab.selectLab['refMin']} ~ ${addLab.selectLab['refMax']}  [ ${addLab.selectLab['unit']} ]` : ''

@@ -66,35 +66,35 @@ class Routes extends Component {
                     <Route component={Page404} />
                     </Switch>
                 </MobileView> */}
-                <BrowserView>
-                    <Switch>
-                        <Route exact path="/">
-                            <Redirect to="/case" />
-                        </Route>
-                        <Route exact path="/case">
-                            <CaseLibrary />
-                        </Route>
-                        <Route path="/case/editor">
-                            <CaseEditor />
-                        </Route>
-                        <Route path="/qna">
-                            <CaseQnA />
-                        </Route>
-                        <Route path="/lecture">
-                            <Lecture />
-                        </Route>
-                        <Route path="/report/:caseId">
-                        {/* {
-                            this.props.Case.currentCase !== undefined && this.props.Case.currentCase !== null &&
-                            <PrintPage user={this.props.user.currentUser} currentUser={this.props.Case.currentCase}/>
-                        } */}
-                        </Route>
-                        <Route>
-                            <Page404 />
-                        </Route>
-                        
-                    </Switch>
-                </BrowserView>
+                <Switch>
+                    <Route exact path="/">
+                        <Redirect to="/case" />
+                    </Route>
+                    <Route exact path="/case">
+                        <CaseLibrary />
+                    </Route>
+                    <Route path="/case/editor">
+                        <CaseEditor />
+                    </Route>
+                    <Route path="/qna">
+                        <CaseQnA />
+                    </Route>
+                    <Route path="/lecture">
+                        <Lecture />
+                    </Route>
+                    <Route path="/report/:caseId">
+                    {/* {
+                        this.props.Case.currentCase !== undefined && this.props.Case.currentCase !== null &&
+                        <PrintPage user={this.props.user.currentUser} currentUser={this.props.Case.currentCase}/>
+                    } */}
+                    </Route>
+                    <Route>
+                        <Page404 />
+                    </Route>
+                    
+                </Switch>
+                {/* <BrowserView>
+                </BrowserView> */}
             </>
         );
     }
