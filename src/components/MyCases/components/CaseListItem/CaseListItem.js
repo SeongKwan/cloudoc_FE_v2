@@ -32,7 +32,16 @@ class CaseListItem extends Component {
         const semiDate = getLocaleSemiDateWithTime(Case.created_date);
 
         return (
-            <Link to={`/case/editor/detail/${caseId}`}>
+            <Link to={`/case/editor/detail/${caseId}`} 
+                onClick={(e) => {
+                    if (this.props.isLoadingMore) {
+                        return e.preventDefault();
+                        
+                    } else {
+                        
+                    }
+                }}
+            >
                 <li className={cx('CaseListItem')}>
                     <div className={cx('wrapper-top')}>
                         <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>

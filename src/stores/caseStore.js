@@ -353,6 +353,7 @@ class CaseStore {
 
     @action loadCase(id) {
         this.isLoading = true;
+
         return agent.loadCase(id)
             .then(action((response) => {
                 this.isLoading = false;
@@ -364,8 +365,7 @@ class CaseStore {
                 this.isLoading = false;
                 throw err;
             })
-    }
-
+    };
     /**
      * 
      * @param {object} postCase create new case 
@@ -484,14 +484,13 @@ class CaseStore {
         newCase.record[0].teaching = filteredTeaching;
 
 
-        console.log(newCase);
-        // return agent.postCase(newCase)
-        //     .then(action((response) => {
-        //         console.log(response.data)
-        //         this.isLoading = false;
-        //         // this.clearAutoSavedCaseForCreate();
-        //         return response;
-        //     }))
+        return agent.postCase(newCase)
+            .then(action((response) => {
+                console.log(response.data)
+                this.isLoading = false;
+                // this.clearAutoSavedCaseForCreate();
+                return response;
+            }))
     }
 
 

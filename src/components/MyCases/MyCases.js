@@ -88,7 +88,7 @@ class MyCases extends Component {
                         {
                             !isLoading ?
                             database.map((Case, i) => {
-                                return <CaseListItem Case={Case} key={i} />
+                                return <CaseListItem Case={Case} key={i} isLoadingMore={this.props.Case.isLoadingMore}/>
                             })
                             : <Loader />
                         }

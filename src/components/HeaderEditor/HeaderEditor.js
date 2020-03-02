@@ -13,7 +13,8 @@ import {
     FiSave,
     FiFileText,
     FiHelpCircle,
-    FiEdit
+    FiEdit,
+    FiArrowDown
 } from "../../lib/react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
@@ -28,8 +29,17 @@ const cx = classNames.bind(styles);
 @inject('Case', 'user', 'caseEditorBasic')
 @observer
 class HeaderEditor extends Component {
+    state = {
+        downloadPDF: false
+    }
+
+    componentWillUnmount() {
+        this.setState({ downloadPDF: false });
+    }
+
 
     render() {
+
         const { type } = this.props;
         const { isEditing, currentCase } = this.props.Case;
         
@@ -41,7 +51,6 @@ class HeaderEditor extends Component {
 
         return (
             <header className={cx('HeaderEditor')}>
-                
                 <div className={cx('tool-bar')}>
                     <div className={cx('btn-tool', 'back')} onClick={() => {
                         this.props.history.goBack();
@@ -169,11 +178,20 @@ class HeaderEditor extends Component {
 
 
 
-
-                    
                     {
-                        this.props.Case.currentCase !== undefined && type === "detail" && !isEditing &&
-                        <PDFDownloadLink 
+                        type === "detail" ?
+                        !this.state.downloadPDF ? 
+                            <div 
+                                className={cx('btn-tool', 'question')}
+                                onClick={() => {
+                                    this.setState({downloadPDF: true});
+                                }}
+                            >
+                                <FiFileText />
+                                <div className={cx('label')}>리포트</div>
+                            </div>
+                            : 
+                            <PDFDownloadLink 
                             className={cx('btn-tool', 'report')}
                             document={<PrintPage user={this.props.user.currentUser} currentCase={this.props.Case.currentCase} />}
                             fileName={`${this.props.Case.currentCase.title}_${getLocaleDateWithYMS(this.props.Case.currentCase.created_date)}.pdf`}
@@ -182,10 +200,14 @@ class HeaderEditor extends Component {
                             }}
                         >
                             {({ blob, url, loading, error }) => {
-                                return <><FiFileText /><div className={cx('label')}>리포트</div></>
-                            }}
+                                    return (loading ? <div style={{fontSize: '0.8rem'}}>준비중...</div> : <><FiArrowDown /><div className={cx('label')}>내려받기</div></>)
+                                }
+                            }
                         </PDFDownloadLink>
+                        : <></>
                     }
+
+                    
 
 
 

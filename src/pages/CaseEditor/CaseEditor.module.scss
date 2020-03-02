@@ -6,6 +6,11 @@
     color: $brand-8;
     background-color: rgba($gray-1, 0.2);
     justify-content: center;
+    &.isLoading {
+        padding: 0;
+        // background-color: red;
+        align-items: center;
+    }
     @include media('lg') {
         padding-top: 58.5px;
     }

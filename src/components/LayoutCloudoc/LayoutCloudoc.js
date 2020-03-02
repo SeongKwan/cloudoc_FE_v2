@@ -18,10 +18,10 @@ class LayoutCloudoc extends Component {
         loadingState: false
     };
     componentDidMount() {
-        // this.setState({loadingState: false});
-        // window.addEventListener("scroll", () => {
-        //     this._loadCases();
-        // });
+        this.setState({loadingState: false});
+        window.addEventListener("scroll", () => {
+            this._loadCases();
+        });
     }
     
     componentWillUnmount() {
@@ -36,7 +36,7 @@ class LayoutCloudoc extends Component {
         const { loadMore } = this.props.Case;
         const totalHeight = Math.floor($(this.layout).prop("scrollHeight"));
         const windowHeight = Math.floor($(window).height());
-        const offset = 400;
+        const offset = 150;
         
         
         // IE에서는 document.documentElement 를 사용.
@@ -49,11 +49,11 @@ class LayoutCloudoc extends Component {
                     if (this.props.search.keyword['cases'] === '') {
                         setTimeout(() => {
                             this.props.Case.addToInfiniteStore();
-                        }, 550);
+                        }, 0);
                     } else if (this.props.search.keyword['cases'] !== '') {
                         setTimeout(() => {
-                        this.props.Case.addToSearchedStore();
-                    }, 550);
+                            this.props.Case.addToSearchedStore();
+                        }, 0);
                     }
                 }
             }
@@ -63,6 +63,8 @@ class LayoutCloudoc extends Component {
             }
         }
     }
+
+
     render() {
         const { children } = this.props;
         
