@@ -5,6 +5,7 @@
         .flexible-container {
             padding: 2rem;
             width: 100%;
+            // min-width: 1200px;
             max-width: 1360px;
             display: flex;
             flex-direction: column;
@@ -12,10 +13,18 @@
             @include media('lg') {
                 padding: 2rem 14rem;
             }
+            @include media('sm') {
+                justify-content: flex-start;
+                padding: 0;
+            }
         }
         .selector {
             display: flex;
             margin-bottom: 3rem;
+            @include media('sm') {
+                padding: 0 1rem;
+                margin-top: 1rem;
+            }
             button {
                 position: relative;
                 padding: 1rem;

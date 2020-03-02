@@ -98,11 +98,18 @@
                     width: 32%;
                     height: 380px;
                 }
+                @include media('sm') {
+                    width: 100%;
+                    margin: 1% !important;
+                }
                 &.add-case {
                     cursor: pointer;
                     background-color: $brand-8;
                     &:hover {
                         background-color: $brand-4;
+                    }
+                    @include media('sm') {
+                        height: 100px;
                     }
                 }
                 &:hover {
@@ -112,6 +119,10 @@
                     }
                     // background-color: rgba($brand-2, 0.9);
                 }
+            }
+
+            @include media('sm') {
+
             }
         }
     }

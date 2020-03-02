@@ -2,10 +2,14 @@
     position: relative;
     padding: 0 2rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1360px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @include media('sm') {
+        font-size: 0.9rem;
+        padding: 0 1rem;
+    }
     .company-info {
         display: flex;
         justify-content: center;
@@ -14,6 +18,9 @@
             margin-top: 1px;
             margin-right: 1rem;
             width: 50px;
+            @include media('sm') {
+                display: none;
+            }
         }
         .info {
             p {
@@ -27,9 +34,13 @@
         display: flex;
         align-items: center;
         margin-bottom: 0;
+        
         li {
             &:not(:last-child) {
                 margin-right: 2rem;
+                @include media('sm') {
+                    margin-right: 1rem;
+                }
             }
         }
         a {

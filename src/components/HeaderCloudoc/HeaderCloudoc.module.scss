@@ -6,6 +6,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @include media('sm') {
+        padding: 0 1rem;
+    }
     .brand-logo {
         display: flex;
         justify-content: center;
@@ -19,18 +22,25 @@
         .brand-name {
             font-size: 1.4rem;
         }
+        @include media('sm') {
+            display: none;
+        }
     }
     .navbar {
         ul {
             display: flex;
             align-items: center;
             margin-bottom: 0;
+            
             a {
                 color: $white;
                 transition-property: font-weight, color;
                 transition-duration: 0.3s;
                 transition-timing-function: ease;
                 font-size: 1.15rem;
+                @include media('sm') {
+                    font-size: 0.9rem;
+                }
                 letter-spacing: 1px;
                 &.active {
                     cursor: default;
@@ -46,6 +56,9 @@
             }
             li:nth-child(2) {
                 margin: 0 6rem;
+                @include media('sm') {
+                    margin: 0 2rem;
+                }
             }
         }
     }
