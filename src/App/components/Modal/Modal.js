@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import styles from './Modal.module.scss';
 import classNames from 'classnames/bind';
 import { inject, observer } from 'mobx-react';
-import { 
-    FiArrowDown
-} from "../../../lib/react-icons/fi";
+// import { 
+//     FiArrowDown
+// } from "../../../lib/react-icons/fi";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PrintPage from '../../../pages/PrintPage';
 import { getLocaleDateWithYMS } from '../../../utils/momentHelper';
@@ -18,6 +18,10 @@ class Modal extends Component {
         downloadPDF: false
     }
     handleClickOnCancel = () => {
+        this.props.modal.closeModal();
+    }
+    handleClickOnConfirm = () => {
+        this.props.print.clear();
         this.props.modal.closeModal();
     }
 
@@ -175,7 +179,7 @@ class Modal extends Component {
                                         }}
                                     >
                                         {({ blob, url, loading, error }) => {
-                                                return (loading ? <button className={cx('confirm', 'preparing')}>다운로드 준비중...</button> : <><button className={cx('confirm')}>내려받기</button></>)
+                                                return (loading ? <button className={cx('confirm', 'preparing')}>다운로드 준비중...</button> : <><button className={cx('confirm')} onClick={this.handleClickOnConfirm}>내려받기</button></>)
                                             }
                                         }
                                 </PDFDownloadLink>
