@@ -18,6 +18,10 @@
             background: $oc-gray-4;
         }
     }
+    &.modalOpen {
+        // overflow: hidden;
+        // height: 100vh;
+    }
     .ready-paste-cover {
         position: absolute;
         top: 0;

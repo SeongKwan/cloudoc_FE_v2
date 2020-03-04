@@ -26,7 +26,7 @@ import Loader from '../Loader';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('Case', 'user', 'caseEditorBasic')
+@inject('Case', 'user', 'caseEditorBasic', 'modal')
 @observer
 class HeaderEditor extends Component {
     state = {
@@ -178,7 +178,7 @@ class HeaderEditor extends Component {
 
 
 
-                    {
+                    {/* {
                         type === "detail" ?
                         !this.state.downloadPDF ? 
                             <div 
@@ -192,19 +192,32 @@ class HeaderEditor extends Component {
                             </div>
                             : 
                             <PDFDownloadLink 
-                            className={cx('btn-tool', 'report')}
-                            document={<PrintPage user={this.props.user.currentUser} currentCase={this.props.Case.currentCase} />}
-                            fileName={`${this.props.Case.currentCase.title}_${getLocaleDateWithYMS(this.props.Case.currentCase.created_date)}.pdf`}
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-                            {({ blob, url, loading, error }) => {
-                                    return (loading ? <div style={{fontSize: '0.8rem'}}>준비중...</div> : <><FiArrowDown /><div className={cx('label')}>내려받기</div></>)
+                                className={cx('btn-tool', 'report')}
+                                document={<PrintPage user={this.props.user.currentUser} currentCase={this.props.Case.currentCase} />}
+                                fileName={`${this.props.Case.currentCase.title}_${getLocaleDateWithYMS(this.props.Case.currentCase.created_date)}.pdf`}
+                                style={{
+                                    textDecoration: "none"
+                                }}
+                            >
+                                {({ blob, url, loading, error }) => {
+                                        return (loading ? <div style={{fontSize: '0.8rem'}}>준비중...</div> : <><FiArrowDown /><div className={cx('label')}>내려받기</div></>)
+                                    }
                                 }
-                            }
                         </PDFDownloadLink>
                         : <></>
+                    } */}
+                    {
+                        type === "detail" && !isEditing &&
+                        <div 
+                            className={cx('btn-tool', 'question')}
+                            onClick={() => {
+                                this.setState({downloadPDF: true});
+                                this.props.modal.showModal('print');
+                            }}
+                        >
+                            <FiFileText />
+                            <div className={cx('label')}>리포트</div>
+                        </div>
                     }
 
                     

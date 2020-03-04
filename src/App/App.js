@@ -10,10 +10,11 @@ import convertRef from '../constant/convertReference'
 import {
   osName
 } from "react-device-detect";
+import Modal from './components/Modal/Modal';
 
 const cx = classNames.bind(styles);
 
-@inject('auth', 'lab')
+@inject('auth', 'lab', 'modal')
 @observer
 class App extends Component {
   state = {
@@ -136,6 +137,7 @@ checkerPaste = (firstData) => {
   
   render() {
     const { readyForPaste } = this.props.lab;
+    
 
     return (
       <Router>
@@ -143,11 +145,14 @@ checkerPaste = (firstData) => {
           <title>{`Cloudoc`}</title>
           <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
-        <main className={cx('App', {Windows: osName === 'Windows'})}>
+        <main className={cx('App', {Windows: osName === 'Windows'}, {modalOpen: this.props.modal.open})}>
         {
           this.state.online === false &&
           <div className={cx('network-message', 'offline')}>오프라인 상태</div>
         }
+        <div id="modal-area">
+          <Modal />
+        </div>
         <div id="paste-area">
         {
           readyForPaste && 

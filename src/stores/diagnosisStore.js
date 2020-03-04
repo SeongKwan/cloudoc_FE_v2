@@ -256,20 +256,10 @@ class DiagnosisStore {
 
     @action clear() {
         this.staticData = [
-            {
-                category: '',
-                name: '',
-                description: '',
-                strategy: '',
-            }
+            
         ];
         this.editableData = [
-            {
-                category: '',
-                name: '',
-                description: '',
-                strategy: '',
-            }
+            
         ];
     }
 

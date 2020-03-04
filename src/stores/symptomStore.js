@@ -531,32 +531,10 @@ class SymptomStore {
 
     @action clear() {
         this.staticData = [
-            {
-                rank: 1,
-                category: '',
-                name: '',
-                onset: '',
-                
-                value: '',
-                unit: 'NRS',
-                min: 0,
-                max: 10,
-                description: ''
-            }
+            
         ];
         this.editableData = [
-            {
-                rank: 1,
-                category: '',
-                name: '',
-                onset: '',
-                
-                value: '',
-                unit: 'NRS',
-                min: 0,
-                max: 10,
-                description: ''
-            }
+            
         ];
 
         this.symptomsForReadOnly = [];

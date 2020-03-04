@@ -1,11 +1,14 @@
 .HeaderCloudoc {
     position: relative;
-    padding: 0 2rem;
+    padding: 2rem;
     width: 100%;
     max-width: 1360px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @include media('lg') {
+        padding: 2rem 14rem;
+    }
     @include media('sm') {
         padding: 0 1rem;
     }
@@ -97,8 +100,8 @@
             flex-direction: column;
             justify-content: center;
             min-width: 200px;
+            right: 0;
             @include media('lg') {
-                right: 0;
             }
             .divider-horizon {
                 position: relative;

@@ -248,20 +248,11 @@ Font.register({ family: 'NanumSquare', fonts: [
 ]});
 
 
-// Font.registerHyphenationCallback(word => {
-//   const middle = Math.floor(word.length / 2);
-//   const parts = word.length === 1 ? [word] : [word.substr(0, middle), word.substr(middle)];
-
-//   // Check console to see words parts
-//   console.log(word, parts);
-
-//   return parts;
-// });
-
 class PrintPage extends Component {
   
   render() {
-    const { user, currentCase } = this.props;
+    const { user, currentCase, contentSetting } = this.props;
+    
     if (currentCase === undefined || currentCase === null) {
       return (
         <Document>
@@ -339,269 +330,271 @@ class PrintPage extends Component {
               {/* <View style={styles.horizon}></View> */}
     
     
-    
-              <View style={styles.section}>
-                <Text style={styles.subTitle}>
-                  기본정보 ( {patient.gender === 'male' ? '남성' : '여성'} / 만 {patient.age}세 )
-                </Text>
-    
-                <View style={styles.contentBox}>
-                  <Text style={styles.name}>&#9635; 과거력</Text>
-                  <Text style={styles.content}>
-                    {patient.pastHistory || '해당사항 없음'}
+              {
+                contentSetting.basic &&
+                <View style={styles.section}>
+                  <Text style={styles.subTitle} wrap={false}>
+                    기본정보 ( {patient.gender === 'male' ? '남성' : '여성'} / 만 {patient.age}세 )
                   </Text>
+      
+                  <View style={styles.contentBox}>
+                    <Text style={styles.name}>&#9635; 과거력</Text>
+                    <Text style={styles.content}>
+                      {patient.pastHistory || '해당사항 없음'}
+                    </Text>
+                  </View>
+                  <View style={styles.contentBox}>
+                    <Text style={styles.name}>&#9635; 가족력</Text>
+                    <Text style={styles.content}>
+                      {patient.familyHistory || '해당사항 없음'}
+                    </Text>
+                  </View>
+                  <View style={styles.contentBox}>
+                    <Text style={styles.name}>&#9635; 사회력</Text>
+                    <Text style={styles.content}>
+                      {patient.socialHistory || '해당사항 없음'}
+                    </Text>
+                  </View>
+                  <View style={styles.contentBox}>
+                    <Text style={styles.name}>&#9635; 기타진찰소견</Text>
+                    <Text style={styles.content}>
+                      {patient.memo || '해당사항 없음'}
+                    </Text>
+                  </View>
                 </View>
-                <View style={styles.contentBox}>
-                  <Text style={styles.name}>&#9635; 가족력</Text>
-                  <Text style={styles.content}>
-                    {patient.familyHistory || '해당사항 없음'}
+              }
+
+              {
+                contentSetting.symptom &&
+                <View style={styles.section}>
+                  <Text wrap={false} style={[styles.subTitle, styles.symptomTitle]}>
+                    증상
                   </Text>
-                </View>
-                <View style={styles.contentBox}>
-                  <Text style={styles.name}>&#9635; 사회력</Text>
-                  <Text style={styles.content}>
-                    {patient.socialHistory || '해당사항 없음'}
-                  </Text>
-                </View>
-                <View style={styles.contentBox}>
-                  <Text style={styles.name}>&#9635; 기타진찰소견</Text>
-                  <Text style={styles.content}>
-                    {patient.memo || '해당사항 없음'}
-                  </Text>
-                </View>
-              </View>
-    
-              <View style={styles.section}>
-                <Text wrap={false} style={[styles.subTitle, styles.symptomTitle]}>
-                  증상
-                </Text>
-    
-                {
-                  symptom.map((symptom, i) => {
-                    const { name, description } = symptom;
-                    
-                    return <View key={i} style={styles.contentBox} wrap={false}>
-                      <Text style={styles.name}>{i + 1}. {name}</Text>
-                      <Text style={styles.content}>
-                        {description || '증상 보충설명 또는 의사 소견란'}
-                      </Text>
-                    </View>
-                  })
-                }
-    
-    
-              </View>
-    
-    
-    
-    
-    
-    
-    
-              <View style={styles.section}>
-                <Text wrap={false} style={[styles.subTitle, styles.labTitle]}>
-                  혈액검사
-                </Text>
-    
-                {
-                  dividedLabByCategory.map((labs, index) => {
-                    let sortedArr = [];
-                    sortedArr = _.sortBy(labs, 'name');
-                    
-                    return <View key={index} style={styles.contentBox}>
-                      <Text style={[styles.name, styles.categoryTitle]}>[ {categories[index]} ]</Text>
-                      {
-                        sortedArr.map((lab, i) => {
-                          const {
-                                originalIndex,
-                                name,
-                                unit,
-                                value,
-                                refMin,
-                                refMax,
-                                optMin,
-                                optMax,
-                                alertMin,
-                                alertMax,
-                                alertMessage,
-                                state,
-                                description,
-                                name_kor
-                            } = lab;
-    
-                            let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
-                            let alertContents;
-                            if (!!description) {
-                                alertContents = description;
-                            } else if (!!!description && alertMessage) {
-                                alertContents = alertMessage;
-                            } else {
-                                alertContents = '-'
-                            }
-    
-                            let widthBar;
-                            widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
-                            if (widthBar > 101) {
-                                widthBar = 100;
-                            } else if (widthBar < 0) {
-                                widthBar = 0;
-                            }
-    
-                            let borderColor;
-                            if ((state === '매우 낮음' && !!alertMin)) {
-                              borderColor = '2pt solid #3b69e6';
-                            }
-                            else if ((state === '매우 높음' && !!alertMax)) {
-                              borderColor = '2pt solid #d64646';
-                            }
-                            else {
-                              borderColor = '1pt solid gray';
-                            }
-    
-                            return <View wrap={false} key={i} style={[styles.labItem, {display: 'flex', flexDirection: 'column'}]}>
-                              <View style={[styles.flexbox]}>
-                                <View style={[styles.flex2, {position: 'relative'}]}>
-                                  {
-                                    showAlert &&
-                                    <View style={[styles.alert]}>
-                                      <Text>!</Text>
-                                    </View>
-                                  }
-                                  <Text style={[styles.labname]}>{name} [ {unit} ]</Text>
-                                </View>
-    
-                                {
-    
-                                }
-    
-                                <View style={[styles.flex3, {position: 'relative', backgroundColor: '#e9e9e9', border: `${borderColor}`, borderRadius: 4}]}>
-                                  <View style={[styles.minRef]}>
-                                    <Text>{refMin}</Text>
-                                  </View>
-                                  <View style={[styles.maxRef]}>
-                                    <Text>{refMax}</Text>
-                                  </View>
-                                  <View style={[styles.labBar, {width: `${widthBar}%`}]}>
-                                    <View style={[styles.currentPosition]}>
-                                      <Text style={{opacity: 1}}>{value}</Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-    
-                              {
-                                showAlert &&
-                                <View style={[{fontSize: 8, lineHeight: 1.4, padding: 8, marginTop: 12, marginBottom: 12, backgroundColor: '#f0f0f0',  borderRadius: 4}]}>
-                                  <Text style={{fontWeight: 200}}>
-                                    {alertMessage}
-                                  </Text>
-                                </View>
-                              }
-    
-                            </View>
-                        })
-                      }
-                    </View>
-                  })
-                }
-              </View>
-    
-    
-    
-    
-    
-              <View style={styles.section}>
-                <Text wrap={false} style={[styles.subTitle, styles.diagnosisTitle]}>
-                  추정진단 ({diagnosis.length})
-                </Text>
-    
-                {
-                  diagnosis.map((diagnosis, i) => {
-                    const { name, description } = diagnosis;
-                    
-                    return <View key={i} style={styles.contentBox} wrap={false}>
-                      <Text style={styles.name}>{i + 1}. {name}</Text>
-                      <Text style={styles.content}>
-                        {description || '진단 보충설명 또는 의사 소견란'}
-                      </Text>
-                    </View>
-                  })
-                }
-    
-    
-              </View>
-    
-    
-    
-    
-              <View style={styles.section}>
-                <Text style={styles.subTitle}>
-                  처방
-                </Text>
-    
-                <View style={styles.contentBox} wrap={false}>
-                  <Text style={styles.name}>{treatment.drugName}</Text>
-                  <Text style={styles.content}>
-                    {
-                      treatment.fomula.length > 0 ?
-                      treatment.fomula.map((fomula, i) => {
-                        const { herbName, dose } = fomula;
-                        if (i < (treatment.fomula.length - 1)) {
-                          return `${herbName}(${dose}g/일), `
-                        } else if (i === treatment.fomula.length - 1) {
-                          return `${herbName}(${dose}g/일)`
-                        }
-                      })
-                      : "처방을 구성하는 한약재 목록"
-                    }
-                  </Text>
-                </View>
-                <View style={styles.contentBox} wrap={false}>
-                  <Text style={styles.name}>&#9635; 복약법</Text>
-                  <Text style={styles.content}>
-                    {treatment.guide || '해당사항 없음'}
-                  </Text>
-                </View>
-                <View style={styles.contentBox} wrap={false}>
-                  <Text style={styles.name}>&#9635; 주의사항</Text>
-                  <Text style={styles.content}>
-                    {treatment.caution || '해당사항 없음'}
-                  </Text>
-                </View>
-              </View>
-    
-    
-    
-    
-              <View style={styles.section}>
-                <Text wrap={false} style={[styles.subTitle, styles.teachingTitle]}>
-                  환자지도
-                </Text>
-    
-                {
-                  teaching.length > 0 ?
-                  teaching.map((teaching, i) => {
-                    const { description } = teaching;
-                    
-                    return <View key={i} style={[styles.contentBox, styles.teachingContents]} wrap={false}>
+      
+                  {
+                    symptom.map((symptom, i) => {
+                      const { name, description } = symptom;
                       
-                      <Text style={[styles.content]}>
-                        {description || '환자 생활 지도에 관한 내용'}
-                      </Text>
-                    </View>
-                  })
-                  : <Text style={[styles.content]}>
-                    해당사항 없음
+                      return <View key={i} style={styles.contentBox} wrap={false}>
+                        <Text style={styles.name}>{i + 1}. {name}</Text>
+                        <Text style={styles.content}>
+                          {description || '증상 보충설명 또는 의사 소견란'}
+                        </Text>
+                      </View>
+                    })
+                  }
+                </View>
+              }
+    
+              {
+                contentSetting.lab &&
+
+                <View style={styles.section}>
+                  <Text wrap={false} style={[styles.subTitle, styles.labTitle]}>
+                    혈액검사
                   </Text>
-                }
+      
+                  {
+                    dividedLabByCategory.map((labs, index) => {
+                      let sortedArr = [];
+                      sortedArr = _.sortBy(labs, 'name');
+                      
+                      return <View key={index} style={styles.contentBox}>
+                        <Text style={[styles.name, styles.categoryTitle]}>[ {categories[index]} ]</Text>
+                        {
+                          sortedArr.map((lab, i) => {
+                            const {
+                                  originalIndex,
+                                  name,
+                                  unit,
+                                  value,
+                                  refMin,
+                                  refMax,
+                                  optMin,
+                                  optMax,
+                                  alertMin,
+                                  alertMax,
+                                  alertMessage,
+                                  state,
+                                  description,
+                                  name_kor
+                              } = lab;
+      
+                              let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
+                              let alertContents;
+                              if (!!description) {
+                                  alertContents = description;
+                              } else if (!!!description && alertMessage) {
+                                  alertContents = alertMessage;
+                              } else {
+                                  alertContents = '-'
+                              }
+      
+                              let widthBar;
+                              widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
+                              if (widthBar > 101) {
+                                  widthBar = 100;
+                              } else if (widthBar < 0) {
+                                  widthBar = 0;
+                              }
+      
+                              let borderColor;
+                              if ((state === '매우 낮음' && !!alertMin)) {
+                                borderColor = '2pt solid #3b69e6';
+                              }
+                              else if ((state === '매우 높음' && !!alertMax)) {
+                                borderColor = '2pt solid #d64646';
+                              }
+                              else {
+                                borderColor = '1pt solid gray';
+                              }
+      
+                              return <View wrap={false} key={i} style={[styles.labItem, {display: 'flex', flexDirection: 'column'}]}>
+                                <View style={[styles.flexbox]}>
+                                  <View style={[styles.flex2, {position: 'relative'}]}>
+                                    {
+                                      showAlert &&
+                                      <View style={[styles.alert]}>
+                                        <Text>!</Text>
+                                      </View>
+                                    }
+                                    <Text style={[styles.labname]}>{name} [ {unit} ]</Text>
+                                  </View>
+      
+                                  {
+      
+                                  }
+      
+                                  <View style={[styles.flex3, {position: 'relative', backgroundColor: '#e9e9e9', border: `${borderColor}`, borderRadius: 4}]}>
+                                    <View style={[styles.minRef]}>
+                                      <Text>{refMin}</Text>
+                                    </View>
+                                    <View style={[styles.maxRef]}>
+                                      <Text>{refMax}</Text>
+                                    </View>
+                                    <View style={[styles.labBar, {width: `${widthBar}%`}]}>
+                                      <View style={[styles.currentPosition]}>
+                                        <Text style={{opacity: 1}}>{value}</Text>
+                                      </View>
+                                    </View>
+                                  </View>
+                                </View>
+      
+                                {
+                                  showAlert &&
+                                  <View style={[{fontSize: 8, lineHeight: 1.4, padding: 8, marginTop: 12, marginBottom: 12, backgroundColor: '#f0f0f0',  borderRadius: 4}]}>
+                                    <Text style={{fontWeight: 200}}>
+                                      {alertMessage}
+                                    </Text>
+                                  </View>
+                                }
+      
+                              </View>
+                          })
+                        }
+                      </View>
+                    })
+                  }
+                </View>
+              }
     
     
-              </View>
+    
+    
+              {
+                contentSetting.diagnosis &&
+                <View style={styles.section}>
+                  <Text wrap={false} style={[styles.subTitle, styles.diagnosisTitle]}>
+                    추정진단 ({diagnosis.length})
+                  </Text>
+      
+                  {
+                    diagnosis.map((diagnosis, i) => {
+                      const { name, description } = diagnosis;
+                      
+                      return <View key={i} style={styles.contentBox} wrap={false}>
+                        <Text style={styles.name}>{i + 1}. {name}</Text>
+                        <Text style={styles.content}>
+                          {description || '진단 보충설명 또는 의사 소견란'}
+                        </Text>
+                      </View>
+                    })
+                  }
+                </View>
+              }
     
     
     
+              {
+                contentSetting.drug &&
+                <View style={styles.section}>
+                  <Text style={styles.subTitle} wrap={false}>
+                    처방
+                  </Text>
+      
+                    <View style={styles.contentBox} wrap={false}>
+                    <Text style={styles.name}>{treatment.drugName}</Text>
+                    {
+                      contentSetting.fomula &&
+                      <Text style={styles.content}>
+                        {
+                          treatment.fomula.length > 0 ?
+                          treatment.fomula.map((fomula, i) => {
+                            const { herbName, dose } = fomula;
+                            if (i < (treatment.fomula.length - 1)) {
+                              return `${herbName}(${dose}g/일), `
+                            } else if (i === treatment.fomula.length - 1) {
+                              return `${herbName}(${dose}g/일)`
+                            }
+                          })
+                          : "처방을 구성하는 한약재 목록"
+                        }
+                      </Text>
+                    }
+                    </View>
+
+                  <View style={styles.contentBox} wrap={false}>
+                    <Text style={styles.name}>&#9635; 복약법</Text>
+                    <Text style={styles.content}>
+                      {treatment.guide || '해당사항 없음'}
+                    </Text>
+                  </View>
+                  <View style={styles.contentBox} wrap={false}>
+                    <Text style={styles.name}>&#9635; 주의사항</Text>
+                    <Text style={styles.content}>
+                      {treatment.caution || '해당사항 없음'}
+                    </Text>
+                  </View>
+                </View>
+              }
     
     
+    
+              {
+                contentSetting.teaching &&
+                <View style={styles.section}>
+                  <Text wrap={false} style={[styles.subTitle, styles.teachingTitle]}>
+                    환자지도
+                  </Text>
+      
+                  {
+                    teaching.length > 0 ?
+                    teaching.map((teaching, i) => {
+                      const { description } = teaching;
+                      
+                      return <View key={i} style={[styles.contentBox, styles.teachingContents]} wrap={false}>
+                        
+                        <Text style={[styles.content]}>
+                          {description || '환자 생활 지도에 관한 내용'}
+                        </Text>
+                      </View>
+                    })
+                    : <Text style={[styles.content]}>
+                      해당사항 없음
+                    </Text>
+                  }
+                </View>
+              }
     
     
     
