@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './LabBar.module.scss';
 import classNames from 'classnames/bind';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import './LabBar.css';
 import $ from 'jquery';
 
@@ -18,15 +18,15 @@ class LabBar extends Component {
             isEditing, 
             index, 
             value, 
-            unit, 
+            // unit, 
             refMax = 100, 
             refMin = 0, 
-            optMax, 
-            optMin, 
-            currentPosition, 
-            state, 
-            alertMin, 
-            alertMax 
+            // optMax, 
+            // optMin, 
+            // currentPosition, 
+            // state, 
+            // alertMin, 
+            // alertMax 
         } = this.props;
 
         let widthBar, widthCoverBar;
@@ -53,7 +53,6 @@ class LabBar extends Component {
                             type="number"
                             placeholder="검사값" 
                             onChange={(e) => {
-                                console.log(e.target.value)
                                 if (e.target.value === 0) {
                                     changeValue(index, '');
                                 }

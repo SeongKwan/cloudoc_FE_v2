@@ -10,7 +10,7 @@ import CaseLibrary from '../../pages/CaseLibrary';
 // import PrintPage from '../../pages/PrintPage';
 import Page404 from '../../pages/Page404';
 import {
-    BrowserView,
+    // BrowserView,
     // MobileView
 } from "react-device-detect";
 import CheckAuth from './CheckAuth';

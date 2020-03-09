@@ -313,7 +313,7 @@
                                                 margin-right: 4px;
                                                 font-size: 0.7rem;
                                                 
-                                                a.drug {
+                                                div.drug {
                                                     padding: 0.2rem;
                                                     color: $gray-2;
                                                     border: 1px solid $gray-2;
@@ -340,13 +340,13 @@
                         }
                     }
 
-                    a.evidence, a.description {
+                    a.evidence, div.description {
                         cursor: pointer;
                         &:hover {
                             text-decoration: underline;
                         }
                     }
-                    a.description {
+                    div.description {
                         padding-right: 0.5rem;
                     }
 
@@ -377,7 +377,7 @@
                                 display: flex;
                                 flex-direction: row;
                                 // font-weight: 100;
-                                padding: 0.25rem 0;
+                                padding: 0.35rem 0;
                                 font-size: 0.9rem;
                                 letter-spacing: 1px;
 
@@ -440,6 +440,10 @@
             top: -4px;
             left: 0px;
             cursor: pointer;
+            display: inline-block;
+            &:hover {
+                opacity: 0.6;
+            }
         }
 
         .header {

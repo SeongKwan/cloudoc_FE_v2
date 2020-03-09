@@ -13,8 +13,6 @@ class RightSideList extends Component {
     
     render() {
         const { editableData, lengthAlertMessage } = this.props.lab;
-        // console.log('editable ',JSON.parse(JSON.stringify(editableData)))
-        // console.log('editable ',typeof JSON.parse(JSON.stringify(editableData)))
         let { length } = editableData;
         let sortedLab = _.sortBy(editableData, 'category')
         let title = length > 0 ? `주의사항(${lengthAlertMessage})` : '주의사항';
@@ -44,6 +42,7 @@ class RightSideList extends Component {
                                 if (showTooltip) {
                                     return <li key={i}><span className={cx('lab-name', {high: state === '매우 높음'}, {low: state === '매우 낮음'})}>{name}</span> - {alertMessage}</li>   
                                 }
+                                return false;
                             })
                         }
                     </ul>

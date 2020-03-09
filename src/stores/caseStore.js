@@ -318,7 +318,7 @@ class CaseStore {
     @action setCurrentCase(currentCase) {
         const {
             title,
-            created_date,
+            // created_date,
             patient,
             record
         } = currentCase;

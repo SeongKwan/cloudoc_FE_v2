@@ -7,21 +7,21 @@ import {
     
     // CsQuestion, 
     FiMessageCircle,
-    FiSettings,
+    // FiSettings,
     FiTrash,
     FiPlus,
     FiSave,
     FiFileText,
     FiHelpCircle,
     FiEdit,
-    FiArrowDown
+    // FiArrowDown
 } from "../../lib/react-icons/fi";
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PrintPage from '../../pages/PrintPage';
-import { getLocaleDateWithYMS } from '../../utils/momentHelper';
-import Loader from '../Loader';
+// import { PDFDownloadLink } from "@react-pdf/renderer";
+// import PrintPage from '../../pages/PrintPage';
+// import { getLocaleDateWithYMS } from '../../utils/momentHelper';
+// import Loader from '../Loader';
 
 const cx = classNames.bind(styles);
 

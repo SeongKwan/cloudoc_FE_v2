@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { IconContext, DefaultContext } from './iconContext';
+import {
+  IconContext,
+  DefaultContext
+} from './iconContext';
 
-var __assign = this && this.__assign || function () {
+var __assign = (this && this.__assign) || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
 
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      for (var p in s)
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
 
     return t;
@@ -15,12 +19,15 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
-var __rest = this && this.__rest || function (s, e) {
+var __rest = (this && this.__rest) || function (s, e) {
   var t = {};
+  
+  for (var p in s)
+    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
 
-  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
+      if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
   return t;
 };
 
@@ -48,8 +55,8 @@ export function IconBase(props) {
     if (props.className) className = (className ? className + ' ' : '') + props.className;
 
     var attr = props.attr,
-        title = props.title,
-        svgProps = __rest(props, ["attr", "title"]);
+      title = props.title,
+      svgProps = __rest(props, ["attr", "title"]);
 
     return React.createElement("svg", __assign({
       stroke: "currentColor",

@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import labStore from './labStore';
+// import labStore from './labStore';
 
 class CaseEditorBasicStore {
     @observable staticData = {

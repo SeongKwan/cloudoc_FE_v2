@@ -154,7 +154,7 @@ class Diagnosis extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, staticData } = this.props.diagnosis;
-        const { length } = editableData;
+        // const { length } = editableData;
         const { diagnosises } = this.props.diagnosisListItem;
         return (
             <div id="case-editor-diagnosis" className={cx('Diagnosis', {view: !isEditing})}>

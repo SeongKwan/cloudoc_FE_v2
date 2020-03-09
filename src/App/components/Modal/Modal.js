@@ -26,7 +26,7 @@ class Modal extends Component {
     }
 
     render() {
-        const { modalType, open } = this.props.modal;
+        const { open } = this.props.modal;
         const {
             basic,
             optionalBasic,

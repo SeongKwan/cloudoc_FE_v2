@@ -184,7 +184,7 @@ class Lab extends Component {
                             alertMessage,
                             state,
                             description,
-                            name_kor
+                            
                         } = lab;
                         let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
                         let alertContents;

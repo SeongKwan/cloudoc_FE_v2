@@ -46,7 +46,7 @@ class Teaching extends Component {
                         {
                             length > 0 ? (type === "create" || isEditing) ?
                             editableData.map((teaching, i) => {
-                                const { ref_id, description } = teaching;
+                                const { description } = teaching;
                                 return <li key={i} className={cx('')}>
                                     <div className={cx('form-wrapper', 'teaching-description', 'input')}>
                                         
@@ -69,7 +69,7 @@ class Teaching extends Component {
                                 </li>
                             })
                             : staticData.map((teaching, i) => {
-                                const { ref_id, description } = teaching;
+                                const { description } = teaching;
                                 return <li key={i} className={cx('')}>
                                     <div className={cx('form-wrapper', 'teaching-description', 'input')}>
                                         

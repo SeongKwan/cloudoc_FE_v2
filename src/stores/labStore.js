@@ -103,14 +103,6 @@ class LabStore {
     }
 
 
-    @action changeGender() {
-        const { gender } = basicStore.editableData;
-        console.log('fn labstore')
-    }
-
-
-
-
 
     @action filteredEditableData(gender = '', categoryIndex) {
         

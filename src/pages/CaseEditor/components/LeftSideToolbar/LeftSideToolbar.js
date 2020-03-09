@@ -64,7 +64,7 @@ class LeftSideToolbar extends Component {
         if (this.props.Case.isEditing || this.props.type === "create") {
             let scrollBox = $('#case-editor-center-container-scroll-box');
             let objDiv = $('#case-editor-diagnosis');
-            if (scrollBox.lenght <= 0 || objDiv.length <= 0) {
+            if (scrollBox.length <= 0 || objDiv.length <= 0) {
                 return false;
             }
             let offset1 = objDiv.position();
@@ -244,6 +244,8 @@ class LeftSideToolbar extends Component {
                 });
             }
             return null;
+        } else {
+            return false;
         }
     }
 
@@ -320,7 +322,7 @@ class LeftSideToolbar extends Component {
         const lengthLab = this.props.lab.editableData.length > 0;
         const lengthDiagnosis = this.props.diagnosis.editableData.length > 0;
 
-        const { currentReference, pageType } = this.props.caseEditor;
+        const { currentReference } = this.props.caseEditor;
 
         
         return (
@@ -382,6 +384,7 @@ class LeftSideToolbar extends Component {
                         <div className={cx('results', {openDetail: symptomDetail})}>
                             <ul className={cx('scroll-box')}>
                                 {
+                                    this.props.analyzeSymptom.openMores.length > 0 &&
                                     anlSymptom.map((anl, i) => {
                                         const { openMores } = this.props.analyzeSymptom;
                                         const {
@@ -398,16 +401,13 @@ class LeftSideToolbar extends Component {
                                             matchedItemWithState,
                                             unmatchedItemWithState
                                         } = analyzeLab;
+
                                         return <li key={i}>
                                                 <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
                                                     <div data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
                                                 </div>
-                                                {/* <div className={cx('btn-condition')}> */}
-                                                    {/* <img data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}} src={Info} alt="질환상세" /> */}
-                                                    {/* <button>
-                                                    </button> */}
-                                                {/* </div> */}
+                                                
                                                 <div className={cx('btn-more')}>
                                                     <button onClick={(e) => {
                                                                 e.stopPropagation();
@@ -545,15 +545,6 @@ class LeftSideToolbar extends Component {
                                             drugs
                                         } = anl;
 
-                                        {/* const {
-                                            id,
-                                            drugName,
-                                            evidence,
-                                            reference_id
-                                        } = anl; */}
-
-                                        {/* console.log(JSON.parse(JSON.stringify(this.props.analyzeDrug.openMores))) */}
-
                                         return <li key={indexAnl}>
                                             <div className={cx('name-btn')}>
                                                 <div className={cx('name', 'condition-name')}>
@@ -568,7 +559,7 @@ class LeftSideToolbar extends Component {
                                                             this.props.analyzeDrug.openMores.length > 0 &&
                                                             drugs.map((drug, indexDrug) => {
                                                                 const {
-                                                                    id, section, drugName, evidences
+                                                                    id, drugName, evidences
                                                                 } = drug;
                                                                 return <li key={indexDrug}>
                                                                     <div className={cx('drug-container')}>
@@ -621,7 +612,7 @@ class LeftSideToolbar extends Component {
                                                                                                         reference_summary
                                                                                                     } = ref;
                                                                                                     return <div key={i}>
-                                                                                                        <a 
+                                                                                                        <div 
                                                                                                             className={cx('drug')}
                                                                                                             data-tip={reference_summary} 
                                                                                                             data-for={`tooltip-evidence-${condition_id}-${id}-${i}`}
@@ -633,7 +624,7 @@ class LeftSideToolbar extends Component {
                                                                                                             }}
                                                                                                         >
                                                                                                             {reference_id}
-                                                                                                        </a>
+                                                                                                        </div>
                                                                                                         <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-evidence-${condition_id}-${id}-${i}`} />
                                                                                                     </div>
                                                                                                 })
@@ -665,6 +656,7 @@ class LeftSideToolbar extends Component {
                         <div className={cx('results', 'teaching', {openDetail: true})}>
                             <ul className={cx('scroll-box')}>
                                 {
+                                    this.props.analyzeTeaching.openMores.length > 0 &&
                                     anlTeaching.map((anl, i) => {
                                         const { openMores } = this.props.analyzeTeaching;
                                         const {
@@ -713,7 +705,7 @@ class LeftSideToolbar extends Component {
                                                                             reference_summary
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                                <a 
+                                                                                <div 
                                                                                     className={cx('description')}
                                                                                     data-tip={reference_summary} 
                                                                                     data-for={`tooltip-teaching-${i}`}
@@ -725,7 +717,7 @@ class LeftSideToolbar extends Component {
                                                                                     }}
                                                                                 >
                                                                                     {description}
-                                                                                </a>
+                                                                                </div>
                                                                                 <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-teaching-${i}`} />
                                                                             
                                                                             <div className={cx('btn-add')}>
@@ -746,6 +738,8 @@ class LeftSideToolbar extends Component {
                                                     </div>
                                                 }
                                             </li>
+                                        } else {
+                                            return false;
                                         }
                                     })
                                 }
@@ -763,7 +757,7 @@ class LeftSideToolbar extends Component {
 
 
                 {
-                    !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "detail" &&
+                    this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "detail" &&
                     <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
                         {
                             
@@ -799,7 +793,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         detail.description && 
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={detail.ref_content} 
                                                                                 data-for={`tooltip-detail-${i}`}
                                                                                 className={cx('anchor')}
@@ -811,7 +805,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{detail.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
                                                                         </>
                                                                     }
@@ -837,7 +831,7 @@ class LeftSideToolbar extends Component {
                                                                             {
                                                                                 path.level1 &&
                                                                                 <>
-                                                                                    <a 
+                                                                                    <div 
                                                                                         data-tip={path.ref_content} 
                                                                                         data-for={`tooltip-path-${i}`}
                                                                                         className={cx('anchor')}
@@ -849,7 +843,7 @@ class LeftSideToolbar extends Component {
                                                                                         }}
                                                                                     >
                                                                                         [{path.ref_id}]
-                                                                                    </a>
+                                                                                    </div>
                                                                                     <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
                                                                                 </>
                                                                             }
@@ -887,7 +881,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         symptom.name &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={symptom.ref_content} 
                                                                                 data-for={`tooltip-symptom-${i}`}
                                                                                 className={cx('anchor')}
@@ -899,7 +893,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{symptom.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
                                                                         </>
                                                                     }
@@ -944,7 +938,7 @@ class LeftSideToolbar extends Component {
                                                                         {
                                                                             drug.effect &&
                                                                             <>
-                                                                                <a 
+                                                                                <div 
                                                                                     data-tip={drug.ref_content} 
                                                                                     data-for={`tooltip-drug-${i}`}
                                                                                     className={cx('anchor')}
@@ -956,7 +950,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                                 >
                                                                                     [{drug.ref_id}]
-                                                                                </a>
+                                                                                </div>
                                                                                 <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
                                                                             </>
                                                                         }
@@ -981,7 +975,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         teach.description &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={teach.ref_content} 
                                                                                 data-for={`tooltip-teach-${i}`}
                                                                                 className={cx('anchor')}
@@ -993,7 +987,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{teach.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
                                                                         </>
                                                                     }
@@ -1013,7 +1007,7 @@ class LeftSideToolbar extends Component {
 
 
                 {
-                    !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "reference" &&
+                    this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "reference" &&
                     <div className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
                         {
                             <div className={cx('detail')}>
@@ -1159,6 +1153,9 @@ class LeftSideToolbar extends Component {
                     </div>
                 }
 
+
+
+
                 {
                     !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "drug" &&
                     <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
@@ -1285,14 +1282,6 @@ class LeftSideToolbar extends Component {
                     </div>
                 }
 
-
-
-
-
-
-
-
-
                 {
                     !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "detail" &&
                     <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
@@ -1330,7 +1319,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         detail.description && 
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={detail.ref_content} 
                                                                                 data-for={`tooltip-detail-${i}`}
                                                                                 className={cx('anchor')}
@@ -1342,7 +1331,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{detail.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
                                                                         </>
                                                                     }
@@ -1368,7 +1357,7 @@ class LeftSideToolbar extends Component {
                                                                             {
                                                                                 path.level1 &&
                                                                                 <>
-                                                                                    <a 
+                                                                                    <div 
                                                                                         data-tip={path.ref_content} 
                                                                                         data-for={`tooltip-path-${i}`}
                                                                                         className={cx('anchor')}
@@ -1380,7 +1369,7 @@ class LeftSideToolbar extends Component {
                                                                                         }}
                                                                                     >
                                                                                         [{path.ref_id}]
-                                                                                    </a>
+                                                                                    </div>
                                                                                     <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
                                                                                 </>
                                                                             }
@@ -1418,7 +1407,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         symptom.name &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={symptom.ref_content} 
                                                                                 data-for={`tooltip-symptom-${i}`}
                                                                                 className={cx('anchor')}
@@ -1430,7 +1419,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{symptom.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
                                                                         </>
                                                                     }
@@ -1475,7 +1464,7 @@ class LeftSideToolbar extends Component {
                                                                         {
                                                                             drug.effect &&
                                                                             <>
-                                                                                <a 
+                                                                                <div 
                                                                                     data-tip={drug.ref_content} 
                                                                                     data-for={`tooltip-drug-${i}`}
                                                                                     className={cx('anchor')}
@@ -1487,7 +1476,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                                 >
                                                                                     [{drug.ref_id}]
-                                                                                </a>
+                                                                                </div>
                                                                                 <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
                                                                             </>
                                                                         }
@@ -1512,7 +1501,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         teach.description &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={teach.ref_content} 
                                                                                 data-for={`tooltip-teach-${i}`}
                                                                                 className={cx('anchor')}
@@ -1524,7 +1513,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{teach.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
                                                                         </>
                                                                     }
@@ -1541,8 +1530,6 @@ class LeftSideToolbar extends Component {
                         }
                     </div>
                 }
-
-
 
                 {
                     !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "reference" &&
@@ -1733,7 +1720,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         detail.description && 
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={detail.ref_content} 
                                                                                 data-for={`tooltip-detail-${i}`}
                                                                                 className={cx('anchor')}
@@ -1745,7 +1732,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{detail.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
                                                                         </>
                                                                     }
@@ -1771,7 +1758,7 @@ class LeftSideToolbar extends Component {
                                                                             {
                                                                                 path.level1 &&
                                                                                 <>
-                                                                                    <a 
+                                                                                    <div 
                                                                                         data-tip={path.ref_content} 
                                                                                         data-for={`tooltip-path-${i}`}
                                                                                         className={cx('anchor')}
@@ -1783,7 +1770,7 @@ class LeftSideToolbar extends Component {
                                                                                         }}
                                                                                     >
                                                                                         [{path.ref_id}]
-                                                                                    </a>
+                                                                                    </div>
                                                                                     <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
                                                                                 </>
                                                                             }
@@ -1821,7 +1808,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         symptom.name &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={symptom.ref_content} 
                                                                                 data-for={`tooltip-symptom-${i}`}
                                                                                 className={cx('anchor')}
@@ -1833,7 +1820,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{symptom.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
                                                                         </>
                                                                     }
@@ -1878,7 +1865,7 @@ class LeftSideToolbar extends Component {
                                                                         {
                                                                             drug.effect &&
                                                                             <>
-                                                                                <a 
+                                                                                <div 
                                                                                     data-tip={drug.ref_content} 
                                                                                     data-for={`tooltip-drug-${i}`}
                                                                                     className={cx('anchor')}
@@ -1890,7 +1877,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                                 >
                                                                                     [{drug.ref_id}]
-                                                                                </a>
+                                                                                </div>
                                                                                 <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
                                                                             </>
                                                                         }
@@ -1915,7 +1902,7 @@ class LeftSideToolbar extends Component {
                                                                     {
                                                                         teach.description &&
                                                                         <>
-                                                                            <a 
+                                                                            <div 
                                                                                 data-tip={teach.ref_content} 
                                                                                 data-for={`tooltip-teach-${i}`}
                                                                                 className={cx('anchor')}
@@ -1927,7 +1914,7 @@ class LeftSideToolbar extends Component {
                                                                                 }}
                                                                             >
                                                                                 [{teach.ref_id}]
-                                                                            </a>
+                                                                            </div>
                                                                             <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
                                                                         </>
                                                                     }
@@ -1944,7 +1931,6 @@ class LeftSideToolbar extends Component {
                         }
                     </div>
                 }
-
 
                 {
                     !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "reference" &&

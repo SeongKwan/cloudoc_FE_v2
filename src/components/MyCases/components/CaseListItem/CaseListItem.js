@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './CaseListItem.module.scss';
 import classNames from 'classnames/bind';
 import { GoPerson } from "../../../../lib/react-icons/go";
-import { FiClock, CsSmartCondition, CsSmartDrug } from "../../../../lib/react-icons/fi";
+import { CsSmartCondition, CsSmartDrug } from "../../../../lib/react-icons/fi";
 import { FaNotesMedical } from "../../../../lib/react-icons/fa";
 import { Link } from 'react-router-dom';
 import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';

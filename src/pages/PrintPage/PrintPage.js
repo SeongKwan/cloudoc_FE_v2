@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 // import styles from './PrintPage.module.scss';
 // import classNames from 'classnames/bind';
 // import { Helmet } from "react-helmet";
-import { Page, Text, View, Image, Document, StyleSheet, Font } from '@react-pdf/renderer';
-import {testCase} from '../../constant/testCase';
-import { inject, observer } from 'mobx-react';
+import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+// import {testCase} from '../../constant/testCase';
+// import { inject, observer } from 'mobx-react';
 import NanumSquareL from '../../styles/font/NanumSquareOTF_acL.ttf';
 import NanumSquareR from '../../styles/font/NanumSquareOTF_acR.ttf';
 import NanumSquareB from '../../styles/font/NanumSquareOTF_acB.ttf';
@@ -263,7 +263,7 @@ class PrintPage extends Component {
       )
     } else {
         const {
-          _id,
+          // _id,
           patient,
           created_date,
           title,
@@ -271,7 +271,7 @@ class PrintPage extends Component {
         } = currentCase;
         const {
           symptom,
-          selectedLabCategory,
+          // selectedLabCategory,
           lab,
           diagnosis,
           treatment,
@@ -404,31 +404,20 @@ class PrintPage extends Component {
                         {
                           sortedArr.map((lab, i) => {
                             const {
-                                  originalIndex,
+                                  
                                   name,
                                   unit,
                                   value,
                                   refMin,
                                   refMax,
-                                  optMin,
-                                  optMax,
                                   alertMin,
                                   alertMax,
                                   alertMessage,
                                   state,
-                                  description,
-                                  name_kor
                               } = lab;
       
                               let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
-                              let alertContents;
-                              if (!!description) {
-                                  alertContents = description;
-                              } else if (!!!description && alertMessage) {
-                                  alertContents = alertMessage;
-                              } else {
-                                  alertContents = '-'
-                              }
+                              
       
                               let widthBar;
                               widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
@@ -545,6 +534,8 @@ class PrintPage extends Component {
                               return `${herbName}(${dose}g/일), `
                             } else if (i === treatment.fomula.length - 1) {
                               return `${herbName}(${dose}g/일)`
+                            } else {
+                              return false;
                             }
                           })
                           : "처방을 구성하는 한약재 목록"
