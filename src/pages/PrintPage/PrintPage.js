@@ -257,7 +257,7 @@ class PrintPage extends Component {
       return (
         <Document>
           <Page>
-            <Text>123456</Text>
+            <Text>잘못된 요청입니다</Text>
           </Page>
         </Document>
       )
@@ -311,10 +311,10 @@ class PrintPage extends Component {
                 <View><Text style={styles.headerTitle}>2020 Cloudoc</Text></View>
               </View>
     
-              {/* 제목줄 */}
+              
               <View>
                 <View style={styles.titleWrapper}>
-                  {/* 띄어쓰기가 없는 긴 내용이 있을 경우 화면에서 짤리는 현상 발생 */}
+                  
                   <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={[styles.caseInfo]}>
@@ -326,8 +326,7 @@ class PrintPage extends Component {
                   </View>
                 </View>
               </View>
-              {/* 가로 분단 줄 */}
-              {/* <View style={styles.horizon}></View> */}
+              
     
     
               {
@@ -591,11 +590,11 @@ class PrintPage extends Component {
     
     
     
-              {/* 페이지위치 */}
+              
               <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
                 `${pageNumber} / ${totalPages}`
               )} fixed />
-              {/* 권리표시 */}
+              
               <View style={styles.copyright} fixed>
                 <Text>Copyright &copy; 2020 Cloudoc. All rights reserved.</Text>
               </View>
