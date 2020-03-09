@@ -226,8 +226,20 @@ class LeftSideToolbar extends Component {
             if (!this.props.analyzeTeaching.isLoading) {
                 this.props.Case.analyzeTeaching(referenceData)
                 .then(result => {
-                    let countResult = result.length;
-                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    let counts = 0;
+
+                    result.forEach((res, i) => {
+                        const { teachings } = res;
+                        teachings.forEach((teaching, i) => {
+                            if (teachings.length > 0) {
+                                return counts++;
+                            } else {
+                                return true;
+                            }
+                        })
+                    });
+
+                    if (counts <= 0) alert('해당하는 분석결과가 없습니다');
                     this.props.analyzeTeaching.initiateOpen();
                 });
             }
@@ -270,6 +282,11 @@ class LeftSideToolbar extends Component {
     render() {
         const { openList } = this.state;
         const {
+            isLoadingForSymptom,
+            isLoadingForTreatment,
+            isLoadingForTeaching,
+        } = this.props.Case;
+        const {
             name,
             detail,
             teaching,
@@ -309,41 +326,55 @@ class LeftSideToolbar extends Component {
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
                 
-                <div 
-                    className={cx('btn', {open: openList === 'condition'}, {tool: (!lengthSymptom && !lengthLab)}, 'symptom', {disabled: (!lengthSymptom && !lengthLab)})} 
-                    id="btn-smart-condition" 
-                    data-anl="symptom" 
-                    data-type="condition" 
-                    onClick={this._handleOnClick} 
-                    data-disabled={(!lengthSymptom && !lengthLab) ? 'true' : 'false'} 
-                    data-tip="증상 또는 혈액검사가 최소 1개 이상 필요합니다"
-                >
-                    <FaUserCheck />
-                    <div className={cx('label')}>스마트진단</div>
-                </div>
-                <div 
-                    className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} 
-                    data-type="drug" 
-                    data-anl="drug" 
-                    onClick={this._handleOnClick} 
-                    data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
-                    data-tip="진단이 최소 1개 이상 필요합니다"
-                >
-                    <FaNotesMedical />
-                    <div className={cx('label')}>스마트처방</div>
-                </div>
-                <div 
-                    className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} 
-                    data-type="teaching" 
-                    data-anl="teaching" 
-                    onClick={this._handleOnClick} 
-                    data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
-                    data-tip="진단이 최소 1개 이상 필요합니다"
-                >
-                    <FaChalkboard />
-                    <div className={cx('label')}>스마트티칭</div>
-                    
-                </div>
+                {
+                    !isLoadingForSymptom ? 
+                    <div 
+                        className={cx('btn', {open: openList === 'condition'}, {tool: (!lengthSymptom && !lengthLab)}, 'symptom', {disabled: (!lengthSymptom && !lengthLab)})} 
+                        id="btn-smart-condition" 
+                        data-anl="symptom" 
+                        data-type="condition" 
+                        onClick={this._handleOnClick} 
+                        data-disabled={(!lengthSymptom && !lengthLab) ? 'true' : 'false'} 
+                        data-tip="증상 또는 혈액검사가 최소 1개 이상 필요합니다"
+                    >
+                        <FaUserCheck />
+                        <div className={cx('label')}>스마트진단</div>
+                    </div>
+                    : <div className={cx('btn', {isLoading: isLoadingForSymptom})}>분석중...</div>
+                }
+                {
+                    !isLoadingForTreatment ? 
+                    <div 
+                        className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} 
+                        data-type="drug" 
+                        data-anl="drug" 
+                        onClick={this._handleOnClick} 
+                        data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                        data-tip="진단이 최소 1개 이상 필요합니다"
+                    >
+                        <FaNotesMedical />
+                        <div className={cx('label')}>스마트처방</div>
+                    </div>
+                    : <div className={cx('btn', {isLoading: isLoadingForTreatment})}>분석중...</div>
+                }
+                {
+                    !isLoadingForTeaching ? 
+                    <div 
+                        className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} 
+                        data-type="teaching" 
+                        data-anl="teaching" 
+                        onClick={this._handleOnClick} 
+                        data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                        data-tip="진단이 최소 1개 이상 필요합니다"
+                    >
+                        <FaChalkboard />
+                        <div className={cx('label')}>스마트티칭</div>
+                        
+                    </div>
+                    : <div className={cx('btn', {isLoading: isLoadingForTeaching})}>분석중...</div>
+                }
+                
+                
                 
                 <div className={cx('content-container')}>
                     {
@@ -412,7 +443,7 @@ class LeftSideToolbar extends Component {
                                                                 matchedItem.length > 0 &&
                                                                 matchedItem.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[증상]</div>
+                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
                                                                         <div> {item}</div>
                                                                     </li>
                                                                 })
@@ -421,7 +452,7 @@ class LeftSideToolbar extends Component {
                                                                 matchedItemWithState.length > 0 &&
                                                                 matchedItemWithState.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[혈검]</div>
+                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
                                                                         <div> {item.name}</div>
                                                                         <div> - {item.state}</div>
                                                                     </li>
@@ -442,7 +473,7 @@ class LeftSideToolbar extends Component {
                                                                 unmatchedItem.length > 0 &&
                                                                 unmatchedItem.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[증상]</div>
+                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
                                                                         <div> {item}</div>
                                                                     </li>
                                                                 })
@@ -451,7 +482,7 @@ class LeftSideToolbar extends Component {
                                                                 unmatchedItemWithState.length > 0 &&
                                                                 unmatchedItemWithState.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[혈검]</div>
+                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
                                                                         <div> {item.name} </div>
                                                                         <div> - {item.state}</div>
                                                                     </li>
@@ -472,7 +503,7 @@ class LeftSideToolbar extends Component {
                                                                 analyzeSymptom.needToCheck.length > 0 &&
                                                                 analyzeSymptom.needToCheck.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[증상]</div>
+                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
                                                                         <div> {item}</div>
                                                                     </li>
                                                                 })
@@ -481,7 +512,7 @@ class LeftSideToolbar extends Component {
                                                                 analyzeLab.needToCheck.length > 0 &&
                                                                 analyzeLab.needToCheck.map((item, i) => {
                                                                     return <li key={i}>
-                                                                        <div>[혈검]</div>
+                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
                                                                         <div> {item.name} </div>
                                                                         <div> - {item.state}</div>
                                                                     </li>
@@ -682,7 +713,6 @@ class LeftSideToolbar extends Component {
                                                                             reference_summary
                                                                         } = teach;
                                                                         return <li key={i}>
-                                                                            <div className={cx('description-wrapper')}>
                                                                                 <a 
                                                                                     className={cx('description')}
                                                                                     data-tip={reference_summary} 
@@ -697,7 +727,7 @@ class LeftSideToolbar extends Component {
                                                                                     {description}
                                                                                 </a>
                                                                                 <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-teaching-${i}`} />
-                                                                            </div>
+                                                                            
                                                                             <div className={cx('btn-add')}>
                                                                                 <button
                                                                                     onClick={(e) => {

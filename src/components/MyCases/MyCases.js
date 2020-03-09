@@ -113,12 +113,6 @@ class MyCases extends Component {
                                 <div className={cx('btn-load-more')}>더 불러오기</div>
                             </div>
                         }
-                        {
-                            length > 0 && !loadMore && !isLoading &&
-                            <div className={cx('status', 'no-more')}>
-                                <div>-------- 마지막입니다 --------</div>
-                            </div>
-                        }
                     </ul>
                 </div>
             </div>

@@ -56,7 +56,7 @@ class Basic extends Component {
         const { isEditing } = this.props.Case;
 
         return (
-            <div className={cx('Basic', {view: !isEditing})}>
+            <div className={cx('Basic', {view: (!isEditing && type === 'detail')})}>
                 <h5>기본정보</h5>
                 <div className={cx('form-wrapper', 'title', 'input')}>
                     {

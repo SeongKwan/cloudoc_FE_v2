@@ -225,17 +225,17 @@ class HeaderEditor extends Component {
 
 
 
+                <div className={cx('btn-tool', 'qna')} onClick={() => {alert('현재 준비중입니다.')}}>
+                    <FiHelpCircle />
+                    <div className={cx('label')}>도움</div>
                 </div>
-                <div className={cx('menu')}>
-                    <div className={cx('btn-tool', 'qna')}>
-                        <FiHelpCircle />
-                        <div className={cx('label')}>도움</div>
-                    </div>
-                    <div className={cx('btn-tool', 'settings')}>
-                        <FiSettings />
-                        <div className={cx('label')}>메뉴</div>
-                    </div>
+                {/* <div className={cx('btn-tool', 'settings')}>
+                    <FiSettings />
+                    <div className={cx('label')}>메뉴</div>
+                </div> */}
                 </div>
+                {/* <div className={cx('menu')}>
+                </div> */}
             </header>
         );
     }

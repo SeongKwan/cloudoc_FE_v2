@@ -47,11 +47,11 @@ class CaseListItem extends Component {
                         <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
                             <div className={cx('created-at')}>
-                                <FiClock />{semiDate} &nbsp;&nbsp;|
+                                {semiDate}
                             </div>
                             <div className={cx('qna')}>
-                                <div className={cx('count', 'question-count')}>질문 8</div>
-                                <div className={cx('count', 'answer-count')}>답변 5</div>
+                                <div className={cx('count', 'question-count')}><div>질문</div><div className={cx('number')}>8</div></div>
+                                <div className={cx('count', 'answer-count')}><div>답변</div><div className={cx('number')}>5</div></div>
                             </div>
                         </div>
                     </div>

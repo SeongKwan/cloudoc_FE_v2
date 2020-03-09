@@ -12,7 +12,7 @@ function toUnix(_datetime) {
 
 function getLocaleSemiDateWithTime(_datetime) {
     let d = new Date(_datetime);
-    return moment(d).tz(moment.tz.guess()).format("YY/MM/DD HH:mm");
+    return moment(d).tz(moment.tz.guess()).format("YYYY년 MM월 DD일");
 }
 
 function getLocaleFullDateWithTime(_datetime) {

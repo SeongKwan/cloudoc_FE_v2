@@ -166,7 +166,7 @@ checkerPaste = (firstData) => {
               </div>
               <div className={cx('code-container')}>
                 <div className={cx('window','code-wrapper')}>
-                  <div>(윈도우)</div>
+                  <div>(윈도우)</div>
                   <code className={cx('short-command-key')}>ctrl + v</code>
                 </div>
                 <div className={cx('mac','code-wrapper')}>

@@ -343,7 +343,7 @@ class Lab extends Component {
                         (type === "create" || isEditing) &&
                         <>
                             <div className={cx('text','button-paste')} onClick={this.handleOnClickPasteButton} id="paste">결과붙여넣기</div>
-                            <button className={cx('add-manual')} onClick={this.handleOnClickAddManual}>{this.state.openAddManual ? '개별입력닫기' : '직접입력'}</button>
+                            <button className={cx('add-manual', {open: this.state.openAddManual})} onClick={this.handleOnClickAddManual}>{this.state.openAddManual ? '입력닫기' : '직접입력'}</button>
                             <button disabled={disabledButton} className={cx('delete-all', {disabled: disabledButton})} onClick={this.handleDeleteAll}>결과삭제</button>
                         </>
                     }
@@ -373,6 +373,7 @@ class Lab extends Component {
                         labCategories.map((category, i) => {
                             return <li className={cx('select-list-item')} key={i}>
                                 <label>
+                                    <div>{category.label}</div>
                                     <input 
                                         type="checkbox"
                                         value={category.value}
@@ -384,7 +385,7 @@ class Lab extends Component {
                                             return this.props.lab.filteredEditableData(gender, i);
                                         }}
                                     />
-                                    <span>{category.label}</span>
+                                    <span></span>
                                 </label>
                                     
                             </li>

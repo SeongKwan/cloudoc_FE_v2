@@ -19,11 +19,12 @@
         cursor: pointer;
         img {
             margin-top: 1px;
-            margin-right: 4px;
+            margin-right: 8px;
             width: 40px;
         }
         .brand-name {
             font-size: 1.4rem;
+            margin-top: 5px;
         }
         @include media('sm') {
             display: none;

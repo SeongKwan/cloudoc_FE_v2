@@ -18,6 +18,9 @@ import RightSideList from './components/RightSideList/RightSideList';
 import Teaching from './components/Teaching/Teaching';
 import $ from 'jquery';
 import Loader from '../../components/Loader';
+import {
+  FiArrowUp
+} from '../../lib/react-icons/fi';
 
 const cx = classNames.bind(styles);
 
@@ -37,9 +40,20 @@ class CaseEditor extends Component {
   componentDidMount() {
     const type = this.props.location.pathname.split('/')[3];
     const caseId = this.props.location.pathname.split('/')[4];
+    
+    $('#case-editor-center-container-scroll-box').on("scroll", function() {
+      if ( $( this ).scrollTop() > 400 ) {
+        $( '#scroll-to-top' ).fadeIn();
+      } else {
+        $( '#scroll-to-top' ).fadeOut();
+      }
+    });
+
     if (type === 'detail') {
       this.props.Case.loadCase(caseId);
     }
+
+
     this.props.symptomListItem.loadSymptoms()
     .then((res) => {
       this.props.drugListItem.loadDrugs();
@@ -48,10 +62,22 @@ class CaseEditor extends Component {
     .catch((err) => {
       console.log(err);
     });
+
+    
   }
 
   componentDidUpdate(prevProps) {
     const type = this.props.location.pathname.split('/')[3];
+    
+    $('#case-editor-center-container-scroll-box').on("scroll", function() {
+      if ( $( this ).scrollTop() > 400 ) {
+        $( '#scroll-to-top' ).fadeIn();
+      } else {
+        $( '#scroll-to-top' ).fadeOut();
+      }
+    });
+
+    $("#testID").on("click", () => {console.log('testID click')})
     if (prevProps.location.pathname.split('/')[3] !== type) {
       $('#case-editor-center-container-scroll-box').scrollTop(0);
     }
@@ -60,6 +86,10 @@ class CaseEditor extends Component {
   componentWillUnmount() {
     this.props.Case.clearIsEditing();
     this.props.Case.clearCurrentCase();
+  }
+
+  handleClickOnTopScroll = () => {
+    $('#case-editor-center-container-scroll-box').animate( { scrollTop : 0 }, 400 );
   }
   
 
@@ -98,7 +128,6 @@ class CaseEditor extends Component {
             </div>
             <div id="case-editor-center-container" className={cx('container', 'center')}>
               <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
-                
                   <>
                     <Basic type={type} />
                     <CollapsibleBox 
@@ -113,7 +142,6 @@ class CaseEditor extends Component {
                     <Drug type={type} />
                     <Teaching type={type} />
                   </>
-                
               </div>
             </div>
             <div className={cx('container', 'right')}>
@@ -123,6 +151,7 @@ class CaseEditor extends Component {
                   <RightSideList type={type} isEditing={isEditing} />
                 }
               </div>
+              <div id="scroll-to-top" className={cx('scroll-to-top')} onClick={this.handleClickOnTopScroll}><FiArrowUp /></div>
             </div>
           </>
         }

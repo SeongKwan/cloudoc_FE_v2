@@ -114,13 +114,12 @@ class Symptoms extends Component {
         const windowWidth = window.outerWidth;
         let offTop, listItemHeight;
         
-
+        
         if (windowWidth > 1411) {
             listItemHeight = 40;
         } else {
             listItemHeight = 32;
         }
-
         
         if (index <= 3 && index >= 0) {
             offTop = 0;

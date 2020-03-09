@@ -13,11 +13,14 @@
     .company-info {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         img {
             margin-top: 1px;
-            margin-right: 1rem;
-            width: 50px;
+            margin-right: 1.8rem;
+            width: 56px;
+            @include media('lg') {
+                width: 40px;
+            }
             @include media('sm') {
                 display: none;
             }

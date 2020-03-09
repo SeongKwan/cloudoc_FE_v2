@@ -1,4 +1,9 @@
 .Header {
+    max-width: 1360px;
+    @include media('lg') {
+        padding-left: 12rem;
+        padding-right: 12rem;
+    }
     &.line {
         background-color: #cc0000;
     }

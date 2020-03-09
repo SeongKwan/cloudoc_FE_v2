@@ -33,6 +33,9 @@
             height: 67px;
             padding: 0.7rem;
         }
+        &.isLoading {
+            font-size: 1rem;
+        }
 
         &.open {
             background-color: $brand-8;
@@ -250,12 +253,23 @@
                     background-color: #858585;
                     color: $white;
 
+                    .badge {
+                        &.symptom {
+                            color: hsl(211, 100%, 27%);
+                        }
+                        &.lab {
+                            color: hsl(0, 100%, 27%);
+                        }
+                    }
+
                     &.drug {
                         padding: 0;
                         .row {
 
                             ul.content {
                                 padding: 0 !important;
+
+                                
                                 li {
                                     font-size: 1rem;
                                     display: flex;
@@ -290,6 +304,7 @@
 
                                         .references-wrapper {
                                             padding: 0.5rem;
+                                            padding-bottom: 0;
                                             display: flex;
                                             margin-top: 0.5rem;
                                             flex-wrap: wrap;
@@ -331,6 +346,9 @@
                             text-decoration: underline;
                         }
                     }
+                    a.description {
+                        padding-right: 0.5rem;
+                    }
 
                     .row {
                         &:not(:last-child) {
@@ -368,10 +386,13 @@
                                 }
 
                                 div:first-child {
-                                    margin-right: 0.2rem;
+                                    margin-right: 0.5rem;
                                 }
                                 .description-wrapper {
                                     width: 100%;
+                                    &:hover {
+                                        text-decoration: underline;
+                                    }
                                 }
                             }
                         }

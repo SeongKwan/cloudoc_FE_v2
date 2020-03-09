@@ -72,6 +72,9 @@
     .add-manual {
         margin-left: 0.5rem;
         margin-right: auto;
+        &.open {
+            background-color: $brand-4;
+        }
 
     }
 
@@ -124,12 +127,60 @@
             margin: 0;
 
             li {
-                width: 16.66%;
-                span {
-                    font-weight: 100;
+                width: 20%;
+                position: relative;
+                height: 18px;
+                line-height: 18px;
+                margin: 0.3rem 0;
+                label {
+                    margin-bottom: 0;
+                    display: flex;
+                    position: relative;
+                    padding-left: 1.8rem;
+                    cursor: pointer;
+                    user-select: none;
+                    font-weight: 400;
                     letter-spacing: 1.5px;
                     font-size: 0.9rem;
-                    margin-left: 0.4rem;
+                    align-items: center;
+                    border-radius: $radius-low;
+                }
+                input {
+                    position: absolute;
+                    opacity: 0;
+                    cursor: pointer;
+                }
+                span {
+                    // margin-left: 0.4rem;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 18px;
+                    width: 18px;
+                    background-color: $gray-3;
+                    border-radius: $radius-low;
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        display: none;
+                        left: 7px;
+                        top: 3px;
+                        width: 5px;
+                        height: 10px;
+                        border: solid white;
+                        border-width: 0 3px 3px 0;
+                        -webkit-transform: rotate(45deg);
+                        -ms-transform: rotate(45deg);
+                        transform: rotate(45deg);
+                    }
+                }
+                input:checked {
+                    & ~ span {
+                        background-color: $brand-2;
+                        &::after {
+                            display: block;
+                        }
+                    }
                 }
             }
         }

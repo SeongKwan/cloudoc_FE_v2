@@ -30,7 +30,7 @@ if (windowWidth > 1411) {
 class CaseStore {
     @observable isLoading = false;
     @observable isLoadingMore = false;
-    @observable isLoadingForAnalyze = false;
+    @observable isLoadingForSymptom = false;
     @observable isLoadingForTreatment = false;
     @observable isLoadingForTeaching = false;
     @observable isEditing = false;
@@ -634,12 +634,12 @@ class CaseStore {
 
 
     @action analyzeSymptom(referenceData = {}) {
-        this.isLoadingForAnalyze = true;
+        this.isLoadingForSymptom = true;
         return agent.analyzeCondition({ referenceData })
             .then(action((response) => {
                 // console.log(response.data.result)
                 analyzeSymptomStore.setEditableData(response.data.result);
-                this.isLoadingForAnalyze = false;
+                this.isLoadingForSymptom = false;
                 return response.data.result;
             }))
             .catch(err => {
