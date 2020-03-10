@@ -10,7 +10,7 @@ import UserStatus from '../../components/UserStatus/UserStatus';
 import MyCases from '../../components/MyCases/MyCases';
 
 const cx = classNames.bind(styles);
-let timer = null;
+// let timer = null;
 
 @withRouter
 @inject(
@@ -26,7 +26,6 @@ class CaseLibrary extends Component {
         selector: ''
     }
     componentDidMount() {
-        this.setState({selector: ''});
         this._handleClickOnSelector('case');
         this.checkToken()
         .then(res => {
@@ -36,7 +35,7 @@ class CaseLibrary extends Component {
         })
     }
     componentWillUnmount() {
-        clearInterval(timer);
+        // clearInterval(timer);
     }
 
     checkToken = () => {
@@ -46,6 +45,7 @@ class CaseLibrary extends Component {
             return resolve({success: result}); 
         });
     }
+
     _loadCases = () => {
         this.props.Case.loadCases();
     }

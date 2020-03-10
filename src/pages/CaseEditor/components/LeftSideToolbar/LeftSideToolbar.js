@@ -35,26 +35,28 @@ class LeftSideToolbar extends Component {
         diagnosisScrollTop: 0,
         drugScrollTop: 0
     }
+
     componentDidMount() {
         if (this.props.Case.isEditing || this.props.type === "create") {
             let scrollBox = $('#case-editor-center-container-scroll-box');
             let objDiv = $('#case-editor-diagnosis');
             let objDivDrug = $('#case-editor-drug');
-            if (!scrollBox || !objDiv || !objDivDrug) {
-                return false;
-            }
-            let THIS = this;
+            // let THIS = this;
             let offset1 = objDiv.position();
-            if (offset1 === undefined) {
-                return false;
-            }
             
             let adj1 = offset1.top;
             let offset2 = objDivDrug.position();
             let adj2 = offset2.top;
-            setTimeout(() => {
-                THIS.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
-            }, 100)
+            
+            if (!scrollBox || !objDiv || !objDivDrug) {
+                return false;
+            }
+            if (offset1 === undefined) {
+                return false;
+            }
+            this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
+            // setTimeout(() => {
+            // }, 100)
             scrollBox.on('scroll', this._setScrollTop);
         }
         document.addEventListener('mousedown', this.handleClickOutside);

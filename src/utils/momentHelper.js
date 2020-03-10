@@ -7,11 +7,15 @@ import 'moment-timezone';
  */
 
 function toUnix(_datetime) {
-    return moment(_datetime).unix()*1000;
+    let d = new Date(_datetime);
+    return moment(d, "X") * 1000;
 }
 
 function getLocaleSemiDateWithTime(_datetime) {
+    // console.log(_datetime)
     let d = new Date(_datetime);
+    // return moment("12-25-1995", "MM-DD-YYYY");
+    // return moment(_datetime, "X");
     return moment(d).tz(moment.tz.guess()).format("YYYY년 MM월 DD일");
 }
 

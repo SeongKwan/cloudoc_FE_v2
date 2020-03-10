@@ -14,7 +14,7 @@ import Modal from './components/Modal/Modal';
 
 const cx = classNames.bind(styles);
 
-@inject('auth', 'lab', 'modal')
+@inject('auth', 'lab', 'modal', 'user')
 @observer
 class App extends Component {
   state = {

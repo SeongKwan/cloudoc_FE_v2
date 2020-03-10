@@ -281,7 +281,7 @@
             .alert-icon {
                 position: absolute;
                 top: 0;
-                right: 8px;
+                right: 16px;
                 width: 35px;
                 font-size: 1.6rem;
                 display: flex;
@@ -291,6 +291,9 @@
                 }
                 &.low {
                     color: darkblue;
+                }
+                @include media('lg') {
+                    right: 10px;
                 }
             }
 

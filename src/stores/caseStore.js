@@ -107,7 +107,6 @@ class CaseStore {
                     this.clear();
                     this.isLoading = false;
                     this.registry = response.data.cases;
-                    // console.log(response.data.cases)
                     this.registry = this.registry.sort(function (a, b) { 
                         let unixA = toUnix(a.created_date);
                         let unixB = toUnix(b.created_date);
@@ -486,9 +485,7 @@ class CaseStore {
 
         return agent.postCase(newCase)
             .then(action((response) => {
-                console.log(response.data)
                 this.isLoading = false;
-                // this.clearAutoSavedCaseForCreate();
                 return response;
             }))
     }
