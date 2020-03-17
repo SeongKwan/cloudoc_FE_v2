@@ -3,14 +3,14 @@
     color: rgba($brand-8, 0.5);
     
     &.open {
-        color: $brand-8;
+        color: $bc-18;
     }
     &.sidebar {
         background-color: $brand-1;
         padding: 0.5rem;
         // color: rgba($white, 0.5);
         overflow: hidden;
-        // color: $brand-8;
+        // color: $bc-18;
         &:not(:last-child) {
             margin-bottom: 0.5rem;
         }
@@ -59,21 +59,21 @@
     // position: relative;
     &.active {
         .header {
-            background-color: $brand-1;
+            background-color: $bc-01;
             &:hover {
-                background-color: $brand-2;
+                background-color: $bc-02;
             }
         }
     }
     &.open {
-        color: $brand-8;
+        color: $bc-18;
     }
     &.sidebar {
         // background-color: $brand-1;
         padding: 0rem;
         // color: rgba($white, 0.5);
         overflow: hidden;
-        // color: $brand-8;
+        // color: $bc-18;
         &:not(:last-child) {
             margin-bottom: 0.5rem;
         }
@@ -124,7 +124,7 @@
     }
     .content {
 
-        background-color: $brand-2;
+        background-color: $bc-02;
         // padding: 0.5rem;
         border-radius: $radius-low;
     }

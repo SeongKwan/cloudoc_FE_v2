@@ -35,27 +35,42 @@
             display: flex;
             align-items: center;
             margin-bottom: 0;
-            
-            a {
-                color: $white;
-                transition-property: font-weight, color;
-                transition-duration: 0.3s;
+            li {
+                color: $bc-14;
+                padding: 0.1rem 1rem;
+                border-radius: $radius-high;
+                transition: background-color 0.2s;
                 transition-timing-function: ease;
-                font-size: 1.15rem;
-                @include media('sm') {
-                    font-size: 1rem;
-                }
-                letter-spacing: 1px;
-                &.active {
-                    cursor: default;
-                    color: $brand-1;
-                    &:hover {
-                        color: $brand-1;
+                cursor: pointer;
+                background-color: $bc-01;
+                &:hover {
+                    background-color: $bc-14;
+                    text-decoration: none;
+                    a {
+                        color: $bc-01;
                     }
                 }
-                &:hover {
-                    color: $brand-4;
+                &.active {
+                    cursor: default;
+                    background-color: $bc-14;
+                    a {
+                        color: $bc-01;
+                    }
+                }
+                a {
+                    
+                    color: $bc-14;
                     text-decoration: none;
+                    transition-property: font-weight, color;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease;
+                    font-size: 1.15rem;
+                    @include media('sm') {
+                        font-size: 1rem;
+                    }
+                    letter-spacing: 1px;
+                    
+                    
                 }
             }
             li:nth-child(2) {
@@ -79,10 +94,10 @@
             background-color: transparent;
             border: none;
             transition: all 0.3s;
-            color: $white;
+            color: $bc-14;
             cursor: pointer;
             &:hover {
-                color: $brand-4;
+                color: $bc-17;
             }
             &:active, &:focus {
                 outline: 0
@@ -91,10 +106,10 @@
         .content {
             opacity: 0;
             position: absolute;
-            background-color: $white;
-            box-shadow: 0 2px 8px 2px rgba($black, 0.2);
+            background-color: $bc-14;
+            box-shadow: 0 2px 8px 2px rgba($bc-18, 0.2);
             top: 105%;
-            color: $brand-8;
+            color: $bc-18;
             padding: 1.5rem 1rem;
             border-radius: $radius-low;
             display: flex;
@@ -114,7 +129,7 @@
                     content: '';
                     width: 90%;
                     height: 1px;
-                    background-color: rgba($brand-8, 0.15);
+                    background-color: rgba($bc-18, 0.15);
                     transform: translateX(-50%);
                 }
             }
@@ -131,13 +146,11 @@
                 }
                 .charge {
                     margin-top: 0.5rem;
-                    color: $brand-1;
+                    color: $bc-13;
                     cursor: pointer;
                     font-size: 0.9rem;
                     transition: color 0.3s ease;
-                    &:hover {
-                        color: $brand-3;
-                    }
+                    
                 }
             }
             .content-item {
@@ -147,7 +160,7 @@
                 cursor: pointer;
                 transition: color 0.3s ease;
                 &:hover {
-                    color: $brand-4;
+                    color: $bc-17;
                 }
                 &:not(:last-child) {
                     margin-bottom: 0.5rem;

@@ -3,7 +3,7 @@
     .toolbar {
         display: flex;
         align-items: center;
-        color: $brand-8;
+        color: $bc-18;
         font-weight: 100;
         margin-bottom: 2%;
         .btn-add-case {
@@ -12,17 +12,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: $brand-8;
+            color: $bc-18;
             margin-right: 1rem;
-            background-color: $brand-7;
-            border: 1px solid $brand-7;
+            background-color: $bc-02;
+            border: 1px solid $bc-02;
             border-radius: $radius-low;
             padding: 0.5rem 1rem;
             cursor: pointer;
             transition: all 0.2s ease;
             &:hover {
-                background-color: $brand-6;
-                border-color: $brand-6;
+                background-color: $bc-03;
+                border-color: $bc-03;
             }
             svg {
                 margin-right: 0.5rem;
@@ -65,13 +65,13 @@
             }
             a, li.add-case {
                 font-weight: 100;
-                color: $white;
+                color: $bc-14;
                 padding: 1rem;
                 margin-bottom: 1.5%;
                 width: 23.875%;
                 // max-width: 23.333%;
                 height: 470px;
-                background-color: rgba($brand-1, 1);
+                background-color: rgba($bc-02, 1);
                 border-radius: $radius-low;
                 transition: background-color 0.2s ease;
                 &:nth-child(4n - 2) {
@@ -104,9 +104,9 @@
                 }
                 &.add-case {
                     cursor: pointer;
-                    background-color: $brand-8;
+                    background-color: $bc-01;
                     &:hover {
-                        background-color: $brand-4;
+                        background-color: $bc-01;
                     }
                     @include media('sm') {
                         height: 100px;
@@ -117,7 +117,7 @@
                     div#case-list-item-memo {
                         font-weight: 700;
                     }
-                    // background-color: rgba($brand-2, 0.9);
+                    background-color: rgba($bc-01, 1);
                 }
             }
 
@@ -133,7 +133,7 @@
         align-items: center;
         padding: 3rem 0;
         font-size: 1.2rem;
-        color: rgba($brand-8, 0.6);
+        color: rgba($bc-18, 0.6);
         .btn-load-more {
             letter-spacing: 1px;
             padding: 1rem 2.5rem;
@@ -141,7 +141,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             &:hover {
-                background-color: rgba($brand-8, 0.1);
+                background-color: rgba($bc-18, 0.1);
             }
         }
         &.no-more {

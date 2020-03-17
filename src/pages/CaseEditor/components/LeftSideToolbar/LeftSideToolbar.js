@@ -438,7 +438,7 @@ class LeftSideToolbar extends Component {
                                                 <div className={cx('more')}>
                                                     <div className={cx('row', 'matched')}>
                                                         <div className={cx('title')}>
-                                                            일치하는 증상/검사결과
+                                                            # 일치하는 증상/검사결과
                                                         </div>
                                                         <ul className={cx('content')}>
                                                             {
@@ -468,7 +468,7 @@ class LeftSideToolbar extends Component {
                                                     </div>
                                                     <div className={cx('row', 'unmatched')}>
                                                         <div className={cx('title')}>
-                                                            불일치하는 증상/검사결과
+                                                            # 불일치하는 증상/검사결과
                                                         </div>
                                                         <ul className={cx('content')}>
                                                             {
@@ -498,7 +498,7 @@ class LeftSideToolbar extends Component {
                                                     </div>
                                                     <div className={cx('row', 'be-advised')}>
                                                         <div className={cx('title')}>
-                                                            추가확인이 필요한 증상/검사결과
+                                                            # 추가확인이 필요한 증상/검사결과
                                                         </div>
                                                         <ul className={cx('content')}>
                                                             {

@@ -13,7 +13,7 @@
     h5 {
         font-weight: 700;
         letter-spacing: 2px;
-        color: $brand-8;
+        color: $bc-18;
         user-select: none;
     }
 
@@ -45,7 +45,7 @@
                     left: -25px;
                     transform: translateY(-50%);
                     &:hover {
-                        color: $brand-4;
+                        color: $bc-17;
                     }
                     svg {
                         cursor: pointer;
@@ -104,14 +104,14 @@
                     &.static {
                         cursor: default;
                         outline: 0;
-                        border-bottom: 1px solid $brand-2;
+                        border-bottom: 1px solid $bc-02;
                     }
                 }
     
                 input:focus,
                 input:hover {
                     outline: 0;
-                    border-bottom: 1px solid $brand-2;
+                    border-bottom: 1px solid $bc-02;
                 }
 
                 
@@ -123,7 +123,7 @@
                     font-size: 11px;
     
                     &.label-no-input {
-                        color: $brand-2;
+                        color: $bc-02;
                         transform: translate(0, 0) scale(1);
                         cursor: pointer;
                     }
@@ -158,7 +158,7 @@
                 input:focus+label,
                 textarea:not(:placeholder-shown)+label,
                 textarea:focus+label {
-                    color: $brand-2;
+                    color: $bc-02;
                     transform: translate(0, 0) scale(1);
                     font-weight: 400;
                     cursor: pointer;
@@ -174,14 +174,14 @@
                 color: $gray-3;
     
                 &.label-no-input {
-                    color: $brand-2;
+                    color: $bc-02;
                     transform: translate(0, 0) scale(1);
                     cursor: pointer;
                 }
             }
 
             .textarea {
-                color: $brand-8;
+                color: $bc-18;
                 padding: 0.5rem;
                 border: 1px solid $gray-1;
                 border-radius: $radius-low;
@@ -191,7 +191,7 @@
 
                 &:focus, &:hover {
                     outline: 0;
-                    border: 1px solid $brand-2;
+                    border: 1px solid $bc-02;
                 }
 
                 &::placeholder {
@@ -200,7 +200,7 @@
                 }
                 &.static {
                     outline: 0;
-                    border: 1px solid $brand-2;
+                    border: 1px solid $bc-02;
                 }
             }
         }
@@ -212,7 +212,7 @@
         align-items: center;
         justify-content: center;
         padding: 0.5rem;
-        background-color: $brand-1;
+        background-color: $bc-01;
         border: 0;
         letter-spacing: 2px;
         border-radius: $radius-low;
@@ -220,7 +220,7 @@
         color: $white;
         cursor: pointer;
         &:hover {
-            background-color: $brand-2;
+            background-color: $bc-02;
         }
         &:focus {
             outline: 0;

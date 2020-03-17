@@ -1,6 +1,6 @@
 .RightSideList {
     position: absolute;
-    // background-color: $brand-2;
+    // background-color: $bc-02;
     top: 1%;
     left: 0.5rem;
     font-weight: 100;
@@ -18,7 +18,7 @@
         font-size: 0.9rem;
         // padding: 0.2rem 0;
         li {
-            // background-color: $brand-8;
+            // background-color: $bc-18;
             color: $white;
             padding: 0.5rem;
             border-radius: $radius-low;
@@ -30,13 +30,13 @@
                 margin-bottom: 2%;
             }
             &:hover {
-                background-color: $brand-7;
-                color: $brand-8;
+                background-color: $bc-03;
+                color: $bc-18;
             }
             .lab-name {
                 font-weight: 900;
-                &.high {color: darkred;}
-                &.low {color: darkblue;}
+                &.high {color: $bc-09;}
+                &.low {color: $bc-01;}
             }
         }
         &.check-symptoms, &.check-labs {

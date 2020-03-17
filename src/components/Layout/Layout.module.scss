@@ -8,7 +8,7 @@
         align-items: center;
         height: 6rem;
         width: 100%;
-        background-color: $black;
+        background-color: $bc-01;
         top: 0;
         left: 0;
         z-index: $header-z-index;
@@ -28,7 +28,7 @@
         width: 100%;
         bottom: 0;
         left: 0;
-        background-color: rgba($black, 0.4);
+        background-color: rgba($bc-14, 0.6);
         padding: 2rem 0;
     }
 }

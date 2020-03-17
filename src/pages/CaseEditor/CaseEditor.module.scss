@@ -3,7 +3,7 @@
     height: 100vh;
     padding-top: 80px;
     display: flex;
-    color: $brand-8;
+    color: $bc-18;
     background-color: rgba($gray-1, 0.2);
     justify-content: center;
     &.isLoading {
@@ -49,8 +49,8 @@
         &.center {
             position: relative;
             flex: 2;
-            border-right: 1px solid rgba($brand-8, 0.1);
-            border-left: 1px solid rgba($brand-8, 0.1);
+            border-right: 1px solid rgba($bc-18, 0.1);
+            border-left: 1px solid rgba($bc-18, 0.1);
             z-index: 9;
             background-color: $white;
             

@@ -37,7 +37,7 @@
       input:focus,
       input:hover {
         outline: 0;
-        border-bottom: 1px solid $brand-2;
+        border-bottom: 1px solid $bc-02;
       }
 
       label {
@@ -47,7 +47,7 @@
         font-size: 11px;
 
         &.label-no-input {
-          color: $brand-2;
+          color: $bc-02;
           transform: translate(0, 0) scale(1);
           cursor: pointer;
         }
@@ -81,7 +81,7 @@
       input:focus+label,
       textarea:not(:placeholder-shown)+label,
       textarea:focus+label {
-        color: $brand-2;
+        color: $bc-02;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
@@ -94,14 +94,14 @@
       font-size: 11px;
 
       &.label-no-input {
-        color: $brand-2;
+        color: $bc-02;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
     }
 
     .textarea {
-      color: $brand-8;
+      color: $bc-18;
       padding: 0.5rem;
       border: 1px solid $gray-1;
       border-radius: $radius-low;
@@ -110,7 +110,7 @@
       }
       &:focus, &:hover {
         outline: 0;
-        border: 1px solid $brand-2;
+        border: 1px solid $bc-02;
       }
       &::placeholder {
         color: $gray-3;
@@ -118,7 +118,7 @@
       }
       &.static {
         outline: 0;
-        border: 1px solid $brand-2;
+        border: 1px solid $bc-02;
       }
     }
   }

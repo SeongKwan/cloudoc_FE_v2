@@ -1,8 +1,8 @@
 .UserStatus {
-    background-color: $brand-8;
+    background-color: $bc-14;
     display: flex;
     align-items: center;
-    color: $white;
+    color: $bc-01;
     justify-content: center;
     .flexible-container {
         padding: 2rem;
@@ -24,25 +24,27 @@
         justify-content: center;
         width: 70px;
         height: 70px;
-        background-color: $brand-1;
+        background-color: $bc-01;
         border-radius: 100%;
         padding: 4px;
         margin-right: 2rem;
         .level {
-            background-color: $brand-8;
+            background-color: $bc-14;
+            color: $bc-19;
             border-radius: 100%;
             width: 62px;
             height: 62px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 100;
+            // font-weight: 100;
             font-size: 1.3rem;
         }
     }
     .info {
         div {
-            font-weight: 100;
+            // font-weight: 100;
+            color: $bc-18;
             font-size: 1.2rem;
             &.nickname {
                 margin-bottom: 0.5rem;

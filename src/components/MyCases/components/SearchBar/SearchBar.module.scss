@@ -21,14 +21,14 @@
         border: 1px solid $gray-1;
         border-radius: $radius-low;
         &:active, &:focus, &:hover {
-            border: 1px solid $brand-8;
+            border: 1px solid $bc-01;
             border-radius: $radius-low;
             outline: 0;
-            border-color: $brand-1;
+            
         }
         &::placeholder {
             font-weight: 100;
-            color: $gray-3;
+            color: $bc-17;
         }
     }
 }

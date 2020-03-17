@@ -6,13 +6,13 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 0 $radius-low $radius-low 0;
-    background-color: $brand-1;
+    background-color: $bc-01;
     color: $white;
 
     z-index: 999;
 
     &.openList {
-        border-right: 1px solid $brand-2;
+        // border-right: 1px solid $brand-2;
     }
 
     .btn {
@@ -38,21 +38,21 @@
         }
 
         &.open {
-            background-color: $brand-8;
+            background-color: $bc-18;
         }
         // transition: all 0.3s ease;
         // border-radius: $radius-low;
         .label {
             margin-top: 0.15rem;
             font-size: 0.8rem;
-            font-weight: 100;
+            // font-weight: 100;
             @include media('lg') {
                 font-size: 0.7rem;
             }
         }
         
         &:hover {
-            background-color: $brand-8;
+            background-color: $bc-18;
         }
         &.symptom:hover {
             border-radius: 0 $radius-low 0 0;
@@ -67,7 +67,7 @@
         &.disabled {
             color: rgba(white, 0.15);
             &:hover {
-                background-color: $brand-1;
+                background-color: $bc-01;
             }
         }
 
@@ -132,7 +132,7 @@
             // padding: 1rem;
 
             border-radius: $radius-low;
-            background-color: rgba($brand-1, 0.95);
+            background-color: rgba($bc-02, 1);
             // opacity: 0.9;
 
             &.drug {
@@ -154,7 +154,7 @@
             }
 
             &.openDetail {
-                border-right: 1px solid $brand-2;
+                // border-right: 1px solid $brand-2;
             }
 
             li {
@@ -187,7 +187,7 @@
                         font-weight: 700;
     
                         &:hover {
-                            color: $brand-8;
+                            color: $bc-18;
                             text-decoration: underline;
                         }
                     }
@@ -206,13 +206,13 @@
                 button {
                     // width: 43px;
                     // height: 25px;
-                    background-color: $brand-8;
+                    background-color: $bc-18;
                     padding: 0.2rem 0.5rem;
                     border: 0;
                     border-radius: $radius-low;
                     color: $white;
                     font-size: 0.8rem;
-                    font-weight: 100;
+                    // font-weight: 100;
                     letter-spacing: 1px;
                     cursor: pointer;
 
@@ -239,26 +239,27 @@
                 }
                 .btn-condition > button {
                     background-color: $white;
-                    color: $brand-8;
+                    color: $bc-18;
                 }
 
                 .btn-add>button {
-                    background-color: $brand-5;
+                    background-color: $bc-12;
+                    color: $bc-18;
                     margin-left: 0.5rem;
                 }
 
                 .more {
                     font-size: 0.9rem;
                     padding: 1rem;
-                    background-color: #858585;
-                    color: $white;
+                    background-color: $bc-14;
+                    color: $bc-18;
 
                     .badge {
                         &.symptom {
-                            color: hsl(211, 100%, 27%);
+                            color: $bc-01;
                         }
                         &.lab {
-                            color: hsl(0, 100%, 27%);
+                            color: $bc-09;
                         }
                     }
 
@@ -284,7 +285,7 @@
                                             width: 140px;
                                         }
                                         &:hover {
-                                            color: $brand-8;
+                                            color: $bc-18;
                                             text-decoration: underline;
                                         }
                                     }
@@ -294,7 +295,7 @@
                                         padding: 1rem;
                                     }
                                     .more.deep {
-                                        background-color: #a8a8a8;
+                                        background-color: rgba($bc-01, 0.1);
                                         li {
                                             position: relative;
                                         }
@@ -315,8 +316,8 @@
                                                 
                                                 div.drug {
                                                     padding: 0.2rem;
-                                                    color: $gray-2;
-                                                    border: 1px solid $gray-2;
+                                                    color: $white;
+                                                    border: 1px solid $white;
                                                     border-radius: $radius-low;
                                                     cursor: pointer;
 
@@ -324,8 +325,8 @@
                                                         margin-right: 0.2rem;
                                                     }
                                                     &:hover {
-                                                        border-color: $brand-8;
-                                                        color: $brand-8;
+                                                        border-color: $bc-18;
+                                                        color: $bc-18;
                                                     }
                                                 }
                                             }
@@ -357,7 +358,7 @@
 
                         .title {
                             letter-spacing: 1.5px;
-                            color: $brand-8;
+                            color: $bc-18;
                             font-size: 1rem;
                             font-weight: 700;
                         }
@@ -407,7 +408,7 @@
             border-radius: $radius-low;
 
             // left: calc(100% + 1px);
-            background-color: rgba($brand-1, 0.95);
+            background-color: rgba($bc-03, 1);
             color: $white;
 
             ul {
@@ -433,7 +434,7 @@
         }
 
         .anchor {
-            color: #336b85;
+            color: $bc-14;
             font-weight: 400;
             font-size: 0.7rem;
             position: relative;
@@ -458,7 +459,7 @@
                 top: -2rem;
 
                 button {
-                    background-color: $brand-8;
+                    background-color: $bc-18;
                     padding: 0.2rem 0.5rem;
                     border: 0;
                     border-radius: $radius-low;
@@ -480,7 +481,7 @@
                 font-size: 1.8rem;
                 letter-spacing: 3px;
                 font-weight: 700;
-                color: $brand-8;
+                color: $bc-18;
 
                 .input-container {
                     width: 100%;
@@ -523,7 +524,7 @@
                 display: flex;
 
                 .button {
-                    color: $brand-1;
+                    color: $bc-01;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -537,7 +538,7 @@
                     }
 
                     &:hover {
-                        color: lighten($brand-1, 15%);
+                        color: lighten($bc-01, 15%);
                         cursor: pointer;
                     }
 
@@ -578,7 +579,9 @@
 
                 .detail-item,
                 .teach-item {
-                    display: flex;
+                    display: flex; 
+                    color: $bc-18;
+                    font-weight: 400;
 
                     &:not(:last-child) {
                         margin-bottom: 0.3rem;
@@ -599,6 +602,8 @@
                     width: 100%;
                     display: flex;
                     flex-direction: column;
+                    color: $bc-18;
+                    font-weight: 400;
 
                     .pathology {
                         display: flex;
@@ -621,6 +626,8 @@
                 .linked {
                     display: flex;
                     margin-bottom: 0.3rem;
+                    color: $bc-18;
+                    font-weight: 400;
                 }
 
                 .lab-state {
@@ -673,7 +680,7 @@
                     padding: 0rem 0;
                     margin-bottom: 1rem;
                     padding-left: 0.5rem;
-                    color: $brand-8;
+                    color: $bc-18;
                 }
 
                 .read-only {
@@ -782,7 +789,7 @@
 
             .addup-button-wrapper {
                 .addup-button {
-                    background-color: $brand-1;
+                    background-color: $bc-01;
                     font-size: 0.8rem;
 
                     .icon {
@@ -790,7 +797,7 @@
                     }
 
                     &:hover {
-                        background-color: lighten($brand-1, 10%);
+                        background-color: lighten($bc-01, 10%);
                     }
                 }
             }

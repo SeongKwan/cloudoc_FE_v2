@@ -2,16 +2,15 @@
     display: flex;
     flex-direction: column;
     font-weight: 400;
-    // color: $brand-8;
+    // color: $bc-18;
     .wrapper-bottom {
         padding: 0.75rem;
         height: 336px;
         @include media('lg') {
             height: 270px;
         }
-        // background-color: $brand-7;
-        background-color: $oc-gray-1;
-        color: $brand-8;
+        background-color: $bc-14;
+        color: $bc-18;
         border-radius: $radius-low;
     }
     .divider-horizon {
@@ -29,6 +28,7 @@
         }
     }
     .memo {
+        color: $bc-14;
         font-size: 1.1rem;
         font-weight: 700;
         letter-spacing: 1.5px;
@@ -72,11 +72,12 @@
                 .number {
                     padding: 0 0.2rem;
                     border-radius: 2px;
+                    color: $bc-18;
                     min-width: 16px;
                     height: 19px;
                     display: flex;
                     justify-content: center;
-                    background-color: $brand-5;
+                    background-color: $bc-12;
                     @include media('lg') {
                         height: 15px;
                     }
@@ -128,7 +129,7 @@
         font-weight: 400;
         letter-spacing: 1px;
         svg {
-            color: $brand-6;
+            color: $bc-01;
             font-size: 2rem;
         }
     }

@@ -6,11 +6,11 @@
         width: 100%;
         min-height: 100vh;
         position: relative;
-        background-color: rgba($black, 0.5);
+        background-color: rgba($bc-01, 0.4);
         .jumbotron {
             background-color: transparent;
             padding: 10rem;
-            color: $white;
+            color: $bc-14;
             margin-bottom: 0;
             z-index: 9990;
             letter-spacing: 2px;
@@ -30,14 +30,16 @@
         .col {
             display: flex;
             .btn-login {
+                font-weight: 700;
                 transition: all 0.2s;
                 padding: 0.7rem 1.2rem;
-                border-radius: 0.25rem;
-                color: $white;
-                background-color: $black;
+                border-radius: $radius-low;
+                color: $bc-01;
+                background-color: $bc-14;
                 letter-spacing: 2px;
                 &:hover {
-                    background-color: $oc-gray-9;
+                    color: $bc-14;
+                    background-color: $bc-01;
                     text-decoration: none;
                 }
                 @include media('xs') {

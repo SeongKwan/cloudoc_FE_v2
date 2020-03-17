@@ -6,7 +6,7 @@
         width: 100%;
         min-height: 100vh;
         position: relative;
-        background-color: rgba($black, 0.5);
+        background-color: rgba($bc-01, 0.4);
         display: flex;
         .wrapper {
             width: 100%;
@@ -51,10 +51,10 @@
                 }
             }
             .container-error {
-                background-color: rgba($black, 0.6);
+                background-color: rgba($bc-18, 0.6);
                 font-size: 0.5rem;
                 color: $white;
-                border-radius: 0.25rem;
+                border-radius: $radius-low;
                 padding: 0.2rem 0.4rem;
                 margin-top: -0.5rem;
                 margin-bottom: 1.5rem;
@@ -71,7 +71,13 @@
             
             button {
                 width: 100%;
-                background-color: $black;
+                background-color: $bc-14;
+                color: $bc-01;
+                transition: all 0.2s;
+                &:hover {
+                    color: $bc-14;
+                    background-color: $bc-01;
+                }
                 &:disabled {
                     color: $gray-4;
                     background-color: $gray-3;

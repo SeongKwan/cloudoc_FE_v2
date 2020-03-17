@@ -12,7 +12,7 @@
     font-weight: 700;
     letter-spacing: 2px;
     margin-bottom: 1.5rem;
-    color: $brand-8;
+    color: $bc-18;
     user-select: none;
   }
 
@@ -45,14 +45,14 @@
         }
         &.static {
           outline: 0;
-          border-bottom: 1px solid $brand-2;
+          border-bottom: 1px solid $bc-02;
         }
       }
 
       input:focus,
       input:hover {
         outline: 0;
-        border-bottom: 1px solid $brand-2;
+        border-bottom: 1px solid $bc-02;
       }
 
       label {
@@ -62,7 +62,7 @@
         font-size: 11px;
 
         &.label-no-input {
-          color: $brand-2;
+          color: $bc-02;
           transform: translate(0, 0) scale(1);
           cursor: pointer;
         }
@@ -93,7 +93,7 @@
 
       input:not(:placeholder-shown)+label,
       input:focus+label {
-        color: $brand-2;
+        color: $bc-02;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
@@ -106,7 +106,7 @@
       font-size: 11px;
 
       &.label-no-input {
-        color: $brand-2;
+        color: $bc-02;
         transform: translate(0, 0) scale(1);
         cursor: pointer;
       }
@@ -125,7 +125,7 @@
         padding-bottom: calc(0.3rem);
         border-bottom: 1px solid $gray-1;
         &.checked {
-          border-color: $brand-2;
+          border-color: $bc-02;
         }
       }
 
@@ -153,12 +153,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: rgba($brand-8, 0.2);
+        color: rgba($bc-18, 0.2);
         transition: color 0.3s ease;
         cursor: pointer;
         padding: 0 0.3rem;
         &.checked {
-          color: $brand-8;
+          color: $bc-18;
         }
       }
     }
@@ -174,7 +174,7 @@
     outline: 0;
     box-shadow: none;
     border: 0 !important;
-    color: $brand-8;
+    color: $bc-18;
     background: $white;
     background-image: none;
   }
@@ -222,6 +222,6 @@
 
   /* Transition */
   .select-wrapper:hover::after {
-    color: $brand-2;
+    color: $bc-02;
   }
 }

@@ -73,14 +73,14 @@ class HeaderCloudoc extends Component {
                 </div>
                 <nav className={cx('navbar')}>
                     <ul className={cx('nav-list')}>
-                        <li className={'nav-item'}>
-                            <Link className={cx({active: where === 'case'})} to='/case'>증례 라이브러리</Link>
+                        <li className={cx('nav-item', {active: where === 'case'})}>
+                            <Link to='/case'>증례 라이브러리</Link>
                         </li>
-                        <li className={'nav-item'}>
-                            <Link className={cx({active: where === 'qna'})} to='/qna'>증례 Q&A</Link>
+                        <li className={cx('nav-item', {active: where === 'qna'})}>
+                            <Link to='/qna'>증례 Q&A</Link>
                         </li>
-                        <li className={'nav-item'}>
-                            <Link className={cx({active: where === 'lecture'})} to='/lecture'>임상강의</Link>
+                        <li className={cx('nav-item', {active: where === 'lecture'})}>
+                            <Link to='/lecture'>임상강의</Link>
                         </li>
                     </ul>
                 </nav>
