@@ -254,7 +254,7 @@
             z-index: 9;
             background-color: $white;
             @include media('sm') {
-                width: 95vw;
+                width: 100vw;
                 flex: initial;
                 overflow-x: hidden;
                 // background-color: red;
