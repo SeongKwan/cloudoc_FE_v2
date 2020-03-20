@@ -21,7 +21,7 @@
 
     .wrapper {
         margin-left: 1rem;
-        padding: 0.5rem;
+        // padding: 0.5rem;
     }
 
     .search-container {
@@ -291,6 +291,11 @@
         }
     }
 
+    .description, .guide, .caution {
+        max-width: 100%;
+        background-color: red;
+    }
+
     .formula-wrapper {
         position: relative;
         z-index: 8;
@@ -388,6 +393,8 @@
             &.formula-dose {
                 width: 30%;
             }
+
+            
     
             &.input {
     
@@ -484,6 +491,7 @@
                 }
             }
         }
+        
     }
 
 }
