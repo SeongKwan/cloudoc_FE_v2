@@ -255,6 +255,7 @@
             background-color: $white;
             @include media('sm') {
                 width: 100vw;
+                flex: initial;
                 overflow-x: hidden;
             }
             
