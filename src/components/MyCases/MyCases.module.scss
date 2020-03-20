@@ -103,16 +103,8 @@
                     height: 380px;
                 }
                 @include media('sm') {
-                    &:nth-child(4n - 2) {
-                        margin-left: 0%;
-                        margin-right: 0%;
-                    }
-                    &:nth-child(4n - 1) {
-                        margin-left: 0%;
-                        margin-right: 0%;
-                    }
                     width: 100%;
-                    margin: 1% 1% 1% 1% !important;
+                    margin: 1% !important;
                 }
                 &.add-case {
                     cursor: pointer;
