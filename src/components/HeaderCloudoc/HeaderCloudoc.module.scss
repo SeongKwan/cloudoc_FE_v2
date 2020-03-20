@@ -43,6 +43,9 @@
                 transition-timing-function: ease;
                 cursor: pointer;
                 background-color: $bc-01;
+                @include media('sm') {
+                    padding: 0.2rem 0.75rem;
+                }
                 &:hover {
                     background-color: $bc-14;
                     text-decoration: none;
@@ -76,7 +79,7 @@
             li:nth-child(2) {
                 margin: 0 6rem;
                 @include media('sm') {
-                    margin: 0 2rem;
+                    margin: 0 1rem;
                 }
             }
         }
