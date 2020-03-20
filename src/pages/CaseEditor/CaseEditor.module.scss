@@ -31,6 +31,9 @@
         transition: all 0.2s ease;
         background-color: transparent;
         cursor: pointer;
+        @include media('sm') {
+            display: none;
+        }
         &:hover {
             font-size: 7rem;
             background-color: rgba($bc-01, 0.1);
@@ -60,6 +63,9 @@
         width: 220px;
         @include media('lg') {
             width: 180px;
+        }
+        @include media('sm') {
+            margin-bottom: 1rem;
         }
         &.isEditing {
             &:hover {
@@ -218,10 +224,13 @@
             height: 100%;
             overflow-y: scroll;
         }
-
+        
         &.left, &.right {
             position: relative;
             background-color: rgba($gray-1, 0.2);
+            @include media('sm') {
+                display: none;
+            }
         }
         
         &.left {

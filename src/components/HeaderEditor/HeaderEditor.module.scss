@@ -10,6 +10,7 @@
     background-color: $bc-01;
     z-index: 999999;
     color: $bc-14;
+    overflow-x: auto;
     @include media('lg') {
         height: 4.5rem;
     }
