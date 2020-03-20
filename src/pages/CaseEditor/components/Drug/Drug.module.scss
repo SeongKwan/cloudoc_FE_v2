@@ -2,7 +2,7 @@
     padding: 2rem;
     position: relative;
     user-select: none;
-
+    overflow-x: hidden;
     &.view {
         h5 {
             margin-bottom: 1rem !important;
