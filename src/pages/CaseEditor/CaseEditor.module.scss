@@ -216,6 +216,7 @@
         @include media('lg') {
             height: calc(100vh - 58.5px);
         }
+        
 
         .scroll-box {
             width: 100%;
@@ -252,6 +253,10 @@
             border-left: 1px solid rgba($bc-18, 0.1);
             z-index: 9;
             background-color: $white;
+            @include media('sm') {
+                width: 100vw;
+                overflow-x: hidden;
+            }
             
         }
         
