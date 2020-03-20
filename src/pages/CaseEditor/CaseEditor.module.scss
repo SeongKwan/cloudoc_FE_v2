@@ -56,8 +56,11 @@
         border: 1px solid $gray-2;
         border-radius: $radius-low;
         position: relative;
-        width: 180px;
         margin: 0 auto;
+        width: 220px;
+        @include media('lg') {
+            width: 180px;
+        }
         &.isEditing {
             &:hover {
                 border-color: $gray-2;
@@ -78,11 +81,14 @@
         .selected-date {
             text-align: center;
             position: relative;
-            width: 180px;
             padding-top: 0.5rem;
             padding-bottom: 0.25rem;
             border-radius: $radius-low;
             cursor: pointer;
+            width: 220px;
+            @include media('lg') {
+                width: 180px;
+            }
             div:first-child {
                 position: absolute;
                 left: 1.5rem;
@@ -97,13 +103,16 @@
     
         }
         .records {
-            width: 180px;
             position: absolute;
             top: 93%;
             border: 1px solid $bc-02;
             border-radius: 0 0 $radius-low $radius-low;
             border-top: 1px solid transparent;
             background-color: white;
+            width: 220px;
+            @include media('lg') {
+                width: 180px;
+            }
             ul {
                 z-index: 999;
                 position: relative;
