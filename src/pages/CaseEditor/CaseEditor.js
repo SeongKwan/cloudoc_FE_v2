@@ -147,7 +147,7 @@ class CaseEditor extends Component {
           isLoading ? <Loader /> 
           : <>
           {
-            currentCaseRecord.length > 1 && type === 'detail' &&
+            currentCaseRecord.length > 1 && type === 'detail' && !isEditing &&
             <>
               {
                 +dateIndex !== 0 &&
@@ -195,7 +195,10 @@ class CaseEditor extends Component {
                             currentCaseRecord.length > 0 &&
                             <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
                           }
-                          <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
+                          {
+                            !isEditing &&
+                            <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
+                          }
                         </div>
                         {
                           this.state.focusParent &&
