@@ -332,10 +332,14 @@
                 }
                 .herb-name {
                     min-width: 200px;
+                    width: 70%;
                     max-width: 35%;
+                    @include media('sm') {
+                        max-width: initial;
+                        min-width: initial;
+                    }
                 }
                 .dose {
-                    width: 100px;
                     &::placeholder, &:placeholder-shown {
                         text-transform: lowercase;
                     }
@@ -382,7 +386,7 @@
                 }
             }
             &.formula-dose {
-                flex: 1;
+                width: 30%;
             }
     
             &.input {

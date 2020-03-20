@@ -155,10 +155,14 @@ class Drug extends Component {
         const { editableData } = this.props.treatment;
         const { length } = editableData;
 
-        if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
-            this.props.treatment.addDrug();
+        if (editableData.length <= 0) {
+            return this.props.treatment.addDrug();
         } else {
-            alert('약재명 또는 수량이 입력되지 않았습니다');
+            if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
+                this.props.treatment.addDrug();
+            } else {
+                alert('약재명 또는 수량이 입력되지 않았습니다');
+            }
         }
     }
 
@@ -363,7 +367,7 @@ class Drug extends Component {
                                                         />
                                                         <label htmlFor={`herb-name-${i}`}>약초명</label>
                                                     </div>
-                                                    <div className={cx('input', 'dose', 'form-wrapper')}>
+                                                    <div className={cx('input', 'form-wrapper', 'formula-dose')}>
                                                         <input 
                                                             data-index={i}
                                                             className={cx('dose')}
