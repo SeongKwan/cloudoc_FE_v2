@@ -254,10 +254,10 @@
             z-index: 9;
             background-color: $white;
             @include media('sm') {
-                width: 70vw;
+                width: 95vw;
                 flex: initial;
                 overflow-x: hidden;
-                background-color: red;
+                // background-color: red;
             }
             
         }
