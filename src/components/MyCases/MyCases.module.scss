@@ -102,10 +102,7 @@
                     width: 32%;
                     height: 380px;
                 }
-                @include media('sm') {
-                    width: 100%;
-                    margin: 1% !important;
-                }
+                
                 &.add-case {
                     cursor: pointer;
                     background-color: $bc-01;
@@ -126,8 +123,17 @@
             }
 
             @include media('sm') {
-
+                a, li.add-case {
+                    width: 100%;
+                    margin: 1% !important;
+                }
+                a:nth-child(2) {
+                    background-color: red;
+                    margin: 1% !important;
+                }
             }
+
+            
         }
     }
     .status {
