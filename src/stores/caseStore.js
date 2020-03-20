@@ -14,6 +14,7 @@ import teachingStore from './teachingStore';
 import analyzeSymptomStore from './analyzeSymptomStore';
 import analyzeDrugStore from './analyzeRecommendationTreatmentStore';
 import analyzeTeachingStore from './analyzeTeachingStore';
+import { v1 } from 'uuid';
 
 const windowWidth = window.outerWidth;
 let initialLoadAmount;
@@ -44,6 +45,12 @@ class CaseStore {
     @observable rest = 0;
     @observable restForSearch = 0;
     @observable loadMore = true;
+
+    @observable currentCaseRecordDate = '';
+    @observable currentCaseRecord = [];
+    @observable currentCasePatient = [];
+    @observable currentCaseDetail = {};
+    @observable dateIndex = 0;
 
 
     @computed get cases() {
@@ -314,12 +321,17 @@ class CaseStore {
         }
     }
 
-    @action setCurrentCase(currentCase) {
+    @action setCurrentCaseDetail(dateIndex) {
+        this.currentCaseDetail = this.currentCase.record.slice().reverse()[dateIndex];
+        this.currentCaseRecordDate = this.currentCaseRecord[dateIndex];
+    }
+
+    @action setCurrentCase(currentCase, dateIndex = 0) {
         const {
             title,
             // created_date,
             patient,
-            record
+            // record
         } = currentCase;
 
         let patientInfoData = {
@@ -332,38 +344,82 @@ class CaseStore {
             memo: patient.memo
         }
 
+
+        const { 
+            symptom,
+            // exam,
+            // selectedLabCategory,
+            lab,
+            // analyzeCondition,
+            // analyzeLab,
+            diagnosis,
+            // analyzeTreatment,
+            treatment,
+            // memo,
+            teaching
+        } = this.currentCaseDetail;
+        
+
+        console.log(JSON.parse(JSON.stringify(this.currentCaseDetail)))
+
         basicStore.initialize(patientInfoData);
-        symptomStore.initStaticData(record[0].symptom);
-        symptomStore.setEditableData(record[0].symptom);
-        labStore.initCaseDetailData(record[0].lab);
-        diagnosisStore.initStaticData(record[0].diagnosis);
-        diagnosisStore.setEditableData(record[0].diagnosis);
-        drugStore.initilize(record[0].treatment);
-        drugStore.setEditableData(record[0].treatment.fomula);
-        teachingStore.initStaticData(record[0].teaching);
-        teachingStore.setEditableData(record[0].teaching);
+        symptomStore.initStaticData(symptom);
+        symptomStore.setEditableData(symptom);
+        labStore.initCaseDetailData(lab);
+        diagnosisStore.initStaticData(diagnosis);
+        diagnosisStore.setEditableData(diagnosis);
+        drugStore.initilize(treatment);
+        drugStore.setEditableData(treatment.fomula);
+        teachingStore.initStaticData(teaching);
+        teachingStore.setEditableData(teaching);
+
+        // basicStore.initialize(patientInfoData);
+        // symptomStore.initStaticData(record[0].symptom);
+        // symptomStore.setEditableData(record[0].symptom);
+        // labStore.initCaseDetailData(record[0].lab);
+        // diagnosisStore.initStaticData(record[0].diagnosis);
+        // diagnosisStore.setEditableData(record[0].diagnosis);
+        // drugStore.initilize(record[0].treatment);
+        // drugStore.setEditableData(record[0].treatment.fomula);
+        // teachingStore.initStaticData(record[0].teaching);
+        // teachingStore.setEditableData(record[0].teaching);
     }
 
-    @action toggleIsEditing() {
-        this.setCurrentCase(this.currentCase);
+    @action toggleIsEditing(dateIndex = 0) {
+        this.setCurrentCase(this.currentCase, dateIndex);
         this.isEditing = !this.isEditing;
     }
 
 
-    @action loadCase(id) {
+    @action loadCase(id, dateIndex = 0) {
+        console.log(id, dateIndex)
         this.isLoading = true;
+
+        console.log('loadCase')
 
         return agent.loadCase(id)
             .then(action((response) => {
                 this.isLoading = false;
-                // console.log(response.data.case)
                 this.currentCase = response.data.case;
-                this.setCurrentCase(response.data.case);
+                
+                // console.log(dateIndex)
+                let reversedDetail = response.data.case.record.slice().reverse();
+                // console.log(reversedDetail[dateIndex])
+                this.currentCaseDetail = reversedDetail[dateIndex];
+                // console.log(JSON.parse(JSON.stringify(this.currentCaseDetail)))
+
+                let recordDates = [];
+                response.data.case.record.forEach((record) => { recordDates.push(record.createdDate) });
+                this.currentCaseRecord = recordDates.slice().reverse();
+                
+                this.currentCaseRecordDate = this.currentCaseRecord[dateIndex];
+
+                this.setCurrentCase(response.data.case, dateIndex);
             }))
-            .catch((err) => {
+            .catch(action((err) => {
                 this.isLoading = false;
                 throw err;
-            })
+            }))
     };
     /**
      * 
@@ -496,9 +552,10 @@ class CaseStore {
      * @param {object} updateCase
      * @return {object}
      */
-    @action updateCase() {
+    @action updateCase(dateIndex) {
         this.isLoading = true;
         const date = this.currentCase.created_date;
+        const { currentCaseRecordDate } = this;
         const { currentUser } = user;
         let updatedCase = {
         user_id: currentUser.user_id || 'admin',
@@ -506,7 +563,7 @@ class CaseStore {
         title: '',
         record: [
             {
-            createdDate: date,
+            createdDate: currentCaseRecordDate,
             symptom: [],
             exam: [],
             selectedLabCategory: [],
@@ -607,16 +664,39 @@ class CaseStore {
         updatedCase.record[0].treatment = {...updatedCase.record[0].treatment, fomula: filteredFomula};
         updatedCase.record[0].teaching = filteredTeaching;
 
+        let reversedRecords = [];
+        if (this.currentCase.record.length > 1) {
+            reversedRecords = this.currentCase.record.slice().reverse();
+            let willBeUpdatedRecords = JSON.parse(JSON.stringify(reversedRecords));
+            willBeUpdatedRecords.splice(dateIndex, 1, updatedCase.record[0]);
+            let reversedUpdatedRecords = willBeUpdatedRecords.slice().reverse();
+            updatedCase = { ...updatedCase, record: reversedUpdatedRecords }
+        }
+
         return agent.updateCase(this.currentCase._id ,updatedCase)
             .then(action((response) => {
-                // console.log(response.data)
+                const { Case } = response.data;
+                let reversedDetail = Case.record.slice().reverse();
+
                 this.isLoading = false;
-                this.currentCase = response.data.Case;
-                this.setCurrentCase(response.data.Case);
+                this.currentCase = Case;
+                this.currentCaseDetail = reversedDetail[dateIndex];
+
+
+                let recordDates = [];
+                Case.record.forEach((record) => { recordDates.push(record.createdDate) });
+                this.currentCaseRecord = recordDates.slice().reverse();
                 
-                // this.clearAutoSavedCaseForCreate();
+                this.currentCaseRecordDate = this.currentCaseRecord[dateIndex];
+
+                this.setCurrentCase(response.data.Case, dateIndex);
+                
+                
                 return response;
             }))
+            .catch(action((err) => {
+                throw err;
+            }));
     }
 
     
@@ -627,6 +707,77 @@ class CaseStore {
             .then(action((response) => {
                 this.isLoading = false;
             }))
+    }
+
+
+    @action addNewRecordToCase(caseId) {
+        const lengthOfRecord = this.currentCase.record.length;
+        const lastDate = this.currentCase.record[lengthOfRecord - 1].createdDate;
+        let createdDate = getLocaleFullDateWithTime(Date.now());
+        
+        if (createdDate !== lastDate) {
+            let oldCase = JSON.parse(JSON.stringify(this.currentCase));
+            let latestRecord = oldCase.record.splice(lengthOfRecord - 1, 1);
+            let newCase = JSON.parse(JSON.stringify(this.currentCase));
+
+            latestRecord[0].createdDate = createdDate;
+            latestRecord[0]._id = v1();
+            newCase.record.push(latestRecord[0]);
+
+            this.isLoading = true;
+            return agent.updateCase(caseId, newCase)
+                .then(action((response) => {
+                    this.isLoading = false;
+                    const recordDates = [];
+                    response.data.Case.record.forEach((record) => {
+                        recordDates.push(record.createdDate)
+                    });
+                    this.currentCaseRecord = recordDates.reverse();
+                    this.currentCaseRecordDate = this.currentCaseRecord[0];
+                    this.currentCase = response.data.Case;
+                    return response;
+                }))
+                .catch(action((error) => {
+                    this.isLoading = false;
+                    throw error;
+                }));
+        }
+    }
+
+
+    @action deleteRecordFromCase(caseId) {
+        const willBeDeletedRecordDate = this.currentCaseRecordDate;
+        
+        let newCase = JSON.parse(JSON.stringify(this.currentCase));
+
+        let recordDates = [];
+        newCase.record.forEach((record) => { recordDates.push(record.createdDate) });
+        const willBeDeletedRecordDateIndex = recordDates.indexOf(willBeDeletedRecordDate);
+        this.isLoading = true;
+        if (recordDates.length > 1) {
+            newCase.record.splice(willBeDeletedRecordDateIndex, 1);
+
+            return agent.updateCase(caseId, newCase)
+                .then(action((response) => {
+                    
+                    const recordDates = [];
+                    this.isLoading = false;
+                    response.data.Case.record.forEach((record) => {
+                        recordDates.push(record.createdDate);
+                    });
+                    this.currentCaseRecord = recordDates.reverse();
+                    this.currentCaseRecordDate = this.currentCaseRecord[0];
+                    this.currentCase = response.data.Case;
+                    if (this.isEditing === true) {
+                        this.toggleIsEditing();
+                    }
+                    return response.data;
+                }))
+                .catch(action((error) => {
+                    this.isLoading = false;
+                    throw error;
+                }));
+        }
     }
 
 
@@ -680,6 +831,11 @@ class CaseStore {
         this.rest = 0;
         this.restForSearch = 0;
         this.loadMore = true;
+        this.currentCaseRecordDate = '';
+        this.currentCaseRecord = [];
+        this.currentCasePatient = [];
+        this.currentCaseDetail = {};
+        this.dateIndex = 0;
     }
 
     @action clearCurrentCase() {

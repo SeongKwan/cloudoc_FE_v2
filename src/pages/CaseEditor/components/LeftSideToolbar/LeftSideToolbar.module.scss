@@ -847,7 +847,7 @@
     .tool::before {
         border-style: solid;
         border-width: 0.23em;
-        border-color: transparent $brand-8 transparent transparent;
+        border-color: transparent $bc-18 transparent transparent;
         left: 100%;
         content: "";
         // margin-left: -0.5em;
@@ -864,7 +864,7 @@
     /*== speech bubble ==*/
     .tool::after {
         font-size: 0.7rem;
-        background: $brand-8;
+        background: $bc-18;
         border-radius: $radius-low;
         left: 150%;
         color: $white;

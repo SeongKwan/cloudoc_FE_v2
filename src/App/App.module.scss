@@ -33,7 +33,7 @@
         .instruction {
             code {
                 padding: 2px 4px;
-                color: $brand-1;
+                color: $bc-01;
                 white-space: nowrap;
                 background-color: #f7f7f9;
                 border: 1px solid #e1e1e8;
@@ -103,7 +103,7 @@
         letter-spacing: 1px;
         text-align: center;
         &.offline {
-            background-color: $brand-1;
+            background-color: $bc-01;
         }
         &.online {
             background-color: $bc-17;

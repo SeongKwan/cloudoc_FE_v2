@@ -32,7 +32,7 @@ class CaseListItem extends Component {
         const semiDate = getLocaleSemiDateWithTime(Case.created_date);
 
         return (
-            <Link to={`/case/editor/detail/${caseId}`} 
+            <Link to={`/case/editor/detail/${caseId}/0`} 
                 onClick={(e) => {
                     if (this.props.isLoadingMore) {
                         return e.preventDefault();

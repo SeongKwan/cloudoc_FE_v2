@@ -1,12 +1,12 @@
 .CollapsibleBox {
     padding: 1rem 2rem;
-    color: rgba($brand-8, 0.5);
+    color: rgba($bc-18, 0.5);
     
     &.open {
         color: $bc-18;
     }
     &.sidebar {
-        background-color: $brand-1;
+        background-color: $bc-01;
         padding: 0.5rem;
         // color: rgba($white, 0.5);
         overflow: hidden;
@@ -55,7 +55,7 @@
 
 .CollapsibleBox2 {
     padding: 1rem 2rem;
-    color: rgba($brand-8, 0.5);
+    color: rgba($bc-18, 0.5);
     // position: relative;
     &.active {
         .header {
@@ -171,7 +171,7 @@
     .tool::before {
         border-style: solid;
         border-width: 0.5em;
-        border-color: transparent transparent $brand-8 transparent;
+        border-color: transparent transparent $bc-18 transparent;
         left: 5%;
         top: 80%;
         content: "";
@@ -189,7 +189,7 @@
     /*== speech bubble ==*/
     .tool::after {
         font-size: 0.7rem;
-        background: $brand-8;
+        background: $bc-18;
         border-radius: $radius-low;
         top: 134%;
         left: 0;

@@ -1,18 +1,198 @@
 .CaseEditor {
     position: relative;
     height: 100vh;
-    padding-top: 80px;
+    padding-top: 5rem;
     display: flex;
     color: $bc-18;
     background-color: rgba($gray-1, 0.2);
     justify-content: center;
     &.isLoading {
         padding: 0;
-        // background-color: red;
         align-items: center;
     }
     @include media('lg') {
-        padding-top: 58.5px;
+        padding-top: 4.5rem;
+    }
+
+    .btn-move-record {
+        z-index: 11;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        
+        width: calc(25%);
+        height: 100%;
+        color: $bc-01;
+        font-size: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        cursor: pointer;
+        &:hover {
+            font-size: 7rem;
+            background-color: rgba($bc-01, 0.1);
+            text-decoration: none;
+        }
+        &.prevRecord {
+            left: 0;
+        }
+        &.nextRecord {
+            right: 0;
+        }
+        .date {
+            font-size: 1rem;
+            color: $bc-03;
+        }
+    }
+
+    .record-date {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid $gray-2;
+        border-radius: $radius-low;
+        position: relative;
+        width: 180px;
+        margin: 0 auto;
+        &.isEditing {
+            &:hover {
+                border-color: $gray-2;
+            }
+            .selected-date {
+                cursor: default;
+            }
+        }
+        &.focus {
+            border-color: $bc-02;
+            border-radius: $radius-low $radius-low 0 0;
+            border-bottom: 1px solid transparent;
+        }
+        
+        &:hover {
+            border-color: $bc-02;
+        }
+        .selected-date {
+            text-align: center;
+            position: relative;
+            width: 180px;
+            padding-top: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-radius: $radius-low;
+            cursor: pointer;
+            div:first-child {
+                position: absolute;
+                left: 1.5rem;
+                margin-right: 0.5rem;
+            }
+            .arrow-down-icon {
+                position: absolute;
+                top: 0;
+                right: 0.5rem;
+                font-size: 1.5rem;
+            }        
+    
+        }
+        .records {
+            width: 180px;
+            position: absolute;
+            top: 93%;
+            border: 1px solid $bc-02;
+            border-radius: 0 0 $radius-low $radius-low;
+            border-top: 1px solid transparent;
+            background-color: white;
+            ul {
+                z-index: 999;
+                position: relative;
+                padding-top: 0.5rem;
+                margin: 0;
+                max-height: 278px;
+                overflow-y: scroll;
+                background-color: white;
+
+                &::before {
+                    width: 98%;
+                    height: 1px;
+                    background-color: $gray-1;
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+
+                .date {
+                    padding: 0.5rem;
+                    padding-bottom: 0.3rem;
+                    text-align: center;
+                    display: block;
+                    color: $bc-18;
+                    text-decoration: none;
+                    &.selected {
+                        color: $gray-1;
+                        cursor: not-allowed;
+                        &:hover {
+                            background-color: transparent;
+                        }
+                    }
+    
+                    &:hover, &.active {
+                        background-color: $gray-1;
+                    }
+                    
+                }
+            }
+        }
+    }
+
+    .results-wrapper {
+        position: absolute;
+        top: 33px;
+        width: calc(100% - 1rem);
+        border: 1px solid $bc-02;
+        border-radius: $radius-low;
+        border-top: 1px solid transparent;
+        padding: 0;
+        background-color: $white;
+
+        ul {
+            position: relative;
+            padding-top: 1rem;
+            max-height: 278px;
+            overflow-y: scroll;
+            background-color: $white;
+
+            @include media('lg') {
+                max-height: 222px;
+            }
+
+            &::before {
+                width: 98%;
+                height: 1px;
+                background-color: $gray-1;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            li {
+                padding: 0.5rem 2.5rem;
+
+                &:hover, &.active {
+                    background-color: $gray-1;
+                }
+                &.no-results {
+                    &:hover {
+                        background-color: $white;
+                    }
+                }
+            }
+        }
     }
     
     .container {
@@ -24,7 +204,7 @@
 
         .scroll-box {
             width: 100%;
-            padding-top: 1rem;
+            padding-top: 2rem;
             padding-bottom: 2rem;
             height: 100%;
             overflow-y: scroll;
@@ -36,6 +216,7 @@
         }
         
         &.left {
+            padding-right: 0.5rem;
             flex: 1;
             position: relative;
             z-index: 10;

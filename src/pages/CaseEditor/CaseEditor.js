@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './CaseEditor.module.scss';
 import classNames from 'classnames/bind';
@@ -21,6 +21,14 @@ import Loader from '../../components/Loader';
 import {
   FiArrowUp
 } from '../../lib/react-icons/fi';
+import {
+  IoMdArrowDropdown
+} from 'react-icons/io';
+import {
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight
+} from 'react-icons/md';
+import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -37,10 +45,14 @@ const cx = classNames.bind(styles);
 )
 @observer
 class CaseEditor extends Component {
+  state = { 
+    focusParent: false
+}
   componentDidMount() {
-    const type = this.props.location.pathname.split('/')[3];
-    const caseId = this.props.location.pathname.split('/')[4];
+    const { type, caseId, dateIndex } = this.props.match.params;
+
     
+
     $('#case-editor-center-container-scroll-box').on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
         $( '#scroll-to-top' ).fadeIn();
@@ -50,7 +62,7 @@ class CaseEditor extends Component {
     });
 
     if (type === 'detail') {
-      this.props.Case.loadCase(caseId);
+      this.props.Case.loadCase(caseId, dateIndex);
     }
 
 
@@ -63,12 +75,16 @@ class CaseEditor extends Component {
       console.log(err);
     });
 
+    document.addEventListener('mousedown', this._handleClickOutside);
     
   }
 
   componentDidUpdate(prevProps) {
-    const type = this.props.location.pathname.split('/')[3];
-    
+    const { type, dateIndex } = this.props.match.params;
+    if (prevProps.match.params.dateIndex !== this.props.match.params.dateIndex) {
+      this.props.Case.setCurrentCaseDetail(dateIndex);
+      this.props.Case.setCurrentCase(this.props.Case.currentCase, dateIndex);
+    }
     $('#case-editor-center-container-scroll-box').on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
         $( '#scroll-to-top' ).fadeIn();
@@ -86,16 +102,28 @@ class CaseEditor extends Component {
   componentWillUnmount() {
     this.props.Case.clearIsEditing();
     this.props.Case.clearCurrentCase();
+    document.removeEventListener('mousedown', this._handleClickOutside);
   }
+
+  _handleClickOutside = (event) => {
+    if (this.breadCrumbs && !this.breadCrumbs.contains(event.target)) {
+        this.setState({ focusParent: false});
+        
+    }
+}
 
   handleClickOnTopScroll = () => {
     $('#case-editor-center-container-scroll-box').animate( { scrollTop : 0 }, 400 );
   }
-  
+
+  _toggleOnFocus = () => {
+    this.setState({ focusParent: true})
+  }
 
   render() {
-    const type = this.props.location.pathname.split('/')[3]
-    const { isEditing, isLoading } = this.props.Case;
+    const { type, dateIndex, caseId } = this.props.match.params;
+    const { isEditing, isLoading, currentCaseRecord } = this.props.Case;
+    console.log(JSON.parse(JSON.stringify(this.props.Case.currentCaseRecord)))
     const {
       pastHistory,
       familyHistory,
@@ -118,6 +146,25 @@ class CaseEditor extends Component {
         {
           isLoading ? <Loader /> 
           : <>
+          {
+            currentCaseRecord.length > 1 &&
+            <>
+              {
+                +dateIndex !== 0 &&
+                <Link className={cx('prevRecord', 'btn-move-record')} to={`/case/editor/detail/${caseId}/${+dateIndex - 1}`}>
+                  <MdKeyboardArrowLeft />
+                  <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex - 1])}</div>
+                </Link>
+              }
+              {
+                +dateIndex !== currentCaseRecord.length - 1 &&
+                <Link className={cx('nextRecord', 'btn-move-record')} to={`/case/editor/detail/${caseId}/${+dateIndex + 1}`}>
+                  <MdKeyboardArrowRight />
+                  <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex + 1])}</div>
+                </Link>
+              }
+            </>
+          }
             <div className={cx('container', 'left')}>
               <div className={cx('scroll-box')}>
                 {
@@ -129,6 +176,38 @@ class CaseEditor extends Component {
             <div id="case-editor-center-container" className={cx('container', 'center')}>
               <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
                   <>
+                    <div 
+                        ref={(ref) => {
+                            this.breadCrumbs = ref;
+                        }}
+                        className={cx('record-date', {focus: this.state.focusParent}, {isEditing: isEditing})}>
+                      <div className={cx('selected-date')} 
+                        onClick={() => {
+                          if (!isEditing) {
+                            this._toggleOnFocus();
+                          }
+                        }}
+                      >
+                        <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
+                        {
+                          currentCaseRecord.length > 0 &&
+                          <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
+                        }
+                        <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
+                      </div>
+                      {
+                        this.state.focusParent &&
+                        <div className={cx('records')}>
+                          <ul>
+                            {
+                              currentCaseRecord.map((date, i) => {
+                                return <li key={i}><Link onClick={() => {this.setState({focusParent: false})}} className={cx('date', {selected: i === +dateIndex})} to={`/case/editor/detail/${caseId}/${i}`}>{getLocaleDateWithYMS(date)}</Link></li>
+                              })
+                            }
+                          </ul>
+                        </div>
+                      }
+                    </div>
                     <Basic type={type} />
                     <CollapsibleBox 
                       title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 
