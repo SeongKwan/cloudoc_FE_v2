@@ -106,7 +106,7 @@ class CaseEditor extends Component {
   }
 
   _handleClickOutside = (event) => {
-    if (this.breadCrumbs && !this.breadCrumbs.contains(event.target)) {
+    if (this.recordDate && !this.recordDate.contains(event.target)) {
         this.setState({ focusParent: false});
         
     }
@@ -147,7 +147,7 @@ class CaseEditor extends Component {
           isLoading ? <Loader /> 
           : <>
           {
-            currentCaseRecord.length > 1 &&
+            currentCaseRecord.length > 1 && type === 'detail' &&
             <>
               {
                 +dateIndex !== 0 &&
@@ -176,38 +176,41 @@ class CaseEditor extends Component {
             <div id="case-editor-center-container" className={cx('container', 'center')}>
               <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
                   <>
-                    <div 
-                        ref={(ref) => {
-                            this.breadCrumbs = ref;
-                        }}
-                        className={cx('record-date', {focus: this.state.focusParent}, {isEditing: isEditing})}>
-                      <div className={cx('selected-date')} 
-                        onClick={() => {
-                          if (!isEditing) {
-                            this._toggleOnFocus();
-                          }
-                        }}
-                      >
-                        <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
-                        {
-                          currentCaseRecord.length > 0 &&
-                          <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
-                        }
-                        <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
-                      </div>
-                      {
-                        this.state.focusParent &&
-                        <div className={cx('records')}>
-                          <ul>
-                            {
-                              currentCaseRecord.map((date, i) => {
-                                return <li key={i}><Link onClick={() => {this.setState({focusParent: false})}} className={cx('date', {selected: i === +dateIndex})} to={`/case/editor/detail/${caseId}/${i}`}>{getLocaleDateWithYMS(date)}</Link></li>
-                              })
+                    {
+                      type === 'detail' &&
+                      <div 
+                          ref={(ref) => {
+                              this.recordDate = ref;
+                          }}
+                          className={cx('record-date', {focus: this.state.focusParent}, {isEditing: isEditing})}>
+                        <div className={cx('selected-date')} 
+                          onClick={() => {
+                            if (!isEditing) {
+                              this._toggleOnFocus();
                             }
-                          </ul>
+                          }}
+                        >
+                          <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
+                          {
+                            currentCaseRecord.length > 0 &&
+                            <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
+                          }
+                          <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
                         </div>
-                      }
-                    </div>
+                        {
+                          this.state.focusParent &&
+                          <div className={cx('records')}>
+                            <ul>
+                              {
+                                currentCaseRecord.map((date, i) => {
+                                  return <li key={i}><Link onClick={() => {this.setState({focusParent: false})}} className={cx('date', {selected: i === +dateIndex})} to={`/case/editor/detail/${caseId}/${i}`}>{getLocaleDateWithYMS(date)}</Link></li>
+                                })
+                              }
+                            </ul>
+                          </div>
+                        }
+                      </div>
+                    }
                     <Basic type={type} />
                     <CollapsibleBox 
                       title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 

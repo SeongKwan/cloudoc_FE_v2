@@ -76,6 +76,9 @@ class Routes extends Component {
                     <Route path="/case/editor/:type/:caseId/:dateIndex">
                         <CaseEditor />
                     </Route>
+                    <Route path="/case/editor/:type">
+                        <CaseEditor />
+                    </Route>
                     <Route path="/qna">
                         <CaseQnA />
                     </Route>
