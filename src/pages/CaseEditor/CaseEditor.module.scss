@@ -11,6 +11,11 @@
     }
     @include media('sm') {
         height: initial;
+        .loader-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
     }
 
     .btn-move-record {

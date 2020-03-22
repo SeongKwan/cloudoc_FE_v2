@@ -144,7 +144,7 @@ class CaseEditor extends Component {
         </Helmet>
         <HeaderEditor type={type} />
         {
-          isLoading ? <Loader /> 
+          isLoading ? <div className={cx('loader-container')}><Loader /> </div>
           : <>
           {
             currentCaseRecord.length > 1 && type === 'detail' && !isEditing &&
