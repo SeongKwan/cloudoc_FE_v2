@@ -1,13 +1,17 @@
 .RightSideList {
     position: absolute;
     // background-color: $bc-02;
-    top: 1%;
+    // top: 1%;
     left: 0.5rem;
     font-weight: 100;
     // letter-spacing: 1px;
     border-radius: $radius-low;
     width: calc(100% - 1rem);
     // padding: 0.5rem;
+    top: 6rem;
+    @include media('lg') {
+        top: 5.5rem;
+    }
     ul {
         // margin-top: 2.5rem;
         max-height: 80vh;

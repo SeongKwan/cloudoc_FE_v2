@@ -1,6 +1,6 @@
 .LeftSideToolbar {
     position: absolute;
-    top: 10%;
+    
     left: 0;
     display: flex;
     flex-direction: column;
@@ -11,6 +11,11 @@
 
     z-index: 999;
 
+    top: 6rem;
+    @include media('lg') {
+        top: 5.5rem;
+    }
+    
     &.openList {
         // border-right: 1px solid $brand-2;
     }

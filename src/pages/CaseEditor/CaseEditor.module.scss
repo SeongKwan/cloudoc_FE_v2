@@ -1,7 +1,6 @@
 .CaseEditor {
     position: relative;
     height: 100vh;
-    padding-top: 5rem;
     display: flex;
     color: $bc-18;
     background-color: rgba($gray-1, 0.2);
@@ -10,9 +9,10 @@
         padding: 0;
         align-items: center;
     }
-    @include media('lg') {
-        padding-top: 4.5rem;
-    }
+    // padding-top: 5rem;
+    // @include media('lg') {
+    //     padding-top: 4.5rem;
+    // }
 
     .btn-move-record {
         z-index: 11;
@@ -60,6 +60,8 @@
         border-radius: $radius-low;
         position: relative;
         margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: -1rem;
         width: 220px;
         @include media('lg') {
             width: 180px;
@@ -211,16 +213,17 @@
     }
     
     .container {
-        height: calc(100vh - 80px);
         display: flex;
+        padding-top: 5rem;
+        
         @include media('lg') {
-            height: calc(100vh - 58.5px);
+            padding-top: 4.5rem;
         }
         
 
         .scroll-box {
             width: 100%;
-            padding-top: 2rem;
+            // padding-top: 2rem;
             padding-bottom: 2rem;
             height: 100%;
             overflow-y: scroll;
@@ -247,6 +250,7 @@
         }
         
         &.center {
+            // margin-top: 2rem;
             position: relative;
             flex: 2;
             border-right: 1px solid rgba($bc-18, 0.1);
