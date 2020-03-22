@@ -52,6 +52,7 @@ class CaseEditor extends Component {
     const { type, caseId, dateIndex } = this.props.match.params;
 
     
+    $('#case-editor-center-container-scroll-box').scrollTop(0);
 
     $('#case-editor-center-container-scroll-box').on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
@@ -85,6 +86,7 @@ class CaseEditor extends Component {
       this.props.Case.setCurrentCaseDetail(dateIndex);
       this.props.Case.setCurrentCase(this.props.Case.currentCase, dateIndex);
     }
+    
     $('#case-editor-center-container-scroll-box').on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
         $( '#scroll-to-top' ).fadeIn();
@@ -93,7 +95,7 @@ class CaseEditor extends Component {
       }
     });
 
-    $("#testID").on("click", () => {console.log('testID click')})
+    
     if (prevProps.location.pathname.split('/')[3] !== type) {
       $('#case-editor-center-container-scroll-box').scrollTop(0);
     }
