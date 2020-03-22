@@ -86,6 +86,13 @@ class MyCases extends Component {
                             </li>
                         }
                         {
+                            !isLoading && length > 0 && this.props.search.keyword['cases'].length === 0 &&
+                            <div onClick={this._handleClickOnButton} className={cx('floating-btn-add-case')}>
+                                <FiPlus />
+                                <span>증례추가</span>
+                            </div>
+                        }
+                        {
                             !isLoading ?
                             database.map((Case, i) => {
                                 return <CaseListItem Case={Case} key={i} isLoadingMore={this.props.Case.isLoadingMore}/>
