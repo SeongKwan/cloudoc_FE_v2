@@ -142,7 +142,7 @@ class CaseEditor extends Component {
         <Helmet>
             <title>{type === 'create' ? 'Case Create' : 'Case Editor'}</title>
         </Helmet>
-        <HeaderEditor type={type} />
+        {/* <HeaderEditor type={type} /> */}
         {
           isLoading ? <Loader /> 
           : <>
