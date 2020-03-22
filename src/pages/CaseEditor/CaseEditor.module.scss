@@ -1,6 +1,6 @@
 .CaseEditor {
     position: relative;
-    // height: 100vh;
+    height: 100vh;
     display: flex;
     color: $bc-18;
     background-color: rgba($gray-1, 0.2);
@@ -9,10 +9,9 @@
         padding: 0;
         align-items: center;
     }
-    // padding-top: 5rem;
-    // @include media('lg') {
-    //     padding-top: 4.5rem;
-    // }
+    @include media('sm') {
+        height: initial;
+    }
 
     .btn-move-record {
         z-index: 11;
