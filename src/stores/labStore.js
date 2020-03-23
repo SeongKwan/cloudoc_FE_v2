@@ -87,13 +87,6 @@ class LabStore {
         return count;
     }
 
-    // @computed get diff() {
-    //     console.log(JSON.parse(JSON.stringify(this.staticData)))
-    //     console.log(JSON.parse(JSON.stringify(this.editableData)))
-    //     console.log(JSON.stringify(this.editableData) !== JSON.stringify(this.staticData))
-        
-    //     return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
-    // }
 
     @computed get diff() {
         let staticWithoutOriginalIndex = [];
@@ -108,11 +101,6 @@ class LabStore {
             delete filteredLab['originalIndex'];
             editableWithoutOriginalIndex.push(filteredLab);
         })
-        console.log('1',JSON.parse(JSON.stringify(this.staticData)))
-        console.log('2',JSON.parse(JSON.stringify(this.editableData)))
-        console.log('3',JSON.parse(JSON.stringify(staticWithoutOriginalIndex)))
-        console.log('4',JSON.parse(JSON.stringify(editableWithoutOriginalIndex)))
-        console.log(JSON.stringify(editableWithoutOriginalIndex) !== JSON.stringify(staticWithoutOriginalIndex))
         return JSON.stringify(editableWithoutOriginalIndex) !== JSON.stringify(staticWithoutOriginalIndex);
     }
 
