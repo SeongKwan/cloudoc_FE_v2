@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './LeftSideToolbar.module.scss';
 import classNames from 'classnames/bind';
@@ -11,10 +12,15 @@ import {
     FaNotesMedical,
     FaChalkboard
 } from "react-icons/fa"; 
+import {
+    MdKeyboardArrowLeft
+} from 'react-icons/md';
+import { getLocaleDateWithYMS } from '../../../../utils/momentHelper';
 
 
 const cx = classNames.bind(styles);
 
+@withRouter
 @inject(
     'Case',
     'caseEditorBasic',
@@ -310,13 +316,9 @@ class LeftSideToolbar extends Component {
         } = this.props.analyzeDrug.currentDrug;
         
         let symptomDetail, drugDetail, teachingDetail;
-        // symptomMores = this.props.analyzeSymptom.openMores;
         symptomDetail = this.props.analyzeSymptom.openDetail;
         drugDetail = this.props.analyzeDrug.openDetail;
         teachingDetail = this.props.analyzeTeaching.openDetail;
-        // drugMores = this.props.analyzeDrug.openMores;
-        // console.log(JSON.parse(JSON.stringify(this.props.diagnosis.editableData)))
-        // console.log(JSON.parse(JSON.stringify(openDetails)))
         const anlSymptom = this.props.analyzeSymptom.editableData;
         const anlDrug = this.props.analyzeDrug.editableData;
         const anlTeaching = this.props.analyzeTeaching.editableData;
@@ -325,372 +327,161 @@ class LeftSideToolbar extends Component {
         const lengthDiagnosis = this.props.diagnosis.editableData.length > 0;
 
         const { currentReference } = this.props.caseEditor;
-
+        const { isEditing, currentCaseRecord } = this.props.Case;
+        const { type, dateIndex, caseId } = this.props.match.params;
+        const { caseEditorBasic, symptom, lab, diagnosis, treatment } = this.props;
+        let difference = (
+            caseEditorBasic.diff ||
+            symptom.diff ||
+            lab.diff ||
+            diagnosis.diff ||
+            treatment.diff ||
+            treatment.diffForFormula ||
+            this.props.teaching.diff
+            ) ? true : false;
         
         return (
             <div className={cx('LeftSideToolbar', {openList: openList !== ''})} ref={ref => this.toolbar = ref}>
-                
                 {
-                    !isLoadingForSymptom ? 
-                    <div 
-                        className={cx('btn', {open: openList === 'condition'}, {tool: (!lengthSymptom && !lengthLab)}, 'symptom', {disabled: (!lengthSymptom && !lengthLab)})} 
-                        id="btn-smart-condition" 
-                        data-anl="symptom" 
-                        data-type="condition" 
-                        onClick={this._handleOnClick} 
-                        data-disabled={(!lengthSymptom && !lengthLab) ? 'true' : 'false'} 
-                        data-tip="증상 또는 혈액검사가 최소 1개 이상 필요합니다"
-                    >
-                        <FaUserCheck />
-                        <div className={cx('label')}>스마트진단</div>
-                    </div>
-                    : <div className={cx('btn', {isLoading: isLoadingForSymptom})}>분석중...</div>
-                }
-                {
-                    !isLoadingForTreatment ? 
-                    <div 
-                        className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} 
-                        data-type="drug" 
-                        data-anl="drug" 
-                        onClick={this._handleOnClick} 
-                        data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
-                        data-tip="진단이 최소 1개 이상 필요합니다"
-                    >
-                        <FaNotesMedical />
-                        <div className={cx('label')}>스마트처방</div>
-                    </div>
-                    : <div className={cx('btn', {isLoading: isLoadingForTreatment})}>분석중...</div>
-                }
-                {
-                    !isLoadingForTeaching ? 
-                    <div 
-                        className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} 
-                        data-type="teaching" 
-                        data-anl="teaching" 
-                        onClick={this._handleOnClick} 
-                        data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
-                        data-tip="진단이 최소 1개 이상 필요합니다"
-                    >
-                        <FaChalkboard />
-                        <div className={cx('label')}>스마트티칭</div>
-                        
-                    </div>
-                    : <div className={cx('btn', {isLoading: isLoadingForTeaching})}>분석중...</div>
+                currentCaseRecord.length > 1 && type === 'detail' &&
+                    <>
+                        {
+                            +dateIndex !== 0 &&
+                            <div 
+                            className={cx('prevRecord', 'btn-move-record')} 
+                            onClick={() => {
+                                if (isEditing) {
+                                    if (difference) {
+                                        if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
+                                        return this.props.Case.updateCase(dateIndex)
+                                            .then(res => {
+                                                if (res) {
+                                                    alert('정상적으로 수정되었습니다')
+                                                }
+                                            })
+                                            .then(() => {
+                                            this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                                            })
+                                            .catch(err => {
+                                                console.log(err)
+                                            });
+                                        } 
+                                        return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                                    }
+                                } 
+                                return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                            }}
+                            >
+                                <MdKeyboardArrowLeft />
+                                <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex - 1])}</div>
+                            </div>
+                        }
+                    </>
                 }
                 
-                
-                
-                <div className={cx('content-container')}>
+                {
+                    (type === "create" || isEditing) &&
+                    <div className={cx('tool-box')}>
                     {
-                        openList === 'condition' &&
-                        <div className={cx('results', {openDetail: symptomDetail})}>
-                            <ul className={cx('scroll-box')}>
-                                {
-                                    this.props.analyzeSymptom.openMores.length > 0 &&
-                                    anlSymptom.map((anl, i) => {
-                                        const { openMores } = this.props.analyzeSymptom;
-                                        const {
-                                            conditionName,
-                                            analyzeSymptom,
-                                            analyzeLab,
-                                            id
-                                        } = anl;
-                                        const {
-                                            matchedItem,
-                                            unmatchedItem
-                                        } = analyzeSymptom;
-                                        const {
-                                            matchedItemWithState,
-                                            unmatchedItemWithState
-                                        } = analyzeLab;
-
-                                        return <li key={i}>
-                                                <div className={cx('name-btn')}>
-                                                <div className={cx('name', 'condition-name')}>
-                                                    <div data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
-                                                </div>
-                                                
-                                                <div className={cx('btn-more')}>
-                                                    <button onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                this.props.analyzeSymptom.toggleOpenMores(i);
-                                                            }
-                                                        }
-                                                    >
-                                                        {
-                                                            openMores[i] ? '닫기' : '분석'
-                                                        }
-                                                    </button>
-                                                </div>
-                                                <div className={cx('btn-add')}>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            this._handleClickOnBtnAdd('condition', conditionName)
-                                                        }}
-                                                    >
-                                                        입력
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {
-                                                openMores[i] &&
-                                                <div className={cx('more')}>
-                                                    <div className={cx('row', 'matched')}>
-                                                        <div className={cx('title')}>
-                                                            # 일치하는 증상/검사결과
-                                                        </div>
-                                                        <ul className={cx('content')}>
-                                                            {
-                                                                matchedItem.length > 0 &&
-                                                                matchedItem.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
-                                                                        <div> {item}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                matchedItemWithState.length > 0 &&
-                                                                matchedItemWithState.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
-                                                                        <div> {item.name}</div>
-                                                                        <div> - {item.state}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                matchedItem.length < 1 && matchedItemWithState.length < 1 &&
-                                                                <li>-</li>
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                    <div className={cx('row', 'unmatched')}>
-                                                        <div className={cx('title')}>
-                                                            # 불일치하는 증상/검사결과
-                                                        </div>
-                                                        <ul className={cx('content')}>
-                                                            {
-                                                                unmatchedItem.length > 0 &&
-                                                                unmatchedItem.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
-                                                                        <div> {item}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                unmatchedItemWithState.length > 0 &&
-                                                                unmatchedItemWithState.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
-                                                                        <div> {item.name} </div>
-                                                                        <div> - {item.state}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                unmatchedItem.length < 1 && unmatchedItemWithState.length < 1 &&
-                                                                <li>-</li>
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                    <div className={cx('row', 'be-advised')}>
-                                                        <div className={cx('title')}>
-                                                            # 추가확인이 필요한 증상/검사결과
-                                                        </div>
-                                                        <ul className={cx('content')}>
-                                                            {
-                                                                analyzeSymptom.needToCheck.length > 0 &&
-                                                                analyzeSymptom.needToCheck.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'symptom')}>[증상]</div>
-                                                                        <div> {item}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                analyzeLab.needToCheck.length > 0 &&
-                                                                analyzeLab.needToCheck.map((item, i) => {
-                                                                    return <li key={i}>
-                                                                        <div className={cx('badge', 'lab')}>[혈검]</div>
-                                                                        <div> {item.name} </div>
-                                                                        <div> - {item.state}</div>
-                                                                    </li>
-                                                                })
-                                                            }
-                                                            {
-                                                                analyzeSymptom.needToCheck.length < 1 && analyzeLab.needToCheck.length < 1 &&
-                                                                <li>-</li>
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            }
-                                        </li>
-                                    })
-                                }
-                            </ul>
+                        !isLoadingForSymptom ? 
+                        <div 
+                            className={cx('btn', {open: openList === 'condition'}, {tool: (!lengthSymptom && !lengthLab)}, 'symptom', {disabled: (!lengthSymptom && !lengthLab)})} 
+                            id="btn-smart-condition" 
+                            data-anl="symptom" 
+                            data-type="condition" 
+                            onClick={this._handleOnClick} 
+                            data-disabled={(!lengthSymptom && !lengthLab) ? 'true' : 'false'} 
+                            data-tip="증상 또는 혈액검사가 최소 1개 이상 필요합니다"
+                        >
+                            <FaUserCheck />
+                            <div className={cx('label')}>스마트진단</div>
                         </div>
+                        : <div className={cx('btn', {isLoading: isLoadingForSymptom})}>분석중...</div>
                     }
                     {
-                        openList === 'drug' &&
-                        <div className={cx('results', 'drug', {openDetail: drugDetail})}>
-                            <ul className={cx('scroll-box')}>
-                                {
-                                    anlDrug.map((anl, indexAnl) => {
-                                        const { openMores } = this.props.analyzeDrug;
-                                        const {
-                                            condition_id,
-                                            relatedDisease,
-                                            drugs
-                                        } = anl;
-
-                                        return <li key={indexAnl}>
-                                            <div className={cx('name-btn')}>
-                                                <div className={cx('name', 'condition-name')}>
-                                                    <div data-type="drug" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, condition_id)}}>{relatedDisease}</div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className={cx('more', 'drug')}>
-                                                <div className={cx('row', 'evidence')}>
-                                                    <ul className={cx('content')}>
-                                                        {
-                                                            this.props.analyzeDrug.openMores.length > 0 &&
-                                                            drugs.map((drug, indexDrug) => {
-                                                                const {
-                                                                    id, drugName, evidences
-                                                                } = drug;
-                                                                return <li key={indexDrug}>
-                                                                    <div className={cx('drug-container')}>
-                                                                        <div data-type="drug" data-page="drug" className={cx('drug-name')} onClick={(e) => {this._handleClickOnListitem(e, id)}}>
-                                                                            {drugName}
-                                                                        </div>
-                                                                        <div className={cx('btn-more')}>
-                                                                            <button onClick={(e) => {
-                                                                                        e.stopPropagation();
-                                                                                        this.props.analyzeDrug.toggleOpenMores(indexAnl, indexDrug);
-                                                                                    }
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    openMores[indexAnl][indexDrug] ? '닫기' : '분석'
-                                                                                }
-                                                                            </button>
-                                                                        </div>
-                                                                        <div className={cx('btn-add')}>
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    this._handleClickOnBtnAdd('drug', drugName, drug)
-                                                                                }}
-                                                                            >
-                                                                                입력
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                    {
-                                                                        openMores[indexAnl][indexDrug] &&
-                                                                        <ul className={cx('more', 'deep')}>
-                                                                            {
-                                                                                evidences.length > 0 &&
-                                                                                evidences.map((evi, i) => {
-                                                                                    const {
-                                                                                        evidence,
-                                                                                        references
-                                                                                    } = evi;
-                                                                                    return <li key={i}>
-                                                                                        <div className={cx('evidence')}>
-                                                                                            {evidence || '-'}
-                                                                                        </div>
-                                                                                        <div className={cx('references-wrapper')}>
-                                                                                            {
-                                                                                                references.length > 0 &&
-                                                                                                references.map((ref, i) => {
-                                                                                                    const {
-                                                                                                        reference_id,
-                                                                                                        reference_summary
-                                                                                                    } = ref;
-                                                                                                    return <div key={i}>
-                                                                                                        <div 
-                                                                                                            className={cx('drug')}
-                                                                                                            data-tip={reference_summary} 
-                                                                                                            data-for={`tooltip-evidence-${condition_id}-${id}-${i}`}
-                                                                                                            onClick={() => {
-                                                                                                                if (!drugDetail && +reference_id > 0) {
-                                                                                                                    this.props.analyzeDrug.toggleOpenDetail();
-                                                                                                                }
-                                                                                                                this.props.caseEditor.loadReferenceByLink(reference_id);
-                                                                                                            }}
-                                                                                                        >
-                                                                                                            {reference_id}
-                                                                                                        </div>
-                                                                                                        <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-evidence-${condition_id}-${id}-${i}`} />
-                                                                                                    </div>
-                                                                                                })
-                                                                                            }
-                                                                                        </div>
-                                                                                        
-                                                                                    </li>
-                                                                                })
-                                                                            }
-                                                                        </ul>
-                                                                    }
-                                                                </li>
-                                                            })
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            
-                                        </li>
-                                    })
-                                }
-                            </ul>
+                        !isLoadingForTreatment ? 
+                        <div 
+                            className={cx('btn', {open: openList === 'drug'}, {tool: !lengthDiagnosis}, 'drug', {disabled: !lengthDiagnosis})} 
+                            data-type="drug" 
+                            data-anl="drug" 
+                            onClick={this._handleOnClick} 
+                            data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                            data-tip="진단이 최소 1개 이상 필요합니다"
+                        >
+                            <FaNotesMedical />
+                            <div className={cx('label')}>스마트처방</div>
                         </div>
+                        : <div className={cx('btn', {isLoading: isLoadingForTreatment})}>분석중...</div>
                     }
-
-
                     {
-                        openList === 'teaching' &&
-                        <div className={cx('results', 'teaching', {openDetail: true})}>
-                            <ul className={cx('scroll-box')}>
-                                {
-                                    this.props.analyzeTeaching.openMores.length > 0 &&
-                                    anlTeaching.map((anl, i) => {
-                                        const { openMores } = this.props.analyzeTeaching;
-                                        const {
-                                            condition_id,
-                                            relatedDisease,
-                                            teachings
-                                        } = anl;
+                        !isLoadingForTeaching ? 
+                        <div 
+                            className={cx('btn', {open: openList === 'teaching'}, {tool: !lengthDiagnosis}, 'teaching', {disabled: !lengthDiagnosis})} 
+                            data-type="teaching" 
+                            data-anl="teaching" 
+                            onClick={this._handleOnClick} 
+                            data-disabled={!lengthDiagnosis ? 'true' : 'false'} 
+                            data-tip="진단이 최소 1개 이상 필요합니다"
+                        >
+                            <FaChalkboard />
+                            <div className={cx('label')}>스마트티칭</div>
+                            
+                        </div>
+                        : <div className={cx('btn', {isLoading: isLoadingForTeaching})}>분석중...</div>
+                    }
+                    
+                    
+                    
+                    <div className={cx('content-container')}>
+                        {
+                            openList === 'condition' &&
+                            <div className={cx('results', {openDetail: symptomDetail})}>
+                                <ul className={cx('scroll-box')}>
+                                    {
+                                        this.props.analyzeSymptom.openMores.length > 0 &&
+                                        anlSymptom.map((anl, i) => {
+                                            const { openMores } = this.props.analyzeSymptom;
+                                            const {
+                                                conditionName,
+                                                analyzeSymptom,
+                                                analyzeLab,
+                                                id
+                                            } = anl;
+                                            const {
+                                                matchedItem,
+                                                unmatchedItem
+                                            } = analyzeSymptom;
+                                            const {
+                                                matchedItemWithState,
+                                                unmatchedItemWithState
+                                            } = analyzeLab;
 
-                                        if (teachings.length > 0) {
-                                        return <li key={i}>
-                                                <div className={cx('name-btn')}>
-                                                    <div className={cx('name', 'teaching-name')}>
-                                                        <div data-type="teaching" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, condition_id)}}>{relatedDisease}</div>
+                                            return <li key={i}>
+                                                    <div className={cx('name-btn')}>
+                                                    <div className={cx('name', 'condition-name')}>
+                                                        <div data-type="condition" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, id)}}>{conditionName}</div>
                                                     </div>
+                                                    
                                                     <div className={cx('btn-more')}>
                                                         <button onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                this.props.analyzeTeaching.toggleOpenMores(i);
-                                                            }}>
-                                                                {
-                                                                    openMores[i] ? '닫기' : '분석'
+                                                                    e.stopPropagation();
+                                                                    this.props.analyzeSymptom.toggleOpenMores(i);
                                                                 }
+                                                            }
+                                                        >
+                                                            {
+                                                                openMores[i] ? '닫기' : '분석'
+                                                            }
                                                         </button>
                                                     </div>
                                                     <div className={cx('btn-add')}>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                this._handleClickOnBtnAdd('teaching_all', '지도법', teachings)
+                                                                this._handleClickOnBtnAdd('condition', conditionName)
                                                             }}
                                                         >
-                                                            모두입력
+                                                            입력
                                                         </button>
                                                     </div>
                                                 </div>
@@ -698,1390 +489,1645 @@ class LeftSideToolbar extends Component {
                                                     openMores[i] &&
                                                     <div className={cx('more')}>
                                                         <div className={cx('row', 'matched')}>
+                                                            <div className={cx('title')}>
+                                                                # 일치하는 증상/검사결과
+                                                            </div>
                                                             <ul className={cx('content')}>
                                                                 {
-                                                                    teachings.length > 0 && teachings.map((teach, i) => {
-                                                                        const { 
-                                                                            description,
-                                                                            reference_id,
-                                                                            reference_summary
-                                                                        } = teach;
+                                                                    matchedItem.length > 0 &&
+                                                                    matchedItem.map((item, i) => {
                                                                         return <li key={i}>
-                                                                                <div 
-                                                                                    className={cx('description')}
-                                                                                    data-tip={reference_summary} 
-                                                                                    data-for={`tooltip-teaching-${i}`}
-                                                                                    onClick={() => {
-                                                                                        if (!teachingDetail && +reference_id > 0) {
-                                                                                            this.props.analyzeTeaching.toggleOpenDetail();
-                                                                                        }
-                                                                                        this.props.caseEditor.loadReferenceByLink(reference_id);
-                                                                                    }}
-                                                                                >
-                                                                                    {description}
-                                                                                </div>
-                                                                                <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-teaching-${i}`} />
-                                                                            
-                                                                            <div className={cx('btn-add')}>
-                                                                                <button
-                                                                                    onClick={(e) => {
-                                                                                        e.stopPropagation();
-                                                                                        this._handleClickOnBtnAdd('teaching', '지도법', teach)
-                                                                                    }}
-                                                                                >
-                                                                                    입력
-                                                                                </button>
-                                                                            </div>
+                                                                            <div className={cx('badge', 'symptom')}>[증상]</div>
+                                                                            <div> {item}</div>
                                                                         </li>
                                                                     })
+                                                                }
+                                                                {
+                                                                    matchedItemWithState.length > 0 &&
+                                                                    matchedItemWithState.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <div className={cx('badge', 'lab')}>[혈검]</div>
+                                                                            <div> {item.name}</div>
+                                                                            <div> - {item.state}</div>
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                                {
+                                                                    matchedItem.length < 1 && matchedItemWithState.length < 1 &&
+                                                                    <li>-</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div className={cx('row', 'unmatched')}>
+                                                            <div className={cx('title')}>
+                                                                # 불일치하는 증상/검사결과
+                                                            </div>
+                                                            <ul className={cx('content')}>
+                                                                {
+                                                                    unmatchedItem.length > 0 &&
+                                                                    unmatchedItem.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <div className={cx('badge', 'symptom')}>[증상]</div>
+                                                                            <div> {item}</div>
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                                {
+                                                                    unmatchedItemWithState.length > 0 &&
+                                                                    unmatchedItemWithState.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <div className={cx('badge', 'lab')}>[혈검]</div>
+                                                                            <div> {item.name} </div>
+                                                                            <div> - {item.state}</div>
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                                {
+                                                                    unmatchedItem.length < 1 && unmatchedItemWithState.length < 1 &&
+                                                                    <li>-</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div className={cx('row', 'be-advised')}>
+                                                            <div className={cx('title')}>
+                                                                # 추가확인이 필요한 증상/검사결과
+                                                            </div>
+                                                            <ul className={cx('content')}>
+                                                                {
+                                                                    analyzeSymptom.needToCheck.length > 0 &&
+                                                                    analyzeSymptom.needToCheck.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <div className={cx('badge', 'symptom')}>[증상]</div>
+                                                                            <div> {item}</div>
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                                {
+                                                                    analyzeLab.needToCheck.length > 0 &&
+                                                                    analyzeLab.needToCheck.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <div className={cx('badge', 'lab')}>[혈검]</div>
+                                                                            <div> {item.name} </div>
+                                                                            <div> - {item.state}</div>
+                                                                        </li>
+                                                                    })
+                                                                }
+                                                                {
+                                                                    analyzeSymptom.needToCheck.length < 1 && analyzeLab.needToCheck.length < 1 &&
+                                                                    <li>-</li>
                                                                 }
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 }
                                             </li>
-                                        } else {
-                                            return false;
-                                        }
-                                    })
-                                }
-                            </ul>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        {
+                            openList === 'drug' &&
+                            <div className={cx('results', 'drug', {openDetail: drugDetail})}>
+                                <ul className={cx('scroll-box')}>
+                                    {
+                                        anlDrug.map((anl, indexAnl) => {
+                                            const { openMores } = this.props.analyzeDrug;
+                                            const {
+                                                condition_id,
+                                                relatedDisease,
+                                                drugs
+                                            } = anl;
+
+                                            return <li key={indexAnl}>
+                                                <div className={cx('name-btn')}>
+                                                    <div className={cx('name', 'condition-name')}>
+                                                        <div data-type="drug" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, condition_id)}}>{relatedDisease}</div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className={cx('more', 'drug')}>
+                                                    <div className={cx('row', 'evidence')}>
+                                                        <ul className={cx('content')}>
+                                                            {
+                                                                this.props.analyzeDrug.openMores.length > 0 &&
+                                                                drugs.map((drug, indexDrug) => {
+                                                                    const {
+                                                                        id, drugName, evidences
+                                                                    } = drug;
+                                                                    return <li key={indexDrug}>
+                                                                        <div className={cx('drug-container')}>
+                                                                            <div data-type="drug" data-page="drug" className={cx('drug-name')} onClick={(e) => {this._handleClickOnListitem(e, id)}}>
+                                                                                {drugName}
+                                                                            </div>
+                                                                            <div className={cx('btn-more')}>
+                                                                                <button onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            this.props.analyzeDrug.toggleOpenMores(indexAnl, indexDrug);
+                                                                                        }
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        openMores[indexAnl][indexDrug] ? '닫기' : '분석'
+                                                                                    }
+                                                                                </button>
+                                                                            </div>
+                                                                            <div className={cx('btn-add')}>
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        this._handleClickOnBtnAdd('drug', drugName, drug)
+                                                                                    }}
+                                                                                >
+                                                                                    입력
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        {
+                                                                            openMores[indexAnl][indexDrug] &&
+                                                                            <ul className={cx('more', 'deep')}>
+                                                                                {
+                                                                                    evidences.length > 0 &&
+                                                                                    evidences.map((evi, i) => {
+                                                                                        const {
+                                                                                            evidence,
+                                                                                            references
+                                                                                        } = evi;
+                                                                                        return <li key={i}>
+                                                                                            <div className={cx('evidence')}>
+                                                                                                {evidence || '-'}
+                                                                                            </div>
+                                                                                            <div className={cx('references-wrapper')}>
+                                                                                                {
+                                                                                                    references.length > 0 &&
+                                                                                                    references.map((ref, i) => {
+                                                                                                        const {
+                                                                                                            reference_id,
+                                                                                                            reference_summary
+                                                                                                        } = ref;
+                                                                                                        return <div key={i}>
+                                                                                                            <div 
+                                                                                                                className={cx('drug')}
+                                                                                                                data-tip={reference_summary} 
+                                                                                                                data-for={`tooltip-evidence-${condition_id}-${id}-${i}`}
+                                                                                                                onClick={() => {
+                                                                                                                    if (!drugDetail && +reference_id > 0) {
+                                                                                                                        this.props.analyzeDrug.toggleOpenDetail();
+                                                                                                                    }
+                                                                                                                    this.props.caseEditor.loadReferenceByLink(reference_id);
+                                                                                                                }}
+                                                                                                            >
+                                                                                                                {reference_id}
+                                                                                                            </div>
+                                                                                                            <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-evidence-${condition_id}-${id}-${i}`} />
+                                                                                                        </div>
+                                                                                                    })
+                                                                                                }
+                                                                                            </div>
+                                                                                            
+                                                                                        </li>
+                                                                                    })
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                })
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                
+                                            </li>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+
+                        {
+                            openList === 'teaching' &&
+                            <div className={cx('results', 'teaching', {openDetail: true})}>
+                                <ul className={cx('scroll-box')}>
+                                    {
+                                        this.props.analyzeTeaching.openMores.length > 0 &&
+                                        anlTeaching.map((anl, i) => {
+                                            const { openMores } = this.props.analyzeTeaching;
+                                            const {
+                                                condition_id,
+                                                relatedDisease,
+                                                teachings
+                                            } = anl;
+
+                                            if (teachings.length > 0) {
+                                            return <li key={i}>
+                                                    <div className={cx('name-btn')}>
+                                                        <div className={cx('name', 'teaching-name')}>
+                                                            <div data-type="teaching" data-page="detail" onClick={(e) => {this._handleClickOnListitem(e, condition_id)}}>{relatedDisease}</div>
+                                                        </div>
+                                                        <div className={cx('btn-more')}>
+                                                            <button onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    this.props.analyzeTeaching.toggleOpenMores(i);
+                                                                }}>
+                                                                    {
+                                                                        openMores[i] ? '닫기' : '분석'
+                                                                    }
+                                                            </button>
+                                                        </div>
+                                                        <div className={cx('btn-add')}>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    this._handleClickOnBtnAdd('teaching_all', '지도법', teachings)
+                                                                }}
+                                                            >
+                                                                모두입력
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    {
+                                                        openMores[i] &&
+                                                        <div className={cx('more')}>
+                                                            <div className={cx('row', 'matched')}>
+                                                                <ul className={cx('content')}>
+                                                                    {
+                                                                        teachings.length > 0 && teachings.map((teach, i) => {
+                                                                            const { 
+                                                                                description,
+                                                                                reference_id,
+                                                                                reference_summary
+                                                                            } = teach;
+                                                                            return <li key={i}>
+                                                                                    <div 
+                                                                                        className={cx('description')}
+                                                                                        data-tip={reference_summary} 
+                                                                                        data-for={`tooltip-teaching-${i}`}
+                                                                                        onClick={() => {
+                                                                                            if (!teachingDetail && +reference_id > 0) {
+                                                                                                this.props.analyzeTeaching.toggleOpenDetail();
+                                                                                            }
+                                                                                            this.props.caseEditor.loadReferenceByLink(reference_id);
+                                                                                        }}
+                                                                                    >
+                                                                                        {description}
+                                                                                    </div>
+                                                                                    <ReactTooltip className="custom-tooltip" place="right" effect="solid" id={`tooltip-teaching-${i}`} />
+                                                                                
+                                                                                <div className={cx('btn-add')}>
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            this._handleClickOnBtnAdd('teaching', '지도법', teach)
+                                                                                        }}
+                                                                                    >
+                                                                                        입력
+                                                                                    </button>
+                                                                                </div>
+                                                                            </li>
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </li>
+                                            } else {
+                                                return false;
+                                            }
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </div>
+
+
+
+                    {
+                        this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "detail" &&
+                        <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
+                            {
+                                
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeSymptom.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{name}</div>
+                                                </div>
+                                            </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>질환설명</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            detail.map((detail, i) => {
+                                                                return <div key={i} className={cx('detail-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{detail.description || '-'}&nbsp;
+                                                                        {
+                                                                            detail.description && 
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={detail.ref_content} 
+                                                                                    data-for={`tooltip-detail-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+detail.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(detail.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{detail.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련기전</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            pathology.map((path, i) => {
+                                                                return <div key={i} className={cx('pathology-item')}>
+                                                                    <div className={cx('pathology-wrapper')}>
+                                                                        <div className={cx('pathology')}>
+                                                                            <div className={cx('pathology-content')}>
+                                                                                -&nbsp;{path.level1}&nbsp;
+                                                                                {
+                                                                                    path.level1 &&
+                                                                                    <>
+                                                                                        <div 
+                                                                                            data-tip={path.ref_content} 
+                                                                                            data-for={`tooltip-path-${i}`}
+                                                                                            className={cx('anchor')}
+                                                                                            key={i} 
+                                                                                            onClick={() => {
+                                                                                                if (+path.ref_id > 0) {
+                                                                                                    this.props.caseEditor.loadReferenceByLink(path.ref_id)
+                                                                                                }
+                                                                                            }}
+                                                                                        >
+                                                                                            [{path.ref_id}]
+                                                                                        </div>
+                                                                                        <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
+                                                                                    </>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        {
+                                                                            path.level2 !== undefined && path.level2 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                        {
+                                                                            path.level3 !== undefined && path.level3 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련증상</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_symptoms.map((symptom, i) => {
+                                                                return <div key={i} className={cx('symptom-item', 'linked')}>
+                                                                    <div>
+                                                                        -&nbsp;{symptom.name || '-'}&nbsp;
+                                                                        {
+                                                                            symptom.name &&
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={symptom.ref_content} 
+                                                                                    data-for={`tooltip-symptom-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+symptom.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{symptom.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련처방</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_drugs.map((drug, i) => {
+                                                                return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            처방명
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.name || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련효능
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.target_pathology || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련연구결과
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.effect || '-'}&nbsp;
+                                                                            {
+                                                                                drug.effect &&
+                                                                                <>
+                                                                                    <div 
+                                                                                        data-tip={drug.ref_content} 
+                                                                                        data-for={`tooltip-drug-${i}`}
+                                                                                        className={cx('anchor')}
+                                                                                        key={i} 
+                                                                                        onClick={() => {
+                                                                                        if (+drug.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(drug.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                    >
+                                                                                        [{drug.ref_id}]
+                                                                                    </div>
+                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
+                                                                                </>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>환자지도</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            teaching.map((teach, i) => {
+                                                                return <div key={i} className={cx('teach-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{teach.description}&nbsp;
+                                                                        {
+                                                                            teach.description &&
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={teach.ref_content} 
+                                                                                    data-for={`tooltip-teach-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+teach.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(teach.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{teach.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     }
-                </div>
 
 
-
-
-
-
-
-
-
-                {
-                    this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "detail" &&
-                    <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
-                        {
-                            
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeSymptom.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>질환설명</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    {
-                                                        detail.map((detail, i) => {
-                                                            return <div key={i} className={cx('detail-item')}>
-                                                                <div>
-                                                                    -&nbsp;{detail.description || '-'}&nbsp;
-                                                                    {
-                                                                        detail.description && 
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={detail.ref_content} 
-                                                                                data-for={`tooltip-detail-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+detail.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(detail.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{detail.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
+                    {
+                        this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "reference" &&
+                        <div className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
+                            {
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.caseEditor.setPageType('detail');
+                                                        }}
+                                                    >
+                                                        뒤로
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{currentReference.name}</div>
                                                 </div>
                                             </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련기전</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        pathology.map((path, i) => {
-                                                            return <div key={i} className={cx('pathology-item')}>
-                                                                <div className={cx('pathology-wrapper')}>
-                                                                    <div className={cx('pathology')}>
-                                                                        <div className={cx('pathology-content')}>
-                                                                            -&nbsp;{path.level1}&nbsp;
-                                                                            {
-                                                                                path.level1 &&
-                                                                                <>
-                                                                                    <div 
-                                                                                        data-tip={path.ref_content} 
-                                                                                        data-for={`tooltip-path-${i}`}
-                                                                                        className={cx('anchor')}
-                                                                                        key={i} 
-                                                                                        onClick={() => {
-                                                                                            if (+path.ref_id > 0) {
-                                                                                                this.props.caseEditor.loadReferenceByLink(path.ref_id)
-                                                                                            }
-                                                                                        }}
-                                                                                    >
-                                                                                        [{path.ref_id}]
-                                                                                    </div>
-                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
-                                                                                </>
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    {
-                                                                        path.level2 !== undefined && path.level2 !== '' &&
-                                                                        <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
-                                                                        </div>
-                                                                    }
-                                                                    {
-                                                                        path.level3 !== undefined && path.level3 !== '' &&
-                                                                        <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>분류</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.category || '-'}
                                                             </div>
-                                                        })
-                                                    }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구분류</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.method || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>저자</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.author || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판연도</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.year || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판사(저널명)</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.publisher || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>원문링크</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.url || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>참고사항</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.memo || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>주요내용</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.description || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구방법</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.methodDetail || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
 
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련증상</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_symptoms.map((symptom, i) => {
-                                                            return <div key={i} className={cx('symptom-item', 'linked')}>
-                                                                <div>
-                                                                    -&nbsp;{symptom.name || '-'}&nbsp;
-                                                                    {
-                                                                        symptom.name &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={symptom.ref_content} 
-                                                                                data-for={`tooltip-symptom-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+symptom.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{symptom.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
+
+
+                    {
+                        !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "drug" &&
+                        <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
+                            {
+                                
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeDrug.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{this.props.analyzeDrug.currentDrug.name}</div>
                                                 </div>
                                             </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>분류</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {category || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
+                                                <div className={cx('divider', 'horizon-divider')}></div>
 
-                                            
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련처방</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_drugs.map((drug, i) => {
-                                                            return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        처방명
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.name || '-'}
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출전</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {reference || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>복약법</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {guide || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>주의사항</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {caution || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>처방설명</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {description || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>참고사항</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {lifestyle || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>처방구성</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            formula.map((drug, i) => {
+                                                                return <div key={i} className={cx('teach-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{drug.herbName}&nbsp;[{drug.dose}g / 일]
                                                                     </div>
                                                                 </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련효능
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.target_pathology || '-'}
-                                                                    </div>
-                                                                </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련연구결과
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.effect || '-'}&nbsp;
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    {
+                        !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "detail" &&
+                        <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
+                            {
+                                
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeDrug.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{name}</div>
+                                                </div>
+                                            </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>질환설명</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            detail.map((detail, i) => {
+                                                                return <div key={i} className={cx('detail-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{detail.description || '-'}&nbsp;
                                                                         {
-                                                                            drug.effect &&
+                                                                            detail.description && 
                                                                             <>
                                                                                 <div 
-                                                                                    data-tip={drug.ref_content} 
-                                                                                    data-for={`tooltip-drug-${i}`}
+                                                                                    data-tip={detail.ref_content} 
+                                                                                    data-for={`tooltip-detail-${i}`}
                                                                                     className={cx('anchor')}
                                                                                     key={i} 
                                                                                     onClick={() => {
-                                                                                    if (+drug.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(drug.ref_id)
-                                                                                    }
-                                                                                }}
+                                                                                        if (+detail.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(detail.ref_id)
+                                                                                        }
+                                                                                    }}
                                                                                 >
-                                                                                    [{drug.ref_id}]
+                                                                                    [{detail.ref_id}]
                                                                                 </div>
-                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
                                                                             </>
                                                                         }
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>환자지도</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        teaching.map((teach, i) => {
-                                                            return <div key={i} className={cx('teach-item')}>
-                                                                <div>
-                                                                    -&nbsp;{teach.description}&nbsp;
-                                                                    {
-                                                                        teach.description &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={teach.ref_content} 
-                                                                                data-for={`tooltip-teach-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+teach.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(teach.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{teach.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-
-                {
-                    this.props.analyzeSymptom.openMores.length > 0 && !this.props.analyzeSymptom.isLoading && symptomDetail && this.props.caseEditor.pageType === "reference" &&
-                    <div className={cx('detail-container', {open: !this.props.analyzeSymptom.isLoading && symptomDetail})}>
-                        {
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.caseEditor.setPageType('detail');
-                                                    }}
-                                                >
-                                                    뒤로
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{currentReference.name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>분류</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.category || '-'}
-                                                        </div>
+                                                            })
+                                                        }
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
+                                                <div className={cx('divider', 'horizon-divider')}></div>
 
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구분류</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.method || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>저자</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.author || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판연도</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.year || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판사(저널명)</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.publisher || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>원문링크</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.url || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>참고사항</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.memo || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>주요내용</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.description || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구방법</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.methodDetail || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-
-
-
-                {
-                    !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "drug" &&
-                    <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
-                        {
-                            
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeDrug.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{this.props.analyzeDrug.currentDrug.name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>분류</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {category || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출전</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {reference || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>복약법</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {guide || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>주의사항</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {caution || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>처방설명</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {description || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>참고사항</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {lifestyle || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>처방구성</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        formula.map((drug, i) => {
-                                                            return <div key={i} className={cx('teach-item')}>
-                                                                <div>
-                                                                    -&nbsp;{drug.herbName}&nbsp;[{drug.dose}g / 일]
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-                {
-                    !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "detail" &&
-                    <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
-                        {
-                            
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeDrug.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>질환설명</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    {
-                                                        detail.map((detail, i) => {
-                                                            return <div key={i} className={cx('detail-item')}>
-                                                                <div>
-                                                                    -&nbsp;{detail.description || '-'}&nbsp;
-                                                                    {
-                                                                        detail.description && 
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={detail.ref_content} 
-                                                                                data-for={`tooltip-detail-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+detail.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(detail.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{detail.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련기전</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        pathology.map((path, i) => {
-                                                            return <div key={i} className={cx('pathology-item')}>
-                                                                <div className={cx('pathology-wrapper')}>
-                                                                    <div className={cx('pathology')}>
-                                                                        <div className={cx('pathology-content')}>
-                                                                            -&nbsp;{path.level1}&nbsp;
-                                                                            {
-                                                                                path.level1 &&
-                                                                                <>
-                                                                                    <div 
-                                                                                        data-tip={path.ref_content} 
-                                                                                        data-for={`tooltip-path-${i}`}
-                                                                                        className={cx('anchor')}
-                                                                                        key={i} 
-                                                                                        onClick={() => {
-                                                                                            if (+path.ref_id > 0) {
-                                                                                                this.props.caseEditor.loadReferenceByLink(path.ref_id)
-                                                                                            }
-                                                                                        }}
-                                                                                    >
-                                                                                        [{path.ref_id}]
-                                                                                    </div>
-                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
-                                                                                </>
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    {
-                                                                        path.level2 !== undefined && path.level2 !== '' &&
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련기전</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            pathology.map((path, i) => {
+                                                                return <div key={i} className={cx('pathology-item')}>
+                                                                    <div className={cx('pathology-wrapper')}>
                                                                         <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
-                                                                        </div>
-                                                                    }
-                                                                    {
-                                                                        path.level3 !== undefined && path.level3 !== '' &&
-                                                                        <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련증상</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_symptoms.map((symptom, i) => {
-                                                            return <div key={i} className={cx('symptom-item', 'linked')}>
-                                                                <div>
-                                                                    -&nbsp;{symptom.name || '-'}&nbsp;
-                                                                    {
-                                                                        symptom.name &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={symptom.ref_content} 
-                                                                                data-for={`tooltip-symptom-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+symptom.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{symptom.ref_id}]
+                                                                            <div className={cx('pathology-content')}>
+                                                                                -&nbsp;{path.level1}&nbsp;
+                                                                                {
+                                                                                    path.level1 &&
+                                                                                    <>
+                                                                                        <div 
+                                                                                            data-tip={path.ref_content} 
+                                                                                            data-for={`tooltip-path-${i}`}
+                                                                                            className={cx('anchor')}
+                                                                                            key={i} 
+                                                                                            onClick={() => {
+                                                                                                if (+path.ref_id > 0) {
+                                                                                                    this.props.caseEditor.loadReferenceByLink(path.ref_id)
+                                                                                                }
+                                                                                            }}
+                                                                                        >
+                                                                                            [{path.ref_id}]
+                                                                                        </div>
+                                                                                        <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
+                                                                                    </>
+                                                                                }
                                                                             </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련처방</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_drugs.map((drug, i) => {
-                                                            return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        처방명
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.name || '-'}
-                                                                    </div>
-                                                                </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련효능
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.target_pathology || '-'}
-                                                                    </div>
-                                                                </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련연구결과
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.effect || '-'}&nbsp;
+                                                                        </div>
                                                                         {
-                                                                            drug.effect &&
+                                                                            path.level2 !== undefined && path.level2 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                        {
+                                                                            path.level3 !== undefined && path.level3 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련증상</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_symptoms.map((symptom, i) => {
+                                                                return <div key={i} className={cx('symptom-item', 'linked')}>
+                                                                    <div>
+                                                                        -&nbsp;{symptom.name || '-'}&nbsp;
+                                                                        {
+                                                                            symptom.name &&
                                                                             <>
                                                                                 <div 
-                                                                                    data-tip={drug.ref_content} 
-                                                                                    data-for={`tooltip-drug-${i}`}
+                                                                                    data-tip={symptom.ref_content} 
+                                                                                    data-for={`tooltip-symptom-${i}`}
                                                                                     className={cx('anchor')}
                                                                                     key={i} 
                                                                                     onClick={() => {
-                                                                                    if (+drug.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(drug.ref_id)
-                                                                                    }
-                                                                                }}
+                                                                                        if (+symptom.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
+                                                                                        }
+                                                                                    }}
                                                                                 >
-                                                                                    [{drug.ref_id}]
+                                                                                    [{symptom.ref_id}]
                                                                                 </div>
-                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
                                                                             </>
                                                                         }
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        })
-                                                    }
+                                                            })
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
+                                                <div className={cx('divider', 'horizon-divider')}></div>
 
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>환자지도</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        teaching.map((teach, i) => {
-                                                            return <div key={i} className={cx('teach-item')}>
-                                                                <div>
-                                                                    -&nbsp;{teach.description}&nbsp;
-                                                                    {
-                                                                        teach.description &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={teach.ref_content} 
-                                                                                data-for={`tooltip-teach-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+teach.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(teach.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{teach.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-                {
-                    !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "reference" &&
-                    <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
-                        {
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeDrug.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{currentReference.name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>분류</div>
                                                 
-                                                
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.category || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구분류</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.method || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>저자</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.author || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판연도</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.year || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판사(저널명)</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.publisher || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>원문링크</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.url || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>참고사항</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.memo || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>주요내용</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.description || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구방법</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.methodDetail || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-
-
-
-
-
-                {
-                    !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "detail" &&
-                    <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeTeaching.isLoading && teachingDetail})}>
-                        {
-                            
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeTeaching.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>{name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>질환설명</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    {
-                                                        detail.map((detail, i) => {
-                                                            return <div key={i} className={cx('detail-item')}>
-                                                                <div>
-                                                                    -&nbsp;{detail.description || '-'}&nbsp;
-                                                                    {
-                                                                        detail.description && 
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={detail.ref_content} 
-                                                                                data-for={`tooltip-detail-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+detail.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(detail.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{detail.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련기전</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        pathology.map((path, i) => {
-                                                            return <div key={i} className={cx('pathology-item')}>
-                                                                <div className={cx('pathology-wrapper')}>
-                                                                    <div className={cx('pathology')}>
-                                                                        <div className={cx('pathology-content')}>
-                                                                            -&nbsp;{path.level1}&nbsp;
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련처방</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_drugs.map((drug, i) => {
+                                                                return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            처방명
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.name || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련효능
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.target_pathology || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련연구결과
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.effect || '-'}&nbsp;
                                                                             {
-                                                                                path.level1 &&
+                                                                                drug.effect &&
                                                                                 <>
                                                                                     <div 
-                                                                                        data-tip={path.ref_content} 
-                                                                                        data-for={`tooltip-path-${i}`}
+                                                                                        data-tip={drug.ref_content} 
+                                                                                        data-for={`tooltip-drug-${i}`}
                                                                                         className={cx('anchor')}
                                                                                         key={i} 
                                                                                         onClick={() => {
-                                                                                            if (+path.ref_id > 0) {
-                                                                                                this.props.caseEditor.loadReferenceByLink(path.ref_id)
-                                                                                            }
-                                                                                        }}
+                                                                                        if (+drug.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(drug.ref_id)
+                                                                                        }
+                                                                                    }}
                                                                                     >
-                                                                                        [{path.ref_id}]
+                                                                                        [{drug.ref_id}]
                                                                                     </div>
-                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
+                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
                                                                                 </>
                                                                             }
                                                                         </div>
                                                                     </div>
-                                                                    {
-                                                                        path.level2 !== undefined && path.level2 !== '' &&
-                                                                        <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
-                                                                        </div>
-                                                                    }
-                                                                    {
-                                                                        path.level3 !== undefined && path.level3 !== '' &&
-                                                                        <div className={cx('pathology')}>
-                                                                            <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
-                                                                        </div>
-                                                                    }
                                                                 </div>
-                                                            </div>
-                                                        })
-                                                    }
+                                                            })
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
+                                                <div className={cx('divider', 'horizon-divider')}></div>
 
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련증상</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_symptoms.map((symptom, i) => {
-                                                            return <div key={i} className={cx('symptom-item', 'linked')}>
-                                                                <div>
-                                                                    -&nbsp;{symptom.name || '-'}&nbsp;
-                                                                    {
-                                                                        symptom.name &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={symptom.ref_content} 
-                                                                                data-for={`tooltip-symptom-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+symptom.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{symptom.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
-                                                                        </>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>관련처방</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        linked_drugs.map((drug, i) => {
-                                                            return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        처방명
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.name || '-'}
-                                                                    </div>
-                                                                </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련효능
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.target_pathology || '-'}
-                                                                    </div>
-                                                                </div>
-                                                                <div className={cx('drug-card-body')}>
-                                                                    <div className={cx('drug-label')}>
-                                                                        관련연구결과
-                                                                    </div>
-                                                                    <div className={cx('drug-content')}>
-                                                                        {drug.effect || '-'}&nbsp;
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>환자지도</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            teaching.map((teach, i) => {
+                                                                return <div key={i} className={cx('teach-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{teach.description}&nbsp;
                                                                         {
-                                                                            drug.effect &&
+                                                                            teach.description &&
                                                                             <>
                                                                                 <div 
-                                                                                    data-tip={drug.ref_content} 
-                                                                                    data-for={`tooltip-drug-${i}`}
+                                                                                    data-tip={teach.ref_content} 
+                                                                                    data-for={`tooltip-teach-${i}`}
                                                                                     className={cx('anchor')}
                                                                                     key={i} 
                                                                                     onClick={() => {
-                                                                                    if (+drug.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(drug.ref_id)
-                                                                                    }
-                                                                                }}
+                                                                                        if (+teach.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(teach.ref_id)
+                                                                                        }
+                                                                                    }}
                                                                                 >
-                                                                                    [{drug.ref_id}]
+                                                                                    [{teach.ref_id}]
                                                                                 </div>
-                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
+                                                                                <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
                                                                             </>
                                                                         }
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        })
-                                                    }
+                                                            })
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
 
-                                            <div className={cx('divider', 'horizon-divider')}></div>
+                    {
+                        !this.props.analyzeDrug.isLoading && drugDetail && this.props.caseEditor.pageType === "reference" &&
+                        <div className={cx('detail-container', {open: !this.props.analyzeDrug.isLoading && drugDetail})}>
+                            {
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeDrug.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{currentReference.name}</div>
+                                                </div>
+                                            </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>분류</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.category || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>환자지도</div>
-                                                <div className={cx('box')}>
-                                                    {
-                                                        teaching.map((teach, i) => {
-                                                            return <div key={i} className={cx('teach-item')}>
-                                                                <div>
-                                                                    -&nbsp;{teach.description}&nbsp;
-                                                                    {
-                                                                        teach.description &&
-                                                                        <>
-                                                                            <div 
-                                                                                data-tip={teach.ref_content} 
-                                                                                data-for={`tooltip-teach-${i}`}
-                                                                                className={cx('anchor')}
-                                                                                key={i} 
-                                                                                onClick={() => {
-                                                                                    if (+teach.ref_id > 0) {
-                                                                                        this.props.caseEditor.loadReferenceByLink(teach.ref_id)
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                [{teach.ref_id}]
-                                                                            </div>
-                                                                            <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
-                                                                        </>
-                                                                    }
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구분류</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.method || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>저자</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.author || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판연도</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.year || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판사(저널명)</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.publisher || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>원문링크</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.url || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>참고사항</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.memo || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>주요내용</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.description || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구방법</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.methodDetail || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
+
+
+
+
+
+
+                    {
+                        !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "detail" &&
+                        <div id="detail-container" className={cx('detail-container', {open: !this.props.analyzeTeaching.isLoading && teachingDetail})}>
+                            {
+                                
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeTeaching.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>{name}</div>
+                                                </div>
+                                            </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>질환설명</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            detail.map((detail, i) => {
+                                                                return <div key={i} className={cx('detail-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{detail.description || '-'}&nbsp;
+                                                                        {
+                                                                            detail.description && 
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={detail.ref_content} 
+                                                                                    data-for={`tooltip-detail-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+detail.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(detail.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{detail.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-detail-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
                                                                 </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련기전</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            pathology.map((path, i) => {
+                                                                return <div key={i} className={cx('pathology-item')}>
+                                                                    <div className={cx('pathology-wrapper')}>
+                                                                        <div className={cx('pathology')}>
+                                                                            <div className={cx('pathology-content')}>
+                                                                                -&nbsp;{path.level1}&nbsp;
+                                                                                {
+                                                                                    path.level1 &&
+                                                                                    <>
+                                                                                        <div 
+                                                                                            data-tip={path.ref_content} 
+                                                                                            data-for={`tooltip-path-${i}`}
+                                                                                            className={cx('anchor')}
+                                                                                            key={i} 
+                                                                                            onClick={() => {
+                                                                                                if (+path.ref_id > 0) {
+                                                                                                    this.props.caseEditor.loadReferenceByLink(path.ref_id)
+                                                                                                }
+                                                                                            }}
+                                                                                        >
+                                                                                            [{path.ref_id}]
+                                                                                        </div>
+                                                                                        <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-path-${i}`} />
+                                                                                    </>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        {
+                                                                            path.level2 !== undefined && path.level2 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level2}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                        {
+                                                                            path.level3 !== undefined && path.level3 !== '' &&
+                                                                            <div className={cx('pathology')}>
+                                                                                <div className={cx('pathology-content')}>-&nbsp;{path.level3}&nbsp;</div>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련증상</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_symptoms.map((symptom, i) => {
+                                                                return <div key={i} className={cx('symptom-item', 'linked')}>
+                                                                    <div>
+                                                                        -&nbsp;{symptom.name || '-'}&nbsp;
+                                                                        {
+                                                                            symptom.name &&
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={symptom.ref_content} 
+                                                                                    data-for={`tooltip-symptom-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+symptom.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(symptom.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{symptom.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-symptom-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>관련처방</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            linked_drugs.map((drug, i) => {
+                                                                return <div key={i} className={cx('drug-card', 'drug-item', 'linked', 'drug')}>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            처방명
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.name || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련효능
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.target_pathology || '-'}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={cx('drug-card-body')}>
+                                                                        <div className={cx('drug-label')}>
+                                                                            관련연구결과
+                                                                        </div>
+                                                                        <div className={cx('drug-content')}>
+                                                                            {drug.effect || '-'}&nbsp;
+                                                                            {
+                                                                                drug.effect &&
+                                                                                <>
+                                                                                    <div 
+                                                                                        data-tip={drug.ref_content} 
+                                                                                        data-for={`tooltip-drug-${i}`}
+                                                                                        className={cx('anchor')}
+                                                                                        key={i} 
+                                                                                        onClick={() => {
+                                                                                        if (+drug.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(drug.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                    >
+                                                                                        [{drug.ref_id}]
+                                                                                    </div>
+                                                                                    <ReactTooltip className="custom-tooltip" place="bottom" effect="solid" id={`tooltip-drug-${i}`} />
+                                                                                </>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>환자지도</div>
+                                                    <div className={cx('box')}>
+                                                        {
+                                                            teaching.map((teach, i) => {
+                                                                return <div key={i} className={cx('teach-item')}>
+                                                                    <div>
+                                                                        -&nbsp;{teach.description}&nbsp;
+                                                                        {
+                                                                            teach.description &&
+                                                                            <>
+                                                                                <div 
+                                                                                    data-tip={teach.ref_content} 
+                                                                                    data-for={`tooltip-teach-${i}`}
+                                                                                    className={cx('anchor')}
+                                                                                    key={i} 
+                                                                                    onClick={() => {
+                                                                                        if (+teach.ref_id > 0) {
+                                                                                            this.props.caseEditor.loadReferenceByLink(teach.ref_id)
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    [{teach.ref_id}]
+                                                                                </div>
+                                                                                <ReactTooltip className="custom-tooltip" place="top" effect="solid" id={`tooltip-teach-${i}`} />
+                                                                            </>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    {
+                        !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "reference" &&
+                        <div className={cx('detail-container', {open: !this.props.analyzeTeaching.isLoading && teachingDetail})}>
+                            {
+                                <div className={cx('detail')}>
+                                    <ul className={cx('scroll-box')}>
+                                        <li>
+                                            <div className={cx('header')}>
+                                                <div className={cx('btn-close')}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            this.props.analyzeTeaching.closeDetail();
+                                                        }}
+                                                    >
+                                                        닫기
+                                                    </button>
+                                                </div>
+                                                <div className={cx('title')}>
+                                                    <div className={cx('box')}>티칭{currentReference.name}</div>
+                                                </div>
+                                            </div>
+                                            <div className={cx('top-content')}>
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>분류</div>
+                                                    
+                                                    
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.category || '-'}
                                                             </div>
-                                                        })
-                                                    }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구분류</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.method || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>저자</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.author || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판연도</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.year || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>출판사(저널명)</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.publisher || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>원문링크</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.url || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>참고사항</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.memo || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>주요내용</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.description || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className={cx('divider', 'horizon-divider')}></div>
+
+                                                <div className={cx('content-wrapper')}>
+                                                    <div className={cx('label')}>연구방법</div>
+                                                    <div className={cx('box')}>
+                                                        <div className={cx('detail-item')}>
+                                                            <div>
+                                                                {currentReference.methodDetail || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }
                     </div>
                 }
-
-                {
-                    !this.props.analyzeTeaching.isLoading && teachingDetail && this.props.caseEditor.pageType === "reference" &&
-                    <div className={cx('detail-container', {open: !this.props.analyzeTeaching.isLoading && teachingDetail})}>
-                        {
-                            <div className={cx('detail')}>
-                                <ul className={cx('scroll-box')}>
-                                    <li>
-                                        <div className={cx('header')}>
-                                            <div className={cx('btn-close')}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        this.props.analyzeTeaching.closeDetail();
-                                                    }}
-                                                >
-                                                    닫기
-                                                </button>
-                                            </div>
-                                            <div className={cx('title')}>
-                                                <div className={cx('box')}>티칭{currentReference.name}</div>
-                                            </div>
-                                        </div>
-                                        <div className={cx('top-content')}>
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>분류</div>
-                                                
-                                                
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.category || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구분류</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.method || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>저자</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.author || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판연도</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.year || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>출판사(저널명)</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.publisher || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>원문링크</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.url || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>참고사항</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.memo || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>주요내용</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.description || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className={cx('divider', 'horizon-divider')}></div>
-
-                                            <div className={cx('content-wrapper')}>
-                                                <div className={cx('label')}>연구방법</div>
-                                                <div className={cx('box')}>
-                                                    <div className={cx('detail-item')}>
-                                                        <div>
-                                                            {currentReference.methodDetail || '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </div>
-                }
-
-                
             </div>
         );
     }

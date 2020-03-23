@@ -23,10 +23,10 @@ import {
 import {
   IoMdArrowDropdown
 } from 'react-icons/io';
-import {
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight
-} from 'react-icons/md';
+// import {
+//   MdKeyboardArrowLeft,
+//   MdKeyboardArrowRight
+// } from 'react-icons/md';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
@@ -147,79 +147,10 @@ class CaseEditor extends Component {
         {
           (isLoading && !this.props.Case.onReady) ? <div className={cx('loader-container')}><Loader /></div>
           : <>
-          {
-            currentCaseRecord.length > 1 && type === 'detail' &&
-            <>
-              {
-                +dateIndex !== 0 &&
-                <div 
-                  className={cx('prevRecord', 'btn-move-record')} 
-                  onClick={() => {
-                    if (isEditing) {
-                        if (this.props.Case.checkDifferenceContent()) {
-                            if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
-                              return this.props.Case.updateCase(dateIndex)
-                                .then(res => {
-                                    if (res) {
-                                        alert('정상적으로 수정되었습니다')
-                                    }
-                                })
-                                .then(() => {
-                                  this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                });
-                            } 
-                            return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
-                        }
-                    } 
-                    return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
-                  }}
-                >
-                  <MdKeyboardArrowLeft />
-                  <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex - 1])}</div>
-                </div>
-              }
-              {
-                +dateIndex !== currentCaseRecord.length - 1 &&
-                <div 
-                  className={cx('nextRecord', 'btn-move-record')} 
-                  onClick={() => {
-                    if (isEditing) {
-                        if (this.props.Case.checkDifferenceContent()) {
-                            if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
-                              return this.props.Case.updateCase(dateIndex)
-                                .then(res => {
-                                    if (res) {
-                                        alert('정상적으로 수정되었습니다')
-                                    }
-                                })
-                                .then(() => {
-                                  this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                });
-                              }
-                            return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
-                        }
-                    }
-                    return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
-                  }}
-                >
-                  <MdKeyboardArrowRight />
-                  <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex + 1])}</div>
-                </div>
-              }
-            </>
-          }
+          
             <div className={cx('container', 'left')}>
               <div className={cx('scroll-box')}>
-                {
-                  (type === "create" || isEditing) &&
-                  <LeftSideToolbar type={type} />
-                }
+                <LeftSideToolbar type={type} />
               </div>
             </div>
             <div id="case-editor-center-container" className={cx('container', 'center')}>
@@ -302,10 +233,7 @@ class CaseEditor extends Component {
             </div>
             <div className={cx('container', 'right')}>
               <div className={cx('scroll-box')}>
-                {
-                  (type === "create" || isEditing) &&
-                  <RightSideList type={type} isEditing={isEditing} />
-                }
+                <RightSideList type={type} isEditing={isEditing} />
               </div>
               <div id="scroll-to-top" className={cx('scroll-to-top')} onClick={this.handleClickOnTopScroll}><FiArrowUp /></div>
             </div>

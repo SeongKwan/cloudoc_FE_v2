@@ -76,14 +76,14 @@ class HeaderEditor extends Component {
         const { type } = this.props;
         const { isEditing, currentCase } = this.props.Case;
         const { dateIndex } = this.props.match.params;
-        const { caseEditorBasic, symptom, lab, diagnosis, treatment, teaching } = this.props;
         
         if (type === "detail") {
             if (this.props.Case.currentCase === null) {
                 return false;
             }
         }
-
+        
+        const { caseEditorBasic, symptom, lab, diagnosis, treatment, teaching } = this.props;
         let difference = (
             caseEditorBasic.diff ||
             symptom.diff ||

@@ -69,11 +69,10 @@
         color: $bc-18;
     }
     &.sidebar {
-        // background-color: $brand-1;
+        z-index: 6;
         padding: 0rem;
-        // color: rgba($white, 0.5);
         overflow: hidden;
-        // color: $bc-18;
+        position: relative;
         &:not(:last-child) {
             margin-bottom: 0.5rem;
         }

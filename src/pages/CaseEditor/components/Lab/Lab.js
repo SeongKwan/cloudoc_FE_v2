@@ -255,6 +255,8 @@ class Lab extends Component {
     }
 
     handleChangeValueLabBar = (index, value) => {
+        console.log(index, value)
+        console.log(JSON.parse(JSON.stringify(this.props.lab.editableData)))
         const {
             refMin,
             refMax,

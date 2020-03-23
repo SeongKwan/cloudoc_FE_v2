@@ -1,23 +1,56 @@
 .LeftSideToolbar {
-    position: absolute;
+    // position: absolute;
     
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 0 $radius-low $radius-low 0;
-    background-color: $bc-01;
-    color: $white;
+    
 
-    z-index: 999;
+    .tool-box {
+        position: absolute;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 0 $radius-low $radius-low 0;
+        background-color: $bc-01;
+        color: $white;
 
-    top: 6rem;
-    @include media('lg') {
-        top: 5.5rem;
+        
+        top: 6rem;
+        z-index: 999;
+        @include media('lg') {
+            top: 5.5rem;
+        }
     }
-    
-    &.openList {
-        // border-right: 1px solid $brand-2;
+
+    .btn-move-record {
+        user-select: none;
+        z-index: 4;
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        width: 50%;
+        height: 25%;
+        color: $bc-01;
+        font-size: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        cursor: pointer;
+        @include media('sm') {
+            display: none;
+        }
+        &:hover {
+            font-size: 7rem;
+            background-color: rgba($bc-01, 0.1);
+            text-decoration: none;
+        }
+        .date {
+            font-size: 1rem;
+            color: $bc-02;
+        }
     }
 
     .btn {
@@ -30,10 +63,10 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        font-size: 3rem;
+        font-size: 2.5rem;
         user-select: none;
         @include media('lg') {
-            font-size: 2.5rem;
+            font-size: 2rem;
             width: 67px;
             height: 67px;
             padding: 0.7rem;

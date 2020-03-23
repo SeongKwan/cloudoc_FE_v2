@@ -1,16 +1,44 @@
 .RightSideList {
-    position: absolute;
-    // background-color: $bc-02;
-    // top: 1%;
+    height: 100%;
+    padding-top: 1rem;
     left: 0.5rem;
     font-weight: 100;
-    // letter-spacing: 1px;
     border-radius: $radius-low;
     width: calc(100% - 1rem);
-    // padding: 0.5rem;
     top: 6rem;
     @include media('lg') {
         top: 5.5rem;
+    }
+    .btn-move-record {
+        user-select: none;
+        z-index: 4;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50%;
+        height: 25%;
+        color: $bc-01;
+        font-size: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        cursor: pointer;
+        @include media('sm') {
+            display: none;
+        }
+        &:hover {
+            font-size: 7rem;
+            background-color: rgba($bc-01, 0.1);
+            text-decoration: none;
+        }
+        .date {
+            font-size: 1rem;
+            font-weight: 400;
+            color: $bc-02;
+        }
     }
     ul {
         // margin-top: 2.5rem;

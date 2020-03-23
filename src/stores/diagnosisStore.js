@@ -21,6 +21,7 @@ class DiagnosisStore {
     ];
 
     @computed get diff() {
+        console.log(JSON.stringify(this.editableData) !== JSON.stringify(this.staticData))
         return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
     }
 
