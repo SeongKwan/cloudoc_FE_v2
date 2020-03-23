@@ -149,7 +149,7 @@ class CaseEditor extends Component {
           isLoading ? <div className={cx('loader-container')}><Loader /> </div>
           : <>
           {
-            currentCaseRecord.length > 1 && type === 'detail' && !isEditing &&
+            currentCaseRecord.length > 1 && type === 'detail' &&
             <>
               {
                 +dateIndex !== 0 &&
@@ -184,23 +184,16 @@ class CaseEditor extends Component {
                           ref={(ref) => {
                               this.recordDate = ref;
                           }}
-                          className={cx('record-date', {focus: this.state.focusParent}, {isEditing: isEditing})}>
+                          className={cx('record-date', {focus: this.state.focusParent})}>
                         <div className={cx('selected-date')} 
-                          onClick={() => {
-                            if (!isEditing) {
-                              this._toggleOnFocus();
-                            }
-                          }}
+                          onClick={() => { this._toggleOnFocus(); }}
                         >
                           <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
                           {
                             currentCaseRecord.length > 0 &&
                             <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
                           }
-                          {
-                            !isEditing &&
-                            <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
-                          }
+                          <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
                         </div>
                         {
                           this.state.focusParent &&
