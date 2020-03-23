@@ -21,7 +21,6 @@ class Diagnosis extends Component {
         selected: -1
     }
     componentDidMount() {
-        this.props.diagnosis.initEditableData();
         this.setState({ keyword: this.props.search.keyword.diagnosis })
         document.addEventListener('mousedown', this._handleClickOutside);
     }

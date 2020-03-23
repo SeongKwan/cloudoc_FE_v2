@@ -21,7 +21,6 @@ class Symptoms extends Component {
         selected: -1
     }
     componentDidMount() {
-        this.props.symptom.initEditableData();
         this.setState({ keyword: this.props.search.keyword.symptoms })
         document.addEventListener('mousedown', this._handleClickOutside);
     }

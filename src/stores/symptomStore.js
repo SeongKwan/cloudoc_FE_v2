@@ -48,9 +48,10 @@ class SymptomStore {
         return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
     }
 
-    @action initEditableData() {
-        this.editableData = [];
-    }
+    // @action initEditableData() {
+    //     this.editableData = [];
+    // }
+
     @action initStaticData(symptoms) {
         this.staticData = symptoms;
     }

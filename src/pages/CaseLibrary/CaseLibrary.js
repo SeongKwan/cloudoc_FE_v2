@@ -10,7 +10,6 @@ import UserStatus from '../../components/UserStatus/UserStatus';
 import MyCases from '../../components/MyCases/MyCases';
 
 const cx = classNames.bind(styles);
-// let timer = null;
 
 @withRouter
 @inject(

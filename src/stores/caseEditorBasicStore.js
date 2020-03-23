@@ -55,12 +55,11 @@ class CaseEditorBasicStore {
     }
 
     @action changeEditableData = (type, value) => {
-        this.editableData[type] = value;
-        // if (type === 'gender' && (this.editableData.gender !== value)) {
-        //     labStore.changeGender();
-        // } else if (type === 'gender' && this.editableData.gender === value) {
-        //     console.log('stay')
-        // }
+        if (window.confirm('성별을 바꾸면 혈액검사가 초기화 됩니다. 바꾸시겠습니까?')) {
+            return this.editableData[type] = value;
+        } else {
+            return false;
+        }
     }
 
     @action compareData() {

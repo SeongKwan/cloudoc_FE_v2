@@ -35,10 +35,12 @@ class Basic extends Component {
             return <option key={i} value={i}>{i} 세</option>
         });
     }
+    
     _handleChange = (e) => {
         const { value, name: type } = e.target;
         this.props.caseEditorBasic.changeEditableData(type, value);
     }
+
     _handleClickGender = (e) => {
         const { dataset } = e.target;
         this.props.lab.clearForSelector();

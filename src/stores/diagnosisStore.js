@@ -24,10 +24,6 @@ class DiagnosisStore {
         return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
     }
 
-    @action initEditableData() {
-        this.editableData = [];
-    }
-
     @action compareData() {
         return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
     }
@@ -41,8 +37,6 @@ class DiagnosisStore {
             this.editableData = [];
         }
         JSON.parse(JSON.stringify(editableData)).forEach((editableData) => { 
-            
-            editableData.isPopoverOpen = false;
             this.editableData.push(editableData);
             
         });

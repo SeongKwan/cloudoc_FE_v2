@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './CaseEditor.module.scss';
 import classNames from 'classnames/bind';
 import { Helmet } from "react-helmet";
-// import Loader from '../../components/Loader/Loader';
 import HeaderEditor from '../../components/HeaderEditor/HeaderEditor';
 import Basic from './components/Basic/Basic';
 import Symptoms from './components/Symptoms/Symptoms';
