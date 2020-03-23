@@ -26,7 +26,7 @@ import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject('Case', 'user', 'caseEditorBasic', 'modal')
+@inject('Case', 'user', 'caseEditorBasic', 'modal', 'symptom', 'lab', 'diagnosis', 'treatment', 'teaching')
 @observer
 class HeaderEditor extends Component {
     state = {
@@ -38,7 +38,6 @@ class HeaderEditor extends Component {
     }
 
     _handleClickAddRecordButton = async () => {
-        console.log('click')
         const { caseId } = this.props.match.params;
         const lengthOfRecord = this.props.Case.currentCase.record.length;
         const createdDate =  getLocaleDateWithYMS(Date.now());
@@ -77,6 +76,7 @@ class HeaderEditor extends Component {
         const { type } = this.props;
         const { isEditing, currentCase } = this.props.Case;
         const { dateIndex } = this.props.match.params;
+        const { caseEditorBasic, symptom, lab, diagnosis, treatment, teaching } = this.props;
         
         if (type === "detail") {
             if (this.props.Case.currentCase === null) {
@@ -84,22 +84,38 @@ class HeaderEditor extends Component {
             }
         }
 
+        let difference = (
+            caseEditorBasic.diff ||
+            symptom.diff ||
+            lab.diff ||
+            diagnosis.diff ||
+            treatment.diff ||
+            treatment.diffForFormula ||
+            teaching.diff
+            ) ? true : false;
+            
         return (
             <header className={cx('HeaderEditor')}>
                 <div className={cx('tool-bar')}>
                     <div className={cx('btn-tool', 'back')} onClick={() => {
-                        if (this.props.Case.checkDifferenceContent()) {
-                            if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                        if (isEditing) {
+                            if (difference) {
+                                if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                                    this.props.history.push(`/case`)
+                                    this.props.Case.clearIsEditing();
+                                } else {
+                                    return false;
+                                }
+                            } else {
                                 this.props.history.push(`/case`)
                                 this.props.Case.clearIsEditing();
-                            } else {
-                                return false;
                             }
                         } else {
                             this.props.history.push(`/case`)
                             this.props.Case.clearIsEditing();
                         }
-                        }}>
+                        }}
+                    >
                         <FiArrowLeft />
                         <div className={cx('label')}>뒤로</div>
                     </div>
@@ -136,23 +152,28 @@ class HeaderEditor extends Component {
                         </div>
                     }
                     {
-                        type === "detail" && isEditing &&
+                        type === "detail" && isEditing && 
                         <div 
-                            className={cx('btn-tool', 'save')} 
+                            className={cx('btn-tool', 'save', {disabled: !difference})} 
                             onClick={() => {
-                                    this.props.Case.updateCase(dateIndex)
-                                    .then(res => {
-                                        if (res) {
-                                            alert('정상적으로 수정되었습니다')
-                                            this.props.Case.toggleIsEditing();
-                                        }
-                                        
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                    });
+                                if (difference) {
+                                    if (window.confirm('수정하신 내용으로 저장하시겠습니까?')) {
+                                        return this.props.Case.updateCase(dateIndex)
+                                        .then(res => {
+                                            if (res) {
+                                                alert('정상적으로 수정되었습니다');
+                                                this.props.Case.toggleIsEditing();
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                        });
+                                    } else {
+                                        return false;
+                                    }
                                 }
-                            }
+                                return false;
+                            }}
                         >
                             <FiSave />
                             <div className={cx('label')}>

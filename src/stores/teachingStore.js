@@ -14,6 +14,10 @@ class TeachingStore {
             ref_id: ''
         }
     ];
+
+    @computed get diff() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
+    }
     
     @computed get sortedEditableData() {
         let sortedItems;

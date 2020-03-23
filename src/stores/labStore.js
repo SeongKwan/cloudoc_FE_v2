@@ -87,6 +87,10 @@ class LabStore {
         return count;
     }
 
+    @computed get diff() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
+    }
+
     @action toggleReadyForPaste() {
         this.readyForPaste = !this.readyForPaste;
     }

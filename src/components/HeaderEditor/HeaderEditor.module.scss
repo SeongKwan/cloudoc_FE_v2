@@ -49,6 +49,13 @@
         &:hover {
             background-color: rgba($bc-17, 0.3);
         }
+        &.disabled {
+            color: $bc-02;
+            cursor: not-allowed;
+            &:hover {
+                background-color: initial;
+            }
+        }
         .label {
             margin-top: 0.3rem;
             font-weight: 100;

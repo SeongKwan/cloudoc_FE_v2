@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
 import drugListItemStore from './drugListItemStore';
 import drugListForInputStore from './drugListForInputStore';
@@ -24,6 +24,13 @@ class TreatmentStore {
         caution: '',
         lifestyle: '',
         description: ''
+    }
+
+    @computed get diffForFormula() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
+    }
+    @computed get diff() {
+        return JSON.stringify(this.editableDataForTreatment) !== JSON.stringify(this.staticDataForTreatment);
     }
 
     @action initilize(treatmentData) {

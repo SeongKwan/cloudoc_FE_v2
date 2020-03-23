@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import diagnosisListItemStore from './diagnosisListItemStore';
 import diagnosisListForInputStore from './diagnosisListForInputStore';
 
@@ -19,6 +19,10 @@ class DiagnosisStore {
             strategy: '',
         }
     ];
+
+    @computed get diff() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
+    }
 
     @action initEditableData() {
         this.editableData = [];

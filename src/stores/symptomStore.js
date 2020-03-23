@@ -44,6 +44,10 @@ class SymptomStore {
         return length;
     }
 
+    @computed get diff() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
+    }
+
     @action initEditableData() {
         this.editableData = [];
     }

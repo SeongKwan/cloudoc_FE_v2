@@ -60,6 +60,25 @@ class CaseStore {
         return cases || [];
     };
 
+    @computed get checkDiff() {
+        let difference = [];
+        let check = false;
+        difference.push(basicStore.diff);
+        difference.push(symptomStore.diff);
+        difference.push(labStore.diff);
+        difference.push(diagnosisStore.diff);
+        difference.push(drugStore.diff);
+        difference.push(drugStore.diffForFormula);
+        difference.push(teachingStore.diff);
+
+        if (difference.findIndex(diff => diff === false) >= 0) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
+
     @action casesOnSearching() {
         const { keyword } = searchStore;
         let plusOne;

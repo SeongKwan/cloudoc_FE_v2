@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 // import labStore from './labStore';
 
 class CaseEditorBasicStore {
@@ -19,6 +19,10 @@ class CaseEditorBasicStore {
         familyHistory: '',
         socialHistory: '',
         memo: ''
+    }
+
+    @computed get diff() {
+        return JSON.stringify(this.editableData) !== JSON.stringify(this.staticData);
     }
 
     @action initialize(patientInfoData) {
@@ -60,7 +64,6 @@ class CaseEditorBasicStore {
     }
 
     @action compareData() {
-        
         return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
     }
 
