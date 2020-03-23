@@ -70,6 +70,13 @@ class MyCases extends Component {
                 <div className={cx('toolbar')}>
                     <SearchBar />
                 </div>
+                {
+                    !isLoading && length > 0 && this.props.search.keyword['cases'].length === 0 &&
+                    <div onClick={this._handleClickOnButton} className={cx('floating-btn-add-case')}>
+                        <FiPlus />
+                        <span>증례추가</span>
+                    </div>
+                }
                 <div className={cx('list-container')}>
                     <ul className={cx('case-list', {isLoading})}>
                         {
@@ -85,13 +92,7 @@ class MyCases extends Component {
                                 <span>새 증례</span>
                             </li>
                         }
-                        {
-                            !isLoading && length > 0 && this.props.search.keyword['cases'].length === 0 &&
-                            <div onClick={this._handleClickOnButton} className={cx('floating-btn-add-case')}>
-                                <FiPlus />
-                                <span>증례추가</span>
-                            </div>
-                        }
+                        
                         {
                             !isLoading ?
                             database.map((Case, i) => {
