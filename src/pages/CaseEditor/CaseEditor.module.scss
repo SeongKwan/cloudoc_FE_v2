@@ -5,17 +5,14 @@
     color: $bc-18;
     background-color: rgba($gray-1, 0.2);
     justify-content: center;
-    &.isLoading {
-        padding: 0;
+    
+    .loader-container {
+        height: 100vh;
+        display: flex;
         align-items: center;
     }
     @include media('sm') {
         height: initial;
-        .loader-container {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-        }
     }
 
     .btn-move-record {

@@ -142,13 +142,13 @@ class CaseEditor extends Component {
     this.props.Case.checkDifferenceContent();
 
     return (
-      <div className={cx('CaseEditor', {isLoading: isLoading})}>
+      <div className={cx('CaseEditor')}>
         <Helmet>
             <title>{type === 'create' ? 'Case Create' : 'Case Editor'}</title>
         </Helmet>
         <HeaderEditor type={type} />
         {
-          (isLoading && !this.props.Case.onReady) ? <div className={cx('loader-container')}><Loader /> </div>
+          (isLoading && !this.props.Case.onReady) ? <div className={cx('loader-container')}><Loader /></div>
           : <>
           {
             currentCaseRecord.length > 1 && type === 'detail' &&
