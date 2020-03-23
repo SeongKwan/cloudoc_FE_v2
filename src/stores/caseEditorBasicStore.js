@@ -55,11 +55,7 @@ class CaseEditorBasicStore {
     }
 
     @action changeEditableData = (type, value) => {
-        if (window.confirm('성별을 바꾸면 혈액검사가 초기화 됩니다. 바꾸시겠습니까?')) {
-            return this.editableData[type] = value;
-        } else {
-            return false;
-        }
+        return this.editableData[type] = value;
     }
 
     @action compareData() {

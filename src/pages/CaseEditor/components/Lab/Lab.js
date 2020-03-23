@@ -315,8 +315,6 @@ class Lab extends Component {
         const { editableData, staticData, addLab, labCategories, selectedLabCategory, sortType } = this.props.lab;
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         let { length } = labs;
-        
-        // console.log(JSON.parse(JSON.stringify(selectedLabCategory)))
 
         let disabledButton = length <= 0;
         let dataTip = addLab.selectLab !== null ? `${addLab.selectLab['unit']}` : ''

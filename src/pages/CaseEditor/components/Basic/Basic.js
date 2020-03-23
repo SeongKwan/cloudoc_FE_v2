@@ -35,7 +35,7 @@ class Basic extends Component {
             return <option key={i} value={i}>{i} 세</option>
         });
     }
-    
+
     _handleChange = (e) => {
         const { value, name: type } = e.target;
         this.props.caseEditorBasic.changeEditableData(type, value);
@@ -43,8 +43,12 @@ class Basic extends Component {
 
     _handleClickGender = (e) => {
         const { dataset } = e.target;
-        this.props.lab.clearForSelector();
-        this.props.caseEditorBasic.changeEditableData(dataset.name, dataset.value);
+        if (window.confirm('성별을 바꾸면 혈액검사가 초기화 됩니다. 바꾸시겠습니까?')) {
+            this.props.lab.clearForSelector();
+            this.props.caseEditorBasic.changeEditableData(dataset.name, dataset.value);
+        } else {
+            return false;
+        }
     }
 
     render() {
