@@ -88,9 +88,12 @@ class Drug extends Component {
     }
     _addDrug = (type, value) => {
         const { keyword } = this.state;
+        const { drugs } = this.props.drugListItem;
+        const { selectedIndex } = this.props.drugListForInput;
         if (keyword === '') { return false; }
         if (type === 'enter') {
                 this.props.treatment.handleChangeTretment('drugName', value);
+                this.props.treatment.autoSetDrug(drugs[selectedIndex]);
                 return this.setState({ keyword: '', focusParent: false, selected: -1});
             }
         this.props.treatment.handleChangeTretment('drugName', value);
