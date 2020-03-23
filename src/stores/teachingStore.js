@@ -36,6 +36,10 @@ class TeachingStore {
         this.staticData = teachings;
     }
 
+    @action compareData() {
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
+    }
+
     @action sortEditableData() {
         this.editableData.slice().sort(function(a, b) {
             return a.rank < b.rank ? -1 : a.rank > b.rank ? 1 : 0;

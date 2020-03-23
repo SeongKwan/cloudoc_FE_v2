@@ -108,7 +108,6 @@ class LabStore {
         
         this.initLabs = [];
         this.initializeLabsForSelector();
-        
         this.editableData = this._filter(gender, this.editableData, categoryIndex);
     };
 
@@ -188,6 +187,7 @@ class LabStore {
     
 
     _filter = (filterKeyword, items, categoryIndex = 'all') => {
+        console.log('_filtered')
         if (this.selectedLabCategory.length === 0 || this.selectedLabCategory === null || this.selectedLabCategory === undefined) {
             return [];
         }
@@ -320,7 +320,7 @@ class LabStore {
         });
         
         this.editableData = results;
-        this.staticData = results;
+        // this.staticData = results;
 
         results.forEach((editableData, i) => {
             const {
@@ -337,40 +337,20 @@ class LabStore {
         })
 
 
-        let filteredArray = _.uniqBy(results, 'category');
+        this.setSelectedLabCategoryForEditing(results);
 
-        filteredArray.forEach((item, index) => {
-            let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
-            if (selectedLabIndex >= 0) {
-                this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
-            }
-        })
+        // let filteredArray = _.uniqBy(results, 'category');
+
+        // filteredArray.forEach((item, index) => {
+        //     let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
+        //     if (selectedLabIndex >= 0) {
+        //         this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
+        //     }
+        // })
         
     }
 
     
-
-
-    // @computed get testResults() {
-    //     let results = [];
-    //     console.log('testResults',JSON.parse(JSON.stringify(this.editableData)))
-    //     // this.editableData.forEach((item, i) => { 
-    //     //     results[i] = item;
-    //     // });
-
-    //     bloodTestItems.forEach((item, i) => {
-    //         return this.editableData.forEach((result, INDEX) => {
-    //             result.forEach((re, index) => {
-    //                 if (item.name === re.name) {
-    //                     const { category, refMin, refMax, optMin, optMax, alertMin, alertMax, alertMessage, reference, name_kor, description} = item;
-    //                     results[INDEX][index] = {...re, category, refMin, refMax, optMin, optMax, alertMin: alertMin || null, alertMax: alertMax || null, alertMessage: alertMessage || '', reference: reference || '', name_kor, description: description || ''};
-    //                 }
-    //             })
-    //         })
-    //     });
-    //     return results;
-    // }
-
 
 
     @action handleChangeAddLab(name, value) {
@@ -408,9 +388,7 @@ class LabStore {
 
 
 
-    @action setSelectedLabCategoryForEditing(array) {
-        this.selectedLabCategory = array;
-    }
+    
 
     @action setState(index, state) {
         this.editableData[index]['state'] = state;
@@ -475,14 +453,89 @@ class LabStore {
             if (value === '' || value === null || value === undefined) {
                 this.editableData[index]['state'] = '-';
                 this.editableData[index]['stateOrder'] = 0;
+                
+                return '-';
+            }
+            if (value !== null && value !== '' && value < alertMin) {
+                this.editableData[index]['state'] = '매우 낮음';
+                this.editableData[index]['stateOrder'] = 1;
+                
+                return '매우 낮음'
+            }
+            if (value !== null && value !== '' && value > alertMax) {
+                this.editableData[index]['state'] = '매우 높음';
+                this.editableData[index]['stateOrder'] = 5;
+                
+                return '매우 높음'
+            }
+        }
+
+        if (value === '' || value === 0 || value === null) {
+            this.editableData[index]['state'] = '-';
+            this.editableData[index]['stateOrder'] = 0;
+            
+            return '-';
+        }
+        else if (value === refMin && value === optMin) {
+            
+            this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            
+            return '최적'
+        }
+        else if (value === refMax && value === optMax) {
+            
+            this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            
+            return '최적'
+        }
+        else if (refMin <= value && value < optMin) {
+            
+            this.editableData[index]['state'] = '낮음';
+            this.editableData[index]['stateOrder'] = 2;
+            
+            return '낮음';
+        }
+        else if (optMin <= value && value <= optMax) {
+            
+            this.editableData[index]['state'] = '최적';
+            this.editableData[index]['stateOrder'] = 3;
+            
+            return '최적';
+        }
+        else if (optMax <= value && value <= refMax) {
+            
+            this.editableData[index]['state'] = '높음';
+            this.editableData[index]['stateOrder'] = 4;
+            
+            return '높음';
+        }
+        else if (value < refMin) {
+            this.editableData[index]['state'] = '매우 낮음';
+            this.editableData[index]['stateOrder'] = 1;
+            
+            return '매우 낮음';
+        }
+        else if (refMax < value) {
+            
+            this.editableData[index]['state'] = '매우 높음';
+            this.editableData[index]['stateOrder'] = 5;
+            
+            return '매우 높음';
+        }
+    }
+
+
+    @action getStateForStatic(index, refMin, refMax, optMin, optMax, alertMin, alertMax, value) {
+        if (alertMin !== null || alertMax !== null) {
+            if (value === '' || value === null || value === undefined) {
                 if (this.staticData.length > 0) {
                     this.staticData[index]['stateOrder'] = 0;
                 }
                 return '-';
             }
             if (value !== null && value !== '' && value < alertMin) {
-                this.editableData[index]['state'] = '매우 낮음';
-                this.editableData[index]['stateOrder'] = 1;
                 if (this.staticData.length > 0) {
 
                     this.staticData[index]['stateOrder'] = 1;
@@ -490,8 +543,6 @@ class LabStore {
                 return '매우 낮음'
             }
             if (value !== null && value !== '' && value > alertMax) {
-                this.editableData[index]['state'] = '매우 높음';
-                this.editableData[index]['stateOrder'] = 5;
                 if (this.staticData.length > 0) {
 
                     this.staticData[index]['stateOrder'] = 5;
@@ -501,8 +552,6 @@ class LabStore {
         }
 
         if (value === '' || value === 0 || value === null) {
-            this.editableData[index]['state'] = '-';
-            this.editableData[index]['stateOrder'] = 0;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 0;
@@ -511,8 +560,6 @@ class LabStore {
         }
         else if (value === refMin && value === optMin) {
             
-            this.editableData[index]['state'] = '최적';
-            this.editableData[index]['stateOrder'] = 3;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 3;
@@ -520,9 +567,6 @@ class LabStore {
             return '최적'
         }
         else if (value === refMax && value === optMax) {
-            
-            this.editableData[index]['state'] = '최적';
-            this.editableData[index]['stateOrder'] = 3;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 3;
@@ -530,9 +574,6 @@ class LabStore {
             return '최적'
         }
         else if (refMin <= value && value < optMin) {
-            
-            this.editableData[index]['state'] = '낮음';
-            this.editableData[index]['stateOrder'] = 2;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 2;
@@ -540,9 +581,6 @@ class LabStore {
             return '낮음';
         }
         else if (optMin <= value && value <= optMax) {
-            
-            this.editableData[index]['state'] = '최적';
-            this.editableData[index]['stateOrder'] = 3;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 3;
@@ -550,9 +588,6 @@ class LabStore {
             return '최적';
         }
         else if (optMax <= value && value <= refMax) {
-            
-            this.editableData[index]['state'] = '높음';
-            this.editableData[index]['stateOrder'] = 4;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 4;
@@ -560,8 +595,6 @@ class LabStore {
             return '높음';
         }
         else if (value < refMin) {
-            this.editableData[index]['state'] = '매우 낮음';
-            this.editableData[index]['stateOrder'] = 1;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 1;
@@ -569,9 +602,6 @@ class LabStore {
             return '매우 낮음';
         }
         else if (refMax < value) {
-            
-            this.editableData[index]['state'] = '매우 높음';
-            this.editableData[index]['stateOrder'] = 5;
             if (this.staticData.length > 0) {
 
                 this.staticData[index]['stateOrder'] = 5;
@@ -580,10 +610,54 @@ class LabStore {
         }
     }
 
+    @action initStaticData(labs) {
+        this.staticData = [];
+        JSON.parse(JSON.stringify(labs)).forEach((staticData) => { 
+            this.staticData.push(staticData);
+        });
+        
+        this.staticData.forEach((staticData, i) => {
+            const {
+                refMin,
+                refMax,
+                optMin,
+                optMax,
+                alertMin,
+                alertMax,
+                value
+            } = staticData;
+            
+            this.getStateForStatic(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
+        });
+
+        this.setSelectedLabCategoryForEditing(labs);
+    }
+
+    @action setSelectedLabCategoryForEditing(labs) {
+        // console.log('selected lab category')
+        // console.log(JSON.parse(JSON.stringify(labs)))
+
+        this.clearSelectedLabCategory();
+        // console.log(JSON.parse(JSON.stringify(this.selectedLabCategory)))
+        let filteredArray = _.uniqBy(labs, 'category');
+
+        return filteredArray.forEach((item, index) => {
+            let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
+            if (selectedLabIndex >= 0) {
+                this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
+            }
+        })
+    }
+
 
     @action initCaseDetailData(labs) {
-        this.staticData = labs;
-        this.editableData = labs;
+        this.editableData = [];
+
+        // console.log('init labs')
+
+        JSON.parse(JSON.stringify(labs)).forEach((editableData) => { 
+            this.editableData.push(editableData);
+        });
 
         this.editableData.forEach((editableData, i) => {
             const {
@@ -597,18 +671,17 @@ class LabStore {
             } = editableData;
             
             this.getState(i, refMin, refMax, optMin, optMax, alertMin, alertMax, +value);
-        })
+        });
 
-        let filteredArray = _.uniqBy(labs, 'category');
-
-        filteredArray.forEach((item, index) => {
-            let selectedLabIndex = this.selectedLabCategory.findIndex(x => x.label === item.category);
-            if (selectedLabIndex >= 0) {
-                this.selectedLabCategory[selectedLabIndex]['value'] = item.category;
-            }
-        })
+        // this.setSelectedLabCategoryForEditing(labs);
 
         setTimeout(() => {this.resetOriginalIndex();}, 100);
+    }
+
+    @action compareData() {
+        // console.log('static', JSON.parse(JSON.stringify(this.staticData)))
+        // console.log('editable', JSON.parse(JSON.stringify(this.editableData)))
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
     }
 
     @action initialize() {
@@ -659,7 +732,7 @@ class LabStore {
             )
             
         })
-}
+    }
 
     @action loadLabs() {
         return agent.loadLabs()
@@ -695,7 +768,7 @@ class LabStore {
 
     @action checkSelectedCategory() {
         this.selectedLabCategory.forEach((item , i) => {
-            console.log(this.editableData.findIndex(x => x.category === item.value));
+            // console.log(this.editableData.findIndex(x => x.category === item.value));
             if (item.value === '') {
                 if (this.editableData.findIndex(x => x.category === item.label) >= 0) {
                     return this.selectedLabCategory[i] = {

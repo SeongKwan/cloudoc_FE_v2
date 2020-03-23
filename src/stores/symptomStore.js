@@ -51,6 +51,11 @@ class SymptomStore {
         this.staticData = symptoms;
     }
 
+    @action compareData() {
+        
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
+    }
+
     @action sortEditableData() {
         this.editableData.slice().sort(function(a, b) {
             return a.rank < b.rank ? -1 : a.rank > b.rank ? 1 : 0;
@@ -63,13 +68,13 @@ class SymptomStore {
         }
         JSON.parse(JSON.stringify(editableData)).forEach((editableData) => { 
             
-            if (editableData.degree === null || editableData.degree === undefined) {
-                editableData.degree = '';
-            }
+            // if (editableData.degree === null || editableData.degree === undefined) {
+            //     // editableData.degree = '';
+            // }
             if (editableData.unit === null || editableData.unit === undefined) {
                 editableData.unit = '';
             }
-            editableData.isPopoverOpen = false;
+            // editableData.isPopoverOpen = false;
             this.editableData.push(editableData);
             
         });

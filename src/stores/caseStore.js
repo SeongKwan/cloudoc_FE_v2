@@ -26,9 +26,10 @@ if (windowWidth > 1411) {
 } else {
     initialLoadAmount = 5;
     loadAmount = 6;
-}
+};
 
 class CaseStore {
+    @observable onReady = false;
     @observable isLoading = false;
     @observable isLoadingMore = false;
     @observable isLoadingForSymptom = false;
@@ -57,7 +58,7 @@ class CaseStore {
         let cases = [];
         this.infiniteStore.forEach((article) => { cases.push(article); });
         return cases || [];
-    }
+    };
 
     @action casesOnSearching() {
         const { keyword } = searchStore;
@@ -124,7 +125,7 @@ class CaseStore {
                 .catch(error => {
                     
                 });
-    }
+    };
 
     @action InitInfiniteStore() {
         let database = this.registry;
@@ -169,7 +170,7 @@ class CaseStore {
         }
         this.infiniteStore = [];
         this.infiniteStore = database.slice(0, ((this.currentPage) * (initialLoadAmount + plusOne)));
-    }
+    };
 
     @action addToInfiniteStore() {
         let cases = [];
@@ -203,7 +204,7 @@ class CaseStore {
             this.infiniteStore = [...this.infiniteStore, ...cases.slice((initialLoadAmount + (this.currentPage) * loadAmount), (initialLoadAmount + (this.currentPage) * loadAmount + this.rest))]
             return this.loadMore = false;
         }
-    }
+    };
 
     @action addToSearchedStore() {
         let cases = [];
@@ -229,19 +230,19 @@ class CaseStore {
             this.searchedInfiniteStore = [...this.searchedInfiniteStore, ...cases.slice(this.currentPage * loadAmount, ((this.currentPage) * loadAmount) + this.restForSearch)]
             return this.loadMore = false;
         }
-    }
+    };
 
     @action noLoadMore() {
         this.loadMore = false;
-    }
+    };
 
     @action clearLoadMore() {
         this.loadMore = true;
-    }
+    };
 
     @action setIsLoadingMore(status) {
         this.isLoadingMore = status;
-    }
+    };
 
     // _filter = (filterBoolean, items) => {
     //     const { symptom, lab, condition, exam, drug, reference } = this.distributedClinicaldbs;
@@ -264,7 +265,7 @@ class CaseStore {
         return items.filter((item) => {
             return this._hasSearchKeywordInItem(searcher, item);
         });
-    }
+    };
 
     _hasSearchKeywordInItem(searcher, item) {
         const latestRecordIndex = item.record.length - 1;
@@ -283,7 +284,7 @@ class CaseStore {
             //     || this._hasSearchKeywordInProperty(searcher, this._getRecordLatestData(item, 'diagnosis') || '') 
             //     || this._hasSearchKeywordInProperty(searcher, treatment.drugName || '') 
             // )
-    }
+    };
 
     // _hasSearchKeywordInProperty(searcher, property_string) {
     //     return searcher.search(property_string.toLowerCase()) >= 0 ? true : false;
@@ -300,7 +301,7 @@ class CaseStore {
             });
             return a.find(str => str === true);
         }
-    }
+    };
 
     _getRecordLatestData = (item, type) => {
         const latestRecordIndex = item.record.length - 1;
@@ -319,14 +320,16 @@ class CaseStore {
             });
             return items;
         }
-    }
+    };
 
     @action setCurrentCaseDetail(dateIndex) {
         this.currentCaseDetail = this.currentCase.record.slice().reverse()[dateIndex];
         this.currentCaseRecordDate = this.currentCaseRecord[dateIndex];
-    }
+    };
 
     @action setCurrentCase(currentCase, dateIndex = 0) {
+        // console.log('toggle')
+        this.onReady = true;
         const {
             title,
             // created_date,
@@ -358,14 +361,13 @@ class CaseStore {
             // memo,
             teaching
         } = this.currentCaseDetail;
-        
-
-        console.log(JSON.parse(JSON.stringify(this.currentCaseDetail)))
 
         basicStore.initialize(patientInfoData);
         symptomStore.initStaticData(symptom);
         symptomStore.setEditableData(symptom);
+        labStore.initStaticData(lab);
         labStore.initCaseDetailData(lab);
+        
         diagnosisStore.initStaticData(diagnosis);
         diagnosisStore.setEditableData(diagnosis);
         drugStore.initilize(treatment);
@@ -373,30 +375,28 @@ class CaseStore {
         teachingStore.initStaticData(teaching);
         teachingStore.setEditableData(teaching);
 
-        // basicStore.initialize(patientInfoData);
-        // symptomStore.initStaticData(record[0].symptom);
-        // symptomStore.setEditableData(record[0].symptom);
-        // labStore.initCaseDetailData(record[0].lab);
-        // diagnosisStore.initStaticData(record[0].diagnosis);
-        // diagnosisStore.setEditableData(record[0].diagnosis);
-        // drugStore.initilize(record[0].treatment);
-        // drugStore.setEditableData(record[0].treatment.fomula);
-        // teachingStore.initStaticData(record[0].teaching);
-        // teachingStore.setEditableData(record[0].teaching);
-    }
+    };
 
     @action toggleIsEditing(dateIndex = 0) {
         this.setCurrentCase(this.currentCase, dateIndex);
         this.isEditing = !this.isEditing;
+    };
+
+    @action checkDifferenceContent() {
+        let difference = [];
+        difference.push(basicStore.compareData());
+        difference.push(symptomStore.compareData());
+        difference.push(labStore.compareData());
+        difference.push(diagnosisStore.compareData());
+        difference.push(drugStore.compareData());
+        difference.push(drugStore.compareArrayData());
+        difference.push(teachingStore.compareData());
+        console.log(difference);
     }
 
 
     @action loadCase(id, dateIndex = 0) {
-        console.log(id, dateIndex)
         this.isLoading = true;
-
-        console.log('loadCase')
-
         return agent.loadCase(id)
             .then(action((response) => {
                 this.isLoading = false;
@@ -836,6 +836,7 @@ class CaseStore {
         this.currentCasePatient = [];
         this.currentCaseDetail = {};
         this.dateIndex = 0;
+        this.onReady = false;
     }
 
     @action clearCurrentCase() {

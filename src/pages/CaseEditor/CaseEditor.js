@@ -38,6 +38,7 @@ const cx = classNames.bind(styles);
   'Case',
   'login',
   'user', 
+  'lab',
   'caseEditorBasic',
   'symptomListItem',
   'drugListItem',
@@ -125,7 +126,6 @@ class CaseEditor extends Component {
   render() {
     const { type, dateIndex, caseId } = this.props.match.params;
     const { isEditing, isLoading, currentCaseRecord } = this.props.Case;
-    console.log(JSON.parse(JSON.stringify(this.props.Case.currentCaseRecord)))
     const {
       pastHistory,
       familyHistory,
@@ -139,6 +139,8 @@ class CaseEditor extends Component {
       checkContentEmpty = true;
     }
 
+    this.props.Case.checkDifferenceContent();
+
     return (
       <div className={cx('CaseEditor', {isLoading: isLoading})}>
         <Helmet>
@@ -146,7 +148,7 @@ class CaseEditor extends Component {
         </Helmet>
         <HeaderEditor type={type} />
         {
-          isLoading ? <div className={cx('loader-container')}><Loader /> </div>
+          (isLoading && !this.props.Case.onReady) ? <div className={cx('loader-container')}><Loader /> </div>
           : <>
           {
             currentCaseRecord.length > 1 && type === 'detail' &&

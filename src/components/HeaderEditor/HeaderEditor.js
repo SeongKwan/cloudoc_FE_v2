@@ -135,7 +135,7 @@ class HeaderEditor extends Component {
                                     this.props.Case.updateCase(dateIndex)
                                     .then(res => {
                                         if (res) {
-                                            alert('정상적으로 수정되었습니다')
+                                            {/* alert('정상적으로 수정되었습니다') */}
                                             this.props.Case.toggleIsEditing();
                                         }
                                         

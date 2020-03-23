@@ -59,6 +59,11 @@ class CaseEditorBasicStore {
         // }
     }
 
+    @action compareData() {
+        
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
+    }
+
     @action clear() {
         this.editableData = {
             title: '',

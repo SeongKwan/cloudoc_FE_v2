@@ -24,6 +24,10 @@ class DiagnosisStore {
         this.editableData = [];
     }
 
+    @action compareData() {
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
+    }
+
     @action initStaticData(diagnosis) {
         this.staticData = diagnosis;
     }

@@ -17,6 +17,7 @@ class TreatmentStore {
         herbName: '',
         dose: ''
     }];
+    
     @observable editableDataForTreatment = {
         drugName: '',
         guide: '',
@@ -53,6 +54,14 @@ class TreatmentStore {
         }
         editableData.forEach((editableData) => { this.editableData.push(editableData) });
         this.staticData = editableData;
+    }
+
+    @action compareData() {
+        return JSON.stringify(this.editableDataForTreatment) === JSON.stringify(this.staticDataForTreatment);
+    }
+
+    @action compareArrayData() {
+        return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
     }
 
     @action setEditableDataForTreatment(type, value) {
