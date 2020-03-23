@@ -262,7 +262,8 @@ class HeaderEditor extends Component {
                             <div 
                                 className={cx('btn-tool', 'question')}
                                 onClick={() => {
-                                    this.props.history.push(`/report`)
+                                    window.alert('현재 준비중입니다.')
+                                    {/* this.props.history.push(`/report`) */}
                                 }}
                             >
                                 <FiMessageCircle />
