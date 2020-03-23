@@ -52,7 +52,6 @@ class SymptomStore {
     }
 
     @action compareData() {
-        
         return JSON.stringify(this.editableData) === JSON.stringify(this.staticData);
     }
 

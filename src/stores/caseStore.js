@@ -384,6 +384,7 @@ class CaseStore {
 
     @action checkDifferenceContent() {
         let difference = [];
+        let check = false;
         difference.push(basicStore.compareData());
         difference.push(symptomStore.compareData());
         difference.push(labStore.compareData());
@@ -391,7 +392,13 @@ class CaseStore {
         difference.push(drugStore.compareData());
         difference.push(drugStore.compareArrayData());
         difference.push(teachingStore.compareData());
-        console.log(difference);
+
+        if (difference.findIndex(diff => diff === false) >= 0) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
     }
 
 
@@ -402,11 +409,8 @@ class CaseStore {
                 this.isLoading = false;
                 this.currentCase = response.data.case;
                 
-                // console.log(dateIndex)
                 let reversedDetail = response.data.case.record.slice().reverse();
-                // console.log(reversedDetail[dateIndex])
                 this.currentCaseDetail = reversedDetail[dateIndex];
-                // console.log(JSON.parse(JSON.stringify(this.currentCaseDetail)))
 
                 let recordDates = [];
                 response.data.case.record.forEach((record) => { recordDates.push(record.createdDate) });

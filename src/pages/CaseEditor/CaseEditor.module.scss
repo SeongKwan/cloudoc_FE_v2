@@ -16,6 +16,7 @@
     }
 
     .btn-move-record {
+        user-select: none;
         z-index: 11;
         position: absolute;
         top: 50%;

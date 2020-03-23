@@ -4,7 +4,6 @@ import styles from './HeaderEditor.module.scss';
 import classNames from 'classnames/bind';
 import { 
     FiArrowLeft, 
-    
     // CsQuestion, 
     FiMessageCircle,
     // FiSettings,
@@ -89,8 +88,17 @@ class HeaderEditor extends Component {
             <header className={cx('HeaderEditor')}>
                 <div className={cx('tool-bar')}>
                     <div className={cx('btn-tool', 'back')} onClick={() => {
-                        this.props.history.push(`/case`)
-                        this.props.Case.clearIsEditing();
+                        if (this.props.Case.checkDifferenceContent()) {
+                            if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                                this.props.history.push(`/case`)
+                                this.props.Case.clearIsEditing();
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            this.props.history.push(`/case`)
+                            this.props.Case.clearIsEditing();
+                        }
                         }}>
                         <FiArrowLeft />
                         <div className={cx('label')}>뒤로</div>
@@ -135,7 +143,7 @@ class HeaderEditor extends Component {
                                     this.props.Case.updateCase(dateIndex)
                                     .then(res => {
                                         if (res) {
-                                            {/* alert('정상적으로 수정되었습니다') */}
+                                            alert('정상적으로 수정되었습니다')
                                             this.props.Case.toggleIsEditing();
                                         }
                                         
@@ -183,7 +191,19 @@ class HeaderEditor extends Component {
                             className={cx('btn-tool', 'save')} 
                             onClick={() => {
                                     const { dateIndex } = this.props.match.params;
-                                    this.props.Case.toggleIsEditing(dateIndex);
+                                    if (isEditing) {
+                                        if (this.props.Case.checkDifferenceContent()) {
+                                            if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                                                this.props.Case.toggleIsEditing(dateIndex);
+                                            } else {
+                                                return false;
+                                            }
+                                        } else {
+                                            this.props.Case.toggleIsEditing(dateIndex);
+                                        }
+                                    } else {
+                                        this.props.Case.toggleIsEditing(dateIndex);
+                                    }
                                 }
                             }
                         >

@@ -139,8 +139,6 @@ class CaseEditor extends Component {
       checkContentEmpty = true;
     }
 
-    this.props.Case.checkDifferenceContent();
-
     return (
       <div className={cx('CaseEditor')}>
         <Helmet>
@@ -155,17 +153,65 @@ class CaseEditor extends Component {
             <>
               {
                 +dateIndex !== 0 &&
-                <Link className={cx('prevRecord', 'btn-move-record')} to={`/case/editor/detail/${caseId}/${+dateIndex - 1}`}>
+                <div 
+                  className={cx('prevRecord', 'btn-move-record')} 
+                  onClick={() => {
+                    if (isEditing) {
+                        if (this.props.Case.checkDifferenceContent()) {
+                            if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
+                              return this.props.Case.updateCase(dateIndex)
+                                .then(res => {
+                                    if (res) {
+                                        alert('정상적으로 수정되었습니다')
+                                    }
+                                })
+                                .then(() => {
+                                  this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                });
+                            } 
+                            return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                        }
+                    } 
+                    return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
+                  }}
+                >
                   <MdKeyboardArrowLeft />
                   <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex - 1])}</div>
-                </Link>
+                </div>
               }
               {
                 +dateIndex !== currentCaseRecord.length - 1 &&
-                <Link className={cx('nextRecord', 'btn-move-record')} to={`/case/editor/detail/${caseId}/${+dateIndex + 1}`}>
+                <div 
+                  className={cx('nextRecord', 'btn-move-record')} 
+                  onClick={() => {
+                    if (isEditing) {
+                        if (this.props.Case.checkDifferenceContent()) {
+                            if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
+                              return this.props.Case.updateCase(dateIndex)
+                                .then(res => {
+                                    if (res) {
+                                        alert('정상적으로 수정되었습니다')
+                                    }
+                                })
+                                .then(() => {
+                                  this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                });
+                              }
+                            return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                        }
+                    }
+                    return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                  }}
+                >
                   <MdKeyboardArrowRight />
                   <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex + 1])}</div>
-                </Link>
+                </div>
               }
             </>
           }
@@ -203,7 +249,36 @@ class CaseEditor extends Component {
                             <ul>
                               {
                                 currentCaseRecord.map((date, i) => {
-                                  return <li key={i}><Link onClick={() => {this.setState({focusParent: false})}} className={cx('date', {selected: i === +dateIndex})} to={`/case/editor/detail/${caseId}/${i}`}>{getLocaleDateWithYMS(date)}</Link></li>
+                                  return <li key={i}>
+                                    <div 
+                                      onClick={() => {
+                                        this.setState({focusParent: false});
+                                        if (isEditing) {
+                                            if (this.props.Case.checkDifferenceContent()) {
+                                                if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
+                                                  return this.props.Case.updateCase(dateIndex)
+                                                    .then(res => {
+                                                        if (res) {
+                                                            alert('정상적으로 수정되었습니다')
+                                                        }
+                                                    })
+                                                    .then(() => {
+                                                      this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err)
+                                                    });
+                                                  }
+                                                return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                            }
+                                        }
+                                        return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                      }} 
+                                      className={cx('date', {selected: i === +dateIndex})}
+                                    >
+                                      {getLocaleDateWithYMS(date)}
+                                    </div>
+                                  </li>
                                 })
                               }
                             </ul>
