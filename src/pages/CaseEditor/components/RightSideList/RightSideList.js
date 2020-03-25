@@ -88,7 +88,7 @@ class RightSideList extends Component {
                     currentCaseRecord.length > 1 && type === 'detail' &&
                     <>
                         {
-                            +dateIndex !== currentCaseRecord.length - 1 &&
+                            +dateIndex !== 0 &&
                             <div 
                             className={cx('nextRecord', 'btn-move-record')} 
                             onClick={() => {
@@ -102,20 +102,20 @@ class RightSideList extends Component {
                                                 }
                                             })
                                             .then(() => {
-                                            this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                            this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
                                             })
                                             .catch(err => {
                                                 console.log(err)
                                             });
                                         }
-                                        return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                        return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
                                     }
                                 }
-                                return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex - 1}`)
                             }}
                             >
                                 <MdKeyboardArrowRight />
-                                <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex + 1])}</div>
+                                <div className={cx('date')}>{getLocaleDateWithYMS(currentCaseRecord[+dateIndex - 1])}</div>
                             </div>
                         }
                     </>
