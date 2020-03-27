@@ -43,7 +43,7 @@
                 }
                 &.active {
                     background-color: $bc-12;
-                    color: $white;
+                    color: $bc-01;
                     
                     border-radius: $radius-high;
                     // &::after {
@@ -57,7 +57,7 @@
                     //     transform: translateX(-50%);
                     // }
                     &:hover {
-                        color: $white;
+                        color: $bc-01;
                     }
                 }
                 &:focus, &:active {

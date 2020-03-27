@@ -729,7 +729,11 @@ class CaseStore {
         return agent.deleteCase(id)
             .then(action((response) => {
                 this.isLoading = false;
+                return response;
             }))
+            .catch((err) => {
+                throw err;
+            })
     }
 
 

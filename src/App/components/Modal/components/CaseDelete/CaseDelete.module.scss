@@ -1,0 +1,81 @@
+.CaseDelete {
+    position: absolute;
+    background-color: $bc-03;
+    padding: 1rem;
+    width: 320px;
+    border-radius: $radius-medium;
+    font-size: 1rem;
+    user-select: none;
+    top: 5.1rem;
+    left: calc(80px * 2.5);
+
+    @include media('lg') {
+        top: 4.6rem;
+        left: calc(58.5px * 2.5);
+    }
+    @include media('sm') {
+        left: calc(43.5px * 2.5);
+    }
+    
+    // transform: translateX(%);
+    .top, .bottom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        border-radius: $radius-high;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .top {
+        background-color: $bc-12;
+        margin-bottom: 1rem;
+        &:hover {
+            color: $bc-01;
+        }
+    }
+    .bottom {
+        background-color: $bc-11;
+        &:hover {
+            color: $bc-01;
+        }
+    }
+    .delete-message {
+        padding: 1rem;
+        color: $bc-18;
+        border-radius: $radius-high;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+        &.record {
+            background-color: $bc-12;
+        }
+        &.case {
+            background-color: $bc-11;
+        }
+    }
+    .button-wrapper {
+        display: flex;
+
+        .button {
+            border-radius: $radius-high;
+            padding: 1rem;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            &:hover {
+                opacity: 0.9;
+            }
+            
+            &.cancel {
+                background-color: $oc-gray-3;
+                color: $bc-18;
+                margin-right: 0.5rem;
+            }
+            &.delete {
+                background-color: $oc-red-9;
+                color: $bc-14;
+            }
+        }
+    }
+}

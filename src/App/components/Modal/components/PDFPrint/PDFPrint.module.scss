@@ -1,0 +1,75 @@
+.PDFPrint {
+    position: absolute;
+    background-color: $bc-03;
+    padding: 2rem;
+    width: 260px;
+    border-radius: $radius-low;
+    font-size: 1.1rem;
+    user-select: none;
+    top: 5.1rem;
+    left: calc(80px * 4.5);
+
+    @include media('lg') {
+        top: 4.6rem;
+        left: calc(58.5px * 4.5);
+    }
+    @include media('sm') {
+        left: calc(43.5px * 4.5);
+    }
+    h5 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    ul {
+        background: $bc-14;
+        padding: 1rem;
+        border-radius: 2px;        
+    }
+    li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        
+        label {
+            margin-bottom: 0;
+            margin-left: 0.5rem;
+            letter-spacing: 1.2;
+            cursor: pointer;
+            padding: 0.2rem 0;
+        }
+        input {
+            cursor: pointer;
+            padding: 0.2rem 0;
+        }
+    }
+    .button-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        
+        button {
+            position: relative;
+            font-size: 1rem;
+            // font-weight: 100;
+            color: white;
+            border: 0;
+            border-radius: 2px;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            &:focus {
+                outline: 0;
+            }
+            &.cancel {
+                background-color: $gray-4;
+                margin-right: 0.5rem;
+            }
+            &.confirm {
+                background-color: $bc-01;
+                &.preparing {
+                    background-color: $bc-08;
+                }
+            }
+        }
+    }
+}

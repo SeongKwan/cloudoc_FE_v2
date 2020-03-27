@@ -20,14 +20,10 @@ import Loader from '../../components/Loader';
 import {
   FiArrowUp
 } from '../../lib/react-icons/fi';
-import {
-  IoMdArrowDropdown
-} from 'react-icons/io';
 // import {
 //   MdKeyboardArrowLeft,
 //   MdKeyboardArrowRight
 // } from 'react-icons/md';
-import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -104,6 +100,7 @@ class CaseEditor extends Component {
   componentWillUnmount() {
     this.props.Case.clearIsEditing();
     this.props.Case.clearCurrentCase();
+    this.props.Case.clearAllEditableData();
     document.removeEventListener('mousedown', this._handleClickOutside);
   }
 
@@ -112,7 +109,7 @@ class CaseEditor extends Component {
         this.setState({ focusParent: false});
         
     }
-}
+  }
 
   handleClickOnTopScroll = () => {
     $('#case-editor-center-container-scroll-box').animate( { scrollTop : 0 }, 400 );
@@ -123,8 +120,8 @@ class CaseEditor extends Component {
   }
 
   render() {
-    const { type, dateIndex, caseId } = this.props.match.params;
-    const { isEditing, isLoading, currentCaseRecord } = this.props.Case;
+    const { type } = this.props.match.params;
+    const { isEditing, isLoading } = this.props.Case;
     const {
       pastHistory,
       familyHistory,
@@ -156,66 +153,6 @@ class CaseEditor extends Component {
             <div id="case-editor-center-container" className={cx('container', 'center')}>
               <div id="case-editor-center-container-scroll-box" className={cx('scroll-box')}>
                   <>
-                    {
-                      type === 'detail' &&
-                      <div 
-                          ref={(ref) => {
-                              this.recordDate = ref;
-                          }}
-                          className={cx('record-date', {focus: this.state.focusParent})}>
-                        <div className={cx('selected-date')} 
-                          onClick={() => { this._toggleOnFocus(); }}
-                        >
-                          <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
-                          {
-                            currentCaseRecord.length > 0 &&
-                            <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
-                          }
-                          <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
-                        </div>
-                        {
-                          this.state.focusParent &&
-                          <div className={cx('records')}>
-                            <ul>
-                              {
-                                currentCaseRecord.map((date, i) => {
-                                  return <li key={i}>
-                                    <div 
-                                      onClick={() => {
-                                        this.setState({focusParent: false});
-                                        if (isEditing) {
-                                            if (this.props.Case.checkDifferenceContent()) {
-                                                if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
-                                                  return this.props.Case.updateCase(dateIndex)
-                                                    .then(res => {
-                                                        if (res) {
-                                                            alert('정상적으로 수정되었습니다')
-                                                        }
-                                                    })
-                                                    .then(() => {
-                                                      this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
-                                                    })
-                                                    .catch(err => {
-                                                        console.log(err)
-                                                    });
-                                                  }
-                                                return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
-                                            }
-                                        }
-                                        return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
-                                      }} 
-                                      className={cx('date', {selected: i === +dateIndex})}
-                                    >
-                                      {getLocaleDateWithYMS(date)}
-                                    </div>
-                                  </li>
-                                })
-                              }
-                            </ul>
-                          </div>
-                        }
-                      </div>
-                    }
                     <Basic type={type} />
                     <CollapsibleBox 
                       title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 

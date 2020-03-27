@@ -1,71 +1,14 @@
 .Modal {
     position: absolute;
+    z-index: 9999999999;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba($black, 0.45);
-    z-index: 9999999999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .Print {
-        background-color: $oc-gray-2;
-        padding: 2rem;
-        width: 260px;
-        border-radius: $radius-low;
-        font-size: 1.1rem;
-        user-select: none;
-        h5 {
-            font-size: 1.6rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            
-            label {
-                margin-bottom: 0;
-                margin-left: 0.5rem;
-                letter-spacing: 1.2;
-                cursor: pointer;
-                padding: 0.2rem 0;
-            }
-            input {
-                cursor: pointer;
-                padding: 0.2rem 0;
-            }
-        }
-        .button-wrapper {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 2rem;
-            button {
-                position: relative;
-                font-size: 1rem;
-                font-weight: 100;
-                color: white;
-                border: 0;
-                border-radius: 2px;
-                padding: 0.3rem 0.6rem;
-                cursor: pointer;
-                &:focus {
-                    outline: 0;
-                }
-                &.cancel {
-                    background-color: $gray-3;
-                    margin-right: 0.5rem;
-                }
-                &.confirm {
-                    background-color: $bc-01;
-                    &.preparing {
-                        background-color: $bc-08;
-                    }
-                }
-            }
-        }
+    // &.PDF {
+    //     top: 50%;
+    //     left: 50%;
+    //     transform: translate(-50%, -50%);
+    // }
+    &.caseDelete {
+        
     }
 }

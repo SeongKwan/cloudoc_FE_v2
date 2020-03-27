@@ -10,18 +10,19 @@ import {
     FiTrash,
     FiPlus,
     FiSave,
-    FiFileText,
+    // FiFileText,
     FiHelpCircle,
     FiEdit,
+    FiPrinter
     // FiArrowDown
 } from "../../lib/react-icons/fi";
-import { TiDocumentAdd, TiDocumentDelete } from 'react-icons/ti';
+import {
+    IoMdArrowDropdown
+} from 'react-icons/io';
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
-// import { PDFDownloadLink } from "@react-pdf/renderer";
-// import PrintPage from '../../pages/PrintPage';
-import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 // import Loader from '../Loader';
+import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -30,32 +31,22 @@ const cx = classNames.bind(styles);
 @observer
 class HeaderEditor extends Component {
     state = {
-        downloadPDF: false
+        downloadPDF: false,
+        focusParent: false
     }
-
+    componentDidMount() {
+        document.addEventListener('mousedown', this._handleClickOutside);
+    }
     componentWillUnmount() {
-        this.setState({ downloadPDF: false });
+        this.setState({ downloadPDF: false, focusParent: false });
+        this.props.modal.clear();
+        document.removeEventListener('mousedown', this._handleClickOutside);
     }
 
-    _handleClickAddRecordButton = async () => {
-        const { caseId } = this.props.match.params;
-        const lengthOfRecord = this.props.Case.currentCase.record.length;
-        const createdDate =  getLocaleDateWithYMS(Date.now());
-        const lastDate = this.props.Case.currentCase.record[lengthOfRecord - 1].createdDate;
-        let shortLastDate = getLocaleDateWithYMS(lastDate);
-        console.log(createdDate, shortLastDate)
-        if (createdDate === shortLastDate) {
-            return alert('동일날짜 진료가 이미 있습니다.');
+    _handleClickOutside = (event) => {
+        if (this.recordDate && !this.recordDate.contains(event.target) && this.state.focusParent) {
+            this._toggleOnFocus();
         }
-        await this.props.Case.addNewRecordToCase(caseId)
-        .then(res => {
-            this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
-            this.props.Case.toggleIsEditing(0);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    
     }
 
     _handleClickDeleteRecordButton = async () => {
@@ -71,11 +62,15 @@ class HeaderEditor extends Component {
         }
     }
 
+    _toggleOnFocus = () => {
+        this.setState({ focusParent: !this.state.focusParent})
+    }
+
 
     render() {
         const { type } = this.props;
-        const { isEditing, currentCase } = this.props.Case;
-        const { dateIndex } = this.props.match.params;
+        const { isEditing, currentCaseRecord } = this.props.Case;
+        const { dateIndex, caseId } = this.props.match.params;
         
         if (type === "detail") {
             if (this.props.Case.currentCase === null) {
@@ -141,16 +136,7 @@ class HeaderEditor extends Component {
                             <div className={cx('label')}>새증례</div>
                         </div>
                     }
-                    {
-                        type === "detail" && !isEditing &&
-                        <div 
-                            className={cx('btn-tool', 'create')}
-                            onClick={this._handleClickAddRecordButton}
-                        >
-                            <TiDocumentAdd />
-                            <div className={cx('label')}>새진료</div>
-                        </div>
-                    }
+                    
                     {
                         type === "detail" && isEditing && 
                         <div 
@@ -239,67 +225,109 @@ class HeaderEditor extends Component {
                         <>
                             <div 
                                 className={cx('btn-tool', 'trash')}
-                                onClick={this._handleClickDeleteRecordButton}
-                            >
-                                <TiDocumentDelete />
-                                <div className={cx('label')}>진료삭제</div>
-                            </div>
-                            <div 
-                                className={cx('btn-tool', 'trash')}
                                 onClick={() => {
-                                        if (window.confirm(`이 증례[${currentCase.title}]를(을) 삭제하시겠습니까?`)) {
-                                            this.props.Case.deleteCase(this.props.Case.currentCase._id);
-                                            this.props.history.push(`/case`);
-                                        }
+                                        this.props.modal.showModal('caseDelete');
                                     }
                                 }
                             >
                                 <FiTrash />
-                                <div className={cx('label')}>증례삭제</div>
-                            </div>
-
-
-                            <div 
-                                className={cx('btn-tool', 'question')}
-                                onClick={() => {
-                                    window.alert('현재 준비중입니다.')
-                                    {/* this.props.history.push(`/report`) */}
-                                }}
-                            >
-                                <FiMessageCircle />
-                                <div className={cx('label')}>질문</div>
+                                <div className={cx('label')}>삭제</div>
                             </div>
                         </>
                     }
 
                     {
                         type === "detail" && !isEditing &&
-                        <div 
-                            className={cx('btn-tool', 'question')}
-                            onClick={() => {
-                                this.setState({downloadPDF: true});
-                                this.props.modal.showModal('print');
-                            }}
-                        >
-                            <FiFileText />
-                            <div className={cx('label')}>리포트</div>
-                        </div>
+                        <>
+                            <div 
+                                className={cx('btn-tool', 'question')}
+                                onClick={() => {
+                                    window.alert('현재 준비중입니다.')
+                                    
+                                }}
+                            >
+                                <FiMessageCircle />
+                                <div className={cx('label')}>질문</div>
+                            </div>
+                                <div 
+                                className={cx('btn-tool', 'question')}
+                                onClick={() => {
+                                    this.setState({downloadPDF: true});
+                                    this.props.modal.showModal('print', true);
+                                }}
+                            >
+                                <FiPrinter />
+                                <div className={cx('label')}>PDF</div>
+                            </div>
+                        </>
+                        
                     }
 
-                    
-
-
-
-
-                <div className={cx('btn-tool', 'qna')} onClick={() => {alert('현재 준비중입니다.')}}>
-                    <FiHelpCircle />
-                    <div className={cx('label')}>도움</div>
+                    <div className={cx('btn-tool', 'qna')} onClick={() => {alert('현재 준비중입니다.')}}>
+                        <FiHelpCircle />
+                        <div className={cx('label')}>도움</div>
+                    </div>
                 </div>
-                {/* <div className={cx('btn-tool', 'settings')}>
-                    <FiSettings />
-                    <div className={cx('label')}>메뉴</div>
-                </div> */}
-                </div>
+                {
+                        type === 'detail' &&
+                        <div 
+                            ref={(ref) => {
+                                this.recordDate = ref;
+                            }}
+                            className={cx('record-date', {focus: this.state.focusParent})}>
+                            <div className={cx('selected-date')} 
+                            onClick={() => { this._toggleOnFocus(); }}
+                            >
+                            <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
+                            {
+                                currentCaseRecord.length > 0 &&
+                                <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
+                            }
+                            <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
+                            </div>
+                            {
+                            this.state.focusParent &&
+                            <div className={cx('records')}>
+                                <ul>
+                                {
+                                    currentCaseRecord.map((date, i) => {
+                                    return <li key={i}>
+                                        <div 
+                                        onClick={() => {
+                                            this.setState({focusParent: false});
+                                            if (isEditing) {
+                                                if (this.props.Case.checkDifferenceContent()) {
+                                                    if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
+                                                    return this.props.Case.updateCase(dateIndex)
+                                                        .then(res => {
+                                                            if (res) {
+                                                                alert('정상적으로 수정되었습니다')
+                                                            }
+                                                        })
+                                                        .then(() => {
+                                                        this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                                        })
+                                                        .catch(err => {
+                                                            console.log(err)
+                                                        });
+                                                    }
+                                                    return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                                }
+                                            }
+                                            return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                        }} 
+                                        className={cx('date', {selected: i === +dateIndex})}
+                                        >
+                                        {getLocaleDateWithYMS(date)}
+                                        </div>
+                                    </li>
+                                    })
+                                }
+                                </ul>
+                            </div>
+                            }
+                        </div>
+                    }
             </header>
         );
     }
