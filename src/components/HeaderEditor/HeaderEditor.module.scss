@@ -43,9 +43,6 @@
         @include media('lg') {
             width: 180px;
         }
-        @include media('sm') {
-            margin-bottom: 1rem;
-        }
         &.isEditing {
             &:hover {
                 border-color: $gray-2;
@@ -149,6 +146,13 @@
     }
     .tool-bar {
         left: 0;
+        &.mobile {
+            background: $bc-03;
+            color: $bc-18;
+            width: 100%;
+            top: 100%;
+            padding: 0.75rem 0.5rem 0.6rem;
+        }
     }
     .menu {
         right: 0;
@@ -214,5 +218,18 @@
             font-size: 1.3rem;
         }
     }
+
+    .menu {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
     
+    .toggle-tool-bar {
+        display: none;
+        &.open {
+            display: flex;
+        }
+    }
 }
