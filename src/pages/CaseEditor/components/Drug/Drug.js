@@ -159,10 +159,12 @@ class Drug extends Component {
         const { length } = editableData;
 
         if (editableData.length <= 0) {
-            return this.props.treatment.addDrug();
+            this.props.treatment.addDrug();
+            return setTimeout(() => {$(`#herb-name-${0}`).focus();}, 100)
         } else {
             if (editableData[length - 1]['dose'] > 0 && editableData[length - 1]['herbName'] !== '') {
                 this.props.treatment.addDrug();
+                return setTimeout(() => {$(`#herb-name-${length}`).focus();}, 100)
             } else {
                 alert('약재명 또는 수량이 입력되지 않았습니다');
             }

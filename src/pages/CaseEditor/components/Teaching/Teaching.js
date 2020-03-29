@@ -5,6 +5,7 @@ import { observer, inject } from 'mobx-react';
 import { FiPlus } from '../../../../lib/react-icons/fi';
 import { FaTrash } from '../../../../lib/react-icons/fa';
 import TextareaAutosize from 'react-textarea-autosize';
+import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,14 @@ class Teaching extends Component {
     }
     
     _handleClickOnAddTeaching = () => {
+        const { editableData } = this.props.teaching;
+        const { length } = editableData;
         this.props.teaching.addTeaching(null, null, '');
+        console.log(length)
+        if (length <= 0) {
+            return setTimeout(() => {$(`#teaching-description-${0}`).focus();}, 100)
+        }
+        return setTimeout(() => {$(`#teaching-description-${length}`).focus();}, 100)
     }
     
     _deleteTeaching = (i) => {
