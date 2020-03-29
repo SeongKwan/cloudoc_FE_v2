@@ -3,8 +3,6 @@ import { withRouter } from 'react-router-dom';
 import styles from './CaseDelete.module.scss';
 import classNames from 'classnames/bind';
 import { inject, observer } from 'mobx-react';
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PrintPage from '../../../../../pages/PrintPage';
 import { getLocaleDateWithYMS } from '../../../../../utils/momentHelper';
 
 const cx = classNames.bind(styles);

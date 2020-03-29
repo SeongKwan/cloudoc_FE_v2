@@ -20,10 +20,10 @@ import Loader from '../../components/Loader';
 import {
   FiArrowUp
 } from '../../lib/react-icons/fi';
-// import {
-//   MdKeyboardArrowLeft,
-//   MdKeyboardArrowRight
-// } from 'react-icons/md';
+import {
+  BrowserView,
+  MobileView
+} from "react-device-detect";
 
 const cx = classNames.bind(styles);
 

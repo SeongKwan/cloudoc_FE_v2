@@ -104,7 +104,7 @@ class HeaderEditor extends Component {
         return (
             <header className={cx('HeaderEditor')}>
                 <BrowserView>
-                    <div className={cx('tool-bar')}>
+                    <div className={cx('tool-bar', 'desktop')}>
                         <div className={cx('btn-tool', 'back')} onClick={() => {
                             if (isEditing) {
                                 if (difference) {
