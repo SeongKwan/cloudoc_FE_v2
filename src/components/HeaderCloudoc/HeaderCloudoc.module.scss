@@ -159,7 +159,7 @@
             .content-item {
                 display: flex;
                 align-items: center;
-                margin: auto;
+                justify-content: center;
                 cursor: pointer;
                 transition: color 0.3s ease;
                 &:hover {
