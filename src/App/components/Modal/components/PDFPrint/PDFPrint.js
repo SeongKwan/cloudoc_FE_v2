@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './PDFPrint.module.scss';
 import classNames from 'classnames/bind';
 import { inject, observer } from 'mobx-react';
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import PrintPage from '../../../../../pages/PrintPage';
 import { getLocaleDateWithYMS } from '../../../../../utils/momentHelper';
 

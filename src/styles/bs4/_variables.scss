@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700|Raleway:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,700&display=swap&subset=korean');
+
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -278,11 +279,11 @@ $embed-responsive-aspect-ratios: join(
 // stylelint-disable value-keyword-case
 
 
-$font-family-sans-serif:      NotoSansKR !default;
+$font-family-sans-serif:      NotoSansKR, "Noto Sans KR", !default;
 // $font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-$font-family-monospace:       NotoSansKR !default;
+$font-family-monospace:       NotoSansKR, "Noto Sans KR", !default;
 // $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$font-family-base:            NotoSansKR !default;
+$font-family-base:            NotoSansKR, "Noto Sans KR", !default;
 // $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 

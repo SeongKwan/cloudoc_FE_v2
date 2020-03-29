@@ -1,27 +1,29 @@
 @import './resetCSS';
 @import './loader';
 @import './animate';
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,700&display=swap&subset=korean');
 
 @font-face {
     font-family: 'NotoSansKR';
     font-weight: 100;
-    src: url('./font/NotoSansCJKkr-Thin.ttf') format('truetype');
+    src: url('./font/NotoSansCJKkr-Thin.eot'); src:local(※), url('./font/NotoSansCJKkr-Thin.woff') format(‘woff’), url('./font/NotoSansCJKkr-Thin.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
     font-weight: 400;
-    src: url('./font/NotoSansCJKkr-Regular.ttf') format('truetype');
+    src: url('./font/NotoSansCJKkr-Regular.eot'); src:local(※), url('./font/NotoSansCJKkr-Regular.woff') format(‘woff’), url('./font/NotoSansCJKkr-Regular.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
     font-weight: 700;
-    src: url('./font/NotoSansCJKkr-Bold.ttf') format('truetype');
+    src: url('./font/NotoSansCJKkr-Bold.eot'); src:local(※), url('./font/NotoSansCJKkr-Bold.woff') format(‘woff’), url('./font/NotoSansCJKkr-Bold.ttf') format('truetype');
 }
 @font-face {
     font-family: 'NotoSansKR';
     font-weight: 900;
-    src: url('./font/NotoSansCJKkr-Black.ttf') format('truetype');
+    src: url('./font/NotoSansCJKkr-Black.eot'); src:local(※), url('./font/NotoSansCJKkr-Black.woff') format(‘woff’), url('./font/NotoSansCJKkr-Black.ttf') format('truetype');
 }
+
 
 *,
 *::after,
@@ -42,7 +44,7 @@
 
 html {
     font-size: 16px;
-    font-family: NotoSansKR, sans-serif !important;
+    font-family: NotoSansKR, 'Noto Sans KR', sans-serif !important;
 
     @include media('xl') {
         // font-size: 15px;
