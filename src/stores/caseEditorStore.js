@@ -17,11 +17,12 @@ class CaseCreateStore {
 
     @action loadReferenceByLink(referenceId) {
         this.isLoading = true;
-        agent.loadReferenceByLink(referenceId)
+        return agent.loadReferenceByLink(referenceId)
             .then(action((response) => {
                 this.currentReference = response.data;
                 this.isLoading = false;
                 this.setPageType('reference');
+                return response.data;
             }))
             .catch(action((error) => {
                 this.isLoading = false;
