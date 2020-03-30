@@ -47,7 +47,6 @@ class Drug extends Component {
     _handleClickListItem = (name) => {
         this.setState({keyword: name });
         this._focusListItem();
-        // this.props.drugListForInput.setSelectedIndex(-1);
     }
     _handleChange = (e) => {
         const { value, name: type } = e.target;
@@ -107,7 +106,6 @@ class Drug extends Component {
             if (editableData.length < 2) {
                 return false;
             } else {
-                // e.stopPropagation();
                 const selectedIndex = i;
                 
                 this.props.treatment.deleteDrug(selectedIndex);
@@ -174,14 +172,12 @@ class Drug extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, editableDataForTreatment, staticData, staticDataForTreatment } = this.props.treatment;
-        // const { length } = editableData;
         const { drugs } = this.props.drugListItem;
         const {
             drugName,
             guide,
             caution,
-            description,
-            // lifestyle
+            description
         } = editableDataForTreatment;
 
         return (

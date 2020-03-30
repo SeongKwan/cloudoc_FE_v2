@@ -1,7 +1,6 @@
 .Lab {
     padding: 2rem;
     position: relative;
-    // user-select: none;
 
     button,
     .button-paste {
@@ -35,6 +34,7 @@
             outline: 0;
         }
     }
+
     .btn-add-container {
         padding-left: 0.5em;
     }
@@ -67,12 +67,13 @@
         user-select: default !important;
         margin-left: 1rem;
     }
-    
+
 
     .add-manual {
         margin-left: 0.5rem;
         margin-right: auto;
         background-color: $bc-03;
+
         &.open {
             background-color: $bc-17;
         }
@@ -133,9 +134,11 @@
                 height: 18px;
                 line-height: 18px;
                 margin: 0.3rem 0;
+
                 @include media('sm') {
                     width: 25%;
                 }
+
                 label {
                     margin-bottom: 0;
                     display: flex;
@@ -149,20 +152,23 @@
                     align-items: center;
                     border-radius: $radius-low;
                 }
+
                 input {
                     position: absolute;
                     opacity: 0;
                     cursor: pointer;
                 }
+
                 span {
-                    // margin-left: 0.4rem;
                     position: absolute;
                     top: 0;
                     left: 0;
                     height: 18px;
                     width: 18px;
-                    background-color: rgba($bc-19, 0.17);;
+                    background-color: rgba($bc-19, 0.17);
+                    ;
                     border-radius: $radius-low;
+
                     &::after {
                         content: "";
                         position: absolute;
@@ -178,9 +184,11 @@
                         transform: rotate(45deg);
                     }
                 }
+
                 input:checked {
-                    & ~ span {
+                    &~span {
                         background-color: $bc-01;
+
                         &::after {
                             display: block;
                         }
@@ -195,22 +203,28 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+
         span {
             display: inline-block;
         }
-        
+
         svg {
             margin-left: 0.3rem;
         }
+
         button {
-            &.name, &.value {
+
+            &.name,
+            &.value {
                 background-color: $bc-12;
                 color: $bc-18;
             }
+
             &.deactive {
                 background-color: $oc-gray-2;
             }
         }
+
         button:first-child {
             margin-right: 0.5em;
         }
@@ -221,7 +235,7 @@
 
         .category-title {
             letter-spacing: 1.3px;
-            
+
             span {
                 color: $bc-01;
                 font-size: 1.2rem;
@@ -248,16 +262,20 @@
                 top: 45%;
                 left: -25px;
                 transform: translateY(-50%);
+
                 &:hover {
                     color: $bc-17;
                 }
+
                 svg {
                     cursor: pointer;
                 }
+
                 &.last {
                     &:hover {
                         color: $gray-1;
                     }
+
                     svg {
                         cursor: not-allowed;
                     }
@@ -266,12 +284,7 @@
 
             .lab-name-unit {
                 position: relative;
-                // width: 400px;
                 flex: 1;
-
-                @include media('lg') {
-                    // width: 190px;
-                }
 
                 .unit {
                     position: absolute;
@@ -294,12 +307,15 @@
                 font-size: 1.6rem;
                 display: flex;
                 cursor: pointer;
+
                 &.high {
                     color: $bc-09;
                 }
+
                 &.low {
                     color: $bc-01;
                 }
+
                 @include media('lg') {
                     right: 10px;
                 }
@@ -309,6 +325,7 @@
                 flex: 1;
                 max-width: 240px;
                 margin-right: 3rem;
+
                 @include media('lg') {
                     margin-right: 2rem;
                 }
@@ -375,7 +392,7 @@
         }
     }
 
-    
+
 
     .results-wrapper {
         position: absolute;
@@ -423,7 +440,7 @@
                     }
                 }
 
-                
+
             }
         }
     }
@@ -432,16 +449,19 @@
         display: flex;
         max-width: 500px;
         padding-left: 0.5em;
+
         @include media('lg') {
             max-width: 100%;
         }
+
         .age-gender {
             width: 85%;
         }
+
         .value-wrapper {
             width: 15%;
         }
-        
+
     }
 
     .form-wrapper {
@@ -455,31 +475,35 @@
 
         &.age-gender {
             flex-direction: row;
-      
-            .age-wrapper, .gender-wrapper {
-              padding-left: 0.5rem;
+
+            .age-wrapper,
+            .gender-wrapper {
+                padding-left: 0.5rem;
             }
+
             .category,
             .name {
-              display: flex;
-              flex-direction: column;
-              padding-bottom: calc(0.3rem);
-              border-bottom: 1px solid $gray-1;
-              &.checked {
-                border-color: $bc-02;
-              }
+                display: flex;
+                flex-direction: column;
+                padding-bottom: calc(0.3rem);
+                border-bottom: 1px solid $gray-1;
+
+                &.checked {
+                    border-color: $bc-02;
+                }
             }
-      
+
             .category {
                 min-width: 100px;
-            flex: 1;
-              margin-right: 1rem;
+                flex: 1;
+                margin-right: 1rem;
             }
-      
+
             .name {
-            flex: 4;
+                flex: 4;
             }
-          }
+        }
+
         &.input {
 
             label,
@@ -561,7 +585,6 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-size: 11px;
-            // font-weight: 100;
             color: $gray-3;
 
             &.label-no-input {
@@ -596,21 +619,14 @@
     .select-wrapper {
         position: relative;
         display: flex;
-        // width: 90px;
-        // height: 2em;
         background: $white;
         overflow: hidden;
         border-radius: .25em;
-
-        @include media('lg') {
-            // width: 80px;
-        }
     }
 
     select {
         flex: 1;
         padding: 0 .5em;
-        // color: #fff;
         cursor: pointer;
     }
 

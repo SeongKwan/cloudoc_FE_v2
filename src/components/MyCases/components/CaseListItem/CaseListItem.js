@@ -15,9 +15,7 @@ class CaseListItem extends Component {
         const caseId = Case._id;
         const {
             gender,
-            age,
-            // chart_id,
-            // memo
+            age
         } = Case.patient;
         
         let latestRecordIndex;
@@ -89,7 +87,6 @@ class CaseListItem extends Component {
 }
 
 const _renderSymptom = (symptoms = []) => {
-    // const { length } = symptoms;
 
     return symptoms.map((symptom, i) => {
         let rest = symptoms.length - 3;

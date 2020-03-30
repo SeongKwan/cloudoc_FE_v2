@@ -101,17 +101,11 @@ class Diagnosis extends Component {
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _deleteDiagnosis = (i) => {
-        // const { editableData } = this.props.diagnosis;
         if (i !== undefined
         ) {
             const selectedIndex = i;
             
             this.props.diagnosis.deleteDiagnosis(selectedIndex);
-            // if (editableData.length < 2) {
-            //     return false;
-            // } else {
-            //     // e.stopPropagation();
-            // }
         }
     }
 
@@ -152,7 +146,6 @@ class Diagnosis extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, staticData } = this.props.diagnosis;
-        // const { length } = editableData;
         const { diagnosises } = this.props.diagnosisListItem;
         return (
             <div id="case-editor-diagnosis" className={cx('Diagnosis', {view: !isEditing})}>

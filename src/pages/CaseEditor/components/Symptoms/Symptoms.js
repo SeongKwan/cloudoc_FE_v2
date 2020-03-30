@@ -144,7 +144,6 @@ class Symptoms extends Component {
         const { isEditing } = this.props.Case;
         const { type } = this.props;
         const { editableData, staticData } = this.props.symptom;
-        // const { length } = editableData;
         const { symptoms } = this.props.symptomListItem;
 
         return (

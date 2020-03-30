@@ -82,8 +82,6 @@ class App extends Component {
     pastedData = clipboardData.getData('Text');
     
     // Do whatever with pasteddata
-    // alert(pastedData);
-    // console.log(pastedData)
     this.convertTextToObject(pastedData)
 }
 
@@ -125,7 +123,6 @@ convertTextToObject = (pastedData) => {
 
     this.props.lab.setEditableData(parsedData.filter(x => x.value !== "-"));
     this.props.lab.toggleReadyForPaste();
-    // console.log(parsedData);
 }
 
 checkerPaste = (firstData) => {

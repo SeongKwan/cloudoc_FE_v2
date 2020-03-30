@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './MyCases.module.scss';
 import classNames from 'classnames/bind';
-// import { Helmet } from "react-helmet";
 import Loader from '../../components/Loader/Loader';
 import { FiPlus } from "../../lib/react-icons/fi";
 import SearchBar from './components/SearchBar/SearchBar';
@@ -56,9 +55,6 @@ class MyCases extends Component {
             ? searchedInfiniteStore
             : infiniteStore;
         let { length } = database || [];
-
-        // console.log(JSON.parse(JSON.stringify(database)))
-        // console.log(lastPage, rest, loadMore)
 
         return (
             <div 

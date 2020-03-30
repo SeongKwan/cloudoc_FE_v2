@@ -7,12 +7,7 @@ import {
 } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import CaseLibrary from '../../pages/CaseLibrary';
-// import PrintPage from '../../pages/PrintPage';
 import Page404 from '../../pages/Page404';
-import {
-    // BrowserView,
-    // MobileView
-} from "react-device-detect";
 import CheckAuth from './CheckAuth';
 import CaseQnA from '../../pages/CaseQnA/CaseQnA';
 import Lecture from '../../pages/Lecture/Lecture';
@@ -36,8 +31,7 @@ class Routes extends Component {
                 } else {
                     console.log('expired')
                 }
-            }, 30000);
-            // }, 1800000);
+            }, 1800000);
         }
     }
 
@@ -56,16 +50,6 @@ class Routes extends Component {
         
         return (
             <>
-                {/* <MobileView>
-                    <Switch>
-                    <Route path="/404" component={Page404} />
-                    <Route path="/cloudoc/clinicaldb" component={ClinicalDBMobile} />
-                    <Route path={`/cloudoc/case/detail/:id/:index/:dateIndex`} component={CaseDetailMobile} />
-                    <Route path={`/cloudoc/case/create`} component={CaseCreateMobile} />
-                    <Route path="/cloudoc" exact component={MainMobile} />
-                    <Route component={Page404} />
-                    </Switch>
-                </MobileView> */}
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/case" />
@@ -86,18 +70,12 @@ class Routes extends Component {
                         <Lecture />
                     </Route>
                     <Route path="/report/:caseId">
-                    {/* {
-                        this.props.Case.currentCase !== undefined && this.props.Case.currentCase !== null &&
-                        <PrintPage user={this.props.user.currentUser} currentUser={this.props.Case.currentCase}/>
-                    } */}
                     </Route>
                     <Route>
                         <Page404 />
                     </Route>
                     
                 </Switch>
-                {/* <BrowserView>
-                </BrowserView> */}
             </>
         );
     }

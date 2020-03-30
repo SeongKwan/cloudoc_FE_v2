@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-// import styles from './PrintPage.module.scss';
-// import classNames from 'classnames/bind';
-// import { Helmet } from "react-helmet";
 import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
-// import {testCase} from '../../constant/testCase';
-// import { inject, observer } from 'mobx-react';
 import NanumSquareL from '../../styles/font/NanumSquareOTF_acL.ttf';
 import NanumSquareR from '../../styles/font/NanumSquareOTF_acR.ttf';
 import NanumSquareB from '../../styles/font/NanumSquareOTF_acB.ttf';
@@ -25,7 +20,6 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     display: 'flex',
     flexDirection: 'row',
-    // justifyContent: 'center',
     alignItems: 'center'
   },
   headerTitle: {
@@ -60,21 +54,13 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     marginTop: 8
-    // padding: 16,
   },
   title: {
     fontSize: 24,
-    // textAlign: 'center',
     fontFamily: 'NanumSquare',
     fontWeight: 800,
     letterSpacing: 1.5,
     marginBottom: 28,
-    // backgroundColor: 'red',
-    // width: '50%'
-    
-    // display: 'flex',
-    // flexWrap: 'wrap',
-    // justifyContent: 'center'
   },
   caseInfo: {
     marginBottom: 16
@@ -165,7 +151,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: -14,
     top: -4,
-    // padding: '0 4',
     width: 12,
     height: 12,
     borderRadius: 2,
@@ -177,8 +162,6 @@ const styles = StyleSheet.create({
     fontWeight: 800,
     backgroundColor: 'black',
     color: 'white'
-    // border: '1pt solid black'
-    // border: '1pt solid #d8d8d8',
   },
   minRef: {
     fontSize: 9,
@@ -212,13 +195,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    // heigth: '100%',
     top: 0.75,
     left: '100%',
     borderRadius: 2,
     transform: 'translateX(-15)',
-    backgroundColor: '#707070',
-    // border: '1pt solid black'
+    backgroundColor: '#707070'
   },
   pageNumber: {
     position: 'absolute',
@@ -277,7 +258,6 @@ class PrintPage extends Component {
           treatment,
           teaching
         } = record[0];
-    //     const { currentUser } = this.props.user;
     
         let dividedLabByCategory = [];
     

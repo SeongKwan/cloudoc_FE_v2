@@ -8,15 +8,12 @@
     &.sidebar {
         background-color: $bc-01;
         padding: 0.5rem;
-        // color: rgba($white, 0.5);
         overflow: hidden;
-        // color: $bc-18;
         &:not(:last-child) {
             margin-bottom: 0.5rem;
         }
         h5 {
             font-size: 1rem;
-            // font-weight: 400 !important;
             margin-bottom: 0rem;
             padding: 0.3rem 0;
             padding-left: 0.3rem;
@@ -56,7 +53,6 @@
 .CollapsibleBox2 {
     padding: 1rem 2rem;
     color: rgba($bc-18, 0.5);
-    // position: relative;
     &.active {
         .header {
             background-color: $bc-01;
@@ -79,7 +75,6 @@
         h5 {
 
             font-size: 1rem;
-            // font-weight: 400 !important;
             margin-bottom: 0rem;
             padding: 0.5rem;
         }
@@ -117,14 +112,12 @@
             right: 0.5rem;
             transform: translateY(-50%);
             font-size: 1.7rem;
-            // padding: 0.3rem;
             cursor: pointer;
         }
     }
     .content {
 
         background-color: $bc-02;
-        // padding: 0.5rem;
         border-radius: $radius-low;
     }
 
@@ -132,12 +125,6 @@
     /*
     ** Tooltip CSS
     */
-
-    /*== start of code for tooltips ==*/
-    .tool {
-        // cursor: help;
-        // position: relative;
-    }
 
 
     /*== common styles for both parts of tool tip ==*/
@@ -174,7 +161,6 @@
         left: 5%;
         top: 80%;
         content: "";
-        // margin-left: -0.5em;
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26), opacity .35s .2s;
         transform: scale(.6) translateY(-50%);
     }
@@ -197,13 +183,10 @@
         padding: 1em;
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26) .2s;
         transform: scale(.6) translateY(-50%);
-        // width: 180px;
     }
 
     .tool:hover::after,
     .tool:focus::after {
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26);
     }
-
-    
 }

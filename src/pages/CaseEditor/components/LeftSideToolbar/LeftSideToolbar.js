@@ -6,7 +6,6 @@ import classNames from 'classnames/bind';
 import './LeftSideToolbar.css';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
-// import Info from '../../../../styles/img/info.png';
 import { 
     FaUserCheck,
     FaNotesMedical,
@@ -47,7 +46,6 @@ class LeftSideToolbar extends Component {
             let scrollBox = $('#case-editor-center-container-scroll-box');
             let objDiv = $('#case-editor-diagnosis');
             let objDivDrug = $('#case-editor-drug');
-            // let THIS = this;
             let offset1 = objDiv.position();
             
             let adj1 = offset1.top;
@@ -61,8 +59,6 @@ class LeftSideToolbar extends Component {
                 return false;
             }
             this.setState({diagnosisScrollTop: scrollBox.scrollTop() + adj1, drugScrollTop: scrollBox.scrollTop() + adj2})
-            // setTimeout(() => {
-            // }, 100)
             scrollBox.on('scroll', this._setScrollTop);
         }
         document.addEventListener('mousedown', this.handleClickOutside);
@@ -125,10 +121,6 @@ class LeftSideToolbar extends Component {
         this.setState({openList: dataset.type});
     }
 
-    // _handleClick = (e) => {
-    //     console.log(e.target)
-    // }
-    
     // 진단, 처방 리스트
     _handleClickOnListitem = (e, id) => {
         e.preventDefault();
@@ -268,9 +260,6 @@ class LeftSideToolbar extends Component {
         if (type === "drug" && !!data) {
             this.props.treatment.handleChangeTretment('drugName', name);
             this.props.treatment.autoSetDrug({_id: data.id});
-            // let objDiv = $('#case-editor-center-container-scroll-box');
-            // let h = objDiv.get(0).scrollHeight;
-            // objDiv.animate({scrollTop: h});
             scrollBox.animate({scrollTop: this.state.drugScrollTop});
             this.props.analyzeDrug.clearOpen();
             this.setState({openList: ''});

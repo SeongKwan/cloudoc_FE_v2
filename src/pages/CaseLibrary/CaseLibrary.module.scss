@@ -6,7 +6,6 @@
         .flexible-container {
             padding: 2rem;
             width: 100%;
-            // min-width: 1200px;
             max-width: 1360px;
             display: flex;
             flex-direction: column;
@@ -32,7 +31,6 @@
                 position: relative;
                 padding: 0.2rem 0.75rem;
                 font-size: 1.2rem;
-                // font-weight: 100;
                 background-color: transparent;
                 border: none;
                 transition: all 0.3s ease;
@@ -46,16 +44,6 @@
                     color: $bc-01;
                     
                     border-radius: $radius-high;
-                    // &::after {
-                    //     content: '';
-                    //     position: absolute;
-                    //     bottom: 0;
-                    //     left: 50%;
-                    //     width: 90%;
-                    //     height: 1px;
-                    //     background-color: $bc-01;
-                    //     transform: translateX(-50%);
-                    // }
                     &:hover {
                         color: $bc-01;
                     }

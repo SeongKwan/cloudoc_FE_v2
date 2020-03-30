@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Helmet } from "react-helmet";
-// import Loader from '../../components/Loader/Loader';
 import LayoutCloudoc from '../../components/LayoutCloudoc';
 import styles from './CaseLibrary.module.scss';
 import classNames from 'classnames/bind';
@@ -33,10 +32,7 @@ class CaseLibrary extends Component {
             }
         })
     }
-    componentWillUnmount() {
-        // clearInterval(timer);
-    }
-
+    
     checkToken = () => {
         const THIS = this;
         return new Promise((resolve, reject) => {

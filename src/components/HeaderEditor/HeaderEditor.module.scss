@@ -10,7 +10,6 @@
     background-color: $bc-01;
     z-index: 999999;
     color: $bc-14;
-    // overflow-x: auto;
     @include media('lg') {
         height: 4.5rem;
     }
@@ -86,19 +85,7 @@
                 padding-top: 1rem;
                 padding-bottom: 1rem;
                 margin: 0;
-                // max-height: 278px;
                 background-color: white;
-
-                // &::before {
-                //     width: 98%;
-                //     height: 1px;
-                //     background-color: $gray-1;
-                //     content: '';
-                //     position: absolute;
-                //     top: 0;
-                //     left: 50%;
-                //     transform: translateX(-50%);
-                // }
 
                 .date {
                     padding: 0.5rem;
@@ -179,17 +166,12 @@
             margin-top: 0.3rem;
             font-size: 0.8rem;
         }
-
-        &.trash {
-            
-        }
     }
 
     .drop-menu {
         position: absolute;
         top: 100%;
         left: 0;
-        background-color: indianred;
     }
 
     a.report {

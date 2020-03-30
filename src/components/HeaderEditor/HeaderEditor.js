@@ -4,25 +4,20 @@ import styles from './HeaderEditor.module.scss';
 import classNames from 'classnames/bind';
 import { 
     FiArrowLeft, 
-    // CsQuestion, 
     FiMessageCircle,
-    // FiSettings,
     FiTrash,
     FiPlus,
     FiSave,
-    // FiFileText,
     FiHelpCircle,
     FiEdit,
     FiPrinter,
     FiMenu
-    // FiArrowDown
 } from "../../lib/react-icons/fi";
 import {
     IoMdArrowDropdown
 } from 'react-icons/io';
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
-// import Loader from '../Loader';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 import {
     BrowserView,

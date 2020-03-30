@@ -21,7 +21,6 @@
 
     .wrapper {
         margin-left: 1rem;
-        // padding: 0.5rem;
     }
 
     .search-container {
@@ -43,7 +42,6 @@
         &.focus {
             border-color: $bc-02;
             border-bottom: 1px solid transparent;
-            ;
             border-radius: 2px 2px 0 0;
         }
 
@@ -257,7 +255,6 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 font-size: 11px;
-                // font-weight: 100;
                 color: $gray-3;
 
                 &.label-no-input {
@@ -282,7 +279,6 @@
 
                 &::placeholder {
                     color: $gray-3;
-                    // font-weight: 100;
                 }
                 &.static {
                     outline: 0;

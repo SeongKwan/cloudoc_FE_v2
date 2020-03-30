@@ -25,7 +25,6 @@ class Teaching extends Component {
         const { editableData } = this.props.teaching;
         const { length } = editableData;
         this.props.teaching.addTeaching(null, null, '');
-        console.log(length)
         if (length <= 0) {
             return setTimeout(() => {$(`#teaching-description-${0}`).focus();}, 100)
         }

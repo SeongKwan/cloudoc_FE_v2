@@ -1,7 +1,4 @@
 .LeftSideToolbar {
-    // position: absolute;
-    
-    
 
     .tool-box {
         position: absolute;
@@ -13,9 +10,10 @@
         background-color: $bc-01;
         color: $white;
 
-        
+
         top: 6rem;
         z-index: 999;
+
         @include media('lg') {
             top: 5.5rem;
         }
@@ -39,14 +37,17 @@
         transition: all 0.2s ease;
         background-color: transparent;
         cursor: pointer;
+
         @include media('sm') {
             display: none;
         }
+
         &:hover {
             font-size: 7rem;
             background-color: rgba($bc-01, 0.1);
             text-decoration: none;
         }
+
         .date {
             font-size: 1rem;
             color: $bc-02;
@@ -65,12 +66,14 @@
         cursor: pointer;
         font-size: 2.5rem;
         user-select: none;
+
         @include media('lg') {
             font-size: 2rem;
             width: 67px;
             height: 67px;
             padding: 0.7rem;
         }
+
         &.isLoading {
             font-size: 1rem;
         }
@@ -78,32 +81,35 @@
         &.open {
             background-color: $bc-18;
         }
-        // transition: all 0.3s ease;
-        // border-radius: $radius-low;
+
         .label {
             margin-top: 0.15rem;
             font-size: 0.8rem;
-            // font-weight: 100;
+
             @include media('lg') {
                 font-size: 0.7rem;
             }
         }
-        
+
         &:hover {
             background-color: $bc-18;
         }
+
         &.symptom:hover {
             border-radius: 0 $radius-low 0 0;
         }
+
         &.drug:hover {
             border-radius: 0;
         }
+
         &.teaching:hover {
             border-radius: 0 0 $radius-low 0;
         }
 
         &.disabled {
             color: rgba(white, 0.15);
+
             &:hover {
                 background-color: $bc-01;
             }
@@ -122,6 +128,7 @@
 
     .content-container {
         left: 101px;
+
         @include media('lg') {
             left: 68px;
         }
@@ -131,10 +138,11 @@
         left: 472px;
         visibility: hidden;
         z-index: -10;
-        
+
         @include media('lg') {
             left: 359px;
         }
+
         &.open {
             visibility: visible;
             z-index: 9999999;
@@ -146,15 +154,12 @@
         position: absolute;
         top: 0%;
         border-radius: $radius-low;
-        // width: 200px;
-        // height: 100px;
-        // background-color: greenyellow;
+
         ul {
             margin-bottom: 0;
         }
 
         .scroll-box {
-            // width: 100%;
             max-height: 700px;
             overflow-y: scroll;
 
@@ -166,45 +171,32 @@
         .results {
             position: absolute;
             top: 0px;
-            // left: calc(100% + 1px);
-            // padding: 1rem;
-
             border-radius: $radius-low;
             background-color: rgba($bc-02, 1);
-            // opacity: 0.9;
-
-            &.drug {
-                // top: -67px;
-
-            }
 
             &.teaching {
-
-                // top: -134px;
                 ul.content {
                     li:first-child {
                         margin-top: 0 !important;
                     }
+
                     button {
                         white-space: nowrap;
                     }
                 }
             }
 
-            &.openDetail {
-                // border-right: 1px solid $brand-2;
-            }
-
             li {
                 font-size: 1rem;
                 width: 370px;
+
                 @include media('lg') {
                     width: 290px;
                 }
 
                 display: flex;
                 flex-direction: column;
-                
+
                 cursor: default;
 
                 .name-btn {
@@ -213,44 +205,44 @@
                     padding: 1rem;
                 }
 
-                .teaching-name, .condition-name {
+                .teaching-name,
+                .condition-name {
                     width: 190px;
+
                     @include media('lg') {
                         width: 144px;
                     }
+
                     div {
                         word-break: break-all;
                         cursor: pointer;
-                        // letter-spacing: 2px;
+                        
                         font-weight: 700;
-    
+
                         &:hover {
                             color: $bc-18;
                             text-decoration: underline;
                         }
                     }
                 }
-                
+
                 .name {
                     margin-right: auto;
-                    
+
                     div {
                         word-break: break-all;
-                        // letter-spacing: 2px;
+                        
                         font-weight: 700;
                     }
                 }
 
                 button {
-                    // width: 43px;
-                    // height: 25px;
                     background-color: $bc-18;
                     padding: 0.2rem 0.5rem;
                     border: 0;
                     border-radius: $radius-low;
                     color: $white;
                     font-size: 0.8rem;
-                    // font-weight: 100;
                     letter-spacing: 1px;
                     cursor: pointer;
 
@@ -260,22 +252,7 @@
                     }
                 }
 
-                // img {
-                //     width: 25px;
-                //     cursor: pointer;
-                //     color: $white;
-                    
-                //     @include media('lg') {
-                //         // width: 20px;
-                //     }
-                // }
-                .btn-condition {
-                    // margin-right: 0.5rem;
-                    // display: flex;
-                    // justify-content: center;
-                    // align-items: center;
-                }
-                .btn-condition > button {
+                .btn-condition>button {
                     background-color: $white;
                     color: $bc-18;
                 }
@@ -296,6 +273,7 @@
                         &.symptom {
                             color: $bc-01;
                         }
+
                         &.lab {
                             color: $bc-09;
                         }
@@ -303,12 +281,13 @@
 
                     &.drug {
                         padding: 0;
+
                         .row {
 
                             ul.content {
                                 padding: 0 !important;
 
-                                
+
                                 li {
                                     font-size: 1rem;
                                     display: flex;
@@ -319,9 +298,11 @@
                                         width: 180px;
                                         margin-right: auto;
                                         cursor: pointer;
+
                                         @include media('lg') {
                                             width: 140px;
                                         }
+
                                         &:hover {
                                             color: $bc-18;
                                             text-decoration: underline;
@@ -332,11 +313,14 @@
                                         display: flex;
                                         padding: 1rem;
                                     }
+
                                     .more.deep {
                                         background-color: rgba($bc-01, 0.1);
+
                                         li {
                                             position: relative;
                                         }
+
                                         .evidence {
                                             font-size: 0.9rem;
                                         }
@@ -347,11 +331,12 @@
                                             display: flex;
                                             margin-top: 0.5rem;
                                             flex-wrap: wrap;
+
                                             div {
                                                 margin-bottom: 0.5rem;
                                                 margin-right: 4px;
                                                 font-size: 0.7rem;
-                                                
+
                                                 div.drug {
                                                     padding: 0.2rem;
                                                     color: $white;
@@ -362,6 +347,7 @@
                                                     &:not(:last-child) {
                                                         margin-right: 0.2rem;
                                                     }
+
                                                     &:hover {
                                                         border-color: $bc-18;
                                                         color: $bc-18;
@@ -372,6 +358,7 @@
                                     }
 
                                 }
+
                                 li:first-child {
                                     margin-top: 0 !important;
                                 }
@@ -379,12 +366,15 @@
                         }
                     }
 
-                    a.evidence, div.description {
+                    a.evidence,
+                    div.description {
                         cursor: pointer;
+
                         &:hover {
                             text-decoration: underline;
                         }
                     }
+
                     div.description {
                         padding-right: 0.5rem;
                     }
@@ -415,7 +405,6 @@
                                 width: 100%;
                                 display: flex;
                                 flex-direction: row;
-                                // font-weight: 100;
                                 padding: 0.35rem 0;
                                 font-size: 0.9rem;
                                 letter-spacing: 1px;
@@ -427,8 +416,10 @@
                                 div:first-child {
                                     margin-right: 0.5rem;
                                 }
+
                                 .description-wrapper {
                                     width: 100%;
+
                                     &:hover {
                                         text-decoration: underline;
                                     }
@@ -444,8 +435,6 @@
             position: absolute;
             top: 0px;
             border-radius: $radius-low;
-
-            // left: calc(100% + 1px);
             background-color: rgba($bc-03, 1);
             color: $white;
 
@@ -458,6 +447,7 @@
                 padding: 1rem 0;
                 padding-top: 3rem;
                 width: 750px;
+
                 @include media('lg') {
                     width: 630px;
                 }
@@ -480,6 +470,7 @@
             left: 0px;
             cursor: pointer;
             display: inline-block;
+
             &:hover {
                 opacity: 0.6;
             }
@@ -612,12 +603,11 @@
                     font-weight: 300;
                     padding-left: 1rem;
                     font-size: 0.925em;
-                    // letter-spacing: 1px;
                 }
 
                 .detail-item,
                 .teach-item {
-                    display: flex; 
+                    display: flex;
                     color: $bc-18;
                     font-weight: 400;
 
@@ -631,7 +621,6 @@
                     }
 
                     button {
-                        // width: 20%;
                         padding: 0.2rem 1rem;
                     }
                 }
@@ -850,7 +839,6 @@
 
     /*== start of code for tooltips ==*/
     .tool {
-        // cursor: help;
         position: relative;
     }
 
@@ -888,7 +876,6 @@
         border-color: transparent $bc-18 transparent transparent;
         left: 100%;
         content: "";
-        // margin-left: -0.5em;
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26), opacity .35s .2s;
         transform: scale(.6) translateX(-90%);
     }
@@ -918,5 +905,5 @@
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26);
     }
 
-    
+
 }

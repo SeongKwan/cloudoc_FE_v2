@@ -113,8 +113,6 @@ class Lab extends Component {
         let labs = (type === "create" || isEditing) ? editableData : staticData;
         
         const categories = this._extractCategory();
-
-        // console.log(JSON.parse(JSON.stringify(categories)))
         
         let dividedLabByCategory = [];
         let categorizedLab = [];
@@ -128,18 +126,6 @@ class Lab extends Component {
         });
 
         return dividedLabByCategory.map((arr, index) => {
-            // let sortedArr = _.sortBy(arr, 'name');
-            // let sortedArr = _.sortBy(arr, 'name');
-            // //Ascending Order:
-            // _.sortBy([2, 3, 1], function(num){
-                //     return num;
-                // }); // [1, 2, 3]
-                
-                
-                // //Descending Order:
-                // _.sortBy([2, 3, 1], function(num){
-                    //     return num * -1;
-                    // }); // [3, 2, 1]
             let sortedArr = [];
                     
             if (sortType.name !== '') {
@@ -337,24 +323,6 @@ class Lab extends Component {
                 </div>
                 { (type === "create" || isEditing) &&
                 <div className={cx('category-container')}>
-                    {/* <div className={cx('add-delete-button')}>
-                        <Button variant='info' size='sm' onClick={() => {
-                            const { gender } = this.props.patientInfoStore.editableData;
-                            this.props.bloodTestStore.selectAllLabCategory();
-                            this.props.bloodTestStore.filteredEditableData(gender);
-                        }}>
-                            모든 항목 추가
-                        </Button>
-                        <Button 
-                            variant='info' 
-                            size='sm' 
-                            onClick={() => {
-                                this.props.bloodTestStore.clearForSelector()}
-                            }
-                        >
-                            모든 내용 삭제
-                        </Button>
-                    </div> */}
                     <ul className={cx('select-list')}>
                     {   (selectedLabCategory !== null || selectedLabCategory !== undefined) &&
                         labCategories.map((category, i) => {

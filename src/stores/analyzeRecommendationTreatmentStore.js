@@ -32,7 +32,6 @@ class AnalyzeRecommendationTreatmentStore {
                 }))
             }))
         }
-        // console.log(JSON.parse(JSON.stringify(this.openMores)))
     }
 
     @action setEditableData(editableData) {
