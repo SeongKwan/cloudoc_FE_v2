@@ -118,11 +118,13 @@ class HeaderEditor extends Component {
                                     this.props.history.push(`/case`)
                                     this.props.Case.clearIsEditing();
                                 }
-                            } else {
-                                this.props.history.push(`/case`)
-                                this.props.Case.clearIsEditing();
+                            } else if (!isEditing) {
+                                if (window.confirm('작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?')) {
+                                    this.props.history.push(`/case`);
+                                    this.props.Case.clearIsEditing();
+                                }
                             }
-                            }}
+                        }}
                         >
                             <FiArrowLeft />
                             <div className={cx('label')}>뒤로</div>
@@ -352,6 +354,7 @@ class HeaderEditor extends Component {
                         <div className={cx('tool-bar','mobile')}>
                             <div className={cx('btn-tool', 'back')} onClick={() => {
                                 if (isEditing) {
+                                    console.log('1')
                                     if (difference) {
                                         if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
                                             this.props.history.push(`/case`)
@@ -363,9 +366,11 @@ class HeaderEditor extends Component {
                                         this.props.history.push(`/case`)
                                         this.props.Case.clearIsEditing();
                                     }
-                                } else {
-                                    this.props.history.push(`/case`)
-                                    this.props.Case.clearIsEditing();
+                                } else if (!isEditing) {
+                                    if (window.confirm('작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?')) {
+                                        this.props.history.push(`/case`);
+                                        this.props.Case.clearIsEditing();
+                                    }
                                 }
                                 }}
                             >
