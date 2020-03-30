@@ -143,7 +143,7 @@ class CaseEditor extends Component {
           
             <div className={cx('container', 'left')}>
               <div className={cx('scroll-box')}>
-                <LeftSideToolbar type={type} />
+                {/* <LeftSideToolbar type={type} /> */}
               </div>
             </div>
             <div id="case-editor-center-container" className={cx('container', 'center')}>
@@ -166,7 +166,7 @@ class CaseEditor extends Component {
             </div>
             <div className={cx('container', 'right')}>
               <div className={cx('scroll-box')}>
-                <RightSideList type={type} isEditing={isEditing} />
+                {/* <RightSideList type={type} isEditing={isEditing} /> */}
               </div>
               <div id="scroll-to-top" className={cx('scroll-to-top')} onClick={this.handleClickOnTopScroll}><FiArrowUp /></div>
             </div>

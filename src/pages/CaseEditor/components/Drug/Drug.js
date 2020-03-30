@@ -68,7 +68,6 @@ class Drug extends Component {
         this.setState({ keyword: '', selected: -1});
         this.props.search.clearKeyword();
         this.props.drugListItem.clearSearchKeyword();
-        $(this.input).focus();
     }
     _focusListItem = () => {
         $(this.input).focus();
@@ -291,7 +290,11 @@ class Drug extends Component {
                                     onFocus={this._toggleOnFocus}
                                 />
                             </div>
-                            <div onClick={this._handleClearKeyword} className={cx('btn-clear')}>
+                            <div onClick={() => {
+                                this._handleClearKeyword();
+                                this._focusListItem();
+                            }}
+                            className={cx('btn-clear')}>
                                 {this.state.keyword.length > 0 && <FiX />}
                             </div>
                         </div>

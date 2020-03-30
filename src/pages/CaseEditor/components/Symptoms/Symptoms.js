@@ -57,7 +57,6 @@ class Symptoms extends Component {
         this.setState({ keyword: '', selected: -1});
         this.props.search.clearKeyword();
         this.props.symptomListItem.clearSearchKeyword();
-        $(this.input).focus();
     }
     _focusListItem = () => {
         $(this.input).focus();
@@ -100,7 +99,6 @@ class Symptoms extends Component {
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _deleteSymptom = (i) => {
-        // const { editableData } = this.props.symptom;
         if (i !== undefined) {
             const selectedIndex = i;
             
@@ -256,7 +254,11 @@ class Symptoms extends Component {
                                     onFocus={this._toggleOnFocus}
                                 />
                             </div>
-                            <div onClick={this._handleClearKeyword} className={cx('btn-clear')}>
+                            <div onClick={() => {
+                                this._handleClearKeyword();
+                                this._focusListItem();
+                            }}
+                            className={cx('btn-clear')}>
                                 {this.state.keyword.length > 0 && <FiX />}
                             </div>
                         </div>
