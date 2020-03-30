@@ -170,7 +170,9 @@ class RightSideList extends Component {
                                         return this._handleClickAddRecordButton(); 
                                     }
                                 }
-                                return this._handleClickAddRecordButton(); 
+                                if (window.confirm('오늘날짜로 새 기록을 만드시겠습니까')) {
+                                    return this._handleClickAddRecordButton(); 
+                                }
                             }}
                             >
                                 <TiDocumentAdd />

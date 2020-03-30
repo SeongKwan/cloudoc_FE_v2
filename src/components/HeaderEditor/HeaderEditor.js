@@ -113,11 +113,14 @@ class HeaderEditor extends Component {
                                     this.props.history.push(`/case`)
                                     this.props.Case.clearIsEditing();
                                 }
-                            } else if (!isEditing) {
+                            } else if (!isEditing && type === 'create') {
                                 if (window.confirm('작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?')) {
                                     this.props.history.push(`/case`);
                                     this.props.Case.clearIsEditing();
                                 }
+                            } else {
+                                this.props.history.push(`/case`);
+                                this.props.Case.clearIsEditing();
                             }
                         }}
                         >
