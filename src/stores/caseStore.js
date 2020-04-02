@@ -576,8 +576,6 @@ class CaseStore {
      * @return {object}
      */
     @action updateCase(dateIndex) {
-        console.log('update case')
-        console.log(getLocaleFullDateWithTime(Date.now()))
         this.isLoading = true;
         const date = this.currentCase.created_date;
         const { currentCaseRecordDate } = this;
