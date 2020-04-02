@@ -34,7 +34,6 @@ class CaseListItem extends Component {
                 onClick={(e) => {
                     if (this.props.isLoadingMore) {
                         return e.preventDefault();
-                        
                     } else {
                         
                     }
