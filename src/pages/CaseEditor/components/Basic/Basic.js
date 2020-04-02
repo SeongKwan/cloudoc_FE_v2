@@ -60,7 +60,6 @@ class Basic extends Component {
         const { staticData } = this.props.caseEditorBasic;
         const { type } = this.props;
         const { isEditing, currentCaseDetail } = this.props.Case;
-        console.log(JSON.parse(JSON.stringify(currentCaseDetail)))
         const { updatedDate } = currentCaseDetail;
 
         return (
