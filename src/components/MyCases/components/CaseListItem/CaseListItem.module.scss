@@ -87,6 +87,12 @@
             margin-right: 0.5rem;
             svg {
                 margin-right: 0.5rem;
+                font-size: 1.3rem;
+            }
+            &.updated {
+                svg {
+                    color: $bc-19;
+                }
             }
         }
     }
@@ -133,6 +139,5 @@
         padding-left: 2rem;
         letter-spacing: 1px;
         margin-top: 1px;
-        
     }
 }
