@@ -4,9 +4,9 @@ import classNames from 'classnames/bind';
 import { GoPerson } from "../../../../lib/react-icons/go";
 import { CsSmartCondition, CsSmartDrug } from "../../../../lib/react-icons/fi";
 import { FaNotesMedical } from "../../../../lib/react-icons/fa";
-// import { MdAccessTime, MdUpdate } from "react-icons/md";
+import { MdAccessTime, MdUpdate } from "react-icons/md";
 import { Link } from 'react-router-dom';
-// import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
+import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -28,8 +28,8 @@ class CaseListItem extends Component {
         }
         
         const { symptom, diagnosis, treatment } = Case.record[latestRecordIndex] || [];
-        // const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
-        // const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
+        const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
+        const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
 
         return (
             <Link to={`/case/editor/detail/${caseId}/0`} 
@@ -45,7 +45,7 @@ class CaseListItem extends Component {
                     <div className={cx('wrapper-top')}>
                         <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
-                            {/* {
+                            {
                                 Case.updated_date === 'default' ?
                                 <div className={cx('created-at')}>
                                     <MdAccessTime />{semiCreatedDate}
@@ -54,7 +54,7 @@ class CaseListItem extends Component {
                                 <div className={cx('created-at', 'updated')}>
                                     <MdUpdate />{semiUpdatedDate}
                                 </div>
-                            } */}
+                            }
                             <div className={cx('qna')}>
                                 <div className={cx('count', 'question-count')}><div>질문</div><div className={cx('number')}>8</div></div>
                                 <div className={cx('count', 'answer-count')}><div>답변</div><div className={cx('number')}>5</div></div>
