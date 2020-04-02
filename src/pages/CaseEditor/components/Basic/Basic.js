@@ -59,11 +59,18 @@ class Basic extends Component {
         } = this.props.caseEditorBasic.editableData;
         const { staticData } = this.props.caseEditorBasic;
         const { type } = this.props;
-        const { isEditing } = this.props.Case;
+        const { isEditing, currentCaseDetail } = this.props.Case;
+        const { updatedDate } = currentCaseDetail;
 
         return (
             <div className={cx('Basic', {view: (!isEditing && type === 'detail')})}>
-                <h5>기본정보</h5>
+                <h5>
+                    기본정보&nbsp;
+                    {
+                        updatedDate !== 'default' &&
+                        <span className={cx('updated-date')}>{`(최근수정일시 : ${updatedDate})`}</span>
+                    }
+                </h5>
                 <div className={cx('form-wrapper', 'title', 'input')}>
                     {
                         type === 'create' || isEditing ?

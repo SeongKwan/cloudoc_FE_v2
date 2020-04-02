@@ -583,10 +583,12 @@ class CaseStore {
         let updatedCase = {
         user_id: currentUser.user_id || 'admin',
         created_date: date,
+        updated_date: getLocaleFullDateWithTime(Date.now()),
         title: '',
         record: [
             {
             createdDate: currentCaseRecordDate,
+            updatedDate: getLocaleFullDateWithTime(Date.now()),
             symptom: [],
             exam: [],
             selectedLabCategory: [],
