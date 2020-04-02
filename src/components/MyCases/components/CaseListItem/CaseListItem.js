@@ -46,7 +46,7 @@ class CaseListItem extends Component {
                     <div className={cx('wrapper-top')}>
                         <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>
                         <div className={cx('date-qna')}>
-                            {
+                            {/* {
                                 Case.updated_date === 'default' ?
                                 <div className={cx('created-at')}>
                                     <MdAccessTime />{semiCreatedDate}
@@ -55,7 +55,7 @@ class CaseListItem extends Component {
                                 <div className={cx('created-at', 'updated')}>
                                     <MdUpdate />{semiUpdatedDate}
                                 </div>
-                            }
+                            } */}
                             <div className={cx('qna')}>
                                 <div className={cx('count', 'question-count')}><div>질문</div><div className={cx('number')}>8</div></div>
                                 <div className={cx('count', 'answer-count')}><div>답변</div><div className={cx('number')}>5</div></div>
