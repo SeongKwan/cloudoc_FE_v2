@@ -9,6 +9,7 @@ import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import stores from './stores';
 import * as serviceWorker from './serviceWorker';
+require('dotenv').config()
 
 configure({ 
     enforceActions: "observed"
