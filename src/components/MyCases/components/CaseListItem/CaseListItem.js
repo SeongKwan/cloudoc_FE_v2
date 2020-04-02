@@ -4,9 +4,9 @@ import classNames from 'classnames/bind';
 import { GoPerson } from "../../../../lib/react-icons/go";
 import { CsSmartCondition, CsSmartDrug } from "../../../../lib/react-icons/fi";
 import { FaNotesMedical } from "../../../../lib/react-icons/fa";
-import { MdAccessTime, MdUpdate } from "../../../../lib/react-icons/md";
+// import { MdAccessTime, MdUpdate } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
+// import { getLocaleSemiDateWithTime } from '../../../../utils/momentHelper';
 
 const cx = classNames.bind(styles);
 
@@ -28,8 +28,8 @@ class CaseListItem extends Component {
         }
         
         const { symptom, diagnosis, treatment } = Case.record[latestRecordIndex] || [];
-        const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
-        const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
+        // const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
+        // const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
 
         return (
             <Link to={`/case/editor/detail/${caseId}/0`} 
