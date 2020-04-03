@@ -65,10 +65,10 @@ class Basic extends Component {
         return (
             <div className={cx('Basic', {view: (!isEditing && type === 'detail')})}>
                 <h5>
-                    기본정보&nbsp;
+                    <span>기본정보</span>
                     {
                         updatedDate !== 'default' &&
-                        <span className={cx('updated-date')}>{`(최근수정일시 : ${updatedDate})`}</span>
+                        <span className={cx('updated-date')}>{`최근수정일시 - ${updatedDate}`}</span>
                     }
                 </h5>
                 <div className={cx('form-wrapper', 'title', 'input')}>

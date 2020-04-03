@@ -10,13 +10,16 @@
   }
 
   h5 {
-    font-weight: 700;
-    letter-spacing: 2px;
     margin-bottom: 1.5rem;
     color: $bc-18;
     user-select: none;
     display: flex;
     align-items: center;
+    span:first-child {
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-right: 1rem;
+    }
     .updated-date {
       font-size: 0.9rem;
       color: $bc-17;
