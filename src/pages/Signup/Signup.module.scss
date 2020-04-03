@@ -18,7 +18,9 @@
             text-align: center;
             color: $white;
             margin-bottom: 0;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            font-size: 2.5rem;
+            font-weight: 700;
         }
         .row {
             margin: 0;
@@ -26,7 +28,7 @@
             justify-content: center;
         }
         .signup-form {
-            max-width: 297px;
+            max-width: 320px;
             margin: auto;
             padding: 0 15px;
             margin-top: 2.375rem;
@@ -73,10 +75,10 @@
                 width: 100%;
                 background-color: $bc-14;
                 color: $bc-01;
-                transition: all 0.2s;
+                transition: all 0.3s ease;
+                        
                 &:hover {
-                    color: $bc-14;
-                    background-color: $bc-01;
+                    background-color: $gray-2;
                 }
                 &:disabled {
                     color: $gray-4;

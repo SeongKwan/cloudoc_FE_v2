@@ -16,7 +16,7 @@
             display: flex;
             justify-content: center;
             .col {
-                max-width: 297px;
+                max-width: 320px;
                 .loading-container {
                     padding: 2rem 0;
                     text-align: center;
@@ -29,18 +29,19 @@
                     display: flex;
                     justify-content: center;
                     margin-bottom: 2.375rem;
-                    letter-spacing: 2px;
+                    letter-spacing: 1px;
+                    font-size: 2.5rem;
+                    font-weight: 700;
                 }
                 .form-container {
                     .login-button {
                         width: 100%;
                         background-color: $bc-14;
                         color: $bc-01;
-                        transition: all 0.2s;
+                        transition: all 0.3s ease;
                         
                         &:hover {
-                            color: $bc-14;
-                            background-color: $bc-01;
+                            background-color: $gray-2;
                         }
                     }
                     .input-form {
@@ -74,11 +75,17 @@
                     }
                 }
                 .link-forgetPW {
+                    text-decoration: underline;
                     margin-top: 0.5rem;
                     font-size: 0.8em;
                     padding: 0 0.2rem;
+                    
                     a {
                         color: $bc-14;
+                        transition: all 0.3s ease;
+                        &:hover {
+                            color: $gray-2;
+                        }
                     }
                 }
             }

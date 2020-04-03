@@ -6,12 +6,13 @@
         position: absolute;
         display: flex;
         align-items: center;
-        height: 6rem;
+        height: 4rem;
         width: 100%;
         background-color: $bc-01;
         top: 0;
         left: 0;
         z-index: $header-z-index;
+        opacity: 0.94;
     }
     .main-container {
         width: 100%;
