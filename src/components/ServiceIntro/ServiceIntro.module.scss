@@ -15,11 +15,14 @@
             z-index: 9990;
             letter-spacing: 0.5px;
             h1 {
+                font-weight: 700;
                 font-size: 3rem;
             }
             @include media('xs') {
                 padding: 6rem 2rem;
-
+                h1 {
+                    font-size: 2.5rem;
+                }
             }
         }
     }
@@ -46,7 +49,7 @@
                     text-decoration: none;
                 }
                 @include media('xs') {
-                    padding: 1.25rem 1.25rem;
+                    padding: 0.5rem 1.2rem;
                 }
             }
         }
