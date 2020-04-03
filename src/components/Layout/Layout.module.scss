@@ -31,5 +31,8 @@
         left: 0;
         background-color: rgba($bc-14, 0.6);
         padding: 2rem 0;
+        @include media('sm') {
+            padding: 1.5rem 0;
+        }
     }
 }

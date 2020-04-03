@@ -36,7 +36,6 @@
         .col {
             display: flex;
             .btn-login {
-                // font-weight: 700;
                 transition: all 0.2s ease;
                 padding: 0.7rem 1.2rem;
                 border-radius: $radius-low;
@@ -44,7 +43,6 @@
                 background-color: $bc-14;
                 letter-spacing: 0.5px;
                 &:hover {
-                    // color: $bc-14;
                     background-color: $gray-2;
                     text-decoration: none;
                 }
