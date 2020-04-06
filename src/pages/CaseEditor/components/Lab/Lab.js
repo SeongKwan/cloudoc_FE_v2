@@ -149,6 +149,7 @@ class Lab extends Component {
             })
             
             return <ul key={index} style={{marginBottom: '4rem'}}>
+                
                 <h6 className={cx('category-title')}>
                     <span>[{categories[index]}]</span>
                 </h6>
@@ -241,8 +242,6 @@ class Lab extends Component {
     }
 
     handleChangeValueLabBar = (index, value) => {
-        console.log(index, value)
-        console.log(JSON.parse(JSON.stringify(this.props.lab.editableData)))
         const {
             refMin,
             refMax,

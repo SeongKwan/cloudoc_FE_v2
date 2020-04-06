@@ -18,73 +18,7 @@
             background: $oc-gray-4;
         }
     }
-    .ready-paste-cover {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba($black, 0.85);
-        z-index: 9999999999;
-        .instruction {
-            code {
-                padding: 2px 4px;
-                color: $bc-01;
-                white-space: nowrap;
-                background-color: #f7f7f9;
-                border: 1px solid #e1e1e8;
-                border-radius: $radius-low;
-                letter-spacing: 1px;
-            }
-            font-size: 1.3rem;
-            color: $white;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-
-            .title {
-                font-size: 2rem;
-                letter-spacing: 1.5px;
-                margin-bottom: 1.5rem;
-                display: flex;
-                align-items: center;
-            }
-            .code-container {
-                display: flex;
-                flex-direction: column;
-                .code-wrapper {
-                    display: flex;
-                    align-items: center;
-                    &:first-child {
-                        margin-bottom: 0.5rem;
-                    }
-                    div {
-                        font-weight: 100;
-                        font-size: 1rem;
-                        width: 80px;
-                        color: $white;
-                        margin-right: 0.3rem;
-                    }
-                }
-            }
-            .cancel {
-                cursor: pointer;
-                margin-left: 0.5rem;
-                display: inline-block;
-                padding: 2px 4px;
-                color: $bc-18;
-                white-space: nowrap;
-                background-color: #f7f7f9;
-                border: 1px solid #e1e1e8;
-                border-radius: $radius-low;
-                font-size: 0.85rem;
-                font-weight: 100;
-                letter-spacing: 1.5px;
-            }
-        }
-    }
+    
     .network-message {
         position: absolute;
         top: 8%;

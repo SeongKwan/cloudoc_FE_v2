@@ -1,8 +1,7 @@
 import { observable, action, computed } from 'mobx';
-
-// import modalStore from './modalStore';
 import agent from '../utils/agent';
 import bloodTestItems from '../constant/bloodTestItem';
+import convertRef from '../constant/convertReference';
 import _ from 'lodash';
 import basicStore from './caseEditorBasicStore';
 
@@ -106,6 +105,53 @@ class LabStore {
 
     @action toggleReadyForPaste() {
         this.readyForPaste = !this.readyForPaste;
+    }
+
+
+    @action convertTextToObject(pastedData) {
+        let parsedData = [];
+        
+        if (!this._checkerPaste(pastedData.split('\n')[0])) {
+            alert('복사한 혈액검사 텍스트파일 양식이 틀렸거나 내용이 올바르지 않습니다');
+            return false;
+        }
+        pastedData.split('\n').forEach(data => {
+            let splitted = data.split('\t');
+            if (splitted.length > 1) {
+                if (splitted[1] !== "") {
+                    let name = splitted[1];
+                    let value;
+                    value = splitted[9];
+    
+                    let ref = convertRef.find(data => data.source === name);
+                    if (ref) {
+                        parsedData.push({
+                            name: ref.target,
+                            category: ref.category,
+                            unit: ref.unit,
+                            value: value
+                        })
+                    } else {
+                        parsedData.push({
+                            name: name,
+                            unit: splitted[3],
+                            value: value
+                        })
+                    }
+    
+                }
+            }
+        })
+        parsedData.splice(0, 1);
+    
+        this.setEditableData(parsedData.filter(x => x.value !== "-"));
+        this.toggleReadyForPaste();
+    }
+
+    @action _checkerPaste(firstData) {
+        let splitted = firstData.split('\t');
+        if (splitted[0] === '검사구분') return true;
+        return false;
     }
 
 

@@ -67,7 +67,7 @@ class Basic extends Component {
                 <h5>
                     <span>기본정보</span>
                     {
-                        updatedDate !== 'default' &&
+                        type === 'detail' && updatedDate !== 'default' &&
                         <span className={cx('updated-date')}>{`최근수정일시 - ${updatedDate}`}</span>
                     }
                 </h5>

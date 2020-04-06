@@ -9,17 +9,10 @@ import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import stores from './stores';
 import * as serviceWorker from './serviceWorker';
-require('dotenv').config()
 
 configure({ 
     enforceActions: "observed"
 });
-
-// ReactDOM.render(
-//     <PDFViewer style={{width: '100vw', height: '100vh'}}>
-//         <PrintPage />
-//     </PDFViewer>
-// , document.getElementById('root'));
 
 ReactDOM.render(
     <Provider {...stores}>
