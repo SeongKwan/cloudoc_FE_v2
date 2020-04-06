@@ -11,39 +11,18 @@ import MyCases from '../../components/MyCases/MyCases';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject(
-    'auth',
-    'Case',
-    'login',
-    'user', 
-    'search'
-)
+@inject('auth', 'Case', 'login', 'user', 'search')
 @observer
 class CaseLibrary extends Component {
-    state = {
-        selector: ''
-    }
+    state = { selector: '' }
     componentDidMount() {
         this._handleClickOnSelector('case');
-        this.checkToken()
+        this.props.auth.validateToken()
         .then(res => {
-            if (res) {
-                return this._loadCases();
-            }
+            if (res) return this.props.Case.loadCases();
         })
     }
-    
-    checkToken = () => {
-        const THIS = this;
-        return new Promise((resolve, reject) => {
-            let result = THIS.props.auth.validateToken();
-            return resolve({success: result}); 
-        });
-    }
 
-    _loadCases = () => {
-        this.props.Case.loadCases();
-    }
     _handleClickOnSelector = (type) => {
         this.setState({selector: type});
     }
@@ -51,7 +30,6 @@ class CaseLibrary extends Component {
     render() {
         const { selector } = this.state;
         const { currentUser } = this.props.user;
-    
         return (
             <LayoutCloudoc>
                 <div className={cx('CaseLibrary')}>
