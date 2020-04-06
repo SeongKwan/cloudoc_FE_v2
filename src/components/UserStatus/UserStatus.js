@@ -15,8 +15,8 @@ class UserStatus extends Component {
                         <div className={cx('level')}>Lv.1</div>
                     </div>
                     <div className={cx('info')}>
-                        <div className={cx('nickname')}>{`${this.props.username}`} 님</div>
-                        <div className={cx('points')}>1,000 PTS</div>
+                        <div className={cx('nickname')}><span>{`${this.props.username}`}</span> 님, 환영합니다</div>
+                        <div className={cx('points')}>현재잔여포인트 <span>1,000 PTS</span></div>
                     </div>
                 </div>
             </div>

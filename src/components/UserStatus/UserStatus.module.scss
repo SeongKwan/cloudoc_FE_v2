@@ -41,11 +41,21 @@
         }
     }
     .info {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
         div {
             color: $bc-18;
             font-size: 1.2rem;
             &.nickname {
-                margin-bottom: 0.5rem;
+                span {
+                    font-weight: 700;
+                }
+            }
+        }
+        .points {
+            span {
+                color: $bc-01;
             }
         }
     }
