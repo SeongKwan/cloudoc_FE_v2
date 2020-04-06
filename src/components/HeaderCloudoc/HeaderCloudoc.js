@@ -11,12 +11,7 @@ import './HeaderCloudoc.css';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject(
-    'auth',
-    'Case',
-    'login',
-    'user', 
-)
+@inject('auth', 'Case', 'login', 'user')
 @observer
 class HeaderCloudoc extends Component {
     state = { where: '', openMenus: false }
@@ -92,16 +87,7 @@ class HeaderCloudoc extends Component {
                         <li className={cx('content-item')}><FiUser />계정관리</li>
                         <li 
                             className={cx('content-item')}
-                            onClick={() => {
-                                this.props.login.logout()
-                                .then((res) => {
-                                    console.log(res)
-                                    console.log('logout!!!')
-                                    if (res) {
-                                        this.props.history.go('http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/')
-                                    }
-                                })
-                            }}
+                            onClick={() => { this.props.login.logout(); }}
                         >
                             <FiLogOut />로그아웃
                         </li>
