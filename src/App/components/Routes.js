@@ -26,10 +26,9 @@ class Routes extends Component {
         if (isLoggedIn) {
             timer = setInterval(() => {
                 if (!expiredToken) {
-                    
                     this.checkToken();
                 } else {
-                    console.log('expired')
+                    console.log('expired');
                 }
             }, 1800000);
         }
@@ -39,6 +38,7 @@ class Routes extends Component {
         clearInterval(timer);
         this.props.auth.setExpiredToken(false);
     }
+
     checkToken = () => {
         const THIS = this;
         return new Promise((resolve, reject) => {
@@ -46,8 +46,8 @@ class Routes extends Component {
             return resolve({success: result.data}); 
         });
     }
+
     render() {
-        
         return (
             <>
                 <Switch>
@@ -74,7 +74,6 @@ class Routes extends Component {
                     <Route>
                         <Page404 />
                     </Route>
-                    
                 </Switch>
             </>
         );

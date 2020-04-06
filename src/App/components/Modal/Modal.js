@@ -13,7 +13,6 @@ const cx = classNames.bind(styles);
 @observer
 class Modal extends Component {
     
-
     render() {
         const { open, modalType } = this.props.modal;
         const { dateIndex } = this.props.match.params;
