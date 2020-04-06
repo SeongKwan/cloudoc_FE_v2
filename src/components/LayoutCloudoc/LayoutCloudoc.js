@@ -14,28 +14,20 @@ const cx = classNames.bind(styles);
 @inject('auth', 'Case', 'search', 'login', 'user')
 @observer
 class LayoutCloudoc extends Component {
-    state = {
-        loadingState: false
-    };
+    state = { loadingState: false };
     componentDidMount() {
-        window.addEventListener("scroll", () => {
-            this._loadCases();
-        });
+        window.addEventListener("scroll", () => { this._loadCases(); });
     }
     
     componentWillUnmount() {
-        window.removeEventListener("scroll", () => {
-            this._loadCases();
-        });
+        window.removeEventListener("scroll", () => { this._loadCases(); });
     }
-    
 
     _loadCases = () => {
         const { loadMore } = this.props.Case;
         const totalHeight = Math.floor($(this.layout).prop("scrollHeight"));
         const windowHeight = Math.floor($(window).height());
         const offset = 150;
-        
         
         // IE에서는 document.documentElement 를 사용.
         const scrollTop = Math.floor($(window).scrollTop());
@@ -57,14 +49,10 @@ class LayoutCloudoc extends Component {
         }
     }
 
-
     render() {
         const { children } = this.props;
-        
         return (
-            <div className={cx('LayoutCloudoc')} ref={ref => {
-                    this.layout = ref;
-                }}>
+            <div className={cx('LayoutCloudoc')} ref={ref => { this.layout = ref; }}>
                 <div className={cx('app-cover', {cover: this.props.auth.expiredToken})}></div>
                 <div className={cx('header-container')}>
                     <HeaderCloudoc />
