@@ -14,50 +14,42 @@ class CaseListItem extends Component {
     render() {
         const { Case } = this.props;
         const caseId = Case._id;
-        const {
-            gender,
-            age
-        } = Case.patient;
-        
+        const { gender, age } = Case.patient;
+        const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
+        const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
         let latestRecordIndex;
-
         if (Case.record.length === 0) {
             latestRecordIndex = 0;
         } else if (Case.record.length > 0) {
             latestRecordIndex = Case.record.length - 1;
         }
-        
         const { symptom, diagnosis, treatment } = Case.record[latestRecordIndex] || [];
-        const semiCreatedDate = getLocaleSemiDateWithTime(Case.created_date);
-        const semiUpdatedDate = getLocaleSemiDateWithTime(Case.updated_date);
 
         return (
-            <Link to={`/case/editor/detail/${caseId}/0`} 
+            <Link 
+                to={`/case/editor/detail/${caseId}/0`} 
                 onClick={(e) => {
                     if (this.props.isLoadingMore) {
                         return e.preventDefault();
-                    } else {
-                        
                     }
                 }}
             >
                 <li className={cx('CaseListItem')}>
                     <div className={cx('wrapper-top')}>
-                        <div className={cx('memo')}>{Case.title || '빈 제목...'}</div>
+                        <div className={cx('memo')}>{Case.title}</div>
                         <div className={cx('date-qna')}>
                             {
                                 Case.updated_date === 'default' ?
                                 <div className={cx('created-at')}>
                                     <MdAccessTime />{semiCreatedDate}
                                 </div>
-                                :
-                                <div className={cx('created-at', 'updated')}>
+                                : <div className={cx('created-at', 'updated')}>
                                     <MdUpdate />{semiUpdatedDate}
                                 </div>
                             }
                             <div className={cx('qna')}>
-                                <div className={cx('count', 'question-count')}><div>질문</div><div className={cx('number')}>8</div></div>
-                                <div className={cx('count', 'answer-count')}><div>답변</div><div className={cx('number')}>5</div></div>
+                                <div className={cx('count', 'question-count')}><div>질문</div><div className={cx('number')}>{Math.floor(Math.random() * (50 - 0)) + 0}</div></div>
+                                <div className={cx('count', 'answer-count')}><div>답변</div><div className={cx('number')}>{Math.floor(Math.random() * (30 - 0)) + 0}</div></div>
                             </div>
                         </div>
                     </div>
@@ -84,7 +76,7 @@ class CaseListItem extends Component {
                         <div className={cx('flexbox', 'drug')}>
                             <span className={cx('label')}><CsSmartDrug /></span>
                             <div className={cx('content')}>
-                                {_renderTreatments(treatment)}
+                                <div className={cx('item')}>{treatment.drugName || ''}</div>
                             </div>
                         </div>
                     </div>
@@ -95,18 +87,13 @@ class CaseListItem extends Component {
 }
 
 const _renderSymptom = (symptoms = []) => {
-
     return symptoms.map((symptom, i) => {
         let rest = symptoms.length - 3;
         const { name } = symptom;
         if (i === 3) {
             return <div key={i} className={cx('item')}>... <span>({`${rest}`})</span></div>
-        } else if (i > 3) {
-            return false;
-        }
-        return (
-            <div key={i} className={cx('item')}>{name}</div>
-        );
+        } else if (i > 3) {return false;}
+        return (<div key={i} className={cx('item')}>{name}</div>);
     })
 }
 
@@ -116,21 +103,9 @@ const _renderCondition = (conditions =[]) => {
         let rest = conditions.length - 2;
         if (i === 2) {
             return <div key={i} className={cx('item')}>... <span>({`${rest}`})</span></div>
-        } else if (i > 2) {
-            return false;
-        }
-        return (
-            <div key={i} className={cx('item')}>{name}</div>
-        );
-    
+        } else if (i > 2) {return false;}
+        return (<div key={i} className={cx('item')}>{name}</div>);
     })
-}
-
-const _renderTreatments = (treatment = []) => {
-    const { drugName } = treatment;
-    return (
-        <div className={cx('item')}>{drugName}</div>
-    );
 }
 
 export default CaseListItem;

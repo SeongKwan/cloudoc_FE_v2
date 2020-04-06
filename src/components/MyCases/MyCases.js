@@ -11,13 +11,7 @@ import CaseListItem from './components/CaseListItem/CaseListItem';
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject(
-    'auth',
-    'Case',
-    'login',
-    'user', 
-    'search'
-)
+@inject('auth', 'Case', 'login', 'user', 'search')
 @observer
 class MyCases extends Component {
     componentDidMount() {
@@ -41,21 +35,15 @@ class MyCases extends Component {
         }
     }
 
-    _handleClickOnButton = () => {
-        this.props.history.push('/case/editor/create');
-    }
-
-    
+    _handleClickOnButton = () => { this.props.history.push('/case/editor/create'); }
 
     render() {
         const { infiniteStore, searchedInfiniteStore, loadMore, isLoading, isLoadingMore } = this.props.Case;
-
         let database = 
             this.props.search.keyword['cases'].length > 0 
             ? searchedInfiniteStore
             : infiniteStore;
         let { length } = database || [];
-
         return (
             <div 
                 className={cx('MyCases')} 

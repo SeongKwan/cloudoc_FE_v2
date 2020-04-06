@@ -8,10 +8,7 @@ import { FiSearch } from "../../../../lib/react-icons/fi";
 const cx = classNames.bind(styles);
 
 @withRouter
-@inject(
-    'search',
-    'Case'
-)
+@inject('search', 'Case')
 @observer
 class SearchBar extends Component {
     state = { keyword: ''}
@@ -39,7 +36,6 @@ class SearchBar extends Component {
         }
         this.props.Case.noLoadMore();
         this.props.search.setKeyword('cases', this.state.keyword);
-        
         this.props.Case.casesOnSearching();
     }
     handleClearKeyword = () => {
