@@ -55,7 +55,7 @@
             border-radius: $radius-low;
             top: 50%;
             transform: translate(-50%, -50%);
-            
+
             &.isEditing {
                 padding-top: 0px;
                 background-color: transparent;
@@ -73,9 +73,11 @@
                 border: 1px solid $gray-2;
                 border-radius: $radius-low;
                 box-shadow: none;
+
                 &:focus {
                     outline-color: $bc-02;
                 }
+
                 @include media('lg') {
                     height: 22px;
                 }

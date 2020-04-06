@@ -6,19 +6,12 @@ import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
-
 class LabBar extends Component {
     _renderBar = () => {
         const {
-            labs,
-            categoryIndex, 
-            inputIndex, 
-            changeValue, 
-            isEditing, 
-            index, 
-            value, 
-            refMax = 100, 
-            refMin = 0, 
+            labs, categoryIndex, inputIndex, 
+            changeValue, isEditing, index, 
+            value, refMax = 100, refMin = 0
         } = this.props;
 
         let widthBar, widthCoverBar;
@@ -29,8 +22,6 @@ class LabBar extends Component {
             widthBar = 0;
         }
         widthCoverBar = 100 - widthBar;
-
-
         return (
             <div className={cx('bar-container')}>
                 <div className={cx('min')}>
@@ -86,22 +77,16 @@ class LabBar extends Component {
                         value
                     }
                 </div>
-                <div className={cx('gauge')}>
-                </div>
+                <div className={cx('gauge')}></div>
                 <div className={cx('gauge-cover')} style={{width: `${widthCoverBar}%`}}></div>
-                <div className={cx('max')}>
-                    <div className={cx('ref', 'refMax')}>{refMax}</div>
-                </div>
+                <div className={cx('max')}><div className={cx('ref', 'refMax')}>{refMax}</div></div>
             </div>
         )
     }
     render() {
-        
         return (
             <div className={cx('LabBar')}>
-                {
-                    this._renderBar()
-                }
+                {this._renderBar()}
             </div>
         );
     }
