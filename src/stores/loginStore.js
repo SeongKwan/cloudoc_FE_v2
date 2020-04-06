@@ -119,7 +119,6 @@ class LoginStore {
             if (type !== 'expiredRefreshToken') {
                 const logoutOK = window.confirm('로그아웃 하시겠습니까?');
                 if (logoutOK) {
-                    
                     THIS._removeItem()
                     THIS.setLoggedIn(false);
                     authStore.destroyTokenAndUuid();

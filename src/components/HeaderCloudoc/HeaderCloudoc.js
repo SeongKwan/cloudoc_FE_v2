@@ -19,17 +19,15 @@ const cx = classNames.bind(styles);
 )
 @observer
 class HeaderCloudoc extends Component {
-    state = {
-        where: '',
-        openMenus: false
-    }
+    state = { where: '', openMenus: false }
+
     componentDidMount() {
         let where = this.props.location.pathname.split('/')[1];
         this.setState({ where });
-        document.addEventListener('mousedown', this.handleClickOutside);
+        document.addEventListener('mousedown', this._handleClickOutside);
     }
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClickOutside);
+        document.removeEventListener('mousedown', this._handleClickOutside);
     }
     _handleClickOnLogo = () => {
         this.props.history.push('/case')
@@ -50,7 +48,7 @@ class HeaderCloudoc extends Component {
             contentElement.removeClass('closeContent');
         }
     }
-    handleClickOutside = (event) => {
+    _handleClickOutside = (event) => {
         if (this.userButton && !this.userButton.contains(event.target)) {
             if (this.state.openMenus) {
                 this._handleClickOnButton();
@@ -64,11 +62,7 @@ class HeaderCloudoc extends Component {
         return (
             <div className={cx('HeaderCloudoc')}>
                 <div className={cx('brand-logo')} onClick={this._handleClickOnLogo}>
-                    <img
-                        className={cx('logo')}
-                        alt="Cloudoc Logo"
-                        src={brandLogo}
-                    />
+                    <img className={cx('logo')} alt="Cloudoc Logo" src={brandLogo} />
                     <div className={cx('brand-name')}>Cloudoc</div>
                 </div>
                 <nav className={cx('navbar')}>
@@ -84,13 +78,8 @@ class HeaderCloudoc extends Component {
                         </li>
                     </ul>
                 </nav>
-                <div className={cx('btn-user')} ref={(ref) => {
-                            this.userButton = ref;
-                        }} >
-                    <button 
-                        
-                        onClick={this._handleClickOnButton}
-                    >
+                <div className={cx('btn-user')} ref={(ref) => { this.userButton = ref; }}>
+                    <button onClick={this._handleClickOnButton}>
                         <FiMenu />
                     </button>
                     <ul id="dropdown-content-user" className={cx('content')}>
@@ -107,6 +96,7 @@ class HeaderCloudoc extends Component {
                                 this.props.login.logout()
                                 .then((res) => {
                                     console.log(res)
+                                    console.log('logout!!!')
                                     if (res) {
                                         this.props.history.go('http://cloudoc.net.s3-website.ap-northeast-2.amazonaws.com/')
                                     }
