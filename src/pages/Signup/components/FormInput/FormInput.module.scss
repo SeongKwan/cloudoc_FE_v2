@@ -1,0 +1,44 @@
+.input-form {
+    border: 0;
+    
+    &:focus {
+        box-shadow: none;
+        border: 0;
+    }
+
+    &::placeholder {
+        color: $oc-gray-5;
+        font-size: 0.9em;
+    }
+    &.error {
+        border: 1.5px $error solid;
+    }
+    &.inValid {
+        border: 1.5px $error solid;
+    }
+}
+.container-error {
+    background-color: rgba($bc-18, 0.6);
+    font-size: 0.5rem;
+    color: $white;
+    border-radius: $radius-low;
+    padding: 0.2rem 0.4rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+    p {
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+}
+
+label {
+    display: none;
+    color: $white;
+}
+
+
+
+.text-muted {
+    font-size: 0.7rem;
+    color: $white;
+}

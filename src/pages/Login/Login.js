@@ -20,7 +20,6 @@ class Login extends Component {
   _handleChange = (e) => {
     this.props.login.changeInput(e.target.name, e.target.value);
   }
-
   _handleClick = (e) => {
     e.preventDefault();
     this.props.login.login()
@@ -36,7 +35,6 @@ class Login extends Component {
     const { noIdValue, noPasswordValue, inputError } = this.props.login.errorValues;
     const { isLoading } = this.props.login;
     let error = noIdValue || noPasswordValue || inputError;
-
     return (
       <Layout>
         <section className={cx('Login')}>
@@ -74,18 +72,10 @@ class Login extends Component {
                     {
                       error && 
                       <div className={cx('container-error')}>
-                        {
-                          (noIdValue && noPasswordValue) && <p>이메일과 비밀번호를 입력해 주세요</p>
-                        }
-                        {
-                          noIdValue && !noPasswordValue && <p>이메일을 입력해 주세요</p>
-                        }
-                        {
-                          noPasswordValue && !noIdValue && <p>비밀번호를 입력해 주세요</p>
-                        }
-                        {
-                          inputError && <p>이메일 또는 비밀번호를 확인하여 주세요</p>
-                        }
+                        {(noIdValue && noPasswordValue) && <p>이메일과 비밀번호를 입력해 주세요</p>}
+                        {noIdValue && !noPasswordValue && <p>이메일을 입력해 주세요</p>}
+                        {noPasswordValue && !noIdValue && <p>비밀번호를 입력해 주세요</p>}
+                        {inputError && <p>이메일 또는 비밀번호를 확인하여 주세요</p>}
                       </div>
                     }
                     {

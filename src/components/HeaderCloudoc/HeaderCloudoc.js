@@ -15,7 +15,6 @@ const cx = classNames.bind(styles);
 @observer
 class HeaderCloudoc extends Component {
     state = { where: '', openMenus: false }
-
     componentDidMount() {
         let where = this.props.location.pathname.split('/')[1];
         this.setState({ where });
@@ -87,7 +86,7 @@ class HeaderCloudoc extends Component {
                         <li className={cx('content-item')}><FiUser />계정관리</li>
                         <li 
                             className={cx('content-item')}
-                            onClick={() => { this.props.login.logout(); }}
+                            onClick={() => { this.props.login.logout().then(res => this.props.history.go('/')); }}
                         >
                             <FiLogOut />로그아웃
                         </li>

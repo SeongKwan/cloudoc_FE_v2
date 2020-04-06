@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import constInviteCode from '../constant/inviteCode';
 import agent from '../utils/agent';
 
 class SignupStore {
@@ -70,6 +71,44 @@ class SignupStore {
         if (type === 'inValidConfirm') return this.errorValues.inValidConfirm = true;
         if (type === 'inviteCode') return this.errorValues.noInviteCode = true;
         if (type === 'inValidInviteCode') return this.errorValues.inValidInviteCode = true;
+    }
+
+    @action validation() {
+        const {
+            name,
+            email,
+            password,
+            confirmPassword,
+            inviteCode
+        } = this.userInfo;
+        
+        let buttonOn = name.length > 0 && email.length > 0 && password.length > 0 && confirmPassword.length > 0 && inviteCode.length > 0;
+        let isEmailForm = email.search(/[0-9a-zA-Z][_0-9a-zA-Z-]*@[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+){1,2}$/) !== -1;
+    
+        if (name === '') {this.manageError('name')} 
+        if (email === '') {this.manageError('email')}
+        if (password === '') {this.manageError('password')}
+        if (!isEmailForm) {this.manageError('inValidEmail')}
+        if (password.length < 8) {this.manageError('inValidPassword')}
+        if (password !== confirmPassword) {this.manageError('inValidConfirm')}
+        if (inviteCode === '') {this.manageError('inviteCode')}
+        if (inviteCode !== constInviteCode) {this.manageError('inValidInviteCode')}
+        
+        if (buttonOn) {
+            return this.props.signup.signup()
+            .then(res => {
+                if(res.data.success) {
+                    this.props.signup.signupCaseMaster();
+                }
+            })
+            .then(res => {
+                alert('가입해주셔서 감사합니다. 이제 Case Editor를 이용하실 수 있습니다.');
+                    return this.props.history.replace('/login');
+                })
+            .catch(err => {
+                console.log(err);
+            });
+        }
     }
 
     @action signup() {
