@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 const FormInput = ({id, labelTitle, inValid, autoFocus = false, name, type, errorValue, errMsg, value, onChange, required = true}) => {
     return (
         <Form.Group controlId={id}>
-            <Form.Label>{labelTitle}</Form.Label>
+            <Form.Label className={cx('form-input-label')}>{labelTitle}</Form.Label>
             <Form.Control 
                 className={cx('input-form', {error: errorValue}, {inValid: inValid})}
                 autoFocus={autoFocus}

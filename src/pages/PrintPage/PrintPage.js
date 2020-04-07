@@ -1,239 +1,16 @@
 import React, { Component } from 'react';
 import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
-import NanumSquareL from '../../styles/font/NanumSquareOTF_acL.ttf';
-import NanumSquareR from '../../styles/font/NanumSquareOTF_acR.ttf';
-import NanumSquareB from '../../styles/font/NanumSquareOTF_acB.ttf';
-import NanumSquareEB from '../../styles/font/NanumSquareOTF_acEB.ttf';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 import _ from 'lodash';
+import style from './styles';
+import font from './font';
 
-const styles = StyleSheet.create({
-  page: {
-    position: 'relative',
-    paddingTop: 36,
-    paddingBottom: 65,
-    paddingHorizontal: 35,
-    fontFamily: 'NanumSquare'
-  },
-  header: {
-    position: 'relative',
-    marginBottom: 18,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  headerTitle: {
-    backgroundColor: '#d3d3d3',
-    display: 'inline',
-    fontSize: 12,
-    color: 'white',
-    padding: '4 8',
-    borderRadius: 4,
-
-  },
-  flexbox: {
-    display: 'flex',
-    flexDirection: "row"
-  },
-  flexItem: {
-    flex: 1
-  },
-  flex1: {
-    flex: 1,
-    backgroundColor: 'blue'
-  },
-  flex2: {
-    flex: 2,
-  },
-  flex3: {
-    flex: 3,
-  },
-  horizon: {
-    marginTop: 8,
-    borderBottom: "1pt solid #c8c8c8"
-  },
-  titleWrapper: {
-    marginTop: 8
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: 'NanumSquare',
-    fontWeight: 800,
-    letterSpacing: 1.5,
-    marginBottom: 28,
-  },
-  caseInfo: {
-    marginBottom: 16
-  },
-  info: {
-    fontSize: 10,
-    margin: 0,
-    color: 'gray',
-    letterSpacing: 1
-  },
-  date: {
-    textAlign: "right",
-    marginBottom: 4
-  },
-  author: {
-    textAlign: 'right'
-  },
-  section: {
-    marginTop: 12
-  },
-  subTitle: {
-    paddingLeft: 10,
-    paddingTop: 6,
-    paddingBottom: 6,
-    backgroundColor: '#d3d3d3',
-    borderRadius: 2,
-    fontWeight: 800,
-    letterSpacing: 1.6,
-    fontSize: 14,
-    marginTop: 24,
-    marginBottom: 8
-  },
-  symptomTitle: {
-    backgroundColor: '#f1dfcb',
-  },
-  labTitle: {
-    backgroundColor: '#f1cbce',
-  },
-  diagnosisTitle: {
-    backgroundColor: '#f1cbce',
-  },
-  teachingTitle: {
-    backgroundColor: '#f1cbce',
-  },
-  contentBox: {
-    marginTop: 8,
-    padding: 8,
-    paddingLeft: 12,
-  },
-  teachingContents: {
-    marginTop: 0
-  },
-  name: {
-    fontSize: 12,
-    marginBottom: 8,
-    letterSpacing: 2
-  },
-  categoryTitle: {
-    fontWeight: 600
-  },
-  labname: {
-    fontSize: 11,
-    fontWeight: 200
-  },
-  unit: {
-    fontSize: 9,
-    color: 'gray'
-  },
-  content: {
-    fontWeight: 200,
-    padding: 8,
-    paddingLeft: 12,
-    border: "1pt solid #e9e9e9",
-    borderRadius: 2,
-    fontSize: 11,
-    lineHeight: 1.4,
-  },
-  
-  labItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginBottom: 8,
-    paddingLeft: 8,
-    marginTop: 15,
-
-  },
-  alert: {
-    position: 'absolute',
-    left: -14,
-    top: -4,
-    width: 12,
-    height: 12,
-    borderRadius: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 8,
-    fontWeight: 800,
-    backgroundColor: 'black',
-    color: 'white'
-  },
-  minRef: {
-    fontSize: 9,
-    color: '#807e7e',
-    position: 'absolute',
-    top: -12.5,
-    left: 0
-
-  },
-  maxRef: {
-    fontSize: 9,
-    color: '#807e7e',
-    position: 'absolute',
-    top: -12.5,
-    right: 0
-
-  },
-  labBar: {
-    position: 'relative',
-    backgroundColor: '#d4e6d1',
-    height: 15,
-    borderRadius: 3
-  },
-  currentPosition: {
-    position: 'absolute',
-    width: 30,
-    fontSize: 9,
-    height: 12,
-    color: 'white',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 0.75,
-    left: '100%',
-    borderRadius: 2,
-    transform: 'translateX(-15)',
-    backgroundColor: '#707070'
-  },
-  pageNumber: {
-    position: 'absolute',
-    fontSize: 10,
-    bottom: 36,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-    color: 'grey',
-  },
-  copyright: {
-    position: 'absolute',
-    bottom: 15,
-    left: 0,
-    right: 0,
-    fontSize: 9,
-    fontWeight: 200,
-    textAlign: 'center'
-  }
-});
-
-Font.register({ family: 'NanumSquare', fonts: [
-  { src: NanumSquareL, fontWeight: 200 },
-  { src: NanumSquareR },
-  { src: NanumSquareB, fontWeight: 600 },
-  { src: NanumSquareEB, fontWeight: 800 }
-]});
-
+const styles = StyleSheet.create(style);
+Font.register(font);
 
 class PrintPage extends Component {
-  
   render() {
     const { user, currentCase, contentSetting } = this.props;
-    
     if (currentCase === undefined || currentCase === null) {
       return (
         <Document>
@@ -243,58 +20,32 @@ class PrintPage extends Component {
         </Document>
       )
     } else {
-        const {
-          // _id,
-          patient,
-          created_date,
-          title,
-          record
-        } = currentCase;
-        const {
-          symptom,
-          // selectedLabCategory,
-          lab,
-          diagnosis,
-          treatment,
-          teaching
-        } = record[0];
+        const { patient, created_date, title, record } = currentCase;
+        const { symptom, lab, diagnosis, treatment, teaching } = record[0];
     
         let dividedLabByCategory = [];
-    
         let arr = _.uniqBy(lab, 'category');
         let categories = [];
     
         arr.forEach((item, i) => {
           categories[i] = item.category;
         });
-        
         categories = _.sortBy(categories);
-    
         categories.forEach((category, i) => {
           dividedLabByCategory[i] = lab.filter(item => {
               return item.category === category;
           })
         });
-    
-        
-    
+
         return (
-          <Document
-            title={title}
-            author={'User Name'}
-            creator="2020 Cloudoc"
-          >
+          <Document title={title} author={'User Name'} creator="2020 Cloudoc" >
             <Page style={styles.page} wrap>
-    
               <View style={styles.header} fixed>
                 <View style={{flex: 1, backgroundColor: '#d3d3d3', width: '100%', height: '3pt', borderRadius: 4, position: 'absolute', top: '45%', left: 0}}></View>
                 <View><Text style={styles.headerTitle}>2020 Cloudoc</Text></View>
               </View>
-    
-              
               <View>
                 <View style={styles.titleWrapper}>
-                  
                   <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={[styles.caseInfo]}>
@@ -306,9 +57,6 @@ class PrintPage extends Component {
                   </View>
                 </View>
               </View>
-              
-    
-    
               {
                 contentSetting.basic &&
                 <View style={styles.section}>
@@ -349,11 +97,9 @@ class PrintPage extends Component {
                   <Text wrap={false} style={[styles.subTitle, styles.symptomTitle]}>
                     증상
                   </Text>
-      
                   {
                     symptom.map((symptom, i) => {
                       const { name, description } = symptom;
-                      
                       return <View key={i} style={styles.contentBox} wrap={false}>
                         <Text style={styles.name}>{i + 1}. {name}</Text>
                         <Text style={styles.content}>
@@ -364,58 +110,36 @@ class PrintPage extends Component {
                   }
                 </View>
               }
-    
               {
                 contentSetting.lab &&
-
                 <View style={styles.section}>
                   <Text wrap={false} style={[styles.subTitle, styles.labTitle]}>
                     혈액검사
                   </Text>
-      
                   {
                     dividedLabByCategory.map((labs, index) => {
                       let sortedArr = [];
                       sortedArr = _.sortBy(labs, 'name');
-                      
                       return <View key={index} style={styles.contentBox}>
                         <Text style={[styles.name, styles.categoryTitle]}>[ {categories[index]} ]</Text>
                         {
                           sortedArr.map((lab, i) => {
                             const {
-                                  
-                                  name,
-                                  unit,
-                                  value,
-                                  refMin,
-                                  refMax,
-                                  alertMin,
-                                  alertMax,
-                                  alertMessage,
-                                  state,
+                                  name, unit, value,
+                                  refMin, refMax, alertMin,
+                                  alertMax, alertMessage, state,
                               } = lab;
       
                               let showAlert = (state === '매우 낮음' && !!alertMin) || (state === '매우 높음' && !!alertMax);
-                              
-      
                               let widthBar;
-                              widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
-                              if (widthBar > 101) {
-                                  widthBar = 100;
-                              } else if (widthBar < 0) {
-                                  widthBar = 0;
-                              }
-      
                               let borderColor;
-                              if ((state === '매우 낮음' && !!alertMin)) {
-                                borderColor = '2pt solid #3b69e6';
-                              }
-                              else if ((state === '매우 높음' && !!alertMax)) {
-                                borderColor = '2pt solid #d64646';
-                              }
-                              else {
-                                borderColor = '1pt solid gray';
-                              }
+                              widthBar = (( value - refMin ) / ( refMax - refMin )) * 100;
+
+                              if (widthBar > 101) { widthBar = 100; } 
+                              else if (widthBar < 0) { widthBar = 0; }
+                              if ((state === '매우 낮음' && !!alertMin)) { borderColor = '2pt solid #3b69e6'; }
+                              else if ((state === '매우 높음' && !!alertMax)) { borderColor = '2pt solid #d64646'; }
+                              else { borderColor = '1pt solid gray'; }
       
                               return <View wrap={false} key={i} style={[styles.labItem, {display: 'flex', flexDirection: 'column'}]}>
                                 <View style={[styles.flexbox]}>
@@ -428,11 +152,6 @@ class PrintPage extends Component {
                                     }
                                     <Text style={[styles.labname]}>{name} [ {unit} ]</Text>
                                   </View>
-      
-                                  {
-      
-                                  }
-      
                                   <View style={[styles.flex3, {position: 'relative', backgroundColor: '#e9e9e9', border: `${borderColor}`, borderRadius: 4}]}>
                                     <View style={[styles.minRef]}>
                                       <Text>{refMin}</Text>
@@ -447,7 +166,6 @@ class PrintPage extends Component {
                                     </View>
                                   </View>
                                 </View>
-      
                                 {
                                   showAlert &&
                                   <View style={[{fontSize: 8, lineHeight: 1.4, padding: 8, marginTop: 12, marginBottom: 12, backgroundColor: '#f0f0f0',  borderRadius: 4}]}>
@@ -456,7 +174,6 @@ class PrintPage extends Component {
                                     </Text>
                                   </View>
                                 }
-      
                               </View>
                           })
                         }
@@ -465,17 +182,12 @@ class PrintPage extends Component {
                   }
                 </View>
               }
-    
-    
-    
-    
               {
                 contentSetting.diagnosis &&
                 <View style={styles.section}>
                   <Text wrap={false} style={[styles.subTitle, styles.diagnosisTitle]}>
                     추정진단 ({diagnosis.length})
                   </Text>
-      
                   {
                     diagnosis.map((diagnosis, i) => {
                       const { name, description } = diagnosis;
@@ -490,9 +202,6 @@ class PrintPage extends Component {
                   }
                 </View>
               }
-    
-    
-    
               {
                 contentSetting.drug &&
                 <View style={styles.section}>
@@ -522,7 +231,6 @@ class PrintPage extends Component {
                       </Text>
                     }
                     </View>
-
                   <View style={styles.contentBox} wrap={false}>
                     <Text style={styles.name}>&#9635; 복약법</Text>
                     <Text style={styles.content}>
@@ -537,23 +245,17 @@ class PrintPage extends Component {
                   </View>
                 </View>
               }
-    
-    
-    
               {
                 contentSetting.teaching &&
                 <View style={styles.section}>
                   <Text wrap={false} style={[styles.subTitle, styles.teachingTitle]}>
                     환자지도
                   </Text>
-      
                   {
                     teaching.length > 0 ?
                     teaching.map((teaching, i) => {
                       const { description } = teaching;
-                      
                       return <View key={i} style={[styles.contentBox, styles.teachingContents]} wrap={false}>
-                        
                         <Text style={[styles.content]}>
                           {description || '환자 생활 지도에 관한 내용'}
                         </Text>
@@ -564,17 +266,8 @@ class PrintPage extends Component {
                     </Text>
                   }
                 </View>
-              }
-    
-    
-    
-    
-    
-              
-              <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-                `${pageNumber} / ${totalPages}`
-              )} fixed />
-              
+              }          
+              <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (`${pageNumber} / ${totalPages}`)} fixed />
               <View style={styles.copyright} fixed>
                 <Text>Copyright &copy; 2020 Cloudoc. All rights reserved.</Text>
               </View>
@@ -584,6 +277,5 @@ class PrintPage extends Component {
     }
   }
 }
-
 
 export default PrintPage;
