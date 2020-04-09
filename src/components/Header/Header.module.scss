@@ -1,8 +1,8 @@
 .Header {
     max-width: 1360px;
     @include media('lg') {
-        padding-left: 12rem;
-        padding-right: 12rem;
+        padding-left: 14rem;
+        padding-right: 14rem;
     }
     @include media('sm') {
         padding-left: 1rem;
@@ -21,7 +21,7 @@
             .logo {
                 width: 2.25rem;
                 height: auto;
-                margin-right: 1rem;
+                margin-right: 8px;
             }
             .title {
                 font-size: 1.1rem;
@@ -57,20 +57,6 @@
                     @include media('xs') {
                         margin-right: 1.5rem;
                     }
-                    // &::after {
-                    //     position: absolute;
-                    //     right: -1.5rem;
-                    //     top: 50%;
-                    //     transform: translateY(-50%);
-                    //     content: "\00a0";
-                    //     width: 1px;
-                    //     height: 50%;
-                    //     background-color: $bc-14;
-                    //     @include media('xs') {
-                    //         right: -0.75rem;
-                    //         height: 30%;
-                    //     }
-                    // }
                 }
             }
         }
