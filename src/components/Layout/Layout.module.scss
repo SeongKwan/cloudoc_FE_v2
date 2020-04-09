@@ -8,11 +8,11 @@
         align-items: center;
         height: 4rem;
         width: 100%;
-        background-color: $bc-01;
         top: 0;
         left: 0;
         z-index: $header-z-index;
-        opacity: 0.94;
+        background: rgba($bc-01, 0.9);
+        backdrop-filter: blur(8px);
     }
     .main-container {
         width: 100%;
@@ -29,7 +29,8 @@
         width: 100%;
         bottom: 0;
         left: 0;
-        background-color: rgba($bc-14, 0.6);
+        background: rgba($bc-14, 0.4);
+        backdrop-filter: blur(8px);
         padding: 2rem 0;
         @include media('sm') {
             padding: 1.5rem 0;
