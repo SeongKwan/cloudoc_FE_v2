@@ -3,26 +3,15 @@ import { withRouter } from 'react-router-dom';
 import styles from './HeaderEditor.module.scss';
 import classNames from 'classnames/bind';
 import { 
-    FiArrowLeft, 
-    FiMessageCircle,
-    FiTrash,
-    FiPlus,
-    FiSave,
-    FiHelpCircle,
-    FiEdit,
-    FiPrinter,
-    FiMenu
+    FiMenu, FiPlus, FiSave, FiEdit,
+    FiTrash, FiPrinter, FiArrowLeft, 
+    FiHelpCircle, FiMessageCircle,
 } from "../../lib/react-icons/fi";
-import {
-    IoMdArrowDropdown
-} from 'react-icons/io';
+import { IoMdArrowDropdown } from 'react-icons/io';
 import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
-import {
-    BrowserView,
-    MobileView
-} from "react-device-detect";
+import { BrowserView, MobileView } from "react-device-detect";
 
 const cx = classNames.bind(styles);
 
@@ -30,11 +19,7 @@ const cx = classNames.bind(styles);
 @inject('Case', 'user', 'caseEditorBasic', 'modal', 'symptom', 'lab', 'diagnosis', 'treatment', 'teaching')
 @observer
 class HeaderEditor extends Component {
-    state = {
-        downloadPDF: false,
-        focusParent: false,
-        open: false
-    }
+    state = { downloadPDF: false, focusParent: false, open: false }
     componentDidMount() {
         document.addEventListener('mousedown', this._handleClickOutside);
     }
@@ -43,7 +28,6 @@ class HeaderEditor extends Component {
         this.props.modal.clear();
         document.removeEventListener('mousedown', this._handleClickOutside);
     }
-
     _handleClickOutside = (event) => {
         if (this.recordDate && !this.recordDate.contains(event.target) && this.state.focusParent) {
             this.setState({ focusParent: false})
@@ -53,27 +37,22 @@ class HeaderEditor extends Component {
                 return this.setState({open: false})
             }
         }
-
     }
-
     _handleClickDeleteRecordButton = async () => {
         const { caseId } = this.props.match.params;
         if (window.confirm('한번 삭제 후 되돌릴 수 없습니다. 이 진료를 삭제하시겠습니까?')) {
-            if (this.props.Case.currentCaseRecord.length <= 1) {
-            return alert(`마지막 진료입니다. 완전삭제를 원하시면, 해당 증례를 삭제해 주세요`);
+            if (this.props.Case.currentCaseRecord.length <= 1) { return alert(`마지막 진료입니다. 완전삭제를 원하시면, 해당 증례를 삭제해 주세요`); }
+            else {
+                await this.props.Case.deleteRecordFromCase(caseId)
+                return this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
             }
-            if (this.props.Case.currentCaseRecord.length > 1) {
-            await this.props.Case.deleteRecordFromCase(caseId)
-            return this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
-            }
+            // if (this.props.Case.currentCaseRecord.length > 1) {
+            // }
         }
     }
-
     _toggleOnFocus = () => {
         this.setState({ focusParent: !this.state.focusParent})
     }
-
-
     render() {
         const { type } = this.props;
         const { isEditing, currentCaseRecord } = this.props.Case;
@@ -84,7 +63,6 @@ class HeaderEditor extends Component {
                 return false;
             }
         }
-        
         const { caseEditorBasic, symptom, lab, diagnosis, treatment, teaching } = this.props;
         let difference = (
             caseEditorBasic.diff ||
@@ -100,7 +78,9 @@ class HeaderEditor extends Component {
             <header className={cx('HeaderEditor')}>
                 <BrowserView>
                     <div className={cx('tool-bar', 'desktop')}>
-                        <div className={cx('btn-tool', 'back')} onClick={() => {
+                        <div 
+                            className={cx('btn-tool', 'back')} 
+                            onClick={() => {
                             if (isEditing) {
                                 if (difference) {
                                     if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {

@@ -6,34 +6,42 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     @include media('lg') {
         padding: 2rem 14rem;
     }
+
     @include media('sm') {
         padding: 0 1rem;
     }
+
     .brand-logo {
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
+
         img {
             margin-top: 1px;
             margin-right: 8px;
-            width: 40px;
+            width: 2.25rem;
         }
+
         .brand-name {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
         }
+
         @include media('sm') {
             display: none;
         }
     }
+
     .navbar {
         ul {
             display: flex;
             align-items: center;
             margin-bottom: 0;
+
             li {
                 color: $bc-14;
                 padding: 0.1rem 1rem;
@@ -42,16 +50,20 @@
                 transition-timing-function: ease;
                 cursor: pointer;
                 background-color: $bc-01;
+
                 @include media('sm') {
                     padding: 0.2rem 0.75rem;
                 }
+
                 &:hover {
                     background-color: $bc-14;
                     text-decoration: none;
+
                     a {
                         color: $bc-01;
                     }
                 }
+
                 &.active {
                     cursor: default;
                     background-color: $bc-14;
@@ -59,35 +71,36 @@
                         color: $bc-01;
                     }
                 }
+
                 a {
-                    
                     color: $bc-14;
                     text-decoration: none;
                     transition-property: font-weight, color;
                     transition-duration: 0.2s;
                     transition-timing-function: ease;
-                    font-size: 1.15rem;
+                    font-size: 1.1rem;
                     @include media('sm') {
                         font-size: 1rem;
                     }
-                    letter-spacing: 1px;
-                    
-                    
                 }
             }
+
             li:nth-child(2) {
                 margin: 0 6rem;
+
                 @include media('sm') {
                     margin: 0 1rem;
                 }
             }
         }
     }
+
     .btn-user {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
+
         button {
             display: flex;
             align-items: center;
@@ -98,13 +111,17 @@
             transition: all 0.3s;
             color: $bc-14;
             cursor: pointer;
+
             &:hover {
                 color: $bc-17;
             }
-            &:active, &:focus {
+
+            &:active,
+            &:focus {
                 outline: 0
             }
         }
+
         .content {
             opacity: 0;
             position: absolute;
@@ -119,11 +136,13 @@
             justify-content: center;
             min-width: 200px;
             right: 0;
-            @include media('lg') {
-            }
+
+            @include media('lg') {}
+
             .divider-horizon {
                 position: relative;
                 margin: 1.3rem 0;
+
                 &::after {
                     position: absolute;
                     top: 0;
@@ -135,38 +154,44 @@
                     transform: translateX(-50%);
                 }
             }
+
             .user-status {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+
                 .nickname {
-                    letter-spacing: 2px;
                     font-size: 1.1rem;
                     margin-bottom: 1rem;
                     font-weight: 900;
                 }
+
                 .charge {
                     margin-top: 0.5rem;
                     color: $bc-13;
                     cursor: pointer;
                     font-size: 0.9rem;
                     transition: color 0.3s ease;
-                    
+
                 }
             }
+
             .content-item {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
                 transition: color 0.3s ease;
+
                 &:hover {
                     color: $bc-17;
                 }
+
                 &:not(:last-child) {
                     margin-bottom: 0.5rem;
                 }
+
                 svg {
                     margin-right: 8px;
                 }
