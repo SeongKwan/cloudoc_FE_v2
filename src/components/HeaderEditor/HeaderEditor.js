@@ -12,6 +12,8 @@ import './HeaderEditor.css';
 import { inject, observer } from 'mobx-react';
 import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 import { BrowserView, MobileView } from "react-device-detect";
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 
@@ -38,21 +40,62 @@ class HeaderEditor extends Component {
             }
         }
     }
-    _handleClickDeleteRecordButton = async () => {
-        const { caseId } = this.props.match.params;
-        if (window.confirm('한번 삭제 후 되돌릴 수 없습니다. 이 진료를 삭제하시겠습니까?')) {
-            if (this.props.Case.currentCaseRecord.length <= 1) { return alert(`마지막 진료입니다. 완전삭제를 원하시면, 해당 증례를 삭제해 주세요`); }
-            else {
-                await this.props.Case.deleteRecordFromCase(caseId)
-                return this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
-            }
-            // if (this.props.Case.currentCaseRecord.length > 1) {
-            // }
-        }
-    }
     _toggleOnFocus = () => {
         this.setState({ focusParent: !this.state.focusParent})
     }
+    _handleClickOnBack = (type, message) => {
+        this._handleModal(type, message);
+        this.props.modal.setFunction(type, () => {
+            this.confirmCallBackFn();
+        })
+    }
+    _handleClickOnCreate = (type, message) => {
+        this._handleModal(type, message);
+        this.props.modal.setFunction(type, () => {
+            this.props.Case.clearIsEditing();
+            this.props.Case.clearAllEditableData();
+            this.props.history.push(`/case/editor/create`)
+        })
+    }
+    _handleClickOnUpdate = (type, message) => {
+        const { dateIndex } = this.props.match.params;
+        this._handleModal(type, message);
+        this.props.modal.setFunction(type, () => {
+            this.props.Case.updateCase(dateIndex)
+                .then(res => {
+                    if (res) {
+                        this.toastUpdateComplete();
+                        this.props.Case.toggleIsEditing();
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        })
+    }
+    _handleClickOnPost = () => {
+        if (this.props.caseEditorBasic.editableData.title !== '') {
+            this._handleModal('confirm', '증례를 생성하시겠습니까?');
+            this.props.modal.setFunction('confirm', () => {
+                this.props.Case.postCase();
+                this.props.Case.clearIsEditing();
+                this.props.history.push(`/case`);
+            })
+        } else {
+            this._handleModal('notification', '증례의 제목을 입력해 주세요');
+        }
+    }
+    _handleModal = (type, message) => {
+        this.props.modal.showModal(type, true);
+        this.props.modal.setMessage(type, message);
+    }
+    confirmCallBackFn = () => {
+        this.props.history.push(`/case`)
+        this.props.Case.clearIsEditing();
+    }
+
+    toastUpdateComplete = () => toast("증례가 수정되었습니다");
+
     render() {
         const { type } = this.props;
         const { isEditing, currentCaseRecord } = this.props.Case;
@@ -77,32 +120,31 @@ class HeaderEditor extends Component {
         return (
             <header className={cx('HeaderEditor')}>
                 <BrowserView>
+                    <ToastContainer 
+                        className={cx('toast')}
+                        toastClassName={cx('toast-wrapper')}
+                        bodyClassName={cx('toast-body')}
+                        position='top-right'
+                        autoClose={3000}
+                        transition={Bounce}
+                        closeButton={false}
+                    />
                     <div className={cx('tool-bar', 'desktop')}>
                         <div 
                             className={cx('btn-tool', 'back')} 
                             onClick={() => {
-                            if (isEditing) {
-                                if (difference) {
-                                    if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
-                                        this.props.history.push(`/case`)
-                                        this.props.Case.clearIsEditing();
+                                if (isEditing) {
+                                    if (difference) {
+                                        this._handleClickOnBack('confirm', '저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?');
                                     } else {
-                                        return false;
+                                        this.confirmCallBackFn();
                                     }
+                                } else if (!isEditing && type === 'create') {
+                                    this._handleClickOnBack('confirm', '작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?');
                                 } else {
-                                    this.props.history.push(`/case`)
-                                    this.props.Case.clearIsEditing();
+                                    this.confirmCallBackFn();
                                 }
-                            } else if (!isEditing && type === 'create') {
-                                if (window.confirm('작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?')) {
-                                    this.props.history.push(`/case`);
-                                    this.props.Case.clearIsEditing();
-                                }
-                            } else {
-                                this.props.history.push(`/case`);
-                                this.props.Case.clearIsEditing();
-                            }
-                        }}
+                            }}
                         >
                             <FiArrowLeft />
                             <div className={cx('label')}>뒤로</div>
@@ -112,16 +154,7 @@ class HeaderEditor extends Component {
                             <div 
                                 className={cx('btn-tool', 'create')}
                                 onClick={() => {
-                                        if (this.props.caseEditorBasic.editableData.title !== '') {
-                                            if (window.confirm('증례를 생성하시겠습니까?')) {
-                                                this.props.Case.clearIsEditing();
-                                                this.props.Case.clearAllEditableData();
-                                                this.props.history.push(`/case/editor/create`)
-                                            }
-                                            return false;
-                                        } else {
-                                            alert('증례의 제목을 입력해 주세요')
-                                        }
+                                        this._handleClickOnCreate('confirm', '새증례를 작성하시겠습니까?')
                                     }
                                 }
                             >
@@ -136,22 +169,8 @@ class HeaderEditor extends Component {
                                 className={cx('btn-tool', 'save', {disabled: !difference})} 
                                 onClick={() => {
                                     if (difference) {
-                                        if (window.confirm('수정하신 내용으로 저장하시겠습니까?')) {
-                                            return this.props.Case.updateCase(dateIndex)
-                                            .then(res => {
-                                                if (res) {
-                                                    alert('정상적으로 수정되었습니다');
-                                                    this.props.Case.toggleIsEditing();
-                                                }
-                                            })
-                                            .catch(err => {
-                                                console.log(err)
-                                            });
-                                        } else {
-                                            return false;
-                                        }
+                                        this._handleClickOnUpdate('confirm', '수정하신 내용으로 저장하시겠습니까?');
                                     }
-                                    return false;
                                 }}
                             >
                                 <FiSave />
@@ -165,19 +184,8 @@ class HeaderEditor extends Component {
                             <div 
                                 className={cx('btn-tool', 'save')} 
                                 onClick={() => {
-                                    if (this.props.caseEditorBasic.editableData.title !== '') {
-                                            if (window.confirm('증례를 생성하시겠습니까?')) {
-                                                this.props.Case.postCase();
-                                                this.props.Case.clearIsEditing();
-                                                this.props.history.push(`/case`);
-                                            }
-                                            return false;
-                                        } else {
-                                            alert('증례의 제목을 입력해 주세요');
-                                        }
-                                        
-                                    }
-                                }
+                                    this._handleClickOnPost();
+                                }}
                             >
                                 <FiSave />
                                 <div className={cx('label')}>
@@ -193,11 +201,10 @@ class HeaderEditor extends Component {
                                         const { dateIndex } = this.props.match.params;
                                         if (isEditing) {
                                             if (this.props.Case.checkDifferenceContent()) {
-                                                if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                                                this._handleModal('confirm', '저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?');
+                                                this.props.modal.setFunction('confirm', () => {
                                                     this.props.Case.toggleIsEditing(dateIndex);
-                                                } else {
-                                                    return false;
-                                                }
+                                                })
                                             } else {
                                                 this.props.Case.toggleIsEditing(dateIndex);
                                             }
@@ -219,7 +226,7 @@ class HeaderEditor extends Component {
                                 <div 
                                     className={cx('btn-tool', 'trash')}
                                     onClick={() => {
-                                            this.props.modal.showModal('caseDelete');
+                                            this.props.modal.showModal('caseDelete', true);
                                         }
                                     }
                                 >
@@ -235,8 +242,8 @@ class HeaderEditor extends Component {
                                 <div 
                                     className={cx('btn-tool', 'question')}
                                     onClick={() => {
-                                        window.alert('현재 준비중입니다.')
-                                        
+                                        this.props.modal.showModal('notification', true);
+                                        this.props.modal.setMessage('notification', '현재 준비중입니다');
                                     }}
                                 >
                                     <FiMessageCircle />
@@ -246,7 +253,7 @@ class HeaderEditor extends Component {
                                     className={cx('btn-tool', 'question')}
                                     onClick={() => {
                                         this.setState({downloadPDF: true});
-                                        this.props.modal.showModal('print', true);
+                                        this.props.modal.showModal('print', false);
                                     }}
                                 >
                                     <FiPrinter />
@@ -256,7 +263,13 @@ class HeaderEditor extends Component {
                             
                         }
 
-                        <div className={cx('btn-tool', 'qna')} onClick={() => {alert('현재 준비중입니다.')}}>
+                        <div 
+                            className={cx('btn-tool', 'qna')} 
+                            onClick={() => {
+                                this.props.modal.showModal('notification', true);
+                                this.props.modal.setMessage('notification', '현재 준비중입니다');
+                            }}
+                        >
                             <FiHelpCircle />
                             <div className={cx('label')}>도움</div>
                         </div>
@@ -265,19 +278,19 @@ class HeaderEditor extends Component {
                 {
                     type === 'detail' &&
                     <div 
-                        ref={(ref) => {
-                            this.recordDate = ref;
-                        }}
-                        className={cx('record-date', {focus: this.state.focusParent})}>
-                        <div className={cx('selected-date')} 
-                        onClick={() => { this._toggleOnFocus(); }}
+                        ref={(ref) => { this.recordDate = ref; }}
+                        className={cx('record-date', {focus: this.state.focusParent})}
+                    >
+                        <div 
+                            className={cx('selected-date')} 
+                            onClick={() => { this._toggleOnFocus(); }}
                         >
-                        <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
-                        {
-                            currentCaseRecord.length > 0 &&
-                            <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
-                        }
-                        <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
+                            <div>({`${+dateIndex + 1}/${currentCaseRecord.length}`})</div>
+                            {
+                                currentCaseRecord.length > 0 &&
+                                <div>{getLocaleDateWithYMS(currentCaseRecord[dateIndex])}</div>
+                            }
+                            <div className={cx('arrow-down-icon')}><IoMdArrowDropdown /></div>
                         </div>
                         {
                         this.state.focusParent &&
@@ -291,21 +304,23 @@ class HeaderEditor extends Component {
                                         this.setState({focusParent: false});
                                         if (isEditing) {
                                             if (this.props.Case.checkDifferenceContent()) {
-                                                if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
-                                                return this.props.Case.updateCase(dateIndex)
-                                                    .then(res => {
-                                                        if (res) {
-                                                            alert('정상적으로 수정되었습니다')
-                                                        }
-                                                    })
-                                                    .then(() => {
+                                                this.props.modal.setFunction('cancel', () => {
                                                     this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
-                                                    })
-                                                    .catch(err => {
-                                                        console.log(err)
-                                                    });
-                                                }
-                                                return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                                })
+                                                
+                                                this._handleModal('confirm', '저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?');
+                                                return this.props.modal.setFunction('confirm', () => {
+                                                    this.props.Case.updateCase(dateIndex)
+                                                        .then(res => {
+                                                            if (res) {
+                                                                this.toastUpdateComplete();
+                                                                this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
+                                                            }
+                                                        })
+                                                        .catch(err => {
+                                                            console.log(err)
+                                                        });
+                                                })
                                             }
                                         }
                                         return this.props.history.push(`/case/editor/detail/${caseId}/${i}`);
@@ -328,27 +343,28 @@ class HeaderEditor extends Component {
                     </div>
                 </MobileView>
                 <MobileView>
+                    <ToastContainer 
+                        className={cx('toast')}
+                        toastClassName={cx('toast-wrapper')}
+                        bodyClassName={cx('toast-body')}
+                        position='top-right'
+                        autoClose={3000}
+                        transition={Bounce}
+                        closeButton={false}
+                    />
                     <div ref={ref => this.toolbar = ref} className={cx('toggle-tool-bar', {open: this.state.open})}>
                         <div className={cx('tool-bar','mobile')}>
                             <div className={cx('btn-tool', 'back')} onClick={() => {
                                 if (isEditing) {
-                                    console.log('1')
                                     if (difference) {
-                                        if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
-                                            this.props.history.push(`/case`)
-                                            this.props.Case.clearIsEditing();
-                                        } else {
-                                            return false;
-                                        }
+                                        this._handleClickOnBack('confirm', '저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?');
                                     } else {
-                                        this.props.history.push(`/case`)
-                                        this.props.Case.clearIsEditing();
+                                        this.confirmCallBackFn();
                                     }
-                                } else if (!isEditing) {
-                                    if (window.confirm('작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?')) {
-                                        this.props.history.push(`/case`);
-                                        this.props.Case.clearIsEditing();
-                                    }
+                                } else if (!isEditing && type === 'create') {
+                                    this._handleClickOnBack('confirm', '작업한 내용은 저장되지 않습니다. 그대로 나가시겠습니까?');
+                                } else {
+                                    this.confirmCallBackFn();
                                 }
                                 }}
                             >
@@ -360,16 +376,7 @@ class HeaderEditor extends Component {
                                 <div 
                                     className={cx('btn-tool', 'create')}
                                     onClick={() => {
-                                            if (this.props.caseEditorBasic.editableData.title !== '') {
-                                                if (window.confirm('증례를 생성하시겠습니까?')) {
-                                                    this.props.Case.clearIsEditing();
-                                                    this.props.Case.clearAllEditableData();
-                                                    this.props.history.push(`/case/editor/create`)
-                                                }
-                                                return false;
-                                            } else {
-                                                alert('증례의 제목을 입력해 주세요')
-                                            }
+                                            this._handleClickOnCreate('confirm', '새증례를 작성하시겠습니까?')
                                         }
                                     }
                                 >
@@ -384,22 +391,8 @@ class HeaderEditor extends Component {
                                     className={cx('btn-tool', 'save', {disabled: !difference})} 
                                     onClick={() => {
                                         if (difference) {
-                                            if (window.confirm('수정하신 내용으로 저장하시겠습니까?')) {
-                                                return this.props.Case.updateCase(dateIndex)
-                                                .then(res => {
-                                                    if (res) {
-                                                        alert('정상적으로 수정되었습니다');
-                                                        this.props.Case.toggleIsEditing();
-                                                    }
-                                                })
-                                                .catch(err => {
-                                                    console.log(err)
-                                                });
-                                            } else {
-                                                return false;
-                                            }
+                                            this._handleClickOnUpdate('confirm', '수정하신 내용으로 저장하시겠습니까?');
                                         }
-                                        return false;
                                     }}
                                 >
                                     <FiSave />
@@ -413,17 +406,7 @@ class HeaderEditor extends Component {
                                 <div 
                                     className={cx('btn-tool', 'save')} 
                                     onClick={() => {
-                                        if (this.props.caseEditorBasic.editableData.title !== '') {
-                                                if (window.confirm('증례를 생성하시겠습니까?')) {
-                                                    this.props.Case.postCase();
-                                                    this.props.Case.clearIsEditing();
-                                                    this.props.history.push(`/case`);
-                                                }
-                                                return false;
-                                            } else {
-                                                alert('증례의 제목을 입력해 주세요');
-                                            }
-                                            
+                                        this._handleClickOnPost();
                                         }
                                     }
                                 >
@@ -441,11 +424,10 @@ class HeaderEditor extends Component {
                                             const { dateIndex } = this.props.match.params;
                                             if (isEditing) {
                                                 if (this.props.Case.checkDifferenceContent()) {
-                                                    if (window.confirm('저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?')) {
+                                                    this._handleModal('confirm', '저장되지 않은 내용이 있습니다. 그대로 나가시겠습니까?');
+                                                    this.props.modal.setFunction('confirm', () => {
                                                         this.props.Case.toggleIsEditing(dateIndex);
-                                                    } else {
-                                                        return false;
-                                                    }
+                                                    })
                                                 } else {
                                                     this.props.Case.toggleIsEditing(dateIndex);
                                                 }
@@ -467,9 +449,8 @@ class HeaderEditor extends Component {
                                     <div 
                                         className={cx('btn-tool', 'trash')}
                                         onClick={() => {
-                                                this.props.modal.showModal('caseDelete');
-                                            }
-                                        }
+                                                this.props.modal.showModal('caseDelete', true);
+                                            }}
                                     >
                                         <FiTrash />
                                         <div className={cx('label')}>삭제</div>
@@ -483,8 +464,8 @@ class HeaderEditor extends Component {
                                     <div 
                                         className={cx('btn-tool', 'question')}
                                         onClick={() => {
-                                            window.alert('현재 준비중입니다.')
-                                            
+                                            this.props.modal.showModal('notification', true);
+                                            this.props.modal.setMessage('notification', '현재 준비중입니다');
                                         }}
                                     >
                                         <FiMessageCircle />
@@ -494,7 +475,7 @@ class HeaderEditor extends Component {
                                         className={cx('btn-tool', 'question')}
                                         onClick={() => {
                                             this.setState({downloadPDF: true});
-                                            this.props.modal.showModal('print', true);
+                                            this.props.modal.showModal('print');
                                         }}
                                     >
                                         <FiPrinter />
@@ -504,7 +485,13 @@ class HeaderEditor extends Component {
                                 
                             }
 
-                            <div className={cx('btn-tool', 'qna')} onClick={() => {alert('현재 준비중입니다.')}}>
+                            <div 
+                                className={cx('btn-tool', 'qna')} 
+                                onClick={() => {
+                                    this.props.modal.showModal('notification', true);
+                                    this.props.modal.setMessage('notification', '현재 준비중입니다');
+                                }}
+                            >
                                 <FiHelpCircle />
                                 <div className={cx('label')}>도움</div>
                             </div>

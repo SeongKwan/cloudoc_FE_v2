@@ -75,18 +75,18 @@ class App extends Component {
 
   render() {
     const { readyForPaste } = this.props.lab;
-    
     return (
       <Router>
         <Helmet>
           <title>{`Cloudoc`}</title>
           <meta name="description" content="더 나은 선택을 위한 여러분의 한의학 비서" />
         </Helmet>
-        <main className={cx('App', {Windows: osName === 'Windows'}, {modalOpen: (this.props.modal.open && this.props.modal.onLayer)})}>
+        <main className={cx('App', {Windows: osName === 'Windows'})}>
         {
           !this.state.online &&
           <div className={cx('network-message', 'offline')}>오프라인 상태</div>
         }
+          <div className={cx({modalLayer: (this.props.modal.open && this.props.modal.onLayer)})}></div>
           <div id="modal-area">
             <Modal />
           </div>

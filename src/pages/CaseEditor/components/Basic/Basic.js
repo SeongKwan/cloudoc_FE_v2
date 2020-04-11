@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './Basic.module.scss';
 import classNames from 'classnames/bind';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +15,8 @@ const cx = classNames.bind(styles);
     'login',
     'user', 
     'caseEditorBasic',
-    'lab'
+    'lab',
+    'modal'
 )
 @observer
 class Basic extends Component {
@@ -43,12 +46,17 @@ class Basic extends Component {
 
     _handleClickGender = (e) => {
         const { dataset } = e.target;
-        if (window.confirm('성별을 바꾸면 혈액검사가 초기화 됩니다. 바꾸시겠습니까?')) {
+
+        this._handleModal('confirm', '성별을 바꾸면 혈액검사가 초기화 됩니다. 바꾸시겠습니까?');
+        this.props.modal.setFunction('confirm', () => {
             this.props.lab.clearForSelector();
             this.props.caseEditorBasic.changeEditableData(dataset.name, dataset.value);
-        } else {
-            return false;
-        }
+        })
+    }
+
+    _handleModal = (type, message) => {
+        this.props.modal.showModal(type, true);
+        this.props.modal.setMessage(type, message);
     }
 
     render() {

@@ -17,7 +17,7 @@ class CollapsibleStore {
         this.open[type][detail] = !this.open[type][detail];
     }
     
-    @action initOpen(type, detail) {
+    @action initOpen(type, detail = '') {
         if (type === 'basic') {
             return this.open[type] = true;
         }

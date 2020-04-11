@@ -14,6 +14,17 @@
         height: 4.5rem;
     }
 
+    .toast {
+        width: 280px;
+        .toast-wrapper {
+            min-height: 48px;
+            padding-left: 1rem;
+        }
+        .toast-body {
+            color: $bc-18;
+        }
+    }
+
     .record-date {
         display: flex;
         justify-content: center;

@@ -11,13 +11,11 @@ const cx = classNames.bind(styles);
 @observer
 class CollapsibleBox extends Component {
     componentDidMount() {
-        if (this.props.initOpen) {
-            this.props.collapsible.toggleSwitch('basic', null);
+        if (this.props.type === 'basic' && this.props.initOpen && !this.props.collapsible.open['basic']) {
+            this.props.collapsible.initOpen('basic');
         }
     }
-    componentWillUnmount() {
-        this.props.collapsible.clear();
-    }
+    
     _handleClickToggle = (e) => {
         e.stopPropagation();
         let type = this.props.sidebar ? 'sidebar' : 'basic';
@@ -33,10 +31,13 @@ class CollapsibleBox extends Component {
     }
     render() {
         const { open } = this.props.collapsible;
-        let type = this.props.sidebar ? 'sidebar' : 'basic';
-        let openSidebar = type === 'basic' ? open[type] : open[type][this.props.detail];
+        let type = this.props.type;
+        let openSidebar = open[type][this.props.detail];
+        let openContent = open[type];
         const { editableData } = this.props.lab;
         let { length } = editableData;
+
+
         if (this.props.short) {
             return (
                 <div className={cx('CollapsibleBox2', {active: length > 0}, {sidebar: this.props.sidebar}, {open: openSidebar === true})}>
@@ -71,7 +72,7 @@ class CollapsibleBox extends Component {
             );
         } else {
             return (
-                <div className={cx('CollapsibleBox', {sidebar: this.props.sidebar}, {open: openSidebar === true})}>
+                <div className={cx('CollapsibleBox', {open: openContent === true})}>
                     <div className={cx('header')} onClick={this._handleClickToggle}>
                         <h5>
                             {this.props.title}
@@ -80,7 +81,7 @@ class CollapsibleBox extends Component {
                                 className={cx('btn-toggle')}
                             >
                                 {
-                                    openSidebar ?
+                                    openContent ?
                                     <MdKeyboardArrowUp />
                                     :
                                     <MdKeyboardArrowDown />
@@ -89,7 +90,7 @@ class CollapsibleBox extends Component {
                         </h5>
                     </div>
                     {
-                        openSidebar && 
+                        openContent && 
                         <div className={cx('content')}>
                             {this.props.children}
                         </div>

@@ -117,8 +117,7 @@ class LoginStore {
         const THIS = this;
         return new Promise(function (resolve, reject) {
             if (type !== 'expiredRefreshToken') {
-                const logoutOK = window.confirm('로그아웃 하시겠습니까?');
-                if (logoutOK) {
+                if (true) {
                     THIS._removeItem()
                     THIS.setLoggedIn(false);
                     authStore.destroyTokenAndUuid();

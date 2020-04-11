@@ -8,7 +8,18 @@ class ModalStore {
         alert: false,
         error: false,
         caseDelete: true,
-        print: false
+        print: false,
+        notification: false
+    };
+    
+    @observable message = {
+        notification: '',
+        confirm: ''
+    };
+
+    @observable callBackFn = {
+        confirm: null,
+        cancel: null
     }
 
     @action showModal(type, layer = false) {
@@ -17,22 +28,35 @@ class ModalStore {
             this.onLayer = true;
         }
         this.open = true;
-        // let checkOpenStatus = Object.values(this.modalType);
-        // if (checkOpenStatus.findIndex(v => v === false) > -1) {
-        //     this.clearModalType();
-        // };
 
         this.modalType[type] = true;
     }
 
-    @action closeModal(type) {
+    @action closeModal() {
         this.clear();
+    }
+
+    @action setMessage(type, message) {
+        this.message[type] = message;
+    }
+
+    @action setFunction(type, callBackFn) {
+        this.callBackFn[type] = callBackFn;
     }
 
     @action clear() {
         this.open = false;
         this.onLayer = false;
         this.clearModalType();
+        this.message = {
+            notification: '',
+            confirm: ''
+        };
+    
+        this.callBackFn = {
+            confirm: null,
+            cancel: null
+        }
     }
     @action clearModalType(){
         this.modalType = {
@@ -40,7 +64,8 @@ class ModalStore {
             alert: false,
             error: false,
             caseDelete: false,
-            print: false
+            print: false,
+            notification: false
         }
     }
 }

@@ -1,23 +1,38 @@
 .CaseDelete {
-    position: absolute;
-    background-color: $bc-03;
-    padding: 1rem;
-    width: 320px;
-    border-radius: $radius-medium;
-    font-size: 1rem;
-    user-select: none;
-    top: 5.1rem;
-    left: calc(80px * 2.5);
 
-    @include media('lg') {
-        top: 4.6rem;
-        left: calc(58.5px * 2.5);
-    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $white;
+    width: 540px;
+    height: 200px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px 0px;
+    border-radius: $radius-medium;
+    padding: 2rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    user-select: none;
+
     @include media('sm') {
-        left: calc(43.5px * 2.5);
+        // left: calc(43.5px * 2.5);
     }
-    
-    .top, .bottom {
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.75rem;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .top,
+    .bottom {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -26,51 +41,56 @@
         cursor: pointer;
         transition: all 0.3s ease;
     }
+
     .top {
         background-color: $bc-12;
         margin-bottom: 1rem;
+
         &:hover {
-            color: $bc-01;
+            opacity: 0.8;
         }
     }
+
     .bottom {
         background-color: $bc-11;
+
         &:hover {
-            color: $bc-01;
+            opacity: 0.8;
         }
     }
+
     .delete-message {
         padding: 1rem;
         color: $bc-18;
+        font-size: 1.2rem;
         border-radius: $radius-high;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         word-wrap: break-word;
-        &.record {
-            background-color: $bc-12;
-        }
-        &.case {
-            background-color: $bc-11;
-        }
+
     }
+
     .button-wrapper {
         display: flex;
+        justify-content: flex-end;
 
         .button {
             border-radius: $radius-high;
-            padding: 1rem;
-            flex: 1;
+            padding: 0.75rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 80px;
+
             &:hover {
-                opacity: 0.9;
+                opacity: 0.8;
             }
-            
+
             &.cancel {
                 background-color: $oc-gray-3;
                 color: $bc-18;
                 margin-right: 0.5rem;
             }
+
             &.delete {
                 background-color: $oc-red-9;
                 color: $bc-14;

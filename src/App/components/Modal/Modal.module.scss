@@ -3,4 +3,9 @@
     z-index: 9999999999;
     top: 0;
     left: 0;
+    &.layer {
+        width: 100vw;
+        height: 100vh;
+        overflow-y: hidden;
+    }
 }

@@ -15,23 +15,17 @@ import {
     MdKeyboardArrowLeft
 } from 'react-icons/md';
 import { getLocaleDateWithYMS } from '../../../../utils/momentHelper';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 
 @withRouter
 @inject(
-    'Case',
-    'caseEditorBasic',
-    'symptom',
-    'lab',
-    'diagnosis',
-    'treatment', 
-    'analyzeSymptom',
-    'analyzeDrug',
-    'analyzeTeaching',
-    'teaching',
-    'caseEditor'
+    'Case', 'caseEditorBasic', 'symptom',
+    'lab', 'diagnosis', 'treatment', 
+    'analyzeSymptom', 'analyzeDrug', 'analyzeTeaching',
+    'teaching', 'caseEditor', 'modal'
 )
 @observer
 class LeftSideToolbar extends Component {
@@ -171,8 +165,6 @@ class LeftSideToolbar extends Component {
         setTimeout(() => {
             $('#detail-container ul').scrollTop(0);
         }, 50);
-        
-
     }
 
     handleClickOutside = (event) => {
@@ -205,7 +197,7 @@ class LeftSideToolbar extends Component {
                 this.props.Case.analyzeSymptom(referenceData)
                 .then(result => {
                     let countResult = result.length;
-                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    if (countResult === 0) this._handleModal('notification', '해당하는 분석결과가 없습니다');
                     this.props.analyzeSymptom.initiateOpen();
                 });
             }
@@ -216,7 +208,7 @@ class LeftSideToolbar extends Component {
                 this.props.Case.analyzeTreatment(referenceData)
                 .then(result => {
                     let countResult = result.length;
-                    if (countResult === 0) alert('해당하는 분석결과가 없습니다');
+                    if (countResult === 0) this._handleModal('notification', '해당하는 분석결과가 없습니다');
                     this.props.analyzeDrug.initiateOpen();
                 });
             }
@@ -239,7 +231,7 @@ class LeftSideToolbar extends Component {
                         })
                     });
 
-                    if (counts <= 0) alert('해당하는 분석결과가 없습니다');
+                    if (counts <= 0) this._handleModal('notification', '해당하는 분석결과가 없습니다');
                     this.props.analyzeTeaching.initiateOpen();
                 });
             }
@@ -277,6 +269,13 @@ class LeftSideToolbar extends Component {
             objDiv.animate({scrollTop: h});
         }
     }
+
+    _handleModal = (type, message) => {
+        this.props.modal.showModal(type, true);
+        this.props.modal.setMessage(type, message);
+    }
+
+    toastUpdateComplete = () => toast("증례가 수정되었습니다");
 
     render() {
         const { openList } = this.state;
@@ -341,21 +340,23 @@ class LeftSideToolbar extends Component {
                             onClick={() => {
                                 if (isEditing) {
                                     if (difference) {
-                                        if (window.confirm('저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?')) {
-                                        return this.props.Case.updateCase(dateIndex)
-                                            .then(res => {
-                                                if (res) {
-                                                    alert('정상적으로 수정되었습니다')
-                                                }
-                                            })
-                                            .then(() => {
-                                            this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
-                                            })
-                                            .catch(err => {
-                                                console.log(err)
-                                            });
-                                        } 
-                                        return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                        this.props.modal.setFunction('cancel', () => {
+                                        this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                    })
+                                    
+                                    this._handleModal('confirm', '저장되지 않은 내용이 있습니다. 저장하고 다른 진료일자로 바꾸시겠습니까?');
+                                    return this.props.modal.setFunction('confirm', () => {
+                                    this.props.Case.updateCase(dateIndex)
+                                        .then(res => {
+                                            if (res) {
+                                                this.toastUpdateComplete();
+                                                this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                        });
+                                    })
                                     }
                                 } 
                                 return this.props.history.push(`/case/editor/detail/${caseId}/${+dateIndex + 1}`)

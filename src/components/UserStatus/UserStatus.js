@@ -16,7 +16,7 @@ class UserStatus extends Component {
                     </div>
                     <div className={cx('info')}>
                         <div className={cx('nickname')}><span>{`${this.props.username}`}</span> 님, 환영합니다</div>
-                        <div className={cx('points')}>현재잔여포인트 <span>1,000 PTS</span></div>
+                        <div className={cx('points')}>현재포인트 <span>1,000 PTS</span></div>
                     </div>
                 </div>
             </div>

@@ -67,7 +67,7 @@
     &.sidebar {
         z-index: 6;
         padding: 0rem;
-        overflow: hidden;
+        // overflow: hidden;
         position: relative;
         &:not(:last-child) {
             margin-bottom: 0.5rem;
@@ -149,7 +149,7 @@
 
     .tool:hover::after,
     .tool:focus::after {
-        transform: scale(1) translateX(0) translateY(-15%);
+        transform: scale(1) translateX(5%) translateY(20%);
     }
 
 
@@ -159,7 +159,7 @@
         border-width: 0.5em;
         border-color: transparent transparent $bc-18 transparent;
         left: 5%;
-        top: 80%;
+        top: 100%;
         content: "";
         transition: all .35s cubic-bezier(.84, -0.18, .31, 1.26), opacity .35s .2s;
         transform: scale(.6) translateY(-50%);
@@ -173,6 +173,7 @@
 
     /*== speech bubble ==*/
     .tool::after {
+        font-weight: 400;
         font-size: 0.7rem;
         background: $bc-18;
         border-radius: $radius-low;

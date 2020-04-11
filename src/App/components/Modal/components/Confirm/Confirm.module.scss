@@ -1,0 +1,54 @@
+.Confirm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $white;
+    width: 540px;
+    min-height: 100px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px 0px;
+    border-radius: $radius-medium;
+    padding: 2rem;
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.75rem;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .message {
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+    }
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+
+        .button {
+            border-radius: $radius-high;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 80px;
+
+            &:hover {
+                opacity: 0.8;
+            }
+
+            &.confirm {
+                background-color: $bc-08;
+                color: $bc-14;
+            }
+            &.cancel {
+                background-color: $oc-gray-3;
+                color: $bc-18;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+}

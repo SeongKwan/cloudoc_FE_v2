@@ -4,6 +4,9 @@ import styles from './CaseDelete.module.scss';
 import classNames from 'classnames/bind';
 import { inject, observer } from 'mobx-react';
 import { getLocaleDateWithYMS } from '../../../../../utils/momentHelper';
+import { FiX } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 
@@ -11,10 +14,7 @@ const cx = classNames.bind(styles);
 @inject('modal', 'Case', 'user')
 @observer
 class CaseDelete extends Component {
-    state = {
-        open: false,
-        openType: ''
-    }
+    state = { open: false, openType: '' }
     componentDidMount() {
         document.addEventListener('mousedown', this._handleClickOutside);
     }
@@ -26,24 +26,27 @@ class CaseDelete extends Component {
 
     _handleClickOutside = (event) => {
         if (this.CaseDelete && !this.CaseDelete.contains(event.target)) {
-            this.props.modal.closeModal()
+            this.props.modal.closeModal();
         }
-    }
-    handleClickOnCancel = () => {
-        this.props.modal.closeModal();
     }
 
     _handleClickDeleteRecordButton = async () => {
         const caseId = this.props.Case.currentCase._id
-        await this.props.Case.deleteRecordFromCase(caseId);
-        await this.props.modal.closeModal();
-        return this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
+        
+        if (this.props.Case.currentCaseRecord.length <= 1) { return alert(`마지막 진료입니다. 완전삭제를 원하시면, 해당 증례를 삭제해 주세요`); }
+        else {
+            await this.props.Case.deleteRecordFromCase(caseId)
+            this.toastDeleteRecordComplete();
+            await this.props.modal.closeModal();
+            return this.props.history.replace(`/case/editor/detail/${caseId}/${0}`);
+        }
     }
 
     _handleClickDeleteCaseButton = () => {
         this.props.modal.closeModal();
         return this.props.Case.deleteCase(this.props.Case.currentCase._id)
         .then(res => {
+            this.toastDeleteCaseComplete();
             this.props.history.push(`/case`);
         });
     }
@@ -52,11 +55,19 @@ class CaseDelete extends Component {
         this.setState({open: true, openType: type})
     }
 
+    _handleModal = (type, message) => {
+        this.props.modal.showModal(type, true);
+        this.props.modal.setMessage(type, message);
+    }
+
+    toastDeleteRecordComplete = () => toast("기록이 삭제되었습니다");
+    toastDeleteCaseComplete = () => toast("증례가 삭제되었습니다");
 
     render() {
         const { currentCaseRecordDate } = this.props.Case;
         return (
             <div ref={ref => this.CaseDelete = ref} className={cx('CaseDelete')} onMouseLeave={() => {}}>
+                <div className={cx('close')} onClick={() => {this.props.modal.closeModal()}}><FiX /></div>
                 {
                     !this.state.open &&
                     <>
@@ -88,9 +99,9 @@ class CaseDelete extends Component {
                             this.state.openType === 'case' &&
                             <>
                                 <div className={cx('delete-message','case')}>
-                                    <p>이 작업은 되돌릴 수 없습니다.</p>
+                                    이 작업은 되돌릴 수 없습니다. <br/>
                                     {
-                                        `증례 [${this.props.Case.currentCase.title}] 을(를) 삭제합니다.`
+                                        `정말 증례-[${this.props.Case.currentCase.title}]을(를) 삭제하시겠습니까?`
                                     }
                                     </div>
                                 <div className={cx('button-wrapper')}>

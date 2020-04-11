@@ -33,7 +33,8 @@ const cx = classNames.bind(styles);
   'caseEditorBasic',
   'symptomListItem',
   'drugListItem',
-  'diagnosisListItem'
+  'diagnosisListItem',
+  'collapsible'
 )
 @observer
 class CaseEditor extends Component {
@@ -74,9 +75,12 @@ class CaseEditor extends Component {
 
   componentDidUpdate(prevProps) {
     const { type, dateIndex } = this.props.match.params;
-    if (prevProps.match.params.dateIndex !== this.props.match.params.dateIndex) {
-      this.props.Case.setCurrentCaseDetail(dateIndex);
-      this.props.Case.setCurrentCase(this.props.Case.currentCase, dateIndex);
+    let where = this.props.history.location.pathname.split('/')[3];
+    if (where === 'detail') {
+      if (prevProps.match.params.dateIndex !== this.props.match.params.dateIndex) {
+        this.props.Case.setCurrentCaseDetail(dateIndex);
+        this.props.Case.setCurrentCase(this.props.Case.currentCase, dateIndex);
+      }
     }
     
     $('#case-editor-center-container-scroll-box').on("scroll", function() {
@@ -97,6 +101,7 @@ class CaseEditor extends Component {
     this.props.Case.clearIsEditing();
     this.props.Case.clearCurrentCase();
     this.props.Case.clearAllEditableData();
+    this.props.collapsible.clear();
     document.removeEventListener('mousedown', this._handleClickOutside);
   }
 
@@ -151,8 +156,10 @@ class CaseEditor extends Component {
                   <>
                     <Basic type={type} />
                     <CollapsibleBox 
+                      type="basic"
                       title={isEditing || type === "create" ? "추가정보(선택입력)" : "추가정보"} 
                       initOpen={(type === "detail" && checkContentEmpty) ? true : false}
+                      sidebar={false}
                     >
                       <BasicOptional type={type} />
                     </CollapsibleBox>
