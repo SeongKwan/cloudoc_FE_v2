@@ -81,6 +81,7 @@ class Basic extends Component {
                     {
                         type === 'create' || isEditing ?
                         <input 
+                            className="input_case_title"
                             name="title" 
                             autoFocus
                             id="title" 

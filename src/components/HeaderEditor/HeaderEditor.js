@@ -14,6 +14,7 @@ import { getLocaleDateWithYMS } from '../../utils/momentHelper';
 import { BrowserView, MobileView } from "react-device-detect";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import $ from 'jquery';
 
 const cx = classNames.bind(styles);
 
@@ -82,7 +83,8 @@ class HeaderEditor extends Component {
                 this.props.history.push(`/case`);
             })
         } else {
-            this._handleModal('notification', '증례의 제목을 입력해 주세요');
+            toast('증례의 제목을 입력해주세요');
+            $('.input_case_title').focus();
         }
     }
     _handleModal = (type, message) => {
