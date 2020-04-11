@@ -3,8 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import styles from './Basic.module.scss';
 import classNames from 'classnames/bind';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 
