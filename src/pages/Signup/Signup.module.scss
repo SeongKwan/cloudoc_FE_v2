@@ -54,4 +54,18 @@
             }
         }
     }
+    .container-error {
+        background-color: rgba($bc-18, 0.6);
+        font-size: 0.5rem;
+        color: $bc-14;
+        border-radius: $radius-low;
+        padding: 0.2rem 0.4rem;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+
+        p {
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    }
 }
