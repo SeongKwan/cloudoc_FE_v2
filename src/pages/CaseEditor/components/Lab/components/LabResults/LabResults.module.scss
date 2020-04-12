@@ -1,0 +1,101 @@
+.LabResults {
+
+    .category-title {
+        letter-spacing: 1.3px;
+    
+        span {
+            color: $bc-01;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+    }
+    
+    li {
+        display: flex;
+        padding: 0.8rem 0.5rem;
+        padding-right: 0;
+        position: relative;
+    
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+    
+        .trash {
+            display: flex;
+            align-items: center;
+            color: $gray-1;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 45%;
+            left: -25px;
+            transform: translateY(-50%);
+    
+            &:hover {
+                color: $bc-17;
+            }
+    
+            svg {
+                cursor: pointer;
+            }
+    
+            &.last {
+                &:hover {
+                    color: $gray-1;
+                }
+    
+                svg {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    
+        .lab-name-unit {
+            position: relative;
+            flex: 1;
+    
+            .unit {
+                position: absolute;
+                left: 0;
+                top: 25px;
+                font-weight: 100;
+                position: absolute;
+                left: 4px;
+                top: 25px;
+                font-size: 0.9rem;
+                color: $gray-3;
+            }
+        }
+    
+        .alert-icon {
+            position: absolute;
+            top: 0;
+            right: 16px;
+            width: 35px;
+            font-size: 1.6rem;
+            display: flex;
+            cursor: pointer;
+    
+            &.high {
+                color: $bc-09;
+            }
+    
+            &.low {
+                color: $bc-01;
+            }
+    
+            @include media('lg') {
+                right: 10px;
+            }
+        }
+    
+        .bar-wrapper {
+            flex: 1;
+            max-width: 240px;
+            margin-right: 3rem;
+    
+            @include media('lg') {
+                margin-right: 2rem;
+            }
+        }
+    }
+}

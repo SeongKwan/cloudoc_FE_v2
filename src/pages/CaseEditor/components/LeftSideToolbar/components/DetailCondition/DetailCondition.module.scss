@@ -1,0 +1,429 @@
+.detail-container {
+    left: 472px;
+    visibility: hidden;
+    z-index: -10;
+
+    @include media('lg') {
+        left: 359px;
+    }
+
+    &.open {
+        visibility: visible;
+        z-index: 9999999;
+    }
+    position: absolute;
+    top: 0%;
+    border-radius: $radius-low;
+
+    ul {
+        margin-bottom: 0;
+    }
+
+    .scroll-box {
+        max-height: 700px;
+        overflow-y: scroll;
+
+        @include media('lg') {
+            max-height: 520px;
+        }
+    }
+
+    .detail {
+        position: absolute;
+        top: 0px;
+        border-radius: $radius-low;
+        background-color: rgba($bc-03, 1);
+        color: $white;
+
+        ul {
+            box-shadow: 6px 0 3px -1.5px rgba($black, 0.2);
+        }
+
+        li {
+            color: $white;
+            padding: 1rem 0;
+            padding-top: 3rem;
+            width: 750px;
+
+            @include media('lg') {
+                width: 630px;
+            }
+        }
+    }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        background-color: rgba(white, 0.15);
+        margin: 1.5rem 0;
+    }
+
+    .anchor {
+        color: $bc-14;
+        font-weight: 400;
+        font-size: 0.7rem;
+        position: relative;
+        top: -4px;
+        left: 0px;
+        cursor: pointer;
+        display: inline-block;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+        padding: 0 1rem;
+        position: relative;
+
+        .btn-close {
+            position: absolute;
+            left: 1rem;
+            top: -2rem;
+
+            button {
+                background-color: $bc-18;
+                padding: 0.2rem 0.5rem;
+                border: 0;
+                border-radius: $radius-low;
+                color: $white;
+                font-size: 0.8rem;
+                font-weight: 100;
+                letter-spacing: 1px;
+                cursor: pointer;
+
+                &:focus,
+                &:active {
+                    outline: 0;
+                }
+            }
+        }
+
+        .title {
+            padding: 1rem;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: $bc-18;
+
+            .input-container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+
+                input {
+                    @extend %input;
+                    border-radius: 4px;
+                    font-size: 0.9rem;
+                    padding: 0.3rem 0.5rem;
+
+                    &::placeholder {
+                        font-weight: 300;
+                    }
+                }
+
+                textarea {
+                    width: 100%;
+                    border-radius: 4px;
+                    max-width: 20rem;
+                    border: 0;
+                    background-color: $gray-1;
+                    font-size: 0.9rem;
+                    padding: 0.3rem;
+
+                    &:focus {
+                        outline: 0;
+                    }
+
+                    &::placeholder {
+                        color: $oc-gray-5;
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
+
+        .edit-save-delete-button {
+            display: flex;
+
+            .button {
+                color: $bc-01;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.3s;
+                padding: 0.2rem;
+                font-size: 1rem;
+
+                &:not(:last-child) {
+                    margin-right: 1.2rem;
+                }
+
+                &:hover {
+                    color: lighten($bc-01, 15%);
+                    cursor: pointer;
+                }
+
+                .icon {
+                    color: inherit;
+                    font-size: 1.25em;
+                }
+
+                .label {
+                    color: inherit;
+                    font-size: 0.7em;
+                }
+            }
+        }
+    }
+
+    .top-content {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+
+            .pathology-item {
+                margin-bottom: 0rem;
+            }
+
+            .box {
+                width: 100%;
+
+                font-weight: 300;
+                padding-left: 1rem;
+                font-size: 0.925em;
+            }
+
+            .detail-item,
+            .teach-item {
+                display: flex;
+                color: $bc-18;
+                font-weight: 400;
+
+                &:not(:last-child) {
+                    margin-bottom: 0.3rem;
+                }
+
+                &>div {
+                    width: 100%;
+                    padding-right: 1rem;
+                }
+
+                button {
+                    padding: 0.2rem 1rem;
+                }
+            }
+
+            .pathology-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                color: $bc-18;
+                font-weight: 400;
+
+                .pathology {
+                    display: flex;
+                    margin-bottom: 0.3rem;
+
+                    .pathology-content {
+                        width: 100%;
+                    }
+
+                    button {
+                        padding: 0.2rem 1rem;
+                    }
+                }
+            }
+
+            .head {
+                font-weight: 700;
+            }
+
+            .linked {
+                display: flex;
+                margin-bottom: 0.3rem;
+                color: $bc-18;
+                font-weight: 400;
+            }
+
+            .lab-state {
+                text-transform: uppercase;
+
+                &.high {
+                    color: rgb(194, 63, 63);
+                }
+
+                &.low {
+                    color: rgb(64, 64, 173);
+                }
+            }
+
+            .drug {
+                margin-bottom: 0.5rem;
+            }
+
+            .drug-card {
+                display: flex;
+                flex-direction: column;
+                border: 1px solid rgba(white, 0.3);
+                padding: 0.5rem;
+                border-radius: 2px;
+
+                .drug-card-body {
+                    display: flex;
+
+                    &:not(:last-child) {
+                        margin-bottom: 0.3rem;
+                    }
+
+                    .drug-label {
+                        flex: 2;
+                        font-weight: 500;
+                    }
+
+                    .drug-content {
+                        flex: 8;
+                        font-weight: 300;
+                    }
+                }
+            }
+
+            .label {
+                width: 10rem;
+                font-size: 1rem;
+                font-weight: 700;
+                letter-spacing: 1px;
+                padding: 0rem 0;
+                margin-bottom: 1rem;
+                padding-left: 0.5rem;
+                color: $bc-18;
+            }
+
+            .read-only {
+                display: flex;
+                align-items: center;
+            }
+
+            .input-container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+
+                input {
+                    @extend %input;
+                    border-radius: 4px;
+                    font-size: 0.9rem;
+                    padding: 0.3rem 0.5rem;
+
+                    &::placeholder {
+                        font-weight: 300;
+                    }
+                }
+
+                textarea {
+                    width: 100%;
+                    border-radius: 4px;
+                    max-width: 20rem;
+                    border: 0;
+                    background-color: $gray-1;
+                    font-size: 0.9rem;
+                    padding: 0.3rem;
+
+                    &:focus {
+                        outline: 0;
+                    }
+
+                    &::placeholder {
+                        color: $oc-gray-5;
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
+    }
+
+    .bottom-content {
+        padding: 0 1rem;
+
+        .input-form-container {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            overflow-x: auto;
+
+            .form-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                &:not(:last-child) {
+                    margin-right: 1.2rem;
+                }
+
+                &.related-disease {
+                    flex: 1;
+                }
+
+                &.relevance,
+                &.reference {
+                    flex: 2;
+                }
+
+                &.delete-row-button {
+                    padding: 0.3rem 0;
+                    color: $delete;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                .label {
+                    margin-bottom: 0.3rem;
+                }
+
+                .content {
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0.3rem;
+
+                    .icon {
+                        margin-left: 0.3rem;
+                        font-size: 1rem;
+                    }
+
+                    input {
+                        width: 100%;
+                        @extend %input;
+                        border-radius: 4px;
+                        padding: 0.3rem;
+                    }
+                }
+            }
+        }
+
+        .addup-button-wrapper {
+            .addup-button {
+                background-color: $bc-01;
+                font-size: 0.8rem;
+
+                .icon {
+                    margin-left: 0.3rem;
+                }
+
+                &:hover {
+                    background-color: lighten($bc-01, 10%);
+                }
+            }
+        }
+    }
+}

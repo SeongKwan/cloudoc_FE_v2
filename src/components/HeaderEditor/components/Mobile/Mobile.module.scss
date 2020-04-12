@@ -1,0 +1,104 @@
+.toast {
+    width: 280px;
+    .toast-wrapper {
+        min-height: 48px;
+        padding-left: 1rem;
+    }
+    .toast-body {
+        color: $bc-18;
+    }
+}
+
+
+
+.tool-bar, .menu {
+    position: absolute;
+    display: flex;
+    font-size: 1.8rem;
+}
+.tool-bar {
+    left: 0;
+    &.desktop {
+        top: 0;
+    }
+    &.mobile {
+        background: $bc-03;
+        color: $bc-18;
+        width: 100%;
+        top: 100%;
+        padding: 0.75rem 0.5rem 0.6rem;
+    }
+}
+.menu {
+    right: 0;
+}
+.btn-tool {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 2px;
+    transition: all 0.3s ease;
+    height: 5rem;
+    width: 80px;
+    @include media('lg') {
+        width: 58.5px;
+        height: 4.5rem;
+    }
+    @include media('sm') {
+        width: 43.5px;
+        height: 3.5rem;
+    }
+    &:hover {
+        background-color: rgba($bc-17, 0.3);
+    }
+    &.disabled {
+        color: $bc-02;
+        cursor: not-allowed;
+        &:hover {
+            background-color: initial;
+        }
+    }
+    .label {
+        margin-top: 0.3rem;
+        font-size: 0.8rem;
+    }
+}
+
+.drop-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+a.report {
+    border: 0 !important;
+    background-color: transparent !important;
+    color: $white !important;
+    &:hover {
+        background-color: rgba($bc-17, 0.3) !important;
+    }
+}
+
+.title {
+    input {
+        font-size: 1.3rem;
+    }
+}
+
+.menu {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.toggle-tool-bar {
+    display: none;
+    &.open {
+        display: flex;
+    }
+}

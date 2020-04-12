@@ -8,30 +8,22 @@ const cx = classNames.bind(styles);
 
 @withRouter
 @inject(
-    'auth',
-    'Case',
-    'login',
-    'user', 
-    'caseEditorBasic',
-    'lab',
-    'modal'
+    'auth', 'Case', 'login',
+    'user', 'caseEditorBasic',
+    'lab', 'modal'
 )
 @observer
 class Basic extends Component {
-    state = {value: ''}
     componentWillUnmount() {
         this.props.caseEditorBasic.clear();
         this.props.caseEditorBasic.clearOptional();
     }
-    handleChange = (value) => {
-        this.setState({value})
-    }
+    
     renderOptions = () => {
         let arrNumber = [];
         for(var i=0;i<121;i++){
             arrNumber[i]=i;
         }
-
         return arrNumber.map((num, i) => {
             return <option key={i} value={i}>{i} 세</option>
         });
@@ -58,11 +50,7 @@ class Basic extends Component {
     }
 
     render() {
-        const {
-            title,
-            gender,
-            age
-        } = this.props.caseEditorBasic.editableData;
+        const { title, gender, age } = this.props.caseEditorBasic.editableData;
         const { staticData } = this.props.caseEditorBasic;
         const { type } = this.props;
         const { isEditing, currentCaseDetail } = this.props.Case;

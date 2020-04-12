@@ -17,37 +17,23 @@ import RightSideList from './components/RightSideList/RightSideList';
 import Teaching from './components/Teaching/Teaching';
 import $ from 'jquery';
 import Loader from '../../components/Loader';
-import {
-  FiArrowUp
-} from '../../lib/react-icons/fi';
+import { FiArrowUp } from '../../lib/react-icons/fi';
 
 const cx = classNames.bind(styles);
 
 @withRouter
 @inject(
-  'auth',
-  'Case',
-  'login',
-  'user', 
-  'lab',
-  'caseEditorBasic',
-  'symptomListItem',
-  'drugListItem',
-  'diagnosisListItem',
-  'collapsible'
+  'auth', 'Case', 'login', 'user', 
+  'lab', 'caseEditorBasic', 'symptomListItem',
+  'drugListItem', 'diagnosisListItem', 'collapsible'
 )
 @observer
 class CaseEditor extends Component {
-  state = { 
-    focusParent: false
-}
   componentDidMount() {
     const { type, caseId, dateIndex } = this.props.match.params;
-
-    
-    $('#case-editor-center-container-scroll-box').scrollTop(0);
-
-    $('#case-editor-center-container-scroll-box').on("scroll", function() {
+    const scrollBox = $('#case-editor-center-container-scroll-box');
+    scrollBox.scrollTop(0);
+    scrollBox.on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
         $( '#scroll-to-top' ).fadeIn();
       } else {
@@ -59,7 +45,6 @@ class CaseEditor extends Component {
       this.props.Case.loadCase(caseId, dateIndex);
     }
 
-
     this.props.symptomListItem.loadSymptoms()
     .then((res) => {
       this.props.drugListItem.loadDrugs();
@@ -68,13 +53,11 @@ class CaseEditor extends Component {
     .catch((err) => {
       console.log(err);
     });
-
-    document.addEventListener('mousedown', this._handleClickOutside);
-    
   }
 
   componentDidUpdate(prevProps) {
     const { type, dateIndex } = this.props.match.params;
+    const scrollBox = $('#case-editor-center-container-scroll-box');
     let where = this.props.history.location.pathname.split('/')[3];
     if (where === 'detail') {
       if (prevProps.match.params.dateIndex !== this.props.match.params.dateIndex) {
@@ -83,17 +66,16 @@ class CaseEditor extends Component {
       }
     }
     
-    $('#case-editor-center-container-scroll-box').on("scroll", function() {
+    scrollBox.on("scroll", function() {
       if ( $( this ).scrollTop() > 400 ) {
         $( '#scroll-to-top' ).fadeIn();
       } else {
         $( '#scroll-to-top' ).fadeOut();
       }
     });
-
     
     if (prevProps.location.pathname.split('/')[3] !== type) {
-      $('#case-editor-center-container-scroll-box').scrollTop(0);
+      scrollBox.scrollTop(0);
     }
   }
 
@@ -102,32 +84,18 @@ class CaseEditor extends Component {
     this.props.Case.clearCurrentCase();
     this.props.Case.clearAllEditableData();
     this.props.collapsible.clear();
-    document.removeEventListener('mousedown', this._handleClickOutside);
-  }
-
-  _handleClickOutside = (event) => {
-    if (this.recordDate && !this.recordDate.contains(event.target)) {
-        this.setState({ focusParent: false});
-        
-    }
   }
 
   handleClickOnTopScroll = () => {
-    $('#case-editor-center-container-scroll-box').animate( { scrollTop : 0 }, 400 );
-  }
-
-  _toggleOnFocus = () => {
-    this.setState({ focusParent: true})
+    $('#case-editor-center-container-scroll-box').animate({scrollTop : 0}, 400);
   }
 
   render() {
     const { type } = this.props.match.params;
     const { isEditing, isLoading } = this.props.Case;
     const {
-      pastHistory,
-      familyHistory,
-      socialHistory,
-      memo
+      pastHistory, familyHistory,
+      socialHistory, memo
     } = this.props.caseEditorBasic.editableData;
     let checkContentEmpty;
     if (pastHistory === '' && familyHistory === '' && socialHistory === '' && memo === '') {
@@ -145,7 +113,6 @@ class CaseEditor extends Component {
         {
           (isLoading && !this.props.Case.onReady) ? <div className={cx('loader-container')}><Loader /></div>
           : <>
-          
             <div className={cx('container', 'left')}>
               <div className={cx('scroll-box')}>
                 <LeftSideToolbar type={type} />

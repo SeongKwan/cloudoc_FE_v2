@@ -1,0 +1,274 @@
+ul {
+    margin-bottom: 0;
+}
+
+.scroll-box {
+    max-height: 700px;
+    overflow-y: scroll;
+
+    @include media('lg') {
+        max-height: 520px;
+    }
+}
+.results {
+    position: absolute;
+    top: 0px;
+    border-radius: $radius-low;
+    background-color: rgba($bc-02, 1);
+
+    &.teaching {
+        ul.content {
+            li:first-child {
+                margin-top: 0 !important;
+            }
+
+            button {
+                white-space: nowrap;
+            }
+        }
+    }
+
+    li {
+        font-size: 1rem;
+        width: 370px;
+
+        @include media('lg') {
+            width: 290px;
+        }
+
+        display: flex;
+        flex-direction: column;
+
+        cursor: default;
+
+        .name-btn {
+            display: flex;
+
+            padding: 1rem;
+        }
+
+        .teaching-name,
+        .condition-name {
+            width: 190px;
+
+            @include media('lg') {
+                width: 144px;
+            }
+
+            div {
+                word-break: break-all;
+                cursor: pointer;
+                
+                font-weight: 700;
+
+                &:hover {
+                    color: $bc-18;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .name {
+            margin-right: auto;
+
+            div {
+                word-break: break-all;
+                
+                font-weight: 700;
+            }
+        }
+
+        button {
+            background-color: $bc-18;
+            padding: 0.2rem 0.5rem;
+            border: 0;
+            border-radius: $radius-low;
+            color: $white;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+
+            &:focus,
+            &:active {
+                outline: 0;
+            }
+        }
+
+        .btn-condition>button {
+            background-color: $white;
+            color: $bc-18;
+        }
+
+        .btn-add>button {
+            background-color: $bc-12;
+            color: $bc-18;
+            margin-left: 0.5rem;
+        }
+
+        .more {
+            font-size: 0.9rem;
+            padding: 1rem;
+            background-color: $bc-14;
+            color: $bc-18;
+
+            .badge {
+                &.symptom {
+                    color: $bc-01;
+                }
+
+                &.lab {
+                    color: $bc-09;
+                }
+            }
+
+            &.drug {
+                padding: 0;
+
+                .row {
+
+                    ul.content {
+                        padding: 0 !important;
+
+
+                        li {
+                            font-size: 1rem;
+                            display: flex;
+                            flex-direction: column;
+                            padding: 0;
+
+                            .drug-name {
+                                width: 180px;
+                                margin-right: auto;
+                                cursor: pointer;
+
+                                @include media('lg') {
+                                    width: 140px;
+                                }
+
+                                &:hover {
+                                    color: $bc-18;
+                                    text-decoration: underline;
+                                }
+                            }
+
+                            .drug-container {
+                                display: flex;
+                                padding: 1rem;
+                            }
+
+                            .more.deep {
+                                background-color: rgba($bc-01, 0.1);
+
+                                li {
+                                    position: relative;
+                                }
+
+                                .evidence {
+                                    font-size: 0.9rem;
+                                }
+
+                                .references-wrapper {
+                                    padding: 0.5rem;
+                                    padding-bottom: 0;
+                                    display: flex;
+                                    margin-top: 0.5rem;
+                                    flex-wrap: wrap;
+
+                                    div {
+                                        margin-bottom: 0.5rem;
+                                        margin-right: 4px;
+                                        font-size: 0.7rem;
+
+                                        div.drug {
+                                            padding: 0.2rem;
+                                            color: $white;
+                                            border: 1px solid $white;
+                                            border-radius: $radius-low;
+                                            cursor: pointer;
+
+                                            &:not(:last-child) {
+                                                margin-right: 0.2rem;
+                                            }
+
+                                            &:hover {
+                                                border-color: $bc-18;
+                                                color: $bc-18;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                        li:first-child {
+                            margin-top: 0 !important;
+                        }
+                    }
+                }
+            }
+
+            a.evidence,
+            div.description {
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            div.description {
+                padding-right: 0.5rem;
+            }
+
+            .row {
+                &:not(:last-child) {
+                    margin-bottom: 1rem;
+                }
+
+                .title {
+                    letter-spacing: 1.5px;
+                    color: $bc-18;
+                    font-size: 1rem;
+                    font-weight: 700;
+                }
+
+                &.evidence {
+                    li {
+                        width: 100%;
+                    }
+                }
+
+                ul.content {
+                    width: 100%;
+                    padding-left: 0.5rem;
+
+                    li {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        padding: 0.35rem 0;
+                        font-size: 0.9rem;
+                        letter-spacing: 1px;
+
+                        &:first-child {
+                            margin-top: 0.5rem;
+                        }
+
+                        div:first-child {
+                            margin-right: 0.5rem;
+                        }
+
+                        .description-wrapper {
+                            width: 100%;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

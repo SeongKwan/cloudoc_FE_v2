@@ -9,29 +9,11 @@ const cx = classNames.bind(styles);
 
 @withRouter
 @inject(
-    'auth',
-    'Case',
-    'login',
-    'user', 
-    'caseEditorBasic'
+    'auth', 'Case', 'login',
+    'user', 'caseEditorBasic'
 )
 @observer
 class BasicOptional extends Component {
-    state = {value: ''}
-    
-    handleChange = (value) => {
-        this.setState({value})
-    }
-    renderOptions = () => {
-        let arrNumber = [];
-        for(var i=0;i<121;i++){
-            arrNumber[i]=i;
-        }
-
-        return arrNumber.map((num, i) => {
-            return <option key={i} value={i}>{i} 세</option>
-        });
-    }
     _handleChange = (e) => {
         const { value, name: type } = e.target;
         this.props.caseEditorBasic.changeEditableData(type, value);
@@ -43,10 +25,8 @@ class BasicOptional extends Component {
 
     render() {
         const {
-            pastHistory,
-            familyHistory,
-            socialHistory,
-            memo
+            pastHistory, familyHistory,
+            socialHistory, memo
         } = this.props.caseEditorBasic.editableData;
         const { staticData } = this.props.caseEditorBasic;
         const { type } = this.props;

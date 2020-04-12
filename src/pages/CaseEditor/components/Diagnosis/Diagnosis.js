@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import styles from './Diagnosis.module.scss';
 import classNames from 'classnames/bind';
 import { observer, inject } from 'mobx-react';
-import {
-    FiSearch, FiX
-} from '../../../../lib/react-icons/fi';
-import {
-    FaTrash
-} from '../../../../lib/react-icons/fa';
+import { FiSearch, FiX } from '../../../../lib/react-icons/fi';
+import { FaTrash } from '../../../../lib/react-icons/fa';
 import $ from 'jquery';
 
 const cx = classNames.bind(styles);
@@ -101,10 +97,8 @@ class Diagnosis extends Component {
         this.setState({ keyword: '', focusParent: false, selected: -1});
     }
     _deleteDiagnosis = (i) => {
-        if (i !== undefined
-        ) {
+        if (i !== undefined ) {
             const selectedIndex = i;
-            
             this.props.diagnosis.deleteDiagnosis(selectedIndex);
         }
     }
@@ -112,7 +106,6 @@ class Diagnosis extends Component {
     _scroll = (index) => {
         const windowWidth = window.outerWidth;
         let offTop, listItemHeight;
-        
 
         if (windowWidth > 1411) {
             listItemHeight = 40;
@@ -120,7 +113,6 @@ class Diagnosis extends Component {
             listItemHeight = 32;
         }
 
-        
         if (index <= 3 && index >= 0) {
             offTop = 0;
         }
@@ -140,6 +132,11 @@ class Diagnosis extends Component {
         if (diagnosis.filter(item => item.name === diagnosisName).length > 0) {
             return true;
         } else return false;
+    }
+
+    _handlePressArrow = (index, keyword) => {
+        this._scroll(index);
+        this.setState({keyword: keyword})
     }
     
     render() {
@@ -195,12 +192,9 @@ class Diagnosis extends Component {
                                         this.props.diagnosisListForInput.setSelectedIndex(-1);
                                         this.props.diagnosisListItem.clearSearchKeyword();
                                         return this.props.diagnosisListForInput.clearForList();
-                                        
-                                        
                                     }
                                     if (e.keyCode === 27) {
                                         this.setState({keyword: '', focusParent: false, selected: -1})
-                                        
                                         this.props.diagnosisListForInput.clearSelectedIndex();
                                         this.props.diagnosisListItem.setSearchKeyword('');
                                     }
@@ -210,14 +204,11 @@ class Diagnosis extends Component {
                                         if (diagnosises.length > 0) {    
                                             if(focusParent) {
                                                 if (selectedIndex <= 0) {
-                                                    this._scroll(0);
-                                                    this.setState({keyword: diagnosises[0].name})
-                                                    return;
+                                                    return this._handlePressArrow(0, diagnosises[0].name)
                                                 }
                                                 if (selectedIndex > 0) {
                                                     index = selectedIndex - 1;
-                                                    this._scroll(index);
-                                                    this.setState({keyword: diagnosises[selectedIndex - 1].name})
+                                                    this._handlePressArrow(index, diagnosises[selectedIndex - 1].name)
                                                     return this.props.diagnosisListForInput.setSelectedIndex(index);
                                                 }
                                             }
@@ -233,20 +224,16 @@ class Diagnosis extends Component {
                                                 if (diagnosises.length > 0) {
                                                     if (selectedIndex < 0) {
                                                         index = 0;
-                                                        this._scroll(index);
-                                                        this.setState({keyword: diagnosises[0].name})
+                                                        this._handlePressArrow(index, diagnosises[0].name)
                                                         return this.props.diagnosisListForInput.setSelectedIndex(index);
                                                     }
                                                     if (selectedIndex >= 0 && selectedIndex < maxIndex) {
                                                         index = selectedIndex + 1;
-                                                        this._scroll(index);
-                                                        this.setState({keyword: diagnosises[index].name})
+                                                        this._handlePressArrow(index, diagnosises[index].name)
                                                         return this.props.diagnosisListForInput.setSelectedIndex(index);
                                                     }
                                                     if (selectedIndex === maxIndex) {
-                                                        this._scroll(maxIndex);
-                                                        this.setState({keyword: diagnosises[maxIndex].name})
-                                                        return;
+                                                        return this._handlePressArrow(maxIndex, diagnosises[maxIndex].name)
                                                     }
                                                 }
                                             }
@@ -276,15 +263,9 @@ class Diagnosis extends Component {
                                         return <li 
                                             className={cx({active: selectedIndex === i})}
                                             key={i}
-                                            onClick={() => {
-                                                this._handleSelectSymptom(name);
-                                            }}
-                                            onMouseEnter={() => {
-                                                this.props.diagnosisListForInput.setSelectedIndex(i);
-                                            }}
-                                            onMouseLeave={() => {
-                                                this.props.diagnosisListForInput.setSelectedIndex(-1);
-                                            }}
+                                            onClick={() => { this._handleSelectSymptom(name); }}
+                                            onMouseEnter={() => { this.props.diagnosisListForInput.setSelectedIndex(i); }}
+                                            onMouseLeave={() => { this.props.diagnosisListForInput.setSelectedIndex(-1); }}
                                         >
                                             {name || ''}
                                         </li>

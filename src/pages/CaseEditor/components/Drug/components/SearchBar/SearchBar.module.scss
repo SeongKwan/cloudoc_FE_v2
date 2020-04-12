@@ -1,0 +1,106 @@
+.wrapper {
+    margin-left: 1rem;
+}
+
+.search-container {
+    position: relative;
+    z-index: 10;
+}
+
+.search-wrapper {
+    border: 1px solid $gray-1;
+    display: flex;
+    border-radius: $radius-low;
+    margin-bottom: 2rem;
+    padding: 0;
+
+    &:hover {
+        border-color: $bc-02;
+    }
+
+    &.focus {
+        border-color: $bc-02;
+        border-bottom: 1px solid transparent;
+        border-radius: 2px 2px 0 0;
+    }
+
+    .btn-search {
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+
+    .btn-clear {
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+
+    .input {
+        flex: 1;
+    }
+
+    input {
+        width: 100%;
+        border: 0;
+        color: $bc-18;
+        padding: 0.5rem;
+
+        &::placeholder {
+            font-weight: 100;
+            color: $gray-3;
+        }
+
+        &:focus {
+            outline: 0;
+        }
+    }
+}
+
+.results-wrapper {
+    position: absolute;
+    top: 33px;
+    width: calc(100% - 1rem);
+    border: 1px solid $bc-02;
+    border-radius: $radius-low;
+    border-top: 1px solid transparent;
+    padding: 0;
+    background-color: $white;
+
+    ul {
+        position: relative;
+        padding-top: 1rem;
+        max-height: 278px;
+        overflow: hidden;
+        overflow-y: scroll;
+        background-color: $white;
+
+        @include media('lg') {
+            max-height: 222px;
+        }
+
+        &::before {
+            width: 98%;
+            height: 1px;
+            background-color: $gray-1;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        li {
+            padding: 0.5rem 2.5rem;
+
+            &:hover,
+            &.active {
+                background-color: $gray-1;
+            }
+
+            &.no-results {
+                &:hover {
+                    background-color: $white;
+                }
+            }
+        }
+    }
+}
